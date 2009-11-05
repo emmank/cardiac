@@ -43,12 +43,16 @@ foreach($vl['datafields'] as $yk => $lv){
             }
             $result .= '</select>' . "\n";
         } elseif($lv['type'] == 'checkbox'){
-//            $cnt = 0;
+            if (count($lv['theref'])>0) {
+            $cnt = 0;
             foreach($lv['theref'] as $kc => $isi){
                 $result .= '<input type="checkbox" name="' . $yk . '[' . $cnt . ']" value="' . $kc . '">';
-                $result .= $isi . "<br />\n";
-//                $cnt++;
-            } //unset($cnt);
+                $result .= $isi . "<br />";
+                $cnt++;
+            } unset($cnt);
+            } else {
+                $result .= '<input type="checkbox" name="' . $yk . '" value="1">';
+            };
         } elseif($lv['type'] == 'radio'){
 //            $cnt = 0;
             foreach($lv['theref'] as $kc => $isi){
