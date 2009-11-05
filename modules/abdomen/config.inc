@@ -39,19 +39,58 @@ class abdomenConfig extends config
     var $hiddenfields = array(
         'id'
     );
-    var $heparfield_types = array(
+
+    // ---- Dibawah ini sengaja saya comment, karena berbeda dengan config module lain ----
+//    var $heparfield_types = array(
+//        'id' => 'hidden',
+//        'hepar' => 'text',
+//        'type' => 'select'
+//    );
+//    var $liverfield_types = array(
+//        'id' => 'hidden',
+//        'liver' => 'text',
+//        'type' => 'select'
+//    );
+//    var $ginjalfield_types = array(
+//        'id' => 'hidden',
+//        'ginjal' => 'text',
+//        'type' => 'select'
+//    );
+
+    var $typeoffields = array(
         'id' => 'hidden',
-        'hepar' => 'text',
-        'type' => 'select'
+        'relief' => 'select',
+        'center' => 'select',
+        'inspeksi_kulit' => 'checkbox',
+        'gerakan_dinding_perut' => 'select',
+        'palpasi_hepar' => 'text',
+        'palpasi_hepar_derajat_pembesaran' => 'text',
+        'palpasi_hepar_konsistensi' => 'text',
+        'palpasi_hepar_permukaan' => 'text',
+        'palpasi_hepar_tepi' => 'text',
+        'palpasi_hepar_nyeri_tekan' => 'text',
+        'palpasi_liver' => 'text',
+        'palpasi_liver_derajat_pembesaran' => 'text',
+        'palpasi_liver_konsistensi' => 'text',
+        'palpasi_liver_permukaan' => 'text',
+        'palpasi_liver_tepi' => 'text',
+        'palpasi_liver_nyeri_tekan' => 'text',
+        'palpasi_ginjal' => 'text',
+        'ballottement' => 'text',
+        'perkusi' => 'text',
+        'auscultation' => 'text',
+        'peristaltik_usus' => 'text'
+
     );
-    var $liverfield_types = array(
-        'id' => 'hidden',
-        'liver' => 'text',
-        'type' => 'select'
+
+    var $fieldsisarray = array(
+        'relief','center','inspeksi_kulit','gerakan_dinding_perut'
     );
-    var $ginjalfield_types = array(
-        'id' => 'hidden',
-        'ginjal' => 'text',
-        'type' => 'select'
+    var $reftable = array(
+        'relief' => array('ref_abdomen_relief','relief'),
+        'center' => array('ref_abdomen_center', 'center'),
+        'inspeksi_kulit' => array('ref_abdomen_skin', 'skin'),
+        'gerakan_dinding_perut' => array('ref_abdomen_gerakan_dinding_perut', 'gerakan'),
+        'gerakan_dinding_perut' => array('ref_abdomen_gerakan_dinding_perut', 'gerakan')
     );
 }
