@@ -366,6 +366,56 @@ class abdomenModule extends mainModule
             'weight' => '0',
             'user_required' => 'reference'
         );
+        //-----------------inspeksi_ginjal -----------------------------
+        $items['ref_abdomen_inspeksi_ginjal'] = array(
+            'title' => __t('abdomen_inspeksi_ginjal'),
+            'description' => __t('inspeksi_ginjal reference form for abdomen'),
+            'path' => '/reference/abdomen_inspeksi_ginjal',
+            'exec' => 'ref_inspeksi_ginjal_view',
+            'weight' => '0',
+            'user_required' => NULL
+        );
+        $items['ref_abdomen_inspeksi_ginjal_detail'] = array(
+            'title' => __t('detil abdomen_inspeksi_ginjal'),
+            'description' => __t('inspeksi_ginjal reference detail for abdomen'),
+            'path' => '/reference/abdomen_inspeksi_ginjal/detail',
+            'exec' => 'ref_inspeksi_ginjal_detail',
+            'weight' => '0',
+            'user_required' => NULL
+        );
+        $items['ref_abdomen_inspeksi_ginjal_form'] = array(
+            'title' => __t('abdomen_inspeksi_ginjal form'),
+            'description' => __t('inspeksi_ginjal reference form for abdomen'),
+            'path' => '/reference/abdomen_inspeksi_ginjal/form',
+            'exec' => 'ref_inspeksi_ginjal_form',
+            'weight' => '0',
+            'user_required' => 'reference'
+        );
+        $items['ref_abdomen_inspeksi_ginjal_form_submit'] = array(
+            'title' => __t('abdomen_inspeksi_ginjal form'),
+            'description' => __t('Execute inspeksi_ginjal reference form for abdomen'),
+            'path' => '/reference/abdomen_inspeksi_ginjal/form_submit',
+            'exec' => 'ref_inspeksi_ginjal_form_submit',
+            'weight' => '0',
+            'user_required' => 'reference'
+        );
+        $items['ref_abdomen_inspeksi_ginjal_edit'] = array(
+            'title' => __t('abdomen_inspeksi_ginjal edit'),
+            'description' => __t('Editing inspeksi_ginjal reference form for abdomen'),
+            'path' => '/reference/abdomen_inspeksi_ginjal/edit',
+            'exec' => 'ref_inspeksi_ginjal_edit',
+            'weight' => '0',
+            'user_required' => 'reference'
+        );
+        $items['ref_abdomen_inspeksi_ginjal_drop'] = array(
+            'title' => __t('abdomen_inspeksi_ginjal drop'),
+            'description' => __t('Remove inspeksi_ginjal reference form for abdomen'),
+            'path' => '/reference/abdomen_inspeksi_ginjal/drop',
+            'exec' => 'ref_inspeksi_ginjal_drop',
+            'weight' => '0',
+            'user_required' => 'reference'
+        );
+        
         $items['ref_abdomen_perkusi'] = array(
             'title' => __t('abdomen_perkusi'),
             'description' => __t('perkusi reference form for abdomen'),
@@ -2084,6 +2134,237 @@ class abdomenModule extends mainModule
             $this->query->close();
         }
         redirect_to('/reference/abdomen_ginjal');
+    }
+    // -------------- Function inspeksi_ginjal -------------
+    function ref_inspeksi_ginjal_view(){
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('Referensi palpasi ginjal abdomen');
+        $result['description'] = __t('Referensi pilihan palpasi ginjal abdomen pasien');
+        $result['addmenu'] = array(
+            'title' => __t('add reference'),
+            'action' => '/reference/abdomen_inspeksi_ginjal/form',
+            'position' => 'top',
+            'user_required' => 'reference'
+        );
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'inspeksi_ginjal',
+                'caption' => __t('keterangan'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'type',
+                'caption' => __t('tipe'),
+                'align' => 'left'
+            )
+        );
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('ref_abdomen_inspeksi_ginjal'),
+            NULL,
+            'inspeksi_ginjal'
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows > 0){
+            for($i=0; $i<$query->_numOfRows; $i++){
+                $result['data'][$i] = $query->fields;
+                $result['data'][$i]['inspeksi_ginjal'] = ucwords($query->fields['inspeksi_ginjal']);
+                $result['data'][$i]['goto'] = '/reference/abdomen_inspeksi_ginjal/detail/' . $query->fields['id'];
+                $query->MoveNext();
+            }
+        }
+        return $result;
+    }
+
+    function ref_inspeksi_ginjal_form(){
+        if(is_file($this->config->fcache)){
+            $vcache = $this->__read_form_cache();
+            unlink($this->config->fcache);
+        }
+//        echo '<pre>'; print_r($vcache); echo '</pre>';
+        $form['group'] = array(
+            '#type' => 'fieldset',
+            '#id' => 'group',
+            '#title' => __t('add abdomen_inspeksi_ginjal'),
+            '#collapsible' => TRUE,
+            '#collapsed' => FALSE,
+            '#focused_item' => 'inspeksi_ginjal',
+            '#weight' => -3,
+            '#action' => '/reference/abdomen_inspeksi_ginjal/form_submit',
+            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
+        );
+        $this->query->connect();
+        $sql = $this->query->getDescribe('ref_abdomen_inspeksi_ginjal');
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        for($i=0; $i<$query->_numOfRows; $i++){
+            if(!in_array($query->fields['Field'], array('id'))){
+                $form['group'][$query->fields['Field']] = array(
+                    '#type' => $this->config->inspeksi_ginjalfield_types[$query->fields['Field']],
+                    '#title' => __t($query->fields['Field']),
+                    '#value' => isset($vcache[$query->fields['Field']]) ? $vcache[$query->fields['Field']] : ($query->fields['Field'] == 'id' ? $_POST['id'] : ''),
+                    '#error' => isset($vcache['blank']) && in_array($query->fields['Field'], $vcache['blank']) ? 1 : 0
+                );
+                if($query->fields['Field'] == 'type'){
+                    $form['group'][$query->fields['Field']]['#option'] = $this->config->formtypelists;
+                }
+            }
+            $query->MoveNext();
+        } unset($query);
+        $form['group']['submit'] = array(
+            '#type' => 'submit',
+            '#title' => '&nbsp;',
+            '#value' => __t('input')
+        );
+        return $form;
+    }
+
+    function ref_inspeksi_ginjal_form_submit(){
+//        if($_POST['id'] != ''){
+            $dump = $this->__write_form_cache();
+            foreach($dump as $key => $value){
+                if($value == ''){
+                    $this->__write_custom_cache(
+                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                    );
+                    redirect_to('/reference/abdomen_inspeksi_ginjal/form');
+                    exit();
+                }
+                if($key != 'blank' && $key != 'submit'){
+                    $thevalue[$key] = $value;
+                }
+            } unset($dump);
+            $thevalue['id'] = $this->__get_id_insert_value('ref_abdomen_inspeksi_ginjal', 'id', $this->query);
+//        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
+            $this->query->connect();
+            $sql = $this->query->saveData(
+                'ref_abdomen_inspeksi_ginjal',
+                $thevalue
+            );
+            $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            unset($thevalue);
+            unlink($this->config->fcache);
+            redirect_to('/reference/abdomen_inspeksi_ginjal');
+//        } else {
+//            redirect_to('/reference/abdomen_inspeksi_ginjal/form');
+//        }
+    }
+
+    function ref_inspeksi_ginjal_detail(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(count($dump) > 4){
+            $update = $dump[4];
+        }
+        $keyid = $dump[3]; unset($dump);
+        $dropable = $this->__is_dropable($keyid, 'inspeksi_ginjal', 'abdomen', $this->query);
+        $result = array();
+        $result['type'] = 'items_detail';
+        $result['title'] = __t('detil referensi inspeksi_ginjal');
+        $result['description'] = __t('informasi detil referensi inspeksi_ginjal yang terpilih');
+        $result['id'] = $keyid;
+        $result['update_access'] = 'reference';
+        $result['dropable'] = $dropable !== FALSE ? '/reference/abdomen_inspeksi_ginjal/drop' : '0';
+        unset($dropable);
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('ref_abdomen_inspeksi_ginjal'),
+            array(
+                array('&&', "id=" . $keyid)
+            )
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if(isset($update)){
+            $showsubmit = array('textarea', 'date');
+        }
+        foreach($query->fields as $key => $value){
+            $result['data'][$key] = array(
+                'key' => __t($key),
+                'value' => $value,
+                'link' => '/reference/abdomen_inspeksi_ginjal/detail/' . $keyid . '/' . $key,
+                'hide' => in_array($key, $this->config->hiddenfields) ? 1 : 0
+            );
+            if(isset($update) && $key == $update){
+                $result['data'][$key]['form'] = array(
+                    'detail' => array(
+                        '#type' => 'fieldset',
+                        '#title' => 'hidden',
+                        '#action' => '/reference/abdomen_inspeksi_ginjal/edit/',
+                        'id' => array(
+                            '#type' => 'hidden',
+                            '#value' => $keyid
+                        ),
+                        $key => array(
+                            '#type' => $this->config->inspeksi_ginjalfield_types[$key],
+                            '#value' => $value,
+                            '#title' => 'hidden',
+                            '#size' => $this->config->inspeksi_ginjalfield_type[$key] == 'select' ? 1 : 20,
+                            '#extra' => $this->config->inspeksi_ginjalfield_type[$key] == 'select' ? 'onchange="Javascript:this.form.submit()"' : ''
+                        )
+                    )
+                );
+                if($result['data'][$key]['form']['detail'][$key]['#type'] == 'select'){
+                    $result['data'][$key]['form']['detail'][$key]['#option'] = $this->config->formtypelists;
+                }
+                if(in_array($result['data'][$key]['form']['detail'][$key]['#type'], $showsubmit)){
+                    $result['data'][$key]['form']['detail'][$key]['submit'] = array(
+                        '#type' => 'submit',
+                        '#value' => 'submit',
+                        '#title' => 'hidden'
+                    );
+                }
+            }
+        } unset($query, $keyid);
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+
+    function ref_inspeksi_ginjal_edit(){
+        foreach($_POST as $key => $value){
+            if($key != 'id'){
+                if(in_array($key, $this->__get_data_fields('ref_abdomen_inspeksi_ginjal', $this->query))){
+                    $this->query->connect();
+                    $sql = $this->query->updateData(
+                        'ref_abdomen_inspeksi_ginjal',
+                        array(
+                            $key => $value
+                        ),
+                        array(
+                            array('&&', "id=" . $_POST['id'])
+                        )
+                    );
+                    $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                }
+            }
+        }
+        redirect_to('/reference/abdomen_inspeksi_ginjal/detail/' . $_POST['id']);
+    }
+
+    function ref_inspeksi_ginjal_drop(){
+        if($this->__is_dropable($_POST['id'], 'inspeksi_ginjal', 'abdomen', $this->query) !== FALSE){
+            $this->query->connect();
+            $sql = $this->query->setDelete(
+                'ref_abdomen_inspeksi_ginjal',
+                array(
+                    array('&&', "id=" . $_POST['id'])
+                )
+            );
+            $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+        }
+        redirect_to('/reference/abdomen_inspeksi_ginjal');
     }
 
     function ref_perkusi_view(){
