@@ -293,6 +293,7 @@ class cardioModule extends mainModule
         $form['cardio_dewasa']['tab_items']['thorax'] = $this->__loadThorax();
         $form['cardio_dewasa']['tab_items']['paru'] = $this->__loadParu();
         $form['cardio_dewasa']['tab_items']['hearth'] = $this->__loadHearth();
+        $form['cardio_dewasa']['tab_items']['abdomen'] = $this->__loadAbdomen();
 
         $form['cardio_dewasa']['submit'] = array(
             '#type' => 'submit',
@@ -314,6 +315,20 @@ class cardioModule extends mainModule
             }
         } else {
             return $this->hearth_exec->cardio_menu();
+        }
+    }
+
+    function __loadAbdomen($exec=NULL){
+        $this->__include_module('abdomen');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->abdomen_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->abdomen_exec->cardio_submit();
+            }
+        } else {
+            return $this->abdomen_exec->cardio_menu();
         }
     }
 
