@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  anusrectum.php
+ *  
+ *  Created on Oct 6, 2009, 11:01:57 AM
+ */
+
+require_once MODULES_DIR . DS . 'anusrectum' . DS . 'anusrectum.class.inc';
+
+if(!isset($anusrectum_config)){
+    $anusrectum_config = new anusrectumConfig();
+} elseif(!$anusrectum_config instanceof anusrectumConfig) {
+    $anusrectum_config = new anusrectumConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $anusrectum_config->rdbms . DS . 'dbquery.php';
+if(!isset($anusrectum_query)){
+    $anusrectum_query = new dbset();
+} elseif(!$anusrectum_query instanceof dbset) {
+    $anusrectum_query = new dbset();
+}
+
+if(!isset($anusrectum_exec)){
+    $anusrectum_exec = new anusrectumModule();
+} elseif(!$anusrectum_exec instanceof anusrectumModule) {
+    $anusrectum_exec = new anusrectumModule();
+}

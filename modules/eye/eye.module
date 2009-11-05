@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  eye.php
+ *  
+ *  Created on Oct 4, 2009, 12:23:36 AM
+ */
+
+require_once MODULES_DIR . DS . 'eye' . DS . 'eye.class.inc';
+
+if(!isset($eye_config)){
+    $eye_config = new eyeConfig();
+} elseif(!$eye_config instanceof eyeConfig) {
+    $eye_config = new eyeConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $eye_config->rdbms . DS . 'dbquery.php';
+if(!isset($eye_query)){
+    $eye_query = new dbset();
+} elseif(!$eye_query instanceof dbset) {
+    $eye_query = new dbset();
+}
+
+if(!isset($eye_exec)){
+    $eye_exec = new eyeModule();
+} elseif(!$eye_exec instanceof eyeModule) {
+    $eye_exec = new eyeModule();
+}

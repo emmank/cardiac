@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  paru.php
+ *  
+ *  Created on Oct 4, 2009, 8:42:11 AM
+ */
+
+require_once MODULES_DIR . DS . 'paru' . DS . 'paru.class.inc';
+
+if(!isset($paru_config)){
+    $paru_config = new paruConfig();
+} elseif(!$paru_config instanceof paruConfig) {
+    $paru_config = new paruConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $paru_config->rdbms . DS . 'dbquery.php';
+if(!isset($paru_query)){
+    $paru_query = new dbset();
+} elseif(!$paru_query instanceof dbset) {
+    $paru_query = new dbset();
+}
+
+if(!isset($paru_exec)){
+    $paru_exec = new paruModule();
+} elseif(!$paru_exec instanceof paruModule) {
+    $paru_exec = new paruModule();
+}

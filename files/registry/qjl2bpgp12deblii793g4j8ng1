@@ -1,0 +1,3134 @@
+<?php
+$modulelists = array('auth', 'cardio', 'ear', 'echocardiography', 'eye', 'group', 'headface', 'hearth', 'mouth', 'neck', 'nose', 'paru', 'patient', 'presentStatus', 'thorax', 'user', 'vascular', 'vitalSign');
+$menulists = array(
+	node => array(
+		id => '1',
+		menus => 'node',
+		parent => '',
+		weight => '0',
+		title => 'layanan',
+		description => 'General information service for accessed by public',
+		user_required => '',
+		path => '/node',
+		exec => 'core_show_node_menus',
+		source => 'configs'
+	),
+	user => array(
+		id => '2',
+		menus => 'user',
+		parent => '',
+		weight => '1',
+		title => 'pengguna',
+		description => 'All menu thats used by user to manage their entry and self configurations',
+		user_required => 'users',
+		path => '/user',
+		exec => 'core_show_user_menus',
+		source => 'configs'
+	),
+	reference => array(
+		id => '11',
+		menus => 'reference',
+		parent => '',
+		weight => '2',
+		title => 'referensi',
+		description => 'Reference information for all system',
+		user_required => 'users',
+		path => '/reference',
+		exec => 'core_show_node_menus',
+		source => 'configs'
+	),
+	admin => array(
+		id => '3',
+		menus => 'admin',
+		parent => '',
+		weight => '3',
+		title => 'administer',
+		description => 'All menu thats used by administrator to manage entire system configurations',
+		user_required => 'admin',
+		path => '/admin',
+		exec => 'core_show_admin_menus',
+		source => 'configs'
+	),
+	login => array(
+		title => 'masuk',
+		description => 'View login form to access authenticated menu',
+		path => '/login',
+		exec => 'login_form',
+		weight => '-10',
+		user_required => '',
+		module => 'auth',
+		source => 'modules'
+	),
+	logout => array(
+		title => 'keluar',
+		description => 'Logout and redirected to home',
+		path => '/logout',
+		exec => 'logout',
+		weight => '50',
+		user_required => 'users',
+		module => 'auth',
+		source => 'modules'
+	),
+	login_submit => array(
+		title => 'login_submit',
+		path => '/loginsubmit',
+		exec => 'login_submit',
+		weight => '50',
+		user_required => '',
+		module => 'auth',
+		source => 'modules'
+	),
+	rewrite_registry => array(
+		title => 'rewrite_registry',
+		path => '/regload',
+		exec => 'regload',
+		weight => '50',
+		user_required => '',
+		module => 'auth',
+		source => 'modules'
+	),
+	ref_ear_inspections => array(
+		title => 'Inspeksi Telinga',
+		description => 'inspections reference form for ear',
+		path => '/reference/ear_inspections',
+		exec => 'ref_inspections_view',
+		weight => '0',
+		user_required => '',
+		module => 'ear',
+		source => 'modules'
+	),
+	ref_ear_inspections_detail => array(
+		title => 'detil telinga',
+		description => 'inspections reference detail for ear',
+		path => '/reference/ear_inspections/detail',
+		exec => 'ref_inspections_detail',
+		weight => '0',
+		user_required => '',
+		module => 'ear',
+		source => 'modules'
+	),
+	ref_ear_inspections_form => array(
+		title => 'ear_inspections form',
+		description => 'inspections reference form for ear',
+		path => '/reference/ear_inspections/form',
+		exec => 'ref_inspections_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'ear',
+		source => 'modules'
+	),
+	ref_ear_inspections_form_submit => array(
+		title => 'ear_inspections form',
+		description => 'Execute inspections reference form for ear',
+		path => '/reference/ear_inspections/form_submit',
+		exec => 'ref_inspections_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'ear',
+		source => 'modules'
+	),
+	ref_ear_inspections_edit => array(
+		title => 'ear_inspections edit',
+		description => 'Editing inspections reference form for ear',
+		path => '/reference/ear_inspections/edit',
+		exec => 'ref_inspections_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'ear',
+		source => 'modules'
+	),
+	ref_ear_inspections_drop => array(
+		title => 'ear_inspections drop',
+		description => 'Remove inspections reference form for ear',
+		path => '/reference/ear_inspections/drop',
+		exec => 'ref_inspections_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'ear',
+		source => 'modules'
+	),
+	echocardiography_form => array(
+		title => 'echocardiography form',
+		description => 'echocardiography check form',
+		path => '/user/echocardiography/form',
+		exec => 'form',
+		weight => '5',
+		user_required => 'echocardiography',
+		module => 'echocardiography',
+		source => 'modules'
+	),
+	echocardiography_today_patient_lists => array(
+		title => 'echocardiography form',
+		description => 'echocardiography check form',
+		path => '/user/echocardiography/today_patient_lists',
+		exec => 'today_patient_lists',
+		weight => '5',
+		user_required => 'echocardiography',
+		module => 'echocardiography',
+		source => 'modules'
+	),
+	echocardiography_message => array(
+		title => 'echocardiography message',
+		description => 'get echocardiography message',
+		path => '/user/echocardiography/message',
+		exec => 'message',
+		weight => '5',
+		user_required => 'echocardiography',
+		module => 'echocardiography',
+		source => 'modules'
+	),
+	echocardiography_form_submit => array(
+		title => 'echocardiography form submit',
+		description => 'execute echocardiography check form',
+		path => '/user/echocardiography/form_submit',
+		exec => 'form_submit',
+		weight => '5',
+		user_required => 'echocardiography',
+		module => 'echocardiography',
+		source => 'modules'
+	),
+	ref_eye_inspections => array(
+		title => 'Inspeksi Mata',
+		description => 'inspections reference form for eye',
+		path => '/reference/eye_inspections',
+		exec => 'ref_inspections_view',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_inspections_detail => array(
+		title => 'detil rambut',
+		description => 'inspections reference detail for eye',
+		path => '/reference/eye_inspections/detail',
+		exec => 'ref_inspections_detail',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_inspections_form => array(
+		title => 'eye_inspections form',
+		description => 'inspections reference form for eye',
+		path => '/reference/eye_inspections/form',
+		exec => 'ref_inspections_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_inspections_form_submit => array(
+		title => 'eye_inspections form',
+		description => 'Execute inspections reference form for eye',
+		path => '/reference/eye_inspections/form_submit',
+		exec => 'ref_inspections_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_inspections_edit => array(
+		title => 'eye_inspections edit',
+		description => 'Editing inspections reference form for eye',
+		path => '/reference/eye_inspections/edit',
+		exec => 'ref_inspections_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_inspections_drop => array(
+		title => 'eye_inspections drop',
+		description => 'Remove inspections reference form for eye',
+		path => '/reference/eye_inspections/drop',
+		exec => 'ref_inspections_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_tekanan_bola_mata => array(
+		title => 'Tekanan Bola Mata',
+		description => 'tekanan_bola_mata reference form for eye',
+		path => '/reference/eye_tekanan_bola_mata',
+		exec => 'ref_tekanan_bola_mata_view',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_tekanan_bola_mata_detail => array(
+		title => 'detil rambut',
+		description => 'tekanan_bola_mata reference detail for eye',
+		path => '/reference/eye_tekanan_bola_mata/detail',
+		exec => 'ref_tekanan_bola_mata_detail',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_tekanan_bola_mata_form => array(
+		title => 'eye_tekanan_bola_mata form',
+		description => 'tekanan_bola_mata reference form for eye',
+		path => '/reference/eye_tekanan_bola_mata/form',
+		exec => 'ref_tekanan_bola_mata_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_tekanan_bola_mata_form_submit => array(
+		title => 'eye_tekanan_bola_mata form',
+		description => 'Execute tekanan_bola_mata reference form for eye',
+		path => '/reference/eye_tekanan_bola_mata/form_submit',
+		exec => 'ref_tekanan_bola_mata_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_tekanan_bola_mata_edit => array(
+		title => 'eye_tekanan_bola_mata edit',
+		description => 'Editing tekanan_bola_mata reference form for eye',
+		path => '/reference/eye_tekanan_bola_mata/edit',
+		exec => 'ref_eye_tekanan_bola_mata_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_tekanan_bola_mata_drop => array(
+		title => 'eye_tekanan_bola_mata drop',
+		description => 'Remove tekanan_bola_mata reference form for eye',
+		path => '/reference/eye_tekanan_bola_mata/drop',
+		exec => 'ref_tekanan_bola_mata_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_kelopak_mata => array(
+		title => 'Kelopak Mata',
+		description => 'kelopak_mata reference form for eye',
+		path => '/reference/eye_kelopak_mata',
+		exec => 'ref_kelopak_mata_view',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_kelopak_mata_detail => array(
+		title => 'detil rambut',
+		description => 'kelopak_mata reference detail for eye',
+		path => '/reference/eye_kelopak_mata/detail',
+		exec => 'ref_kelopak_mata_detail',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_kelopak_mata_form => array(
+		title => 'eye_kelopak_mata form',
+		description => 'kelopak_mata reference form for eye',
+		path => '/reference/eye_kelopak_mata/form',
+		exec => 'ref_kelopak_mata_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_kelopak_mata_form_submit => array(
+		title => 'eye_kelopak_mata form',
+		description => 'Execute kelopak_mata reference form for eye',
+		path => '/reference/eye_kelopak_mata/form_submit',
+		exec => 'ref_kelopak_mata_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_kelopak_mata_edit => array(
+		title => 'eye_kelopak_mata edit',
+		description => 'Editing kelopak_mata reference form for eye',
+		path => '/reference/eye_kelopak_mata/edit',
+		exec => 'ref_kelopak_mata_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_kelopak_mata_drop => array(
+		title => 'eye_kelopak_mata drop',
+		description => 'Remove kelopak_mata reference form for eye',
+		path => '/reference/eye_kelopak_mata/drop',
+		exec => 'ref_kelopak_mata_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_konjunctifa => array(
+		title => 'Konjunctifa',
+		description => 'konjunctifa reference form for eye',
+		path => '/reference/eye_konjunctifa',
+		exec => 'ref_konjunctifa_view',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_konjunctifa_detail => array(
+		title => 'detil rambut',
+		description => 'konjunctifa reference detail for eye',
+		path => '/reference/eye_konjunctifa/detail',
+		exec => 'ref_konjunctifa_detail',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_konjunctifa_form => array(
+		title => 'eye_konjunctifa form',
+		description => 'konjunctifa reference form for eye',
+		path => '/reference/eye_konjunctifa/form',
+		exec => 'ref_konjunctifa_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_konjunctifa_form_submit => array(
+		title => 'eye_konjunctifa form',
+		description => 'Execute konjunctifa reference form for eye',
+		path => '/reference/eye_konjunctifa/form_submit',
+		exec => 'ref_konjunctifa_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_konjunctifa_edit => array(
+		title => 'eye_konjunctifa edit',
+		description => 'Editing konjunctifa reference form for eye',
+		path => '/reference/eye_konjunctifa/edit',
+		exec => 'ref_konjunctifa_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_konjunctifa_drop => array(
+		title => 'eye_konjunctifa drop',
+		description => 'Remove konjunctifa reference form for eye',
+		path => '/reference/eye_konjunctifa/drop',
+		exec => 'ref_konjunctifa_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_cornea => array(
+		title => 'cornea',
+		description => 'cornea reference form for eye',
+		path => '/reference/eye_cornea',
+		exec => 'ref_cornea_view',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_cornea_detail => array(
+		title => 'detil rambut',
+		description => 'cornea reference detail for eye',
+		path => '/reference/eye_cornea/detail',
+		exec => 'ref_cornea_detail',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_cornea_form => array(
+		title => 'eye_cornea form',
+		description => 'cornea reference form for eye',
+		path => '/reference/eye_cornea/form',
+		exec => 'ref_cornea_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_cornea_form_submit => array(
+		title => 'eye_cornea form',
+		description => 'Execute cornea reference form for eye',
+		path => '/reference/eye_cornea/form_submit',
+		exec => 'ref_cornea_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_cornea_edit => array(
+		title => 'eye_cornea edit',
+		description => 'Editing cornea reference form for eye',
+		path => '/reference/eye_cornea/edit',
+		exec => 'ref_cornea_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_cornea_drop => array(
+		title => 'eye_cornea drop',
+		description => 'Remove cornea reference form for eye',
+		path => '/reference/eye_cornea/drop',
+		exec => 'ref_cornea_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_pupil => array(
+		title => 'pupil',
+		description => 'pupil reference form for eye',
+		path => '/reference/eye_pupil',
+		exec => 'ref_pupil_view',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_pupil_detail => array(
+		title => 'detil rambut',
+		description => 'pupil reference detail for eye',
+		path => '/reference/eye_pupil/detail',
+		exec => 'ref_pupil_detail',
+		weight => '0',
+		user_required => '',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_pupil_form => array(
+		title => 'eye_pupil form',
+		description => 'pupil reference form for eye',
+		path => '/reference/eye_pupil/form',
+		exec => 'ref_pupil_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_pupil_form_submit => array(
+		title => 'eye_pupil form',
+		description => 'Execute pupil reference form for eye',
+		path => '/reference/eye_pupil/form_submit',
+		exec => 'ref_pupil_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_pupil_edit => array(
+		title => 'eye_pupil edit',
+		description => 'Editing pupil reference form for eye',
+		path => '/reference/eye_pupil/edit',
+		exec => 'ref_pupil_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	ref_eye_pupil_drop => array(
+		title => 'eye_pupil drop',
+		description => 'Remove pupil reference form for eye',
+		path => '/reference/eye_pupil/drop',
+		exec => 'ref_pupil_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'eye',
+		source => 'modules'
+	),
+	group_view => array(
+		title => 'group',
+		description => 'menu untuk menampilkan daftar group yang terdaftar',
+		path => '/admin/group',
+		exec => 'view',
+		weight => '0',
+		user_required => 'admin',
+		module => 'group',
+		source => 'modules'
+	),
+	group_detail => array(
+		title => 'group detail',
+		description => 'menu untuk menampilkan detail group terdaftar yang terpilih',
+		path => '/admin/group/detail',
+		exec => 'detail',
+		weight => '0',
+		user_required => 'admin',
+		module => 'group',
+		source => 'modules'
+	),
+	group_edit => array(
+		title => 'group edit',
+		description => 'eksekusi perintah edit untuk tabel groups',
+		path => '/admin/group/edit',
+		exec => 'edit',
+		weight => '0',
+		user_required => 'admin',
+		hidden => '1',
+		module => 'group',
+		source => 'modules'
+	),
+	group_add => array(
+		title => 'add group',
+		description => 'formulir pendaftaran group',
+		path => '/admin/group/form',
+		exec => 'form',
+		weight => '0',
+		user_required => 'admin',
+		module => 'group',
+		source => 'modules'
+	),
+	group_add_submit => array(
+		title => 'add group',
+		description => 'eksekusi formulir pendaftaran group',
+		path => '/admin/group/form_submit',
+		exec => 'form_submit',
+		weight => '0',
+		user_required => 'admin',
+		module => 'group',
+		source => 'modules'
+	),
+	group_drop => array(
+		title => 'delete group',
+		description => 'eksekusi perintah delete groups',
+		path => '/admin/group/drop',
+		exec => 'delete',
+		weight => '0',
+		user_required => 'admin',
+		hidden => '1',
+		module => 'group',
+		source => 'modules'
+	),
+	ref_headface_inspections => array(
+		title => 'inspeksi kepala & muka',
+		description => 'inspections reference form for headface',
+		path => '/reference/headface_inspections',
+		exec => 'ref_inspections_view',
+		weight => '0',
+		user_required => '',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_inspections_detail => array(
+		title => 'detil tipe tanda vital',
+		description => 'inspections reference detail for headface',
+		path => '/reference/headface_inspections/detail',
+		exec => 'ref_inspections_detail',
+		weight => '0',
+		user_required => '',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_inspections_form => array(
+		title => 'headface_inspections form',
+		description => 'inspections reference form for headface',
+		path => '/reference/headface_inspections/form',
+		exec => 'ref_inspections_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_inspections_form_submit => array(
+		title => 'headface_inspections form',
+		description => 'Execute inspections reference form for headface',
+		path => '/reference/headface_inspections/form_submit',
+		exec => 'ref_inspections_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_inspections_edit => array(
+		title => 'headface_inspections edit',
+		description => 'Editing inspections reference form for headface',
+		path => '/reference/headface_inspections/edit',
+		exec => 'ref_inspections_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_inspections_drop => array(
+		title => 'headface_inspections drop',
+		description => 'Remove inspections reference form for headface',
+		path => '/reference/headface_inspections/drop',
+		exec => 'ref_inspections_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_expression => array(
+		title => 'Ekspresi',
+		description => 'expression reference form for headface',
+		path => '/reference/headface_expression',
+		exec => 'ref_expression_view',
+		weight => '0',
+		user_required => '',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_expression_detail => array(
+		title => 'detil ekspresi',
+		description => 'expression reference detail for headface',
+		path => '/reference/headface_expression/detail',
+		exec => 'ref_expression_detail',
+		weight => '0',
+		user_required => '',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_expression_form => array(
+		title => 'headface_expression form',
+		description => 'expression reference form for headface',
+		path => '/reference/headface_expression/form',
+		exec => 'ref_expression_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_expression_form_submit => array(
+		title => 'headface_expression form',
+		description => 'Execute expression reference form for headface',
+		path => '/reference/headface_expression/form_submit',
+		exec => 'ref_expression_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_expression_edit => array(
+		title => 'headface_expression edit',
+		description => 'Editing expression reference form for headface',
+		path => '/reference/headface_expression/edit',
+		exec => 'ref_expression_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_expression_drop => array(
+		title => 'headface_expression drop',
+		description => 'Remove expression reference form for headface',
+		path => '/reference/headface_expression/drop',
+		exec => 'ref_expression_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_hair => array(
+		title => 'Rambut',
+		description => 'hair reference form for headface',
+		path => '/reference/headface_hair',
+		exec => 'ref_hair_view',
+		weight => '0',
+		user_required => '',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_hair_detail => array(
+		title => 'detil rambut',
+		description => 'hair reference detail for headface',
+		path => '/reference/headface_hair/detail',
+		exec => 'ref_hair_detail',
+		weight => '0',
+		user_required => '',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_hair_form => array(
+		title => 'headface_hair form',
+		description => 'hair reference form for headface',
+		path => '/reference/headface_hair/form',
+		exec => 'ref_hair_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_hair_form_submit => array(
+		title => 'headface_hair form',
+		description => 'Execute hair reference form for headface',
+		path => '/reference/headface_hair/form_submit',
+		exec => 'ref_hair_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_hair_edit => array(
+		title => 'headface_hair edit',
+		description => 'Editing hair reference form for headface',
+		path => '/reference/headface_hair/edit',
+		exec => 'ref_hair_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_headface_hair_drop => array(
+		title => 'headface_hair drop',
+		description => 'Remove hair reference form for headface',
+		path => '/reference/headface_hair/drop',
+		exec => 'ref_hair_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'headface',
+		source => 'modules'
+	),
+	ref_hearth_inspection => array(
+		title => 'hearth_inspection',
+		description => 'inspection reference form for hearth',
+		path => '/reference/hearth_inspection',
+		exec => 'ref_inspection_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_inspection_detail => array(
+		title => 'detil hearth_inspection',
+		description => 'inspection reference detail for hearth',
+		path => '/reference/hearth_inspection/detail',
+		exec => 'ref_inspection_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_inspection_form => array(
+		title => 'hearth_inspection form',
+		description => 'inspection reference form for hearth',
+		path => '/reference/hearth_inspection/form',
+		exec => 'ref_inspection_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_inspection_form_submit => array(
+		title => 'hearth_inspection form',
+		description => 'Execute inspection reference form for hearth',
+		path => '/reference/hearth_inspection/form_submit',
+		exec => 'ref_inspection_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_inspection_edit => array(
+		title => 'hearth_inspection edit',
+		description => 'Editing inspection reference form for hearth',
+		path => '/reference/hearth_inspection/edit',
+		exec => 'ref_inspection_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_inspection_drop => array(
+		title => 'hearth_inspection drop',
+		description => 'Remove inspection reference form for hearth',
+		path => '/reference/hearth_inspection/drop',
+		exec => 'ref_inspection_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_palpation => array(
+		title => 'hearth_palpation',
+		description => 'palpation reference form for hearth',
+		path => '/reference/hearth_palpation',
+		exec => 'ref_palpation_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_palpation_detail => array(
+		title => 'detil hearth_palpation',
+		description => 'palpation reference detail for hearth',
+		path => '/reference/hearth_palpation/detail',
+		exec => 'ref_palpation_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_palpation_form => array(
+		title => 'hearth_palpation form',
+		description => 'palpation reference form for hearth',
+		path => '/reference/hearth_palpation/form',
+		exec => 'ref_palpation_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_palpation_form_submit => array(
+		title => 'hearth_palpation form',
+		description => 'Execute palpation reference form for hearth',
+		path => '/reference/hearth_palpation/form_submit',
+		exec => 'ref_palpation_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_palpation_edit => array(
+		title => 'hearth_palpation edit',
+		description => 'Editing palpation reference form for hearth',
+		path => '/reference/hearth_palpation/edit',
+		exec => 'ref_palpation_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_palpation_drop => array(
+		title => 'hearth_palpation drop',
+		description => 'Remove palpation reference form for hearth',
+		path => '/reference/hearth_palpation/drop',
+		exec => 'ref_palpation_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_top => array(
+		title => 'hearth_percussion_top',
+		description => 'percussion_top reference form for hearth',
+		path => '/reference/hearth_percussion_top',
+		exec => 'ref_percussion_top_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_top_detail => array(
+		title => 'detil hearth_percussion_top',
+		description => 'percussion_top reference detail for hearth',
+		path => '/reference/hearth_percussion_top/detail',
+		exec => 'ref_percussion_top_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_top_form => array(
+		title => 'hearth_percussion_top form',
+		description => 'percussion_top reference form for hearth',
+		path => '/reference/hearth_percussion_top/form',
+		exec => 'ref_percussion_top_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_top_form_submit => array(
+		title => 'hearth_percussion_top form',
+		description => 'Execute percussion_top reference form for hearth',
+		path => '/reference/hearth_percussion_top/form_submit',
+		exec => 'ref_percussion_top_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_top_edit => array(
+		title => 'hearth_percussion_top edit',
+		description => 'Editing percussion_top reference form for hearth',
+		path => '/reference/hearth_percussion_top/edit',
+		exec => 'ref_percussion_top_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_top_drop => array(
+		title => 'hearth_percussion_top drop',
+		description => 'Remove percussion_top reference form for hearth',
+		path => '/reference/hearth_percussion_top/drop',
+		exec => 'ref_percussion_top_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_bottom => array(
+		title => 'hearth_percussion_bottom',
+		description => 'percussion_bottom reference form for hearth',
+		path => '/reference/hearth_percussion_bottom',
+		exec => 'ref_percussion_bottom_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_bottom_detail => array(
+		title => 'detil hearth_percussion_bottom',
+		description => 'percussion_bottom reference detail for hearth',
+		path => '/reference/hearth_percussion_bottom/detail',
+		exec => 'ref_percussion_bottom_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_bottom_form => array(
+		title => 'hearth_percussion_bottom form',
+		description => 'percussion_bottom reference form for hearth',
+		path => '/reference/hearth_percussion_bottom/form',
+		exec => 'ref_percussion_bottom_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_bottom_form_submit => array(
+		title => 'hearth_percussion_bottom form',
+		description => 'Execute percussion_bottom reference form for hearth',
+		path => '/reference/hearth_percussion_bottom/form_submit',
+		exec => 'ref_percussion_bottom_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_bottom_edit => array(
+		title => 'hearth_percussion_bottom edit',
+		description => 'Editing percussion_bottom reference form for hearth',
+		path => '/reference/hearth_percussion_bottom/edit',
+		exec => 'ref_percussion_bottom_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_bottom_drop => array(
+		title => 'hearth_percussion_bottom drop',
+		description => 'Remove percussion_bottom reference form for hearth',
+		path => '/reference/hearth_percussion_bottom/drop',
+		exec => 'ref_percussion_bottom_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_right => array(
+		title => 'hearth_percussion_right',
+		description => 'percussion_right reference form for hearth',
+		path => '/reference/hearth_percussion_right',
+		exec => 'ref_percussion_right_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_right_detail => array(
+		title => 'detil hearth_percussion_right',
+		description => 'percussion_right reference detail for hearth',
+		path => '/reference/hearth_percussion_right/detail',
+		exec => 'ref_percussion_right_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_right_form => array(
+		title => 'hearth_percussion_right form',
+		description => 'percussion_right reference form for hearth',
+		path => '/reference/hearth_percussion_right/form',
+		exec => 'ref_percussion_right_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_right_form_submit => array(
+		title => 'hearth_percussion_right form',
+		description => 'Execute percussion_right reference form for hearth',
+		path => '/reference/hearth_percussion_right/form_submit',
+		exec => 'ref_percussion_right_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_right_edit => array(
+		title => 'hearth_percussion_right edit',
+		description => 'Editing percussion_right reference form for hearth',
+		path => '/reference/hearth_percussion_right/edit',
+		exec => 'ref_percussion_right_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_right_drop => array(
+		title => 'hearth_percussion_right drop',
+		description => 'Remove percussion_right reference form for hearth',
+		path => '/reference/hearth_percussion_right/drop',
+		exec => 'ref_percussion_right_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_left => array(
+		title => 'hearth_percussion_left',
+		description => 'percussion_left reference form for hearth',
+		path => '/reference/hearth_percussion_left',
+		exec => 'ref_percussion_left_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_left_detail => array(
+		title => 'detil hearth_percussion_left',
+		description => 'percussion_left reference detail for hearth',
+		path => '/reference/hearth_percussion_left/detail',
+		exec => 'ref_percussion_left_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_left_form => array(
+		title => 'hearth_percussion_left form',
+		description => 'percussion_left reference form for hearth',
+		path => '/reference/hearth_percussion_left/form',
+		exec => 'ref_percussion_left_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_left_form_submit => array(
+		title => 'hearth_percussion_left form',
+		description => 'Execute percussion_left reference form for hearth',
+		path => '/reference/hearth_percussion_left/form_submit',
+		exec => 'ref_percussion_left_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_left_edit => array(
+		title => 'hearth_percussion_left edit',
+		description => 'Editing percussion_left reference form for hearth',
+		path => '/reference/hearth_percussion_left/edit',
+		exec => 'ref_percussion_left_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_percussion_left_drop => array(
+		title => 'hearth_percussion_left drop',
+		description => 'Remove percussion_left reference form for hearth',
+		path => '/reference/hearth_percussion_left/drop',
+		exec => 'ref_percussion_left_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_sound => array(
+		title => 'hearth_auscultation_sound',
+		description => 'auscultation_sound reference form for hearth',
+		path => '/reference/hearth_auscultation_sound',
+		exec => 'ref_auscultation_sound_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_sound_detail => array(
+		title => 'detil hearth_auscultation_sound',
+		description => 'auscultation_sound reference detail for hearth',
+		path => '/reference/hearth_auscultation_sound/detail',
+		exec => 'ref_auscultation_sound_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_sound_form => array(
+		title => 'hearth_auscultation_sound form',
+		description => 'auscultation_sound reference form for hearth',
+		path => '/reference/hearth_auscultation_sound/form',
+		exec => 'ref_auscultation_sound_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_sound_form_submit => array(
+		title => 'hearth_auscultation_sound form',
+		description => 'Execute auscultation_sound reference form for hearth',
+		path => '/reference/hearth_auscultation_sound/form_submit',
+		exec => 'ref_auscultation_sound_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_sound_edit => array(
+		title => 'hearth_auscultation_sound edit',
+		description => 'Editing auscultation_sound reference form for hearth',
+		path => '/reference/hearth_auscultation_sound/edit',
+		exec => 'ref_auscultation_sound_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_sound_drop => array(
+		title => 'hearth_auscultation_sound drop',
+		description => 'Remove auscultation_sound reference form for hearth',
+		path => '/reference/hearth_auscultation_sound/drop',
+		exec => 'ref_auscultation_sound_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_localization => array(
+		title => 'hearth_localization',
+		description => 'localization reference form for hearth',
+		path => '/reference/hearth_localization',
+		exec => 'ref_localization_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_localization_detail => array(
+		title => 'detil hearth_localization',
+		description => 'localization reference detail for hearth',
+		path => '/reference/hearth_localization/detail',
+		exec => 'ref_localization_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_localization_form => array(
+		title => 'hearth_localization form',
+		description => 'localization reference form for hearth',
+		path => '/reference/hearth_localization/form',
+		exec => 'ref_localization_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_localization_form_submit => array(
+		title => 'hearth_localization form',
+		description => 'Execute localization reference form for hearth',
+		path => '/reference/hearth_localization/form_submit',
+		exec => 'ref_localization_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_localization_edit => array(
+		title => 'hearth_localization edit',
+		description => 'Editing localization reference form for hearth',
+		path => '/reference/hearth_localization/edit',
+		exec => 'ref_localization_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_localization_drop => array(
+		title => 'hearth_localization drop',
+		description => 'Remove localization reference form for hearth',
+		path => '/reference/hearth_localization/drop',
+		exec => 'ref_localization_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_intencity => array(
+		title => 'hearth_intencity',
+		description => 'intencity reference form for hearth',
+		path => '/reference/hearth_intencity',
+		exec => 'ref_intencity_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_intencity_detail => array(
+		title => 'detil hearth_intencity',
+		description => 'intencity reference detail for hearth',
+		path => '/reference/hearth_intencity/detail',
+		exec => 'ref_intencity_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_intencity_form => array(
+		title => 'hearth_intencity form',
+		description => 'intencity reference form for hearth',
+		path => '/reference/hearth_intencity/form',
+		exec => 'ref_intencity_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_intencity_form_submit => array(
+		title => 'hearth_intencity form',
+		description => 'Execute intencity reference form for hearth',
+		path => '/reference/hearth_intencity/form_submit',
+		exec => 'ref_intencity_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_intencity_edit => array(
+		title => 'hearth_intencity edit',
+		description => 'Editing intencity reference form for hearth',
+		path => '/reference/hearth_intencity/edit',
+		exec => 'ref_intencity_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_intencity_drop => array(
+		title => 'hearth_intencity drop',
+		description => 'Remove intencity reference form for hearth',
+		path => '/reference/hearth_intencity/drop',
+		exec => 'ref_intencity_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_penjalaran => array(
+		title => 'hearth_penjalaran',
+		description => 'penjalaran reference form for hearth',
+		path => '/reference/hearth_penjalaran',
+		exec => 'ref_penjalaran_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_penjalaran_detail => array(
+		title => 'detil hearth_penjalaran',
+		description => 'penjalaran reference detail for hearth',
+		path => '/reference/hearth_penjalaran/detail',
+		exec => 'ref_penjalaran_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_penjalaran_form => array(
+		title => 'hearth_penjalaran form',
+		description => 'penjalaran reference form for hearth',
+		path => '/reference/hearth_penjalaran/form',
+		exec => 'ref_penjalaran_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_penjalaran_form_submit => array(
+		title => 'hearth_penjalaran form',
+		description => 'Execute penjalaran reference form for hearth',
+		path => '/reference/hearth_penjalaran/form_submit',
+		exec => 'ref_penjalaran_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_penjalaran_edit => array(
+		title => 'hearth_penjalaran edit',
+		description => 'Editing penjalaran reference form for hearth',
+		path => '/reference/hearth_penjalaran/edit',
+		exec => 'ref_penjalaran_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_penjalaran_drop => array(
+		title => 'hearth_penjalaran drop',
+		description => 'Remove penjalaran reference form for hearth',
+		path => '/reference/hearth_penjalaran/drop',
+		exec => 'ref_penjalaran_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_kind => array(
+		title => 'hearth_auscultation_kind',
+		description => 'auscultation_kind reference form for hearth',
+		path => '/reference/hearth_auscultation_kind',
+		exec => 'ref_auscultation_kind_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_kind_detail => array(
+		title => 'detil hearth_auscultation_kind',
+		description => 'auscultation_kind reference detail for hearth',
+		path => '/reference/hearth_auscultation_kind/detail',
+		exec => 'ref_auscultation_kind_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_kind_form => array(
+		title => 'hearth_auscultation_kind form',
+		description => 'auscultation_kind reference form for hearth',
+		path => '/reference/hearth_auscultation_kind/form',
+		exec => 'ref_auscultation_kind_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_kind_form_submit => array(
+		title => 'hearth_auscultation_kind form',
+		description => 'Execute auscultation_kind reference form for hearth',
+		path => '/reference/hearth_auscultation_kind/form_submit',
+		exec => 'ref_auscultation_kind_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_kind_edit => array(
+		title => 'hearth_auscultation_kind edit',
+		description => 'Editing auscultation_kind reference form for hearth',
+		path => '/reference/hearth_auscultation_kind/edit',
+		exec => 'ref_auscultation_kind_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_kind_drop => array(
+		title => 'hearth_auscultation_kind drop',
+		description => 'Remove auscultation_kind reference form for hearth',
+		path => '/reference/hearth_auscultation_kind/drop',
+		exec => 'ref_auscultation_kind_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_quality => array(
+		title => 'hearth_auscultation_quality',
+		description => 'auscultation_quality reference form for hearth',
+		path => '/reference/hearth_auscultation_quality',
+		exec => 'ref_auscultation_quality_view',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_quality_detail => array(
+		title => 'detil hearth_auscultation_quality',
+		description => 'auscultation_quality reference detail for hearth',
+		path => '/reference/hearth_auscultation_quality/detail',
+		exec => 'ref_auscultation_quality_detail',
+		weight => '0',
+		user_required => '',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_quality_form => array(
+		title => 'hearth_auscultation_quality form',
+		description => 'auscultation_quality reference form for hearth',
+		path => '/reference/hearth_auscultation_quality/form',
+		exec => 'ref_auscultation_quality_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_quality_form_submit => array(
+		title => 'hearth_auscultation_quality form',
+		description => 'Execute auscultation_quality reference form for hearth',
+		path => '/reference/hearth_auscultation_quality/form_submit',
+		exec => 'ref_auscultation_quality_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_quality_edit => array(
+		title => 'hearth_auscultation_quality edit',
+		description => 'Editing auscultation_quality reference form for hearth',
+		path => '/reference/hearth_auscultation_quality/edit',
+		exec => 'ref_auscultation_quality_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_hearth_auscultation_quality_drop => array(
+		title => 'hearth_auscultation_quality drop',
+		description => 'Remove auscultation_quality reference form for hearth',
+		path => '/reference/hearth_auscultation_quality/drop',
+		exec => 'ref_auscultation_quality_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'hearth',
+		source => 'modules'
+	),
+	ref_mouth_inspections => array(
+		title => 'Inspeksi Mulut',
+		description => 'inspections reference form for mouth',
+		path => '/reference/mouth_inspections',
+		exec => 'ref_inspections_view',
+		weight => '0',
+		user_required => '',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_inspections_detail => array(
+		title => 'detil mulut',
+		description => 'inspections reference detail for mouth',
+		path => '/reference/mouth_inspections/detail',
+		exec => 'ref_inspections_detail',
+		weight => '0',
+		user_required => '',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_inspections_form => array(
+		title => 'mouth_inspections form',
+		description => 'inspections reference form for mouth',
+		path => '/reference/mouth_inspections/form',
+		exec => 'ref_inspections_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_inspections_form_submit => array(
+		title => 'mouth_inspections form',
+		description => 'Execute inspections reference form for mouth',
+		path => '/reference/mouth_inspections/form_submit',
+		exec => 'ref_inspections_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_inspections_edit => array(
+		title => 'mouth_inspections edit',
+		description => 'Editing inspections reference form for mouth',
+		path => '/reference/mouth_inspections/edit',
+		exec => 'ref_inspections_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_inspections_drop => array(
+		title => 'mouth_inspections drop',
+		description => 'Remove inspections reference form for mouth',
+		path => '/reference/mouth_inspections/drop',
+		exec => 'ref_inspections_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_lips => array(
+		title => 'bibir',
+		description => 'lips reference form for mouth',
+		path => '/reference/mouth_lips',
+		exec => 'ref_lips_view',
+		weight => '0',
+		user_required => '',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_lips_detail => array(
+		title => 'detil bibir',
+		description => 'lips reference detail for mouth',
+		path => '/reference/mouth_lips/detail',
+		exec => 'ref_lips_detail',
+		weight => '0',
+		user_required => '',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_lips_form => array(
+		title => 'mouth_lips form',
+		description => 'lips reference form for mouth',
+		path => '/reference/mouth_lips/form',
+		exec => 'ref_lips_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_lips_form_submit => array(
+		title => 'mouth_lips form',
+		description => 'Execute lips reference form for mouth',
+		path => '/reference/mouth_lips/form_submit',
+		exec => 'ref_lips_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_lips_edit => array(
+		title => 'mouth_lips edit',
+		description => 'Editing lips reference form for mouth',
+		path => '/reference/mouth_lips/edit',
+		exec => 'ref_lips_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_lips_drop => array(
+		title => 'mouth_lips drop',
+		description => 'Remove lips reference form for mouth',
+		path => '/reference/mouth_lips/drop',
+		exec => 'ref_lips_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_gums => array(
+		title => 'gusi',
+		description => 'gums reference form for mouth',
+		path => '/reference/mouth_gums',
+		exec => 'ref_gums_view',
+		weight => '0',
+		user_required => '',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_gums_detail => array(
+		title => 'detil gusi',
+		description => 'gums reference detail for mouth',
+		path => '/reference/mouth_gums/detail',
+		exec => 'ref_gums_detail',
+		weight => '0',
+		user_required => '',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_gums_form => array(
+		title => 'mouth_gums form',
+		description => 'gums reference form for mouth',
+		path => '/reference/mouth_gums/form',
+		exec => 'ref_gums_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_gums_form_submit => array(
+		title => 'mouth_gums form',
+		description => 'Execute gums reference form for mouth',
+		path => '/reference/mouth_gums/form_submit',
+		exec => 'ref_gums_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_gums_edit => array(
+		title => 'mouth_gums edit',
+		description => 'Editing gums reference form for mouth',
+		path => '/reference/mouth_gums/edit',
+		exec => 'ref_gums_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_gums_drop => array(
+		title => 'mouth_gums drop',
+		description => 'Remove gums reference form for mouth',
+		path => '/reference/mouth_gums/drop',
+		exec => 'ref_gums_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_tongue => array(
+		title => 'lidah',
+		description => 'tongue reference form for mouth',
+		path => '/reference/mouth_tongue',
+		exec => 'ref_tongue_view',
+		weight => '0',
+		user_required => '',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_tongue_detail => array(
+		title => 'detil lidah',
+		description => 'tongue reference detail for mouth',
+		path => '/reference/mouth_tongue/detail',
+		exec => 'ref_tongue_detail',
+		weight => '0',
+		user_required => '',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_tongue_form => array(
+		title => 'mouth_tongue form',
+		description => 'tongue reference form for mouth',
+		path => '/reference/mouth_tongue/form',
+		exec => 'ref_tongue_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_tongue_form_submit => array(
+		title => 'mouth_tongue form',
+		description => 'Execute tongue reference form for mouth',
+		path => '/reference/mouth_tongue/form_submit',
+		exec => 'ref_tongue_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_tongue_edit => array(
+		title => 'mouth_tongue edit',
+		description => 'Editing tongue reference form for mouth',
+		path => '/reference/mouth_tongue/edit',
+		exec => 'ref_tongue_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_mouth_tongue_drop => array(
+		title => 'mouth_tongue drop',
+		description => 'Remove tongue reference form for mouth',
+		path => '/reference/mouth_tongue/drop',
+		exec => 'ref_tongue_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'mouth',
+		source => 'modules'
+	),
+	ref_neck_inspections => array(
+		title => 'Inspeksi Leher',
+		description => 'inspections reference form for neck',
+		path => '/reference/neck_inspections',
+		exec => 'ref_inspections_view',
+		weight => '0',
+		user_required => '',
+		module => 'neck',
+		source => 'modules'
+	),
+	ref_neck_inspections_detail => array(
+		title => 'detil leher',
+		description => 'inspections reference detail for neck',
+		path => '/reference/neck_inspections/detail',
+		exec => 'ref_inspections_detail',
+		weight => '0',
+		user_required => '',
+		module => 'neck',
+		source => 'modules'
+	),
+	ref_neck_inspections_form => array(
+		title => 'neck_inspections form',
+		description => 'inspections reference form for neck',
+		path => '/reference/neck_inspections/form',
+		exec => 'ref_inspections_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'neck',
+		source => 'modules'
+	),
+	ref_neck_inspections_form_submit => array(
+		title => 'neck_inspections form',
+		description => 'Execute inspections reference form for neck',
+		path => '/reference/neck_inspections/form_submit',
+		exec => 'ref_inspections_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'neck',
+		source => 'modules'
+	),
+	ref_neck_inspections_edit => array(
+		title => 'neck_inspections edit',
+		description => 'Editing inspections reference form for neck',
+		path => '/reference/neck_inspections/edit',
+		exec => 'ref_inspections_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'neck',
+		source => 'modules'
+	),
+	ref_neck_inspections_drop => array(
+		title => 'neck_inspections drop',
+		description => 'Remove inspections reference form for neck',
+		path => '/reference/neck_inspections/drop',
+		exec => 'ref_inspections_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'neck',
+		source => 'modules'
+	),
+	ref_nose_inspections => array(
+		title => 'Inspeksi Hidung',
+		description => 'inspections reference form for nose',
+		path => '/reference/nose_inspections',
+		exec => 'ref_inspections_view',
+		weight => '0',
+		user_required => '',
+		module => 'nose',
+		source => 'modules'
+	),
+	ref_nose_inspections_detail => array(
+		title => 'detil hidung',
+		description => 'inspections reference detail for nose',
+		path => '/reference/nose_inspections/detail',
+		exec => 'ref_inspections_detail',
+		weight => '0',
+		user_required => '',
+		module => 'nose',
+		source => 'modules'
+	),
+	ref_nose_inspections_form => array(
+		title => 'nose_inspections form',
+		description => 'inspections reference form for nose',
+		path => '/reference/nose_inspections/form',
+		exec => 'ref_inspections_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'nose',
+		source => 'modules'
+	),
+	ref_nose_inspections_form_submit => array(
+		title => 'nose_inspections form',
+		description => 'Execute inspections reference form for nose',
+		path => '/reference/nose_inspections/form_submit',
+		exec => 'ref_inspections_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'nose',
+		source => 'modules'
+	),
+	ref_nose_inspections_edit => array(
+		title => 'nose_inspections edit',
+		description => 'Editing inspections reference form for nose',
+		path => '/reference/nose_inspections/edit',
+		exec => 'ref_inspections_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'nose',
+		source => 'modules'
+	),
+	ref_nose_inspections_drop => array(
+		title => 'nose_inspections drop',
+		description => 'Remove inspections reference form for nose',
+		path => '/reference/nose_inspections/drop',
+		exec => 'ref_inspections_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'nose',
+		source => 'modules'
+	),
+	ref_paru_fremitus_raba => array(
+		title => 'fremitus raba',
+		description => 'fremitus_raba reference form for paru',
+		path => '/reference/paru_fremitus_raba',
+		exec => 'ref_fremitus_raba_view',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_fremitus_raba_detail => array(
+		title => 'detil fremitus raba',
+		description => 'fremitus_raba reference detail for paru',
+		path => '/reference/paru_fremitus_raba/detail',
+		exec => 'ref_fremitus_raba_detail',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_fremitus_raba_form => array(
+		title => 'paru_fremitus_raba form',
+		description => 'fremitus_raba reference form for paru',
+		path => '/reference/paru_fremitus_raba/form',
+		exec => 'ref_fremitus_raba_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_fremitus_raba_form_submit => array(
+		title => 'paru_fremitus_raba form',
+		description => 'Execute fremitus_raba reference form for paru',
+		path => '/reference/paru_fremitus_raba/form_submit',
+		exec => 'ref_fremitus_raba_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_fremitus_raba_edit => array(
+		title => 'paru_fremitus_raba edit',
+		description => 'Editing fremitus_raba reference form for paru',
+		path => '/reference/paru_fremitus_raba/edit',
+		exec => 'ref_fremitus_raba_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_fremitus_raba_drop => array(
+		title => 'paru_fremitus_raba drop',
+		description => 'Remove fremitus_raba reference form for paru',
+		path => '/reference/paru_fremitus_raba/drop',
+		exec => 'ref_fremitus_raba_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kiri => array(
+		title => 'paru kiri',
+		description => 'kiri reference form for paru',
+		path => '/reference/paru_kiri',
+		exec => 'ref_kiri_view',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kiri_detail => array(
+		title => 'detil paru kiri',
+		description => 'kiri reference detail for paru',
+		path => '/reference/paru_kiri/detail',
+		exec => 'ref_kiri_detail',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kiri_form => array(
+		title => 'paru_kiri form',
+		description => 'kiri reference form for paru',
+		path => '/reference/paru_kiri/form',
+		exec => 'ref_kiri_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kiri_form_submit => array(
+		title => 'paru_kiri form',
+		description => 'Execute kiri reference form for paru',
+		path => '/reference/paru_kiri/form_submit',
+		exec => 'ref_kiri_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kiri_edit => array(
+		title => 'paru_kiri edit',
+		description => 'Editing kiri reference form for paru',
+		path => '/reference/paru_kiri/edit',
+		exec => 'ref_kiri_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kiri_drop => array(
+		title => 'paru_kiri drop',
+		description => 'Remove kiri reference form for paru',
+		path => '/reference/paru_kiri/drop',
+		exec => 'ref_kiri_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kanan => array(
+		title => 'paru kanan',
+		description => 'kanan reference form for paru',
+		path => '/reference/paru_kanan',
+		exec => 'ref_kanan_view',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kanan_detail => array(
+		title => 'detil paru kanan',
+		description => 'kanan reference detail for paru',
+		path => '/reference/paru_kanan/detail',
+		exec => 'ref_kanan_detail',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kanan_form => array(
+		title => 'paru_kanan form',
+		description => 'kanan reference form for paru',
+		path => '/reference/paru_kanan/form',
+		exec => 'ref_kanan_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kanan_form_submit => array(
+		title => 'paru_kanan form',
+		description => 'Execute kanan reference form for paru',
+		path => '/reference/paru_kanan/form_submit',
+		exec => 'ref_kanan_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kanan_edit => array(
+		title => 'paru_kanan edit',
+		description => 'Editing kanan reference form for paru',
+		path => '/reference/paru_kanan/edit',
+		exec => 'ref_kanan_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_kanan_drop => array(
+		title => 'paru_kanan drop',
+		description => 'Remove kanan reference form for paru',
+		path => '/reference/paru_kanan/drop',
+		exec => 'ref_kanan_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kiri => array(
+		title => 'paru belakang_kiri',
+		description => 'belakang_kiri reference form for paru',
+		path => '/reference/paru_belakang_kiri',
+		exec => 'ref_belakang_kiri_view',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kiri_detail => array(
+		title => 'detil paru belakang_kiri',
+		description => 'belakang_kiri reference detail for paru',
+		path => '/reference/paru_belakang_kiri/detail',
+		exec => 'ref_belakang_kiri_detail',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kiri_form => array(
+		title => 'paru_belakang_kiri form',
+		description => 'belakang_kiri reference form for paru',
+		path => '/reference/paru_belakang_kiri/form',
+		exec => 'ref_belakang_kiri_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kiri_form_submit => array(
+		title => 'paru_belakang_kiri form',
+		description => 'Execute belakang_kiri reference form for paru',
+		path => '/reference/paru_belakang_kiri/form_submit',
+		exec => 'ref_belakang_kiri_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kiri_edit => array(
+		title => 'paru_belakang_kiri edit',
+		description => 'Editing belakang_kiri reference form for paru',
+		path => '/reference/paru_belakang_kiri/edit',
+		exec => 'ref_belakang_kiri_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kiri_drop => array(
+		title => 'paru_belakang_kiri drop',
+		description => 'Remove belakang_kiri reference form for paru',
+		path => '/reference/paru_belakang_kiri/drop',
+		exec => 'ref_belakang_kiri_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kanan => array(
+		title => 'paru belakang_kanan',
+		description => 'belakang_kanan reference form for paru',
+		path => '/reference/paru_belakang_kanan',
+		exec => 'ref_belakang_kanan_view',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kanan_detail => array(
+		title => 'detil paru belakang_kanan',
+		description => 'belakang_kanan reference detail for paru',
+		path => '/reference/paru_belakang_kanan/detail',
+		exec => 'ref_belakang_kanan_detail',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kanan_form => array(
+		title => 'paru_belakang_kanan form',
+		description => 'belakang_kanan reference form for paru',
+		path => '/reference/paru_belakang_kanan/form',
+		exec => 'ref_belakang_kanan_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kanan_form_submit => array(
+		title => 'paru_belakang_kanan form',
+		description => 'Execute belakang_kanan reference form for paru',
+		path => '/reference/paru_belakang_kanan/form_submit',
+		exec => 'ref_belakang_kanan_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kanan_edit => array(
+		title => 'paru_belakang_kanan edit',
+		description => 'Editing belakang_kanan reference form for paru',
+		path => '/reference/paru_belakang_kanan/edit',
+		exec => 'ref_belakang_kanan_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_belakang_kanan_drop => array(
+		title => 'paru_belakang_kanan drop',
+		description => 'Remove belakang_kanan reference form for paru',
+		path => '/reference/paru_belakang_kanan/drop',
+		exec => 'ref_belakang_kanan_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_hepar => array(
+		title => 'paru hepar',
+		description => 'hepar reference form for paru',
+		path => '/reference/paru_hepar',
+		exec => 'ref_hepar_view',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_hepar_detail => array(
+		title => 'detil paru hepar',
+		description => 'hepar reference detail for paru',
+		path => '/reference/paru_hepar/detail',
+		exec => 'ref_hepar_detail',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_hepar_form => array(
+		title => 'paru_hepar form',
+		description => 'hepar reference form for paru',
+		path => '/reference/paru_hepar/form',
+		exec => 'ref_hepar_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_hepar_form_submit => array(
+		title => 'paru_hepar form',
+		description => 'Execute hepar reference form for paru',
+		path => '/reference/paru_hepar/form_submit',
+		exec => 'ref_hepar_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_hepar_edit => array(
+		title => 'paru_hepar edit',
+		description => 'Editing hepar reference form for paru',
+		path => '/reference/paru_hepar/edit',
+		exec => 'ref_hepar_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_hepar_drop => array(
+		title => 'paru_hepar drop',
+		description => 'Remove hepar reference form for paru',
+		path => '/reference/paru_hepar/drop',
+		exec => 'ref_hepar_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_pernafasan => array(
+		title => 'paru bunyi_pernafasan',
+		description => 'bunyi_pernafasan reference form for paru',
+		path => '/reference/paru_bunyi_pernafasan',
+		exec => 'ref_bunyi_pernafasan_view',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_pernafasan_detail => array(
+		title => 'detil paru bunyi_pernafasan',
+		description => 'bunyi_pernafasan reference detail for paru',
+		path => '/reference/paru_bunyi_pernafasan/detail',
+		exec => 'ref_bunyi_pernafasan_detail',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_pernafasan_form => array(
+		title => 'paru_bunyi_pernafasan form',
+		description => 'bunyi_pernafasan reference form for paru',
+		path => '/reference/paru_bunyi_pernafasan/form',
+		exec => 'ref_bunyi_pernafasan_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_pernafasan_form_submit => array(
+		title => 'paru_bunyi_pernafasan form',
+		description => 'Execute bunyi_pernafasan reference form for paru',
+		path => '/reference/paru_bunyi_pernafasan/form_submit',
+		exec => 'ref_bunyi_pernafasan_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_pernafasan_edit => array(
+		title => 'paru_bunyi_pernafasan edit',
+		description => 'Editing bunyi_pernafasan reference form for paru',
+		path => '/reference/paru_bunyi_pernafasan/edit',
+		exec => 'ref_bunyi_pernafasan_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_pernafasan_drop => array(
+		title => 'paru_bunyi_pernafasan drop',
+		description => 'Remove bunyi_pernafasan reference form for paru',
+		path => '/reference/paru_bunyi_pernafasan/drop',
+		exec => 'ref_bunyi_pernafasan_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_tambahan => array(
+		title => 'paru bunyi_tambahan',
+		description => 'bunyi_tambahan reference form for paru',
+		path => '/reference/paru_bunyi_tambahan',
+		exec => 'ref_bunyi_tambahan_view',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_tambahan_detail => array(
+		title => 'detil paru bunyi_tambahan',
+		description => 'bunyi_tambahan reference detail for paru',
+		path => '/reference/paru_bunyi_tambahan/detail',
+		exec => 'ref_bunyi_tambahan_detail',
+		weight => '0',
+		user_required => '',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_tambahan_form => array(
+		title => 'paru_bunyi_tambahan form',
+		description => 'bunyi_tambahan reference form for paru',
+		path => '/reference/paru_bunyi_tambahan/form',
+		exec => 'ref_bunyi_tambahan_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_tambahan_form_submit => array(
+		title => 'paru_bunyi_tambahan form',
+		description => 'Execute bunyi_tambahan reference form for paru',
+		path => '/reference/paru_bunyi_tambahan/form_submit',
+		exec => 'ref_bunyi_tambahan_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_tambahan_edit => array(
+		title => 'paru_bunyi_tambahan edit',
+		description => 'Editing bunyi_tambahan reference form for paru',
+		path => '/reference/paru_bunyi_tambahan/edit',
+		exec => 'ref_bunyi_tambahan_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	ref_paru_bunyi_tambahan_drop => array(
+		title => 'paru_bunyi_tambahan drop',
+		description => 'Remove bunyi_tambahan reference form for paru',
+		path => '/reference/paru_bunyi_tambahan/drop',
+		exec => 'ref_bunyi_tambahan_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'paru',
+		source => 'modules'
+	),
+	patient_lists => array(
+		title => 'patient lists',
+		description => 'lists of patient',
+		path => '/node/patient',
+		exec => 'view',
+		weight => '5',
+		user_required => '',
+		module => 'patient',
+		source => 'modules'
+	),
+	patient_form => array(
+		title => 'patient form',
+		description => 'patient check form',
+		path => '/node/patient/form',
+		exec => 'form',
+		weight => '5',
+		user_required => '',
+		module => 'patient',
+		source => 'modules'
+	),
+	patient_form_submit => array(
+		title => 'patient form',
+		description => 'patient check form',
+		path => '/node/patient/form_submit',
+		exec => 'form_submit',
+		weight => '5',
+		user_required => '',
+		module => 'patient',
+		source => 'modules'
+	),
+	patient_strnum => array(
+		title => 'Get Strnum Form',
+		description => 'patient get strnum form',
+		path => '/node/patient/strnumform',
+		exec => 'strnum_form',
+		weight => '5',
+		user_required => '',
+		module => 'patient',
+		source => 'modules'
+	),
+	patient_strnumset => array(
+		title => 'Get Strnum',
+		description => 'patient get strnum info',
+		path => '/node/patient/setstrnum',
+		exec => 'setstrnum',
+		weight => '5',
+		user_required => '',
+		module => 'patient',
+		source => 'modules'
+	),
+	patient_showme => array(
+		title => 'Patient Detail',
+		description => 'get patient detail info',
+		path => '/node/patient/showme',
+		exec => 'showme',
+		weight => '5',
+		user_required => '',
+		module => 'patient',
+		source => 'modules'
+	),
+	patient_register => array(
+		title => 'Patient Register',
+		description => 'register patient into database',
+		path => '/user/patient',
+		exec => 'register',
+		weight => '5',
+		user_required => 'patient',
+		module => 'patient',
+		source => 'modules'
+	),
+	register_form => array(
+		title => 'Patient Register',
+		description => 'execute registering patient into database',
+		path => '/user/patient/register',
+		exec => 'register_form',
+		weight => '5',
+		user_required => 'patient',
+		module => 'patient',
+		source => 'modules'
+	),
+	register_form_submit => array(
+		title => 'Patient Register',
+		description => 'execute registering patient into database',
+		path => '/user/patient/register_form_submit',
+		exec => 'register_submit',
+		weight => '5',
+		user_required => 'patient',
+		module => 'patient',
+		source => 'modules'
+	),
+	ref_present_nutrient => array(
+		title => 'gizi',
+		description => 'nutrient reference for present status',
+		path => '/reference/nutrient',
+		exec => 'nutrient_view',
+		weight => '5',
+		user_required => '',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_nutrient_detail => array(
+		title => 'nutrient detail',
+		description => 'nutrient reference detail for present status',
+		path => '/reference/nutrient/detail',
+		exec => 'nutrient_detail',
+		weight => '0',
+		user_required => '',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_nutrient_form => array(
+		title => 'nutrient form',
+		description => 'nutrient reference form for present status',
+		path => '/reference/nutrient/form',
+		exec => 'nutrient_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_nutrient_form_submit => array(
+		title => 'nutrient form',
+		description => 'Execute nutrient reference form for present status',
+		path => '/reference/nutrient/form_submit',
+		exec => 'nutrient_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_nutrient_edit => array(
+		title => 'nutrient edit',
+		description => 'Editing nutrient reference form for present status',
+		path => '/reference/nutrient/edit',
+		exec => 'nutrient_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_nutrient_drop => array(
+		title => 'nutrient drop',
+		description => 'Remove nutrient reference form for present status',
+		path => '/reference/nutrient/drop',
+		exec => 'nutrient_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_soreness => array(
+		title => 'Keluhan Utama',
+		description => 'soreness reference form for present status',
+		path => '/reference/soreness',
+		exec => 'soreness_view',
+		weight => '0',
+		user_required => '',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_soreness_detail => array(
+		title => 'detil keluhan',
+		description => 'soreness reference detail for present status',
+		path => '/reference/soreness/detail',
+		exec => 'soreness_detail',
+		weight => '0',
+		user_required => '',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_soreness_form => array(
+		title => 'soreness form',
+		description => 'soreness reference form for present status',
+		path => '/reference/soreness/form',
+		exec => 'soreness_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_soreness_form_submit => array(
+		title => 'soreness form',
+		description => 'Execute soreness reference form for present status',
+		path => '/reference/soreness/form_submit',
+		exec => 'soreness_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_soreness_edit => array(
+		title => 'soreness edit',
+		description => 'Editing soreness reference form for present status',
+		path => '/reference/soreness/edit',
+		exec => 'soreness_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_soreness_drop => array(
+		title => 'soreness drop',
+		description => 'Remove soreness reference form for present status',
+		path => '/reference/soreness/drop',
+		exec => 'soreness_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_risk_factor => array(
+		title => 'Faktor Resiko',
+		description => 'risk_factor reference form for present status',
+		path => '/reference/risk_factor',
+		exec => 'ref_risk_factor_view',
+		weight => '0',
+		user_required => '',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_risk_factor_detail => array(
+		title => 'detil keluhan',
+		description => ' risk_factor reference detail for present status',
+		path => '/reference/risk_factor/detail',
+		exec => 'ref_risk_factor_detail',
+		weight => '0',
+		user_required => '',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_risk_factor_form => array(
+		title => 'risk_factor form',
+		description => ' risk_factor reference form for present status',
+		path => '/reference/risk_factor/form',
+		exec => 'ref_risk_factor_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_risk_factor_form_submit => array(
+		title => 'risk_factor form',
+		description => 'Execute risk_factor reference form for present status',
+		path => '/reference/risk_factor/form_submit',
+		exec => 'ref_risk_factor_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_risk_factor_edit => array(
+		title => 'risk_factor edit',
+		description => 'Editing  risk_factor reference form for present status',
+		path => '/reference/risk_factor/edit',
+		exec => 'ref_risk_factor_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_risk_factor_drop => array(
+		title => 'risk_factor drop',
+		description => 'Remove  risk_factor reference form for present status',
+		path => '/reference/risk_factor/drop',
+		exec => 'ref_risk_factor_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_illness_history => array(
+		title => 'Riwayat Penyakit',
+		description => 'illness_history reference form for present status',
+		path => '/reference/illness_history',
+		exec => 'ref_illness_history_view',
+		weight => '0',
+		user_required => '',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_illness_history_detail => array(
+		title => 'detil keluhan',
+		description => 'illness_history reference detail for present status',
+		path => '/reference/illness_history/detail',
+		exec => 'ref_illness_history_detail',
+		weight => '0',
+		user_required => '',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_illness_history_form => array(
+		title => 'illness_history form',
+		description => 'illness_history reference form for present status',
+		path => '/reference/illness_history/form',
+		exec => 'ref_illness_history_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_illness_history_form_submit => array(
+		title => 'illness_history form',
+		description => 'Execute illness_history reference form for present status',
+		path => '/reference/illness_history/form_submit',
+		exec => 'ref_illness_history_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_illness_history_edit => array(
+		title => 'illness_history edit',
+		description => 'Editing illness_history reference form for present status',
+		path => '/reference/illness_history/edit',
+		exec => 'ref_illness_history_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_present_illness_history_drop => array(
+		title => 'illness_history drop',
+		description => 'Remove illness_history reference form for present status',
+		path => '/reference/illness_history/drop',
+		exec => 'ref_illness_history_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'presentStatus',
+		source => 'modules'
+	),
+	ref_thorax_inspections => array(
+		title => 'Inspeksi Thorax',
+		description => 'inspections reference form for thorax',
+		path => '/reference/thorax_inspections',
+		exec => 'ref_inspections_view',
+		weight => '0',
+		user_required => '',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_inspections_detail => array(
+		title => 'detil thorax',
+		description => 'inspections reference detail for thorax',
+		path => '/reference/thorax_inspections/detail',
+		exec => 'ref_inspections_detail',
+		weight => '0',
+		user_required => '',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_inspections_form => array(
+		title => 'thorax_inspections form',
+		description => 'inspections reference form for thorax',
+		path => '/reference/thorax_inspections/form',
+		exec => 'ref_inspections_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_inspections_form_submit => array(
+		title => 'thorax_inspections form',
+		description => 'Execute inspections reference form for thorax',
+		path => '/reference/thorax_inspections/form_submit',
+		exec => 'ref_inspections_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_inspections_edit => array(
+		title => 'thorax_inspections edit',
+		description => 'Editing inspections reference form for thorax',
+		path => '/reference/thorax_inspections/edit',
+		exec => 'ref_inspections_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_inspections_drop => array(
+		title => 'thorax_inspections drop',
+		description => 'Remove inspections reference form for thorax',
+		path => '/reference/thorax_inspections/drop',
+		exec => 'ref_inspections_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_relief => array(
+		title => 'Bentuk Thorax',
+		description => 'relief reference form for thorax',
+		path => '/reference/thorax_relief',
+		exec => 'ref_relief_view',
+		weight => '0',
+		user_required => '',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_relief_detail => array(
+		title => 'detil bentuk thorax',
+		description => 'relief reference detail for thorax',
+		path => '/reference/thorax_relief/detail',
+		exec => 'ref_relief_detail',
+		weight => '0',
+		user_required => '',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_relief_form => array(
+		title => 'thorax_relief form',
+		description => 'relief reference form for thorax',
+		path => '/reference/thorax_relief/form',
+		exec => 'ref_relief_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_relief_form_submit => array(
+		title => 'thorax_relief form',
+		description => 'Execute relief reference form for thorax',
+		path => '/reference/thorax_relief/form_submit',
+		exec => 'ref_relief_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_relief_edit => array(
+		title => 'thorax_relief edit',
+		description => 'Editing relief reference form for thorax',
+		path => '/reference/thorax_relief/edit',
+		exec => 'ref_relief_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'thorax',
+		source => 'modules'
+	),
+	ref_thorax_relief_drop => array(
+		title => 'thorax_relief drop',
+		description => 'Remove relief reference form for thorax',
+		path => '/reference/thorax_relief/drop',
+		exec => 'ref_relief_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'thorax',
+		source => 'modules'
+	),
+	user_view => array(
+		title => 'user',
+		description => 'menu untuk menampilkan daftar pengguna yang terdaftar',
+		path => '/admin/user',
+		exec => 'view',
+		weight => '0',
+		user_required => 'admin',
+		module => 'user',
+		source => 'modules'
+	),
+	user_detail => array(
+		title => 'user detail',
+		description => 'menu untuk menampilkan detail pengguna terdaftar yang terpilih',
+		path => '/admin/user/detail',
+		exec => 'detail',
+		weight => '0',
+		user_required => 'admin',
+		module => 'user',
+		source => 'modules'
+	),
+	user_edit => array(
+		title => 'user edit',
+		description => 'eksekusi perintah edit untuk tabel users',
+		path => '/admin/user/edit',
+		exec => 'edit',
+		weight => '0',
+		user_required => 'admin',
+		hidden => '1',
+		module => 'user',
+		source => 'modules'
+	),
+	user_drop => array(
+		title => 'delete user',
+		description => 'eksekusi perintah delete users',
+		path => '/admin/user/drop',
+		exec => 'delete',
+		weight => '0',
+		user_required => 'admin',
+		hidden => '1',
+		module => 'user',
+		source => 'modules'
+	),
+	user_add => array(
+		title => 'add user',
+		description => 'formulir pendaftaran pengguna',
+		path => '/admin/user/form',
+		exec => 'form',
+		weight => '0',
+		user_required => 'admin',
+		module => 'user',
+		source => 'modules'
+	),
+	user_add_submit => array(
+		title => 'add user',
+		description => 'eksekusi formulir pendaftaran pengguna',
+		path => '/admin/user/form_submit',
+		exec => 'form_submit',
+		weight => '0',
+		user_required => 'admin',
+		module => 'user',
+		source => 'modules'
+	),
+	user_settings => array(
+		title => 'user setings',
+		description => 'perubahan informasi pengguna',
+		path => '/user/edit',
+		exec => 'seting_form',
+		weight => '0',
+		user_required => 'users',
+		module => 'user',
+		source => 'modules'
+	),
+	user_setting_form_submit => array(
+		title => 'user setings',
+		description => 'eksekusi perubahan informasi pengguna',
+		path => '/user/edit_submit',
+		exec => 'seting_form_submit',
+		weight => '0',
+		user_required => 'users',
+		module => 'user',
+		source => 'modules'
+	),
+	user_password => array(
+		title => 'user password',
+		description => 'perubahan sandi pengguna',
+		path => '/user/sandi',
+		exec => 'password_form',
+		weight => '0',
+		user_required => 'users',
+		module => 'user',
+		source => 'modules'
+	),
+	user_password_submit => array(
+		title => 'user password',
+		description => 'eksekusi perubahan sandi pengguna',
+		path => '/user/sandisubmit',
+		exec => 'password_form_submit',
+		weight => '0',
+		user_required => 'users',
+		module => 'user',
+		source => 'modules'
+	),
+	vascular_form => array(
+		title => 'vascular form',
+		description => 'vascular check form',
+		path => '/user/vascular/form',
+		exec => 'form',
+		weight => '5',
+		user_required => '3',
+		module => 'vascular',
+		source => 'modules'
+	),
+	vascular_checkform => array(
+		title => 'vascular form',
+		description => 'vascular check form',
+		path => '/user/vascular/checkform',
+		exec => 'checkform',
+		weight => '5',
+		user_required => '3',
+		module => 'vascular',
+		source => 'modules'
+	),
+	vascular_today_patient_lists => array(
+		title => 'vascular form',
+		description => 'vascular check form',
+		path => '/user/vascular/today_patient_lists',
+		exec => 'today_patient_lists',
+		weight => '5',
+		user_required => '3',
+		module => 'vascular',
+		source => 'modules'
+	),
+	vascular_form_submit => array(
+		title => 'vascular form submit',
+		description => 'execute vascular check form',
+		path => '/user/vascular/form_submit',
+		exec => 'form_submit',
+		weight => '5',
+		user_required => '3',
+		module => 'vascular',
+		source => 'modules'
+	),
+	vascular_message => array(
+		title => 'vascular message',
+		description => 'get vascular message',
+		path => '/user/vascular/message',
+		exec => 'message',
+		weight => '5',
+		user_required => '3',
+		module => 'vascular',
+		source => 'modules'
+	),
+	ref_vitalsign_type => array(
+		title => 'tipe tanda vital',
+		description => 'type reference form for vitalsign',
+		path => '/reference/vitalsign_type',
+		exec => 'ref_type_view',
+		weight => '0',
+		user_required => '',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_type_detail => array(
+		title => 'detil tipe tanda vital',
+		description => 'type reference detail for vitalsign',
+		path => '/reference/vitalsign_type/detail',
+		exec => 'ref_type_detail',
+		weight => '0',
+		user_required => '',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_type_form => array(
+		title => 'vitalsign_type form',
+		description => 'type reference form for vitalsign',
+		path => '/reference/vitalsign_type/form',
+		exec => 'ref_type_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_type_form_submit => array(
+		title => 'vitalsign_type form',
+		description => 'Execute type reference form for vitalsign',
+		path => '/reference/vitalsign_type/form_submit',
+		exec => 'ref_type_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_type_edit => array(
+		title => 'vitalsign_type edit',
+		description => 'Editing type reference form for vitalsign',
+		path => '/reference/vitalsign_type/edit',
+		exec => 'ref_type_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_type_drop => array(
+		title => 'vitalsign_type drop',
+		description => 'Remove type reference form for vitalsign',
+		path => '/reference/vitalsign_type/drop',
+		exec => 'ref_type_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_pulse_rythm => array(
+		title => 'irama nadi',
+		description => 'pulse rythm reference form for vitalsign',
+		path => '/reference/vitalsign_pulse_rythm',
+		exec => 'ref_pulse_rythm_view',
+		weight => '0',
+		user_required => '',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_pulse_rythm_detail => array(
+		title => 'detil tipe tanda vital',
+		description => 'pulse_rythm reference detail for vitalsign',
+		path => '/reference/vitalsign_pulse_rythm/detail',
+		exec => 'ref_pulse_rythm_detail',
+		weight => '0',
+		user_required => '',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_pulse_rythm_form => array(
+		title => 'vitalsign_pulse_rythm form',
+		description => 'pulse_rythm reference form for vitalsign',
+		path => '/reference/vitalsign_pulse_rythm/form',
+		exec => 'ref_pulse_rythm_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_pulse_rythm_form_submit => array(
+		title => 'vitalsign_pulse_rythm form',
+		description => 'Execute pulse_rythm reference form for vitalsign',
+		path => '/reference/vitalsign_pulse_rythm/form_submit',
+		exec => 'ref_pulse_rythm_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_pulse_rythm_edit => array(
+		title => 'vitalsign_pulse_rythm edit',
+		description => 'Editing pulse_rythm reference form for vitalsign',
+		path => '/reference/vitalsign_pulse_rythm/edit',
+		exec => 'ref_pulse_rythm_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_pulse_rythm_drop => array(
+		title => 'vitalsign_pulse_rythm drop',
+		description => 'Remove pulse_rythm reference form for vitalsign',
+		path => '/reference/vitalsign_pulse_rythm/drop',
+		exec => 'ref_pulse_rythm_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_kesadaran => array(
+		title => 'kesadaran',
+		description => 'kesadaran reference form for vitalsign',
+		path => '/reference/vitalsign_kesadaran',
+		exec => 'ref_kesadaran_view',
+		weight => '0',
+		user_required => '',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_kesadaran_detail => array(
+		title => 'detil tipe tanda vital',
+		description => 'kesadaran reference detail for vitalsign',
+		path => '/reference/vitalsign_kesadaran/detail',
+		exec => 'ref_kesadaran_detail',
+		weight => '0',
+		user_required => '',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_kesadaran_form => array(
+		title => 'vitalsign_kesadaran form',
+		description => 'kesadaran reference form for vitalsign',
+		path => '/reference/vitalsign_kesadaran/form',
+		exec => 'ref_kesadaran_form',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_kesadaran_form_submit => array(
+		title => 'vitalsign_kesadaran form',
+		description => 'Execute kesadaran reference form for vitalsign',
+		path => '/reference/vitalsign_kesadaran/form_submit',
+		exec => 'ref_kesadaran_form_submit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_kesadaran_edit => array(
+		title => 'vitalsign_kesadaran edit',
+		description => 'Editing kesadaran reference form for vitalsign',
+		path => '/reference/vitalsign_kesadaran/edit',
+		exec => 'ref_kesadaran_edit',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	),
+	ref_vitalsign_kesadaran_drop => array(
+		title => 'vitalsign_kesadaran drop',
+		description => 'Remove kesadaran reference form for vitalsign',
+		path => '/reference/vitalsign_kesadaran/drop',
+		exec => 'ref_kesadaran_drop',
+		weight => '0',
+		user_required => 'reference',
+		module => 'vitalSign',
+		source => 'modules'
+	)
+);

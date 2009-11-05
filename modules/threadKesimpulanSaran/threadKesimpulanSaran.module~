@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  theadKesimpulanSaran.php
+ *  
+ *  Created on Oct 3, 2009, 8:38:26 PM
+ */
+
+require_once MODULES_DIR . DS . 'theadKesimpulanSaran' . DS . 'theadKesimpulanSaran.class.inc';
+
+if(!isset($theadKesimpulanSaran_config)){
+    $theadKesimpulanSaran_config = new theadKesimpulanSaranConfig();
+} elseif(!$theadKesimpulanSaran_config instanceof theadKesimpulanSaranConfig) {
+    $theadKesimpulanSaran_config = new theadKesimpulanSaranConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $theadKesimpulanSaran_config->rdbms . DS . 'dbquery.php';
+if(!isset($theadKesimpulanSaran_query)){
+    $theadKesimpulanSaran_query = new dbset();
+} elseif(!$theadKesimpulanSaran_query instanceof dbset) {
+    $theadKesimpulanSaran_query = new dbset();
+}
+
+if(!isset($theadKesimpulanSaran_exec)){
+    $theadKesimpulanSaran_exec = new theadKesimpulanSaranModule();
+} elseif(!$theadKesimpulanSaran_exec instanceof theadKesimpulanSaranModule) {
+    $theadKesimpulanSaran_exec = new theadKesimpulanSaranModule();
+}

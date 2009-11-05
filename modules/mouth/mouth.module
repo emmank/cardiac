@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  mouth.php
+ *  
+ *  Created on Oct 4, 2009, 7:18:29 AM
+ */
+
+require_once MODULES_DIR . DS . 'mouth' . DS . 'mouth.class.inc';
+
+if(!isset($mouth_config)){
+    $mouth_config = new mouthConfig();
+} elseif(!$mouth_config instanceof mouthConfig) {
+    $mouth_config = new mouthConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $mouth_config->rdbms . DS . 'dbquery.php';
+if(!isset($mouth_query)){
+    $mouth_query = new dbset();
+} elseif(!$mouth_query instanceof dbset) {
+    $mouth_query = new dbset();
+}
+
+if(!isset($mouth_exec)){
+    $mouth_exec = new mouthModule();
+} elseif(!$mouth_exec instanceof mouthModule) {
+    $mouth_exec = new mouthModule();
+}

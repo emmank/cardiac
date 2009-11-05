@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  headface.php
+ *  
+ *  Created on Oct 3, 2009, 11:23:46 PM
+ */
+
+require_once MODULES_DIR . DS . 'headface' . DS . 'headface.class.inc';
+
+if(!isset($headface_config)){
+    $headface_config = new headfaceConfig();
+} elseif(!$headface_config instanceof headfaceConfig) {
+    $headface_config = new headfaceConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $headface_config->rdbms . DS . 'dbquery.php';
+if(!isset($headface_query)){
+    $headface_query = new dbset();
+} elseif(!$headface_query instanceof dbset) {
+    $headface_query = new dbset();
+}
+
+if(!isset($headface_exec)){
+    $headface_exec = new headfaceModule();
+} elseif(!$headface_exec instanceof headfaceModule) {
+    $headface_exec = new headfaceModule();
+}

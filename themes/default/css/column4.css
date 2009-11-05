@@ -1,0 +1,36 @@
+.wrapper{
+   position: relative;
+   float: left;
+   left: 0.50%;
+   width: 99.00%;
+   background-color: #ffffff
+}
+.left1{
+   position: relative;
+   float: left;
+   left: 0%;
+   width: 16%;
+   background-color: #ffffff
+}
+.left2{
+   position: relative;
+   float: left;
+   left: 0.20%;
+   width: 20.00%;
+   background-color: #ffffff
+}
+.left3{
+   position: relative;
+   float: left;
+   left: 0.40%;
+   width: 20.00%;
+   background-color: #ffffff
+}
+.left4{
+   position: relative;
+   float: left;
+   left: 0.40%;
+   width: 19.80%;
+   background-color: #ffffff
+}
+
