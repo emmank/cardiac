@@ -40,22 +40,27 @@ class abdomenConfig extends config
         'id'
     );
 
-    // ---- Dibawah ini sengaja saya comment, karena berbeda dengan config module lain ----
-//    var $heparfield_types = array(
-//        'id' => 'hidden',
-//        'hepar' => 'text',
-//        'type' => 'select'
-//    );
-//    var $liverfield_types = array(
-//        'id' => 'hidden',
-//        'liver' => 'text',
-//        'type' => 'select'
-//    );
-//    var $ginjalfield_types = array(
-//        'id' => 'hidden',
-//        'ginjal' => 'text',
-//        'type' => 'select'
-//    );
+    
+    var $heparfield_types = array(
+        'id' => 'hidden',
+        'hepar' => 'text',
+        'type' => 'select'
+    );
+    var $liverfield_types = array(
+        'id' => 'hidden',
+        'liver' => 'text',
+        'type' => 'select'
+    );
+    var $ginjalfield_types = array(
+        'id' => 'hidden',
+        'ginjal' => 'text',
+        'type' => 'select'
+    );
+    var $inspeksi_ginjalfield_types = array(
+        'id' => 'hidden',
+        'inspeksi_ginjal' => 'text',
+        'type' => 'select'
+    );
 
     var $typeoffields = array(
         'id' => 'hidden',
@@ -63,20 +68,20 @@ class abdomenConfig extends config
         'center' => 'select',
         'inspeksi_kulit' => 'checkbox',
         'gerakan_dinding_perut' => 'select',
-        'palpasi_hepar' => 'text',
+        'palpasi_hepar' => 'radio',
         'palpasi_hepar_derajat_pembesaran' => 'text',
         'palpasi_hepar_konsistensi' => 'text',
         'palpasi_hepar_permukaan' => 'text',
         'palpasi_hepar_tepi' => 'text',
-        'palpasi_hepar_nyeri_tekan' => 'text',
-        'palpasi_liver' => 'text',
+        'palpasi_hepar_nyeri_tekan' => 'checkbox',
+        'palpasi_liver' => 'radio',
         'palpasi_liver_derajat_pembesaran' => 'text',
         'palpasi_liver_konsistensi' => 'text',
         'palpasi_liver_permukaan' => 'text',
         'palpasi_liver_tepi' => 'text',
-        'palpasi_liver_nyeri_tekan' => 'text',
-        'palpasi_ginjal' => 'text',
-        'ballottement' => 'text',
+        'palpasi_liver_nyeri_tekan' => 'checkbox',
+        'palpasi_ginjal' => 'radio',
+        'inspeksi_ginjal' => 'checkbox',
         'perkusi' => 'text',
         'auscultation' => 'text',
         'peristaltik_usus' => 'text'
@@ -84,13 +89,17 @@ class abdomenConfig extends config
     );
 
     var $fieldsisarray = array(
-        'relief','center','inspeksi_kulit','gerakan_dinding_perut'
+        'relief','center','inspeksi_kulit','gerakan_dinding_perut','palpasi_hepar','palpasi_liver','palpasi_ginjal','inspeksi_ginjal',
+        'inspeksi_ginjal'
     );
     var $reftable = array(
         'relief' => array('ref_abdomen_relief','relief'),
         'center' => array('ref_abdomen_center', 'center'),
         'inspeksi_kulit' => array('ref_abdomen_skin', 'skin'),
-        'gerakan_dinding_perut' => array('ref_abdomen_gerakan_dinding_perut', 'gerakan'),
-        'gerakan_dinding_perut' => array('ref_abdomen_gerakan_dinding_perut', 'gerakan')
+        'gerakan_dinding_perut' => array('ref_abdomen_gerakan_dinding_perut', 'gerakan_dinding_perut'),
+        'palpasi_hepar' => array('ref_abdomen_hepar', 'hepar'),
+        'palpasi_liver' => array('ref_abdomen_liver', 'liver'),
+        'palpasi_ginjal' => array('ref_abdomen_ginjal', 'ginjal'),
+        'inspeksi_ginjal' => array('ref_abdomen_inspeksi_ginjal', 'inspeksi_ginjal')
     );
 }
