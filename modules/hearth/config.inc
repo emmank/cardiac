@@ -49,7 +49,7 @@ class hearthConfig extends config
         'percussion_left' => 'select',
         'percussion_right' => 'select',
         'bunyi_jantung' => 'text',
-        'auscultation_sound' => 'select',
+        'auscultation_sound' => 'checkbox',
         'localization' => 'select',
         'intencity' => 'select',
         'penjalaran' => 'select',
