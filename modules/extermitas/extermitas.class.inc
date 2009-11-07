@@ -301,5 +301,79 @@ class extermitasModule extends mainModule
         redirect_to('/reference/extermitas_inspections');
     }
 
+    function __get_refs($fields, $sort=NULL){
+        $result = array();
+        $sql = $this->query->getSelect(
+            array(),
+            array($this->config->reftable[$fields][0]),
+            NULL,
+            (!is_null($sort) ? $sort . ' asc' : 'id asc')
+        );
+        $this->query->connect();
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        for($i=0; $i<$query->_numOfRows; $i++){
+            $result[$query->fields['id']] = $query->fields[$this->config->reftable[$fields][1]];
+            $query->MoveNext();
+        }
+        return $result;
+    }
+
+    function cardio_menu(){
+        $result = array();
+        $result['#title'] = __t('Ekstermitas');
+        $result['#tpl'] = MODULES_DIR . DS . 'extermitas' . DS . 'extermitas.tpl';
+        $datafields = $this->__get_data_fields('extermitas', $this->query);
+        foreach($datafields as $key => $value){
+            $result['datafields'][$value] = array(
+                'title' => __t($value),
+                'type' => $this->config->typeoffields[$value]
+            );
+            if(in_array($value, $this->config->fieldsisarray)){
+                $result['datafields'][$value]['theref'] = $this->__get_refs($value);
+            } elseif($this->config->typeoffields[$value] == 'datetime'){
+                $result['datafields'][$value]['theref'] = $this->nama_bulan;
+                $result['datafields'][$value]['timenow'] = $this->config->time;
+            } else {
+                $result['datafields'][$value]['size'] = 6;
+            }
+        }
+        return $result;
+    }
+
+    function cardio_submit(){
+        $thefields = $this->__get_data_fields('extermitas', $this->query);
+        foreach($this->config->free_val as $key => $value){
+            if(in_array($key, $thefields)){
+                if($key == 'inspections'){
+                    if(count($value) > 0){
+                        $value = implode(',', $value);
+                    }
+                }
+                $thevalue[$key] = $value;
+            }
+        } unset($thefields);
+        if($_POST['id'] != ''){
+            unset($thevalue['id']);
+            $sql = $this->query->updateData(
+                'extermitas',
+                $thevalue,
+                array(
+                    array('&&', "id=" . $_POST['id'])
+                )
+            );
+        } else {
+            $sql = $this->query->saveData(
+                'extermitas',
+                $thevalue
+            );
+        }
+//        echo '<pre>'; print_r($thevalue); echo '</pre>';
+        unset($thevalue);
+//        $this->query->connect();
+//        $this->conn->execute($sql); unset($sql);
+//        $this->query->close();
+    }
+
 
 }

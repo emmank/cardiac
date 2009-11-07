@@ -22,7 +22,7 @@
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
-$result .= $vl['datafields']['abdomen']['title'];
+$result .= $vl['datafields']['punggung']['title'];
 $result .= '<table width=100% class="table">' . "\n";
 $cnt = 0;
  //echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
@@ -43,23 +43,19 @@ foreach($vl['datafields'] as $yk => $lv){
             }
             $result .= '</select>' . "\n";
         } elseif($lv['type'] == 'checkbox'){
-            if (count($lv['theref'])>0) {
             $cnt = 0;
             foreach($lv['theref'] as $kc => $isi){
                 $result .= '<input type="checkbox" name="' . $yk . '[' . $cnt . ']" value="' . $kc . '">';
                 $result .= $isi . "<br />";
                 $cnt++;
             } unset($cnt);
-            } else {
-                $result .= '<input type="checkbox" name="' . $yk . '" value="1">';
-            };
         } elseif($lv['type'] == 'radio'){
-//            $cnt = 0;
+            $cnt = 0;
             foreach($lv['theref'] as $kc => $isi){
-                $result .= '<input type="radio" name="' . $yk . '[]" value="' . $kc . '">';
-                $result .= $isi . "<br />\n";
-//                $cnt++;
-            } //unset($cnt);
+                $result .= '<input type="radio" name="' . $yk . '[' . $cnt . ']" value="' . $kc . '">';
+                $result .= $isi . "<br />";
+                $cnt++;
+            } unset($cnt);
         } elseif($lv['type'] == 'datetime'){
             if(isset($lv['value'])){
                 $datetime = $lv['value'];

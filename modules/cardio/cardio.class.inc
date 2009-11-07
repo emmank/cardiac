@@ -294,6 +294,9 @@ class cardioModule extends mainModule
         $form['cardio_dewasa']['tab_items']['paru'] = $this->__loadParu();
         $form['cardio_dewasa']['tab_items']['hearth'] = $this->__loadHearth();
         $form['cardio_dewasa']['tab_items']['abdomen'] = $this->__loadAbdomen();
+        $form['cardio_dewasa']['tab_items']['anusrectum'] = $this->__loadAnusrectum();
+        $form['cardio_dewasa']['tab_items']['punggung'] = $this->__loadPunggung();
+        $form['cardio_dewasa']['tab_items']['extermitas'] = $this->__loadExtermitas();
 
         $form['cardio_dewasa']['submit'] = array(
             '#type' => 'submit',
@@ -329,6 +332,48 @@ class cardioModule extends mainModule
             }
         } else {
             return $this->abdomen_exec->cardio_menu();
+        }
+    }
+    
+    function __loadAnusrectum($exec=NULL){
+        $this->__include_module('anusrectum');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->anusrectum_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->anusrectum_exec->cardio_submit();
+            }
+        } else {
+            return $this->anusrectum_exec->cardio_menu();
+        }
+    }
+
+    function __loadPunggung($exec=NULL){
+        $this->__include_module('punggung');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->punggung_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->punggung_exec->cardio_submit();
+            }
+        } else {
+            return $this->punggung_exec->cardio_menu();
+        }
+    }
+
+    function __loadExtermitas($exec=NULL){
+        $this->__include_module('extermitas');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->extermitas_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->extermitas_exec->cardio_submit();
+            }
+        } else {
+            return $this->extermitas_exec->cardio_menu();
         }
     }
 
@@ -530,6 +575,8 @@ class cardioModule extends mainModule
         $this->__loadThorax('submit');
         $this->__loadParu('submit');
         $this->__loadHearth('submit');
+        $this->__loadAbdomen('submit');
+        $this->__loadAnusrectum('submit');
 //        redirect_to('/user/cardio_dewasa/form');
     }
 

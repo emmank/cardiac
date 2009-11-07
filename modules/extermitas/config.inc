@@ -38,4 +38,17 @@ class extermitasConfig extends config
     var $hiddenfields = array(
         'id'
     );
+
+    var $typeoffields = array(
+        'id' => 'hidden',
+        'inspections' => 'checkbox'
+
+    );
+
+    var $fieldsisarray = array(
+        'inspections'
+    );
+    var $reftable = array(
+        'inspections' => array('ref_extermitas_inspections','inspections')
+    );
 }

@@ -38,4 +38,25 @@ class punggungConfig extends config
     var $hiddenfields = array(
         'id'
     );
+
+    var $typeoffields = array(
+        'id' => 'hidden',
+        'inspections' => 'checkbox',
+        'palpations' => 'checkbox',
+        'bunyi_pernafasan' => 'select',
+        'bunyi_tambahan' => 'select',
+        'others' => 'checkbox'
+
+    );
+
+    var $fieldsisarray = array(
+        'inspections','palpations','bunyi_pernafasan','bunyi_tambahan','others'
+    );
+    var $reftable = array(
+        'inspections' => array('ref_punggung_inspections','inspections'),
+        'palpations' => array('ref_punggung_palpations','palpations'),
+        'bunyi_pernafasan' => array('ref_punggung_bunyi_pernafasan','bunyi_pernafasan'),
+        'bunyi_tambahan' => array('ref_punggung_bunyi_tambahan','bunyi_tambahan'),
+        'others' => array('ref_punggung_others','others')
+    );
 }
