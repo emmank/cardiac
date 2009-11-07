@@ -25,7 +25,7 @@ $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 $result .= $vl['datafields']['abdomen']['title'];
 $result .= '<table width=100% class="table">' . "\n";
 $cnt = 0;
- //echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
+ echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['type'] != 'hidden'){
         if($cnt < 1){
