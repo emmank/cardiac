@@ -229,9 +229,12 @@ class mainModule
     function __write_custom_cache($strvar, $add=NULL){
         $handle = fopen($this->config->fcache, (!is_null($add) ? 'a+' : 'w'));
         fwrite($handle, "\n");
-        foreach($strvar as $key=>$value){
-            if($key > 0){fwrite($handle, "\n");}
-            fwrite($handle, $value);
+//        echo '<pre>'; print_r($strvar); echo '</pre>';
+        if(count($strvar) > 0){
+            foreach($strvar as $key => $value){
+                if(isset($nl)){fwrite($handle, "\n");}
+                fwrite($handle, $key . '=>' . $value); $nl = 0;
+            } unset($nl);
         }
         fclose($handle); unset($handle);
     }
