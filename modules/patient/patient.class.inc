@@ -29,7 +29,7 @@ class patientModule extends mainModule
     var $title = 'patient module';
     var $description = '';
     var $hidden_fields = array(
-        'id', 'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups'
+        'id', 'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'strnum'
     );
     var $formtype_fields = array(
         'id' => 'hidden',
@@ -565,6 +565,7 @@ class patientModule extends mainModule
 
     function setstrnum(){
         $dump = $this->__write_form_cache();
+        //echo '<pre>'; print_r($dump); echo '</pre>'; exit();
         $this->query->connect();
         $sql = $this->query->getSelect(
             array(),
@@ -575,11 +576,13 @@ class patientModule extends mainModule
         );
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
+//        echo '<pre>'; print_r($query); echo '</pre>'; exit();
         if($query->_numOfRows > 0){
-            $str = '';
+            $str = array();
             foreach($query->fields as $key => $value){
-                $str .= $key . '=>' . $value . "\n";
+                $str[$key] = $value;
             }
+//        echo '<pre>'; print_r($str); echo '</pre>'; exit();
             $this->__write_custom_cache($str, 1);
             unset($str);
         }
