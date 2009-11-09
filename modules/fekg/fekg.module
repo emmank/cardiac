@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  fekg.php
+ *  
+ *  Created on Oct 1, 2009, 1:11:20 PM
+ */
+
+require_once MODULES_DIR . DS . 'fekg' . DS . 'fekg.class.inc';
+
+if(!isset($fekg_config)){
+    $fekg_config = new fekgConfig();
+} elseif(!$fekg_config instanceof fekgConfig) {
+    $fekg_config = new fekgConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $fekg_config->rdbms . DS . 'dbquery.php';
+if(!isset($fekg_query)){
+    $fekg_query = new dbset();
+} elseif(!$fekg_query instanceof dbset) {
+    $fekg_query = new dbset();
+}
+
+if(!isset($fekg_exec)){
+    $fekg_exec = new fekgModule();
+} elseif(!$fekg_exec instanceof fekgModule) {
+    $fekg_exec = new fekgModule();
+}

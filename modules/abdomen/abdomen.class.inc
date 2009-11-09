@@ -2588,6 +2588,229 @@ class abdomenModule extends mainModule
         redirect_to('/reference/abdomen_inspeksi_ginjal');
     }
 
+
+//Kenapa punya Pak Herman Ilang ?
+    function ref_perkusi_view(){
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('Referensi perkusi abdomen');
+        $result['description'] = __t('Referensi pilihan perkusi abdomen pasien');
+        $result['addmenu'] = array(
+            'title' => __t('add reference'),
+            'action' => '/reference/abdomen_perkusi/form',
+            'position' => 'top',
+            'user_required' => 'reference'
+        );
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'perkusi',
+                'caption' => __t('keterangan'),
+                'align' => 'left'
+            )
+        );
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('ref_abdomen_perkusi'),
+            NULL,
+            'perkusi'
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows > 0){
+            for($i=0; $i<$query->_numOfRows; $i++){
+                $result['data'][$i] = $query->fields;
+                $result['data'][$i]['perkusi'] = ucwords($query->fields['perkusi']);
+                $result['data'][$i]['goto'] = '/reference/abdomen_perkusi/detail/' . $query->fields['id'];
+                $query->MoveNext();
+            }
+        }
+        return $result;
+    }
+
+    function ref_perkusi_form(){
+        if(is_file($this->config->fcache)){
+            $vcache = $this->__read_form_cache();
+            unlink($this->config->fcache);
+        }
+//        echo '<pre>'; print_r($vcache); echo '</pre>';
+        $form['group'] = array(
+            '#type' => 'fieldset',
+            '#id' => 'group',
+            '#title' => __t('add abdomen_perkusi'),
+            '#collapsible' => TRUE,
+            '#collapsed' => FALSE,
+            '#focused_item' => 'perkusi',
+            '#weight' => -3,
+            '#action' => '/reference/abdomen_perkusi/form_submit',
+            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
+        );
+        $this->query->connect();
+        $sql = $this->query->getDescribe('ref_abdomen_perkusi');
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        for($i=0; $i<$query->_numOfRows; $i++){
+            if(!in_array($query->fields['Field'], array('id'))){
+                $form['group'][$query->fields['Field']] = array(
+                    '#type' => 'text',
+                    '#title' => __t($query->fields['Field']),
+                    '#value' => isset($vcache[$query->fields['Field']]) ? $vcache[$query->fields['Field']] : ($query->fields['Field'] == 'id' ? $_POST['id'] : ''),
+                    '#error' => isset($vcache['blank']) && in_array($query->fields['Field'], $vcache['blank']) ? 1 : 0
+                );
+            }
+            $query->MoveNext();
+        } unset($query);
+        $form['group']['submit'] = array(
+            '#type' => 'submit',
+            '#title' => '&nbsp;',
+            '#value' => __t('input')
+        );
+        return $form;
+    }
+
+    function ref_perkusi_form_submit(){
+//        if($_POST['id'] != ''){
+            $dump = $this->__write_form_cache();
+            foreach($dump as $key => $value){
+                if($value == ''){
+                    $this->__write_custom_cache(
+                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                    );
+                    redirect_to('/reference/abdomen_perkusi/form');
+                    exit();
+                }
+                if($key != 'blank' && $key != 'submit'){
+                    $thevalue[$key] = $value;
+                }
+            } unset($dump);
+            $thevalue['id'] = $this->__get_id_insert_value('ref_abdomen_perkusi', 'id', $this->query);
+//        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
+            $this->query->connect();
+            $sql = $this->query->saveData(
+                'ref_abdomen_perkusi',
+                $thevalue
+            );
+            $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            unset($thevalue);
+            unlink($this->config->fcache);
+            redirect_to('/reference/abdomen_perkusi');
+//        } else {
+//            redirect_to('/reference/abdomen_perkusi/form');
+//        }
+    }
+
+    function ref_perkusi_detail(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(count($dump) > 4){
+            $update = $dump[4];
+        }
+        $keyid = $dump[3]; unset($dump);
+        $dropable = $this->__is_dropable($keyid, 'perkusi', 'abdomen', $this->query);
+        $result = array();
+        $result['type'] = 'items_detail';
+        $result['title'] = __t('detil referensi perkusi');
+        $result['description'] = __t('informasi detil referensi perkusi yang terpilih');
+        $result['id'] = $keyid;
+        $result['update_access'] = 'reference';
+        $result['dropable'] = $dropable !== FALSE ? '/reference/abdomen_perkusi/drop' : '0';
+        unset($dropable);
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array('id', 'perkusi'),
+            array('ref_abdomen_perkusi'),
+            array(
+                array('&&', "id=" . $keyid)
+            )
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if(isset($update)){
+            $showsubmit = array('textarea', 'date');
+        }
+        foreach($query->fields as $key => $value){
+            $result['data'][$key] = array(
+                'key' => __t($key),
+                'value' => $value,
+                'link' => '/reference/abdomen_perkusi/detail/' . $keyid . '/' . $key,
+                'hide' => in_array($key, $this->config->hiddenfields) ? 1 : 0
+            );
+            if(isset($update) && $key == $update){
+                $result['data'][$key]['form'] = array(
+                    'detail' => array(
+                        '#type' => 'fieldset',
+                        '#title' => 'hidden',
+                        '#action' => '/reference/abdomen_perkusi/edit/',
+                        'id' => array(
+                            '#type' => 'hidden',
+                            '#value' => $keyid
+                        ),
+                        $key => array(
+                            '#type' => 'text',
+                            '#value' => $value,
+                            '#title' => 'hidden',
+                            '#size' => $this->formtype_fields[$key] == 'select' ? 1 : 20,
+                            '#extra' => $this->formtype_fields[$key] == 'select' ? 'onchange="Javascript:this.form.submit()"' : ''
+                        )
+                    )
+                );
+                if(in_array($result['data'][$key]['form']['detail'][$key]['#type'], $showsubmit)){
+                    $result['data'][$key]['form']['detail'][$key]['submit'] = array(
+                        '#type' => 'submit',
+                        '#value' => 'submit',
+                        '#title' => 'hidden'
+                    );
+                }
+            }
+        } unset($query, $keyid);
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+
+    function ref_perkusi_edit(){
+        foreach($_POST as $key => $value){
+            if($key != 'id'){
+                if(in_array($key, $this->__get_data_fields('ref_abdomen_perkusi', $this->query))){
+                    $this->query->connect();
+                    $sql = $this->query->updateData(
+                        'ref_abdomen_perkusi',
+                        array(
+                            $key => $value
+                        ),
+                        array(
+                            array('&&', "id=" . $_POST['id'])
+                        )
+                    );
+                    $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                }
+            }
+        }
+        redirect_to('/reference/abdomen_perkusi/detail/' . $_POST['id']);
+    }
+
+    function ref_perkusi_drop(){
+        if($this->__is_dropable($_POST['id'], 'perkusi', 'abdomen', $this->query) !== FALSE){
+            $this->query->connect();
+            $sql = $this->query->setDelete(
+                'ref_abdomen_perkusi',
+                array(
+                    array('&&', "id=" . $_POST['id'])
+                )
+            );
+            $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+        }
+        redirect_to('/reference/abdomen_perkusi');
+    }
+
+
     
     function ref_auscultation_view(){
         $result = array();

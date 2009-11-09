@@ -30,8 +30,9 @@ function rendering_page(){
     $modules = get_active_modules();
     $menus = __get_menu_lists();
     $mymenus = __get_active_menus();
-//    echo '<pre>'; print_r($mymenus); echo '</pre>';
     $path = get_path_array();
+//    echo '<pre>'; print_r($path); echo '</pre>';
+//    if($path['vars'] == 'today_fekg_lists'){exit();}
     $managed_menus = menu_organize();
     get_content($path);
     $exec_menus = get_exec_menus($path);

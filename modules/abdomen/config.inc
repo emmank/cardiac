@@ -83,14 +83,14 @@ class abdomenConfig extends config
         'palpasi_ginjal' => 'radio',
         'inspeksi_ginjal' => 'checkbox',
         'perkusi' => 'checkbox',
-        'auscultation' => 'text',
-        'peristaltik_usus' => 'text'
+        'auscultation' => 'checkbox',
+        'peristaltik_usus' => 'select'
 
     );
 
     var $fieldsisarray = array(
         'relief','center','inspeksi_kulit','gerakan_dinding_perut','palpasi_hepar','palpasi_liver','palpasi_ginjal','inspeksi_ginjal',
-        'inspeksi_ginjal','perkusi'
+        'inspeksi_ginjal','perkusi','auscultation','peristaltik_usus'
     );
     var $reftable = array(
         'relief' => array('ref_abdomen_relief','relief'),
@@ -101,6 +101,8 @@ class abdomenConfig extends config
         'palpasi_liver' => array('ref_abdomen_liver', 'liver'),
         'palpasi_ginjal' => array('ref_abdomen_ginjal', 'ginjal'),
         'inspeksi_ginjal' => array('ref_abdomen_inspeksi_ginjal', 'inspeksi_ginjal'),
-        'perkusi' => array('ref_abdomen_perkusi', 'perkusi')
+        'perkusi' => array('ref_abdomen_perkusi', 'perkusi'),
+        'auscultation' => array('ref_abdomen_auscultation', 'auscultation'),
+        'peristaltik_usus' => array('ref_abdomen_peistaltik_usus', 'peristaltik_usus')
     );
 }

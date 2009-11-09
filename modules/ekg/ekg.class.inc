@@ -230,55 +230,105 @@ class ekgModule extends mainModule
             'user_required' => 'reference'
         );
 
-        //----------------------------Form EKG ----------------------------
-        $items['ekg_form'] = array(
-            'title' => __t('Form EKG'),
-            'description' => __t('Form for ekg'),
-            'path' => '/user/ekg_form',
-            'exec' => 'tampil_form',
-            'weight' => '0',
-            'user_required' => 'ekg'
-        );
-        $items['ref_ekg_respon_jantung_detail'] = array(
-            'title' => __t('detil respon_jantung fase latihan'),
-            'description' => __t('respon_jantung reference detail for ekg'),
-            'path' => '/reference/ekg_respon_jantung/detail',
-            'exec' => 'ref_respon_jantung_detail',
+        //--------------------------5. sandapan------------------------------
+        $items['ref_ekg_sandapan'] = array(
+            'title' => __t('ekg_sandapan'),
+            'description' => __t('sandapan reference form for ekg'),
+            'path' => '/reference/ekg_sandapan',
+            'exec' => 'ref_sandapan_view',
             'weight' => '0',
             'user_required' => NULL
         );
-        $items['ref_ekg_respon_jantung_form'] = array(
-            'title' => __t('ekg_respon_jantung form'),
-            'description' => __t('respon_jantung reference form for ekg'),
-            'path' => '/reference/ekg_respon_jantung/form',
-            'exec' => 'ref_respon_jantung_form',
+        $items['ref_ekg_sandapan_detail'] = array(
+            'title' => __t('detil sandapan ekg'),
+            'description' => __t('sandapan reference detail for ekg'),
+            'path' => '/reference/ekg_sandapan/detail',
+            'exec' => 'ref_sandapan_detail',
+            'weight' => '0',
+            'user_required' => NULL
+        );
+        $items['ref_ekg_sandapan_form'] = array(
+            'title' => __t('ekg_sandapan form'),
+            'description' => __t('sandapan reference form for ekg'),
+            'path' => '/reference/ekg_sandapan/form',
+            'exec' => 'ref_sandapan_form',
             'weight' => '0',
             'user_required' => 'reference'
         );
-        $items['ref_ekg_respon_jantung_form_submit'] = array(
-            'title' => __t('ekg_respon_jantung form'),
-            'description' => __t('Execute respon_jantung reference form for ekg'),
-            'path' => '/reference/ekg_respon_jantung/form_submit',
-            'exec' => 'ref_respon_jantung_form_submit',
+        $items['ref_ekg_sandapan_form_submit'] = array(
+            'title' => __t('ekg_sandapan form'),
+            'description' => __t('Execute sandapan reference form for ekg'),
+            'path' => '/reference/ekg_sandapan/form_submit',
+            'exec' => 'ref_sandapan_form_submit',
             'weight' => '0',
             'user_required' => 'reference'
         );
-        $items['ref_ekg_respon_jantung_edit'] = array(
-            'title' => __t('ekg_respon_jantung edit'),
-            'description' => __t('Editing respon_jantung reference form for ekg'),
-            'path' => '/reference/ekg_respon_jantung/edit',
-            'exec' => 'ref_respon_jantung_edit',
+        $items['ref_ekg_sandapan_edit'] = array(
+            'title' => __t('ekg_sandapan edit'),
+            'description' => __t('Editing sandapan reference form for ekg'),
+            'path' => '/reference/ekg_sandapan/edit',
+            'exec' => 'ref_sandapan_edit',
             'weight' => '0',
             'user_required' => 'reference'
         );
-        $items['ref_ekg_respon_jantung_drop'] = array(
-            'title' => __t('ekg_respon_jantung drop'),
-            'description' => __t('Remove respon_jantung reference form for ekg'),
-            'path' => '/reference/ekg_respon_jantung/drop',
-            'exec' => 'ref_respon_jantung_drop',
+        $items['ref_ekg_sandapan_drop'] = array(
+            'title' => __t('ekg_sandapan drop'),
+            'description' => __t('Remove sandapan reference form for ekg'),
+            'path' => '/reference/ekg_sandapan/drop',
+            'exec' => 'ref_sandapan_drop',
             'weight' => '0',
             'user_required' => 'reference'
         );
+
+//        //----------------------------Form EKG ----------------------------
+//        $items['ekg_form'] = array(
+//            'title' => __t('Form EKG'),
+//            'description' => __t('Form for ekg'),
+//            'path' => '/user/ekg_form',
+//            'exec' => 'tampil_form',
+//            'weight' => '0',
+//            'user_required' => 'ekg'
+//        );
+//        $items['ref_ekg_respon_jantung_detail'] = array(
+//            'title' => __t('detil respon_jantung fase latihan'),
+//            'description' => __t('respon_jantung reference detail for ekg'),
+//            'path' => '/reference/ekg_respon_jantung/detail',
+//            'exec' => 'ref_respon_jantung_detail',
+//            'weight' => '0',
+//            'user_required' => NULL
+//        );
+//        $items['ref_ekg_respon_jantung_form'] = array(
+//            'title' => __t('ekg_respon_jantung form'),
+//            'description' => __t('respon_jantung reference form for ekg'),
+//            'path' => '/reference/ekg_respon_jantung/form',
+//            'exec' => 'ref_respon_jantung_form',
+//            'weight' => '0',
+//            'user_required' => 'reference'
+//        );
+//        $items['ref_ekg_respon_jantung_form_submit'] = array(
+//            'title' => __t('ekg_respon_jantung form'),
+//            'description' => __t('Execute respon_jantung reference form for ekg'),
+//            'path' => '/reference/ekg_respon_jantung/form_submit',
+//            'exec' => 'ref_respon_jantung_form_submit',
+//            'weight' => '0',
+//            'user_required' => 'reference'
+//        );
+//        $items['ref_ekg_respon_jantung_edit'] = array(
+//            'title' => __t('ekg_respon_jantung edit'),
+//            'description' => __t('Editing respon_jantung reference form for ekg'),
+//            'path' => '/reference/ekg_respon_jantung/edit',
+//            'exec' => 'ref_respon_jantung_edit',
+//            'weight' => '0',
+//            'user_required' => 'reference'
+//        );
+//        $items['ref_ekg_respon_jantung_drop'] = array(
+//            'title' => __t('ekg_respon_jantung drop'),
+//            'description' => __t('Remove respon_jantung reference form for ekg'),
+//            'path' => '/reference/ekg_respon_jantung/drop',
+//            'exec' => 'ref_respon_jantung_drop',
+//            'weight' => '0',
+//            'user_required' => 'reference'
+//        );
 
         return $items;
     }
@@ -1165,15 +1215,15 @@ class ekgModule extends mainModule
         redirect_to('/reference/ekg_intervalPR');
     }
 
-    //---------------Form EKG---------------------------------------------
-    function ref_respon_jantung_view(){
+//------------------------5. Function sandapan-------------------------------
+    function ref_sandapan_view(){
         $result = array();
         $result['type'] = 'table';
-        $result['title'] = __t('Referensi respon_jantung fase latihan');
-        $result['description'] = __t('Referensi isian respon_jantung fase latihan');
+        $result['title'] = __t('Referensi sandapan ekg');
+        $result['description'] = __t('Referensi isian sandapan ekg');
         $result['addmenu'] = array(
             'title' => __t('add reference'),
-            'action' => '/reference/ekg_respon_jantung/form',
+            'action' => '/reference/ekg_sandapan/form',
             'position' => 'top',
             'user_required' => 'reference'
         );
@@ -1185,7 +1235,7 @@ class ekgModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => 'respon_jantung',
+                'field' => 'sandapan',
                 'caption' => __t('keterangan'),
                 'align' => 'left'
             )
@@ -1193,24 +1243,23 @@ class ekgModule extends mainModule
         $this->query->connect();
         $sql = $this->query->getSelect(
             array(),
-            array('ref_ekg_respon_jantung'),
-            NULL,
-            'respon_jantung'
+            array('ref_ekg_sandapan'),
+            NULL
         );
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($query->_numOfRows > 0){
             for($i=0; $i<$query->_numOfRows; $i++){
                 $result['data'][$i] = $query->fields;
-                $result['data'][$i]['type'] = ucwords($query->fields['respon_jantung']);
-                $result['data'][$i]['goto'] = '/reference/ekg_respon_jantung/detail/' . $query->fields['id'];
+                $result['data'][$i]['type'] = ucwords($query->fields['sandapan']);
+                $result['data'][$i]['goto'] = '/reference/ekg_sandapan/detail/' . $query->fields['id'];
                 $query->MoveNext();
             }
         }
         return $result;
     }
 
-    function tampil_form(){
+    function ref_sandapan_form(){
         if(is_file($this->config->fcache)){
             $vcache = $this->__read_form_cache();
             unlink($this->config->fcache);
@@ -1219,41 +1268,26 @@ class ekgModule extends mainModule
         $form['group'] = array(
             '#type' => 'fieldset',
             '#id' => 'group',
-            '#title' => __t('add ekg_form'),
+            '#title' => __t('add ekg_sandapan'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
-            '#focused_item' => 'irama_dasar',
+            '#focused_item' => 'sandapan',
             '#weight' => -3,
-            '#action' => '/user/ekg_form_submit',
+            '#action' => '/reference/ekg_sandapan/form_submit',
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
         );
         $this->query->connect();
-        $sql = $this->query->getDescribe('ekg');
+        $sql = $this->query->getDescribe('ref_ekg_sandapan');
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         for($i=0; $i<$query->_numOfRows; $i++){
             if(!in_array($query->fields['Field'], array('id'))){
                 $form['group'][$query->fields['Field']] = array(
-                    '#type' => $this->config->ekgfieldstype[$query->fields['Field']],
+                    '#type' => 'text',
                     '#title' => __t($query->fields['Field']),
                     '#value' => isset($vcache[$query->fields['Field']]) ? $vcache[$query->fields['Field']] : ($query->fields['Field'] == 'id' ? $_POST['id'] : ''),
                     '#error' => isset($vcache['blank']) && in_array($query->fields['Field'], $vcache['blank']) ? 1 : 0
                 );
-                if ($query->fields['Field'] == 'irama_dasar') {
-                    $sql = $this->query->getSelect(
-                        array(),
-                        array('ref_ekg_irama')
-                    );
-                    $this->query->connect();
-                    $query_irama = $this->query->conn->Execute($sql); unset($sql);
-                    $this->query->close();
-                    $items = array();
-                    for ($a=0;$a<$query_irama->_numOfRows;$a++){
-                        $items[$query_irama->fields['id']] = $query_irama->fields['irama'];
-                        $query_irama->MoveNext();
-                    }
-                    $form['group'][$query->fields['Field']]['#option'] = $items; unset($items);
-                }
             }
             $query->MoveNext();
         } unset($query);
@@ -1265,7 +1299,7 @@ class ekgModule extends mainModule
         return $form;
     }
 
-    function ref_respon_jantung_form_submit(){
+    function ref_sandapan_form_submit(){
 //        if($_POST['id'] != ''){
             $dump = $this->__write_form_cache();
             foreach($dump as $key => $value){
@@ -1273,49 +1307,49 @@ class ekgModule extends mainModule
                     $this->__write_custom_cache(
                         array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
-                    redirect_to('/reference/ekg_respon_jantung/form');
+                    redirect_to('/reference/ekg_sandapan/form');
                     exit();
                 }
                 if($key != 'blank' && $key != 'submit'){
                     $thevalue[$key] = $value;
                 }
             } unset($dump);
-            $thevalue['id'] = $this->__get_id_insert_value('ref_ekg_respon_jantung', 'id', $this->query);
+            $thevalue['id'] = $this->__get_id_insert_value('ref_ekg_sandapan', 'id', $this->query);
 //        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
             $this->query->connect();
             $sql = $this->query->saveData(
-                'ref_ekg_respon_jantung',
+                'ref_ekg_sandapan',
                 $thevalue
             );
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
             unlink($this->config->fcache);
-            redirect_to('/reference/ekg_respon_jantung');
+            redirect_to('/reference/ekg_sandapan');
 //        } else {
-//            redirect_to('/reference/ekg_respon_jantung/form');
+//            redirect_to('/reference/ekg_sandapan/form');
 //        }
     }
 
-    function ref_respon_jantung_detail(){
+    function ref_sandapan_detail(){
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         if(count($dump) > 4){
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'respon_jantung', 'fase_latihan', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'sandapan', 'ekg', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
-        $result['title'] = __t('detil referensi respon_jantung fase latihan');
-        $result['description'] = __t('informasi detil referensi respon_jantung fase latihan yang terpilih');
+        $result['title'] = __t('detil referensi sandapan fase latihan');
+        $result['description'] = __t('informasi detil referensi sandapan ekg yang terpilih');
         $result['id'] = $keyid;
         $result['update_access'] = 'reference';
-        $result['dropable'] = $dropable !== FALSE ? '/reference/ekg_respon_jantung/drop' : '0';
+        $result['dropable'] = $dropable !== FALSE ? '/reference/ekg_sandapan/drop' : '0';
         unset($dropable);
         $this->query->connect();
         $sql = $this->query->getSelect(
-            array('id', 'respon_jantung'),
-            array('ref_ekg_respon_jantung'),
+            array('id', 'sandapan'),
+            array('ref_ekg_sandapan'),
             array(
                 array('&&', "id=" . $keyid)
             )
@@ -1329,7 +1363,7 @@ class ekgModule extends mainModule
             $result['data'][$key] = array(
                 'key' => __t($key),
                 'value' => $value,
-                'link' => '/reference/ekg_respon_jantung/detail/' . $keyid . '/' . $key,
+                'link' => '/reference/ekg_sandapan/detail/' . $keyid . '/' . $key,
                 'hide' => in_array($key, $this->config->hiddenfields) ? 1 : 0
             );
             if(isset($update) && $key == $update){
@@ -1337,7 +1371,7 @@ class ekgModule extends mainModule
                     'detail' => array(
                         '#type' => 'fieldset',
                         '#title' => 'hidden',
-                        '#action' => '/reference/ekg_respon_jantung/edit/',
+                        '#action' => '/reference/ekg_sandapan/edit/',
                         'id' => array(
                             '#type' => 'hidden',
                             '#value' => $keyid
@@ -1364,13 +1398,13 @@ class ekgModule extends mainModule
         return $result;
     }
 
-    function ref_respon_jantung_edit(){
+    function ref_sandapan_edit(){
         foreach($_POST as $key => $value){
             if($key != 'id'){
-                if(in_array($key, $this->__get_data_fields('ref_ekg_respon_jantung', $this->query))){
+                if(in_array($key, $this->__get_data_fields('ref_ekg_sandapan', $this->query))){
                     $this->query->connect();
                     $sql = $this->query->updateData(
-                        'ref_ekg_respon_jantung',
+                        'ref_ekg_sandapan',
                         array(
                             $key => $value
                         ),
@@ -1383,14 +1417,14 @@ class ekgModule extends mainModule
                 }
             }
         }
-        redirect_to('/reference/ekg_respon_jantung/detail/' . $_POST['id']);
+        redirect_to('/reference/ekg_sandapan/detail/' . $_POST['id']);
     }
 
-    function ref_respon_jantung_drop(){
-        if($this->__is_dropable($_POST['id'], 'respon_jantung', 'fase_latihan', $this->query) !== FALSE){
+    function ref_sandapan_drop(){
+        if($this->__is_dropable($_POST['id'], 'sandapan', 'ekg', $this->query) !== FALSE){
             $this->query->connect();
             $sql = $this->query->setDelete(
-                'ref_ekg_respon_jantung',
+                'ref_ekg_sandapan',
                 array(
                     array('&&', "id=" . $_POST['id'])
                 )
@@ -1398,7 +1432,243 @@ class ekgModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/reference/ekg_respon_jantung');
+        redirect_to('/reference/ekg_sandapan');
     }
+
+//    //---------------Form EKG---------------------------------------------
+//    function ref_respon_jantung_view(){
+//        $result = array();
+//        $result['type'] = 'table';
+//        $result['title'] = __t('Referensi respon_jantung fase latihan');
+//        $result['description'] = __t('Referensi isian respon_jantung fase latihan');
+//        $result['addmenu'] = array(
+//            'title' => __t('add reference'),
+//            'action' => '/reference/ekg_respon_jantung/form',
+//            'position' => 'top',
+//            'user_required' => 'reference'
+//        );
+//        $result['header'] = array(
+//            array(
+//                'field' => 'none',
+//                'caption' => __t('no'),
+//                'width' => '5%',
+//                'align' => 'right'
+//            ),
+//            array(
+//                'field' => 'respon_jantung',
+//                'caption' => __t('keterangan'),
+//                'align' => 'left'
+//            )
+//        );
+//        $this->query->connect();
+//        $sql = $this->query->getSelect(
+//            array(),
+//            array('ref_ekg_respon_jantung'),
+//            NULL,
+//            'respon_jantung'
+//        );
+//        $query = $this->query->conn->Execute($sql); unset($sql);
+//        $this->query->close();
+//        if($query->_numOfRows > 0){
+//            for($i=0; $i<$query->_numOfRows; $i++){
+//                $result['data'][$i] = $query->fields;
+//                $result['data'][$i]['type'] = ucwords($query->fields['respon_jantung']);
+//                $result['data'][$i]['goto'] = '/reference/ekg_respon_jantung/detail/' . $query->fields['id'];
+//                $query->MoveNext();
+//            }
+//        }
+//        return $result;
+//    }
+//
+//    function tampil_form(){
+//        if(is_file($this->config->fcache)){
+//            $vcache = $this->__read_form_cache();
+//            unlink($this->config->fcache);
+//        }
+////        echo '<pre>'; print_r($vcache); echo '</pre>';
+//        $form['group'] = array(
+//            '#type' => 'fieldset',
+//            '#id' => 'group',
+//            '#title' => __t('add ekg_form'),
+//            '#collapsible' => TRUE,
+//            '#collapsed' => FALSE,
+//            '#focused_item' => 'irama_dasar',
+//            '#weight' => -3,
+//            '#action' => '/user/ekg_form_submit',
+//            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
+//        );
+//        $this->query->connect();
+//        $sql = $this->query->getDescribe('ekg');
+//        $query = $this->query->conn->Execute($sql); unset($sql);
+//        $this->query->close();
+//        for($i=0; $i<$query->_numOfRows; $i++){
+//            if(!in_array($query->fields['Field'], array('id'))){
+//                $form['group'][$query->fields['Field']] = array(
+//                    '#type' => $this->config->ekgfieldstype[$query->fields['Field']],
+//                    '#title' => __t($query->fields['Field']),
+//                    '#value' => isset($vcache[$query->fields['Field']]) ? $vcache[$query->fields['Field']] : ($query->fields['Field'] == 'id' ? $_POST['id'] : ''),
+//                    '#error' => isset($vcache['blank']) && in_array($query->fields['Field'], $vcache['blank']) ? 1 : 0
+//                );
+//                if ($query->fields['Field'] == 'irama_dasar') {
+//                    $sql = $this->query->getSelect(
+//                        array(),
+//                        array('ref_ekg_irama')
+//                    );
+//                    $this->query->connect();
+//                    $query_irama = $this->query->conn->Execute($sql); unset($sql);
+//                    $this->query->close();
+//                    $items = array();
+//                    for ($a=0;$a<$query_irama->_numOfRows;$a++){
+//                        $items[$query_irama->fields['id']] = $query_irama->fields['irama'];
+//                        $query_irama->MoveNext();
+//                    }
+//                    $form['group'][$query->fields['Field']]['#option'] = $items; unset($items);
+//                }
+//            }
+//            $query->MoveNext();
+//        } unset($query);
+//        $form['group']['submit'] = array(
+//            '#type' => 'submit',
+//            '#title' => '&nbsp;',
+//            '#value' => __t('input')
+//        );
+//        return $form;
+//    }
+//
+//    function ref_respon_jantung_form_submit(){
+////        if($_POST['id'] != ''){
+//            $dump = $this->__write_form_cache();
+//            foreach($dump as $key => $value){
+//                if($value == ''){
+//                    $this->__write_custom_cache(
+//                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+//                    );
+//                    redirect_to('/reference/ekg_respon_jantung/form');
+//                    exit();
+//                }
+//                if($key != 'blank' && $key != 'submit'){
+//                    $thevalue[$key] = $value;
+//                }
+//            } unset($dump);
+//            $thevalue['id'] = $this->__get_id_insert_value('ref_ekg_respon_jantung', 'id', $this->query);
+////        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
+//            $this->query->connect();
+//            $sql = $this->query->saveData(
+//                'ref_ekg_respon_jantung',
+//                $thevalue
+//            );
+//            $this->query->conn->Execute($sql); unset($sql);
+//            $this->query->close();
+//            unset($thevalue);
+//            unlink($this->config->fcache);
+//            redirect_to('/reference/ekg_respon_jantung');
+////        } else {
+////            redirect_to('/reference/ekg_respon_jantung/form');
+////        }
+//    }
+//
+//    function ref_respon_jantung_detail(){
+//        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+//        if(count($dump) > 4){
+//            $update = $dump[4];
+//        }
+//        $keyid = $dump[3]; unset($dump);
+//        $dropable = $this->__is_dropable($keyid, 'respon_jantung', 'fase_latihan', $this->query);
+//        $result = array();
+//        $result['type'] = 'items_detail';
+//        $result['title'] = __t('detil referensi respon_jantung fase latihan');
+//        $result['description'] = __t('informasi detil referensi respon_jantung fase latihan yang terpilih');
+//        $result['id'] = $keyid;
+//        $result['update_access'] = 'reference';
+//        $result['dropable'] = $dropable !== FALSE ? '/reference/ekg_respon_jantung/drop' : '0';
+//        unset($dropable);
+//        $this->query->connect();
+//        $sql = $this->query->getSelect(
+//            array('id', 'respon_jantung'),
+//            array('ref_ekg_respon_jantung'),
+//            array(
+//                array('&&', "id=" . $keyid)
+//            )
+//        );
+//        $query = $this->query->conn->Execute($sql); unset($sql);
+//        $this->query->close();
+//        if(isset($update)){
+//            $showsubmit = array('textarea', 'date');
+//        }
+//        foreach($query->fields as $key => $value){
+//            $result['data'][$key] = array(
+//                'key' => __t($key),
+//                'value' => $value,
+//                'link' => '/reference/ekg_respon_jantung/detail/' . $keyid . '/' . $key,
+//                'hide' => in_array($key, $this->config->hiddenfields) ? 1 : 0
+//            );
+//            if(isset($update) && $key == $update){
+//                $result['data'][$key]['form'] = array(
+//                    'detail' => array(
+//                        '#type' => 'fieldset',
+//                        '#title' => 'hidden',
+//                        '#action' => '/reference/ekg_respon_jantung/edit/',
+//                        'id' => array(
+//                            '#type' => 'hidden',
+//                            '#value' => $keyid
+//                        ),
+//                        $key => array(
+//                            '#type' => 'text',
+//                            '#value' => $value,
+//                            '#title' => 'hidden',
+//                            '#size' => $this->formtype_fields[$key] == 'select' ? 1 : 20,
+//                            '#extra' => $this->formtype_fields[$key] == 'select' ? 'onchange="Javascript:this.form.submit()"' : ''
+//                        )
+//                    )
+//                );
+//                if(in_array($result['data'][$key]['form']['detail'][$key]['#type'], $showsubmit)){
+//                    $result['data'][$key]['form']['detail'][$key]['submit'] = array(
+//                        '#type' => 'submit',
+//                        '#value' => 'submit',
+//                        '#title' => 'hidden'
+//                    );
+//                }
+//            }
+//        } unset($query, $keyid);
+////        echo '<pre>'; print_r($result); echo '</pre>';
+//        return $result;
+//    }
+//
+//    function ref_respon_jantung_edit(){
+//        foreach($_POST as $key => $value){
+//            if($key != 'id'){
+//                if(in_array($key, $this->__get_data_fields('ref_ekg_respon_jantung', $this->query))){
+//                    $this->query->connect();
+//                    $sql = $this->query->updateData(
+//                        'ref_ekg_respon_jantung',
+//                        array(
+//                            $key => $value
+//                        ),
+//                        array(
+//                            array('&&', "id=" . $_POST['id'])
+//                        )
+//                    );
+//                    $this->query->conn->Execute($sql); unset($sql);
+//                    $this->query->close();
+//                }
+//            }
+//        }
+//        redirect_to('/reference/ekg_respon_jantung/detail/' . $_POST['id']);
+//    }
+//
+//    function ref_respon_jantung_drop(){
+//        if($this->__is_dropable($_POST['id'], 'respon_jantung', 'fase_latihan', $this->query) !== FALSE){
+//            $this->query->connect();
+//            $sql = $this->query->setDelete(
+//                'ref_ekg_respon_jantung',
+//                array(
+//                    array('&&', "id=" . $_POST['id'])
+//                )
+//            );
+//            $this->query->conn->Execute($sql); unset($sql);
+//            $this->query->close();
+//        }
+//        redirect_to('/reference/ekg_respon_jantung');
+//    }
 
 }
