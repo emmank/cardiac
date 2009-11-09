@@ -2589,7 +2589,7 @@ class abdomenModule extends mainModule
     }
 
 
-//Kenapa punya Pak Herman Ilang ?
+
     function ref_perkusi_view(){
         $result = array();
         $result['type'] = 'table';
