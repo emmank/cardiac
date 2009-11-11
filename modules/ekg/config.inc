@@ -19,7 +19,7 @@
  *  
  *  config.php
  *  
- *  Created on Oct 3, 2009, 8:37:06 PM
+ *  Created on Oct 1, 2009, 1:10:09 PM
  */
 
 class ekgConfig extends config
@@ -36,18 +36,20 @@ class ekgConfig extends config
         'passwd' => 'emmank'
     );
     var $hiddenfields = array(
-        'id'
+        'id', 'id_pasien'
     );
-    var $ekgfieldstype = array(
+    var $fields_form_type = array(
         'id' => 'hidden',
-        'id_pasien' => 'select',
+        'id_pasien' => 'hidden',
         'irama_dasar' => 'select',
         'denyut_jantung' => 'select',
-        'gelombnagP' => 'select',
-        'intervalPR' => 'select',
-        'QRS_complex' => 'select',
-        'segmentST' => 'select',
-        'gelombangT' => 'select',
-        'Q_interval' => 'select',
+        'gelombang_p' => 'select',
+        'interval_pr' => 'select',
+        'qrs_axis' => 'select',
+        'qrs_durasi' => 'select',
+        'qrs_konfig' => 'checkbox',
+        'segmen_st' => 'checkbox',
+        'gelombang_t' => 'checkbox',
+        'q_interfal' => 'select'
     );
 }

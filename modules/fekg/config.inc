@@ -19,7 +19,7 @@
  *  
  *  config.php
  *  
- *  Created on Oct 1, 2009, 1:10:09 PM
+ *  Created on Oct 3, 2009, 8:37:06 PM
  */
 
 class fekgConfig extends config
@@ -38,18 +38,18 @@ class fekgConfig extends config
     var $hiddenfields = array(
         'id'
     );
-    var $fields_form_type = array(
+    var $fekgfieldstype = array(
         'id' => 'hidden',
         'id_pasien' => 'hidden',
         'irama_dasar' => 'select',
         'denyut_jantung' => 'select',
-        'gelombangP' => 'select',
-        'intervalPR' => 'select',
-        'QRS_complex' => 'checkbox',
-        'segmentST' => 'select',
-        'gelombangT' => 'select',
-        'Q_interval' => 'select'
+        'gelombnag_p' => 'select',
+        'interval_pr' => 'select',
+        'qrs_complex' => 'select',
+        'qrs_durasi' => 'select',
+        'qrs_konfig' => 'select',
+        'segment_st' => 'select',
+        'gelombang_t' => 'select',
+        'q_interval' => 'select',
     );
-
-    
 }
