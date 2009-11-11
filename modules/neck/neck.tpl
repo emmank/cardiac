@@ -17,10 +17,11 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  presentStatus.php
+ *  neck.php
  *  
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
+
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 $result .= $vl['datafields']['neck']['title'];
 $result .= '<table width=100% class="table">' . "\n";
