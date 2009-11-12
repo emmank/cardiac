@@ -17,21 +17,20 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
-<<<<<<< HEAD:modules/ekg/ekg.tpl
+
  *  ekg.tpl
  *  
  *  Created on Oct 26, 2009, 5:28:48 AM
  */
 
 //echo '<pre>'; print_r($data); echo '</pre>';
-=======
- *  ekg.php
+
+/*  ekg.php
  *  
  *  Created on Nov 12, 2009, 5:40:49 AM
  */
 
 // echo '<pre>'; print_r($data); echo '</pre>';
->>>>>>> 329ebf0fefff2f31f2daa02f987278e1875dcc72:modules/ekg/ekg.tpl
 foreach($data as $key => $value){
 //    if(isset($value['#error']) && $value['#error'] !== FALSE){
 //        $result .= '<div class="error">' . $value['#error'] . '</div><br /><br />' . "\n";
@@ -58,11 +57,8 @@ foreach($data as $key => $value){
         }
     }
     ksort($gettbpos);
-<<<<<<< HEAD:modules/ekg/ekg.tpl
 //    echo '<pre>'; print_r($gettbpos); echo '</pre>';
-=======
     //echo '<pre>'; print_r($gettbpos); echo '</pre>';
->>>>>>> 329ebf0fefff2f31f2daa02f987278e1875dcc72:modules/ekg/ekg.tpl
     foreach($gettbpos as $ky => $vl){
         if((int)$ky < 1 || (int)$ky % 5 == 0){
             $result .= '<div id="kolom">' . "\n";
@@ -84,7 +80,6 @@ foreach($data as $key => $value){
         unset($setdiv);
     }
     $result .= '</fieldset>' . "\n";
-<<<<<<< HEAD:modules/ekg/ekg.tpl
     
 //    if(isset($value['tab_items']) && count($value['tab_items']) > 0){
 //        $result .= '<ul id="fisistabs" class="shadetabs">' . "\n";
@@ -191,7 +186,6 @@ $result .= '</table>' . "\n";
 $result .= '</div>' . "\n";
 
 
-=======
 
     $result .= '<div>' . "\n";
     $result .= '<table width=100% class="table">' . "\n";
@@ -257,7 +251,6 @@ $result .= '</div>' . "\n";
     } unset($cnt);
     $result .= '</table>' . "\n";
     $result .= '</div>' . "\n";
->>>>>>> 329ebf0fefff2f31f2daa02f987278e1875dcc72:modules/ekg/ekg.tpl
 
     if(isset($value['submit'])){
         $result .= '<div>' . "\n";
@@ -265,13 +258,10 @@ $result .= '</div>' . "\n";
         $result .= '</div>' . "\n";
     }
     $result .= __create_form_close();
-<<<<<<< HEAD:modules/ekg/ekg.tpl
 //    $result .= '<script type="text/javascript">' . "\n";
 //    $result .= 'var tabs=new ddtabcontent("fisistabs")' . "\n";
 //    $result .= 'tabs.setpersist(true)' . "\n";
 //    $result .= 'tabs.setselectedClassTarget("link") //"link" or "linkparent"' . "\n";
 //    $result .= 'tabs.init()' . "\n";
 //    $result .= '</script>' . "\n";
-=======
->>>>>>> 329ebf0fefff2f31f2daa02f987278e1875dcc72:modules/ekg/ekg.tpl
 }
