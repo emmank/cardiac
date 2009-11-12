@@ -56,7 +56,8 @@ class ekgConfig extends config
         'segmen_st_elevasi_1mm_2mm' => 'select',
         'segmen_st_elevasi_2mm_3mm' => 'select',
         'segmen_st_elevasi_3mm' => 'select',
-        'gelombang_t' => 'select',
+        'gelombang_t_normal' => 'checkbox',
+        'gelombang_t_inverted' => 'select',
         'q_interval' => 'select',
         'inputer' => 'hidden',
         'inputtime' => 'hedden',
@@ -78,7 +79,7 @@ class ekgConfig extends config
         'segmen_st_elevasi_1mm_2mm' ,
         'segmen_st_elevasi_2mm_3mm',
         'segmen_st_elevasi_3mm' ,
-        'gelombang_t',
+        'gelombang_t_inverted',
         'q_interval'
     );
 
@@ -97,7 +98,7 @@ class ekgConfig extends config
         'segmen_st_elevasi_1mm_2mm' => array('ref_ekg_sandapan', 'sandapan'),
         'segmen_st_elevasi_2mm_3mm' => array('ref_ekg_sandapan', 'sandapan'),
         'segmen_st_elevasi_3mm' => array('ref_ekg_sandapan', 'sandapan'),
-        'gelombang_t' => array('ref_ekg_gelombang_t', 'gelombang_t'),
+        'gelombang_t_inverted' => array('ref_ekg_sandapan', 'sandapan'),
         'q_interval' => array('ref_ekg_q_interval', 'q_interval')
     );
 }

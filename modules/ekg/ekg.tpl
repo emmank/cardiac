@@ -102,9 +102,15 @@ foreach($data as $key => $value){
                     }
                     $result .= '</select>' . "\n";
                 } elseif($lv['#type'] == 'checkbox'){
-                    foreach($lv['#theref'] as $kc => $isi){
+                    if (count($lv['theref'])>0) {
+                    $cnt = 0;
+                    foreach($lv['theref'] as $kc => $isi){
                         $result .= '<input type="checkbox" name="' . $yk . '[' . $cnt . ']" value="' . $kc . '">';
                         $result .= $isi . "<br />";
+                        $cnt++;
+                    } //unset($cnt);
+                    } else {
+                        $result .= '<input type="checkbox" name="' . $yk . '" value="1">';
                     }
                 } elseif($lv['#type'] == 'radio'){
                     foreach($lv['#theref'] as $kc => $isi){
