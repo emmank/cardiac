@@ -272,26 +272,13 @@ class ekgModule extends mainModule
                         '#title' => __t($value),
                         '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                     );
+                    if(in_array($value, $this->config->fieldsisarray)){
+                        $form['ekg'][$value]['#theref'] = $this->__get_refs($value);
+                    }
                 }
                 
             }
         }
-//        echo '<pre>'; print_r ($form); echo '</pre>';
-//        $form['ekg'] = $this->__loadFekg();
-//        $form['ekg']['tab_items']['vitalSign'] = $this->__loadVitalSign();
-//        $form['ekg']['tab_items']['eye'] = $this->__loadEye();
-//        $form['ekg']['tab_items']['ear'] = $this->__loadEar();
-//        $form['ekg']['tab_items']['nose'] = $this->__loadNose();
-//        $form['ekg']['tab_items']['headface'] = $this->__loadHeadFace();
-//        $form['ekg']['tab_items']['neck'] = $this->__loadNeck();
-//        $form['ekg']['tab_items']['mouth'] = $this->__loadMouth();
-//        $form['ekg']['tab_items']['thorax'] = $this->__loadThorax();
-//        $form['ekg']['tab_items']['paru'] = $this->__loadParu();
-//        $form['ekg']['tab_items']['hearth'] = $this->__loadHearth();
-//        $form['ekg']['tab_items']['abdomen'] = $this->__loadAbdomen();
-//        $form['ekg']['tab_items']['anusrectum'] = $this->__loadAnusrectum();
-//        $form['ekg']['tab_items']['punggung'] = $this->__loadPunggung();
-//        $form['ekg']['tab_items']['extermitas'] = $this->__loadExtermitas();
 
         $form['ekg']['submit'] = array(
             '#type' => 'submit',
@@ -302,216 +289,23 @@ class ekgModule extends mainModule
         return $form;
     }
 
-//    function __loadHearth($exec=NULL){
-//        $this->__include_module('hearth');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->hearth_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->hearth_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->hearth_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadAbdomen($exec=NULL){
-//        $this->__include_module('abdomen');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->abdomen_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->abdomen_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->abdomen_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadAnusrectum($exec=NULL){
-//        $this->__include_module('anusrectum');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->anusrectum_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->anusrectum_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->anusrectum_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadPunggung($exec=NULL){
-//        $this->__include_module('punggung');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->punggung_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->punggung_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->punggung_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadExtermitas($exec=NULL){
-//        $this->__include_module('extermitas');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->extermitas_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->extermitas_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->extermitas_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadParu($exec=NULL){
-//        $this->__include_module('paru');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->paru_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->paru_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->paru_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadThorax($exec=NULL){
-//        $this->__include_module('thorax');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->thorax_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->thorax_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->thorax_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadNeck($exec=NULL){
-//        $this->__include_module('neck');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->neck_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->neck_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->neck_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadMouth($exec=NULL){
-//        $this->__include_module('mouth');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->mouth_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->mouth_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->mouth_exec->ekg_menu();
-//        }
-//    }
-
-//    function __loadFekg($exec=NULL){
-//        $this->__include_module('fekg');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->fekg_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->fekg_exec->fekg_submit();
-//            }
-//        } else {
-//            return $this->fekg_exec->menu();
-//        }
-//    }
-
-//    function __loadVitalSign($exec=NULL){
-//        $this->__include_module('vitalSign');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->vitalSign_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->vitalSign_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->vitalSign_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadHeadFace($exec=NULL){
-//        $this->__include_module('headface');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->headface_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->headface_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->headface_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadEye($exec=NULL){
-//        $this->__include_module('eye');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->eye_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->eye_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->eye_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadNose($exec=NULL){
-//        $this->__include_module('nose');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->nose_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->nose_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->nose_exec->ekg_menu();
-//        }
-//    }
-//
-//    function __loadEar($exec=NULL){
-//        $this->__include_module('ear');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->ear_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->ear_exec->ekg_submit();
-//            }
-//        } else {
-//            return $this->ear_exec->ekg_menu();
-//        }
-//    }
-
+    function __get_refs($fields, $sort=NULL){
+        $result = array();
+        $sql = $this->query->getSelect(
+            array(),
+            array($this->config->reftable[$fields][0]),
+            NULL,
+            (!is_null($sort) ? $sort . ' asc' : 'id asc')
+        );
+        $this->query->connect();
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        for($i=0; $i<$query->_numOfRows; $i++){
+            $result[$query->fields['id']] = $query->fields[$this->config->reftable[$fields][1]];
+            $query->MoveNext();
+        }
+        return $result;
+    }
 
     
     function form_submit(){

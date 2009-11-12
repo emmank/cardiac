@@ -17,12 +17,21 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
+<<<<<<< HEAD:modules/ekg/ekg.tpl
  *  ekg.tpl
  *  
  *  Created on Oct 26, 2009, 5:28:48 AM
  */
 
 //echo '<pre>'; print_r($data); echo '</pre>';
+=======
+ *  ekg.php
+ *  
+ *  Created on Nov 12, 2009, 5:40:49 AM
+ */
+
+// echo '<pre>'; print_r($data); echo '</pre>';
+>>>>>>> 329ebf0fefff2f31f2daa02f987278e1875dcc72:modules/ekg/ekg.tpl
 foreach($data as $key => $value){
 //    if(isset($value['#error']) && $value['#error'] !== FALSE){
 //        $result .= '<div class="error">' . $value['#error'] . '</div><br /><br />' . "\n";
@@ -49,7 +58,11 @@ foreach($data as $key => $value){
         }
     }
     ksort($gettbpos);
+<<<<<<< HEAD:modules/ekg/ekg.tpl
 //    echo '<pre>'; print_r($gettbpos); echo '</pre>';
+=======
+    //echo '<pre>'; print_r($gettbpos); echo '</pre>';
+>>>>>>> 329ebf0fefff2f31f2daa02f987278e1875dcc72:modules/ekg/ekg.tpl
     foreach($gettbpos as $ky => $vl){
         if((int)$ky < 1 || (int)$ky % 5 == 0){
             $result .= '<div id="kolom">' . "\n";
@@ -71,6 +84,7 @@ foreach($data as $key => $value){
         unset($setdiv);
     }
     $result .= '</fieldset>' . "\n";
+<<<<<<< HEAD:modules/ekg/ekg.tpl
     
 //    if(isset($value['tab_items']) && count($value['tab_items']) > 0){
 //        $result .= '<ul id="fisistabs" class="shadetabs">' . "\n";
@@ -177,6 +191,73 @@ $result .= '</table>' . "\n";
 $result .= '</div>' . "\n";
 
 
+=======
+
+    $result .= '<div>' . "\n";
+    $result .= '<table width=100% class="table">' . "\n";
+    $cnt = 0;
+    foreach($value as $yk => $lv){
+        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
+            if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
+                if($cnt < 1){
+                    $result .= '<tr valign="top">' . "\n";
+                }
+                $result .= '<td>' . $lv['#title'] . '</td>';
+                $result .= '<td>';
+                if($lv['#type'] == 'select'){
+                    $result .= '<select name="' . $yk . '" size="' . $lv['#size']. '">' . "\n";
+                    if(isset($lv['#blankopt'])){
+                        $result .= '<option value=""></option>';
+                    }
+                    foreach($lv['#theref'] as $kc => $isi){
+                        $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
+                    }
+                    $result .= '</select>' . "\n";
+                } elseif($lv['#type'] == 'checkbox'){
+                    foreach($lv['#theref'] as $kc => $isi){
+                        $result .= '<input type="checkbox" name="' . $yk . '[' . $cnt . ']" value="' . $kc . '">';
+                        $result .= $isi . "<br />";
+                    }
+                } elseif($lv['#type'] == 'radio'){
+                    foreach($lv['#theref'] as $kc => $isi){
+                        $result .= '<input type="radio" name="' . $yk . '[' . $cnt . ']" value="' . $kc . '">';
+                        $result .= $isi . "<br />";
+                    }
+                } elseif($lv['#type'] == 'datetime'){
+                    if(isset($lv['#value'])){
+                        $datetime = $lv['#value'];
+                    } else {
+                        $datetime = date('Y-m-d H:i:s', $lv['#timenow']);
+                    }
+                    list($dumptgl, $dumptime) = explode(' ', $datetime);
+                    unset($datetime);
+                    $dumptgl = explode('-', $dumptgl);
+                    $dumptime = explode(':', $dumptime);
+                    $result .= '<input type="text" name="' . $yk . '[2]" size="2" maxlength="2" value="' . $dumptgl[2] . '">' . "&nbsp";
+                    $result .= '<select name="' . $yk . '[1]" size="1">' . "\n";
+                    foreach($lv['#theref'] as $kc => $isi){
+                        $result .= '<option value="' . $kc . '"' . ($dumptgl[1] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
+                    }
+                    $result .= '</select>' . "&nbsp;";
+                    $result .= '<input type="text" name="' . $yk . '[0]" size="4" maxlength="4" value="' . $dumptgl[0] . '">' . "<br />";
+                    $result .= '<input type="text" name="' . $yk . '[5]" size="2" maxlength="2" value="' . $dumptime[0] . '">' . ":";
+                    $result .= '<input type="text" name="' . $yk . '[6]" size="2" maxlength="2" value="' . $dumptime[1] . '">' . ":";
+                    $result .= '<input type="text" name="' . $yk . '[7]" size="2" maxlength="2" value="' . $dumptime[2] . '">' . "\n";
+                } else {
+                    $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '"' . (isset($lv['#size']) ? ' size="' . $lv['#size'] . '"' : '') . '>' . "\n";
+                }
+                $result .= '</td>' . "\n";
+                $cnt++;
+                if($cnt > 1){
+                    $cnt = 0;
+                    $result .= '</tr>' . "\n";
+                }
+            }
+        }
+    } unset($cnt);
+    $result .= '</table>' . "\n";
+    $result .= '</div>' . "\n";
+>>>>>>> 329ebf0fefff2f31f2daa02f987278e1875dcc72:modules/ekg/ekg.tpl
 
     if(isset($value['submit'])){
         $result .= '<div>' . "\n";
@@ -184,10 +265,13 @@ $result .= '</div>' . "\n";
         $result .= '</div>' . "\n";
     }
     $result .= __create_form_close();
+<<<<<<< HEAD:modules/ekg/ekg.tpl
 //    $result .= '<script type="text/javascript">' . "\n";
 //    $result .= 'var tabs=new ddtabcontent("fisistabs")' . "\n";
 //    $result .= 'tabs.setpersist(true)' . "\n";
 //    $result .= 'tabs.setselectedClassTarget("link") //"link" or "linkparent"' . "\n";
 //    $result .= 'tabs.init()' . "\n";
 //    $result .= '</script>' . "\n";
+=======
+>>>>>>> 329ebf0fefff2f31f2daa02f987278e1875dcc72:modules/ekg/ekg.tpl
 }
