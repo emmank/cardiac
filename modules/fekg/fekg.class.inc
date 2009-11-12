@@ -181,51 +181,51 @@ class fekgModule extends mainModule
         );
         
         //--------------------------4. Interval P-R ------------------------------
-        $items['ref_ekg_intervalPR'] = array(
-            'title' => __t('interval P-R'),
-            'description' => __t('intervalPR reference form for fekg'),
-            'path' => '/reference/fekg_intervalPR',
-            'exec' => 'ref_intervalPR_view',
+        $items['ref_ekg_q_interval'] = array(
+            'title' => __t('q interval'),
+            'description' => __t('q_interval reference form for fekg'),
+            'path' => '/reference/fekg_q_interval',
+            'exec' => 'ref_q_interval_view',
             'weight' => '0',
             'user_required' => NULL
         );
-        $items['ref_ekg_intervalPR_detail'] = array(
-            'title' => __t('detil intervalPR fekg'),
-            'description' => __t('intervalPR reference detail for fekg'),
-            'path' => '/reference/fekg_intervalPR/detail',
-            'exec' => 'ref_intervalPR_detail',
+        $items['ref_ekg_q_interval_detail'] = array(
+            'title' => __t('detil q_interval fekg'),
+            'description' => __t('q_interval reference detail for fekg'),
+            'path' => '/reference/fekg_q_interval/detail',
+            'exec' => 'ref_q_interval_detail',
             'weight' => '0',
             'user_required' => NULL
         );
-        $items['ref_ekg_intervalPR_form'] = array(
-            'title' => __t('fekg_intervalPR form'),
-            'description' => __t('intervalPR reference form for fekg'),
-            'path' => '/reference/fekg_intervalPR/form',
-            'exec' => 'ref_intervalPR_form',
+        $items['ref_ekg_q_interval_form'] = array(
+            'title' => __t('fekg_q_interval form'),
+            'description' => __t('q_interval reference form for fekg'),
+            'path' => '/reference/fekg_q_interval/form',
+            'exec' => 'ref_q_interval_form',
             'weight' => '0',
             'user_required' => 'reference'
         );
-        $items['ref_ekg_intervalPR_form_submit'] = array(
-            'title' => __t('fekg_intervalPR form'),
-            'description' => __t('Execute intervalPR reference form for fekg'),
-            'path' => '/reference/fekg_intervalPR/form_submit',
-            'exec' => 'ref_intervalPR_form_submit',
+        $items['ref_ekg_q_interval_form_submit'] = array(
+            'title' => __t('fekg_q_interval form'),
+            'description' => __t('Execute q_interval reference form for fekg'),
+            'path' => '/reference/fekg_q_interval/form_submit',
+            'exec' => 'ref_q_interval_form_submit',
             'weight' => '0',
             'user_required' => 'reference'
         );
-        $items['ref_ekg_intervalPR_edit'] = array(
-            'title' => __t('fekg_intervalPR edit'),
-            'description' => __t('Editing intervalPR reference form for fekg'),
-            'path' => '/reference/fekg_intervalPR/edit',
-            'exec' => 'ref_intervalPR_edit',
+        $items['ref_ekg_q_interval_edit'] = array(
+            'title' => __t('fekg_q_interval edit'),
+            'description' => __t('Editing q_interval reference form for fekg'),
+            'path' => '/reference/fekg_q_interval/edit',
+            'exec' => 'ref_q_interval_edit',
             'weight' => '0',
             'user_required' => 'reference'
         );
-        $items['ref_ekg_intervalPR_drop'] = array(
-            'title' => __t('fekg_intervalPR drop'),
-            'description' => __t('Remove intervalPR reference form for fekg'),
-            'path' => '/reference/fekg_intervalPR/drop',
-            'exec' => 'ref_intervalPR_drop',
+        $items['ref_ekg_q_interval_drop'] = array(
+            'title' => __t('fekg_q_interval drop'),
+            'description' => __t('Remove q_interval reference form for fekg'),
+            'path' => '/reference/fekg_q_interval/drop',
+            'exec' => 'ref_q_interval_drop',
             'weight' => '0',
             'user_required' => 'reference'
         );
@@ -945,15 +945,15 @@ class fekgModule extends mainModule
         redirect_to('/reference/fekg_gelombangP');
     }
 
-//------------------------4. Function intervalPR -------------------------------
-    function ref_intervalPR_view(){
+//------------------------4. Function q_interval -------------------------------
+    function ref_q_interval_view(){
         $result = array();
         $result['type'] = 'table';
-        $result['title'] = __t('Referensi intervalPR fekg');
-        $result['description'] = __t('Referensi isian intervalPR fekg');
+        $result['title'] = __t('Referensi q_interval fekg');
+        $result['description'] = __t('Referensi isian q_interval fekg');
         $result['addmenu'] = array(
             'title' => __t('add reference'),
-            'action' => '/reference/fekg_intervalPR/form',
+            'action' => '/reference/fekg_q_interval/form',
             'position' => 'top',
             'user_required' => 'reference'
         );
@@ -965,7 +965,7 @@ class fekgModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => 'intervalPR',
+                'field' => 'q_interval',
                 'caption' => __t('keterangan'),
                 'align' => 'left'
             )
@@ -973,7 +973,7 @@ class fekgModule extends mainModule
         $this->query->connect();
         $sql = $this->query->getSelect(
             array(),
-            array('ref_ekg_intervalPR'),
+            array('ref_ekg_q_interval'),
             NULL
         );
         $query = $this->query->conn->Execute($sql); unset($sql);
@@ -981,15 +981,15 @@ class fekgModule extends mainModule
         if($query->_numOfRows > 0){
             for($i=0; $i<$query->_numOfRows; $i++){
                 $result['data'][$i] = $query->fields;
-                $result['data'][$i]['type'] = ucwords($query->fields['intervalPR']);
-                $result['data'][$i]['goto'] = '/reference/fekg_intervalPR/detail/' . $query->fields['id'];
+                $result['data'][$i]['type'] = ucwords($query->fields['q_interval']);
+                $result['data'][$i]['goto'] = '/reference/fekg_q_interval/detail/' . $query->fields['id'];
                 $query->MoveNext();
             }
         }
         return $result;
     }
 
-    function ref_intervalPR_form(){
+    function ref_q_interval_form(){
         if(is_file($this->config->fcache)){
             $vcache = $this->__read_form_cache();
             unlink($this->config->fcache);
@@ -998,16 +998,16 @@ class fekgModule extends mainModule
         $form['group'] = array(
             '#type' => 'fieldset',
             '#id' => 'group',
-            '#title' => __t('add fekg_intervalPR'),
+            '#title' => __t('add fekg_q_interval'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
-            '#focused_item' => 'intervalPR',
+            '#focused_item' => 'q_interval',
             '#weight' => -3,
-            '#action' => '/reference/fekg_intervalPR/form_submit',
+            '#action' => '/reference/fekg_q_interval/form_submit',
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
         );
         $this->query->connect();
-        $sql = $this->query->getDescribe('ref_ekg_intervalPR');
+        $sql = $this->query->getDescribe('ref_ekg_q_interval');
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         for($i=0; $i<$query->_numOfRows; $i++){
@@ -1029,7 +1029,7 @@ class fekgModule extends mainModule
         return $form;
     }
 
-    function ref_intervalPR_form_submit(){
+    function ref_q_interval_form_submit(){
 //        if($_POST['id'] != ''){
             $dump = $this->__write_form_cache();
             foreach($dump as $key => $value){
@@ -1037,49 +1037,49 @@ class fekgModule extends mainModule
                     $this->__write_custom_cache(
                         array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
-                    redirect_to('/reference/fekg_intervalPR/form');
+                    redirect_to('/reference/fekg_q_interval/form');
                     exit();
                 }
                 if($key != 'blank' && $key != 'submit'){
                     $thevalue[$key] = $value;
                 }
             } unset($dump);
-            $thevalue['id'] = $this->__get_id_insert_value('ref_ekg_intervalPR', 'id', $this->query);
+            $thevalue['id'] = $this->__get_id_insert_value('ref_ekg_q_interval', 'id', $this->query);
 //        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
             $this->query->connect();
             $sql = $this->query->saveData(
-                'ref_ekg_intervalPR',
+                'ref_ekg_q_interval',
                 $thevalue
             );
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
             unlink($this->config->fcache);
-            redirect_to('/reference/fekg_intervalPR');
+            redirect_to('/reference/fekg_q_interval');
 //        } else {
-//            redirect_to('/reference/fekg_intervalPR/form');
+//            redirect_to('/reference/fekg_q_interval/form');
 //        }
     }
 
-    function ref_intervalPR_detail(){
+    function ref_q_interval_detail(){
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         if(count($dump) > 4){
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'intervalPR', 'fekg', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'q_interval', 'fekg', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
-        $result['title'] = __t('detil referensi intervalPR fase latihan');
-        $result['description'] = __t('informasi detil referensi intervalPR fekg yang terpilih');
+        $result['title'] = __t('detil referensi q_interval fase latihan');
+        $result['description'] = __t('informasi detil referensi q_interval fekg yang terpilih');
         $result['id'] = $keyid;
         $result['update_access'] = 'reference';
-        $result['dropable'] = $dropable !== FALSE ? '/reference/fekg_intervalPR/drop' : '0';
+        $result['dropable'] = $dropable !== FALSE ? '/reference/fekg_q_interval/drop' : '0';
         unset($dropable);
         $this->query->connect();
         $sql = $this->query->getSelect(
-            array('id', 'intervalPR'),
-            array('ref_ekg_intervalPR'),
+            array('id', 'q_interval'),
+            array('ref_ekg_q_interval'),
             array(
                 array('&&', "id=" . $keyid)
             )
@@ -1093,7 +1093,7 @@ class fekgModule extends mainModule
             $result['data'][$key] = array(
                 'key' => __t($key),
                 'value' => $value,
-                'link' => '/reference/fekg_intervalPR/detail/' . $keyid . '/' . $key,
+                'link' => '/reference/fekg_q_interval/detail/' . $keyid . '/' . $key,
                 'hide' => in_array($key, $this->config->hiddenfields) ? 1 : 0
             );
             if(isset($update) && $key == $update){
@@ -1101,7 +1101,7 @@ class fekgModule extends mainModule
                     'detail' => array(
                         '#type' => 'fieldset',
                         '#title' => 'hidden',
-                        '#action' => '/reference/fekg_intervalPR/edit/',
+                        '#action' => '/reference/fekg_q_interval/edit/',
                         'id' => array(
                             '#type' => 'hidden',
                             '#value' => $keyid
@@ -1128,13 +1128,13 @@ class fekgModule extends mainModule
         return $result;
     }
 
-    function ref_intervalPR_edit(){
+    function ref_q_interval_edit(){
         foreach($_POST as $key => $value){
             if($key != 'id'){
-                if(in_array($key, $this->__get_data_fields('ref_ekg_intervalPR', $this->query))){
+                if(in_array($key, $this->__get_data_fields('ref_ekg_q_interval', $this->query))){
                     $this->query->connect();
                     $sql = $this->query->updateData(
-                        'ref_ekg_intervalPR',
+                        'ref_ekg_q_interval',
                         array(
                             $key => $value
                         ),
@@ -1147,14 +1147,14 @@ class fekgModule extends mainModule
                 }
             }
         }
-        redirect_to('/reference/fekg_intervalPR/detail/' . $_POST['id']);
+        redirect_to('/reference/fekg_q_interval/detail/' . $_POST['id']);
     }
 
-    function ref_intervalPR_drop(){
-        if($this->__is_dropable($_POST['id'], 'intervalPR', 'fekg', $this->query) !== FALSE){
+    function ref_q_interval_drop(){
+        if($this->__is_dropable($_POST['id'], 'q_interval', 'fekg', $this->query) !== FALSE){
             $this->query->connect();
             $sql = $this->query->setDelete(
-                'ref_ekg_intervalPR',
+                'ref_ekg_q_interval',
                 array(
                     array('&&', "id=" . $_POST['id'])
                 )
@@ -1162,7 +1162,7 @@ class fekgModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/reference/fekg_intervalPR');
+        redirect_to('/reference/fekg_q_interval');
     }
 
     //---------------Form fekg---------------------------------------------
