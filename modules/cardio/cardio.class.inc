@@ -560,9 +560,9 @@ class cardioModule extends mainModule
             );
             $this->vardump['id'] = $thevalue['id'];
         }
-//        $this->query->connect();
-//        $this->query->conn->Execute($sql); unset($sql);
-//        $this->query->close();
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
         unset($thevalue);
         $this->__loadPresentStatus('submit');
         $this->__loadVitalSign('submit');
@@ -577,7 +577,23 @@ class cardioModule extends mainModule
         $this->__loadHearth('submit');
         $this->__loadAbdomen('submit');
         $this->__loadAnusrectum('submit');
-//        redirect_to('/user/cardio_dewasa/form');
+        $this->__loadPunggung('submit');
+        $this->__loadExtermitas('submit');
+        if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
+            $sql = $this->query->updateData(
+                'kunjungan',
+                array(
+                    'doneby' => '1'
+                ),
+                array(
+                    array('&&', "id=" . $_POST['idkunjungan'])
+                )
+            );
+            $this->query->connect();
+            $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+        }
+        redirect_to('/user/cardio_dewasa/form');
     }
 
     function __include_module($module){
