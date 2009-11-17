@@ -38,7 +38,7 @@ class patientModule extends mainModule
         'kelamin' => 'select',
         'tp_lahir' => 'text',
         'tgl_lahir' => 'date',
-        'gol_darah' => 'text',
+        'gol_darah' => 'radio',
         'alamat' => 'textarea',
         'kota' => 'text',
         'propinsi' => 'text',
@@ -640,6 +640,18 @@ class patientModule extends mainModule
                     } elseif($value == 'strnum'){
                         $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
+                    // ------ Add by emmank -------
+                    if($this->formtype_fields[$value] == 'radio'){
+                        if($value == 'gol_darah') {
+                            $options = $this->__get_goldarah_options();
+                        } elseif($this->formtype_fields[$value] == 'date'){
+                            $options = $this->nama_bulan;
+                        }
+                        $form['patient'][$value]['#option'] = $options;
+                    } elseif($value == 'strnum'){
+                        $form['patient'][$value]['#extra'] = 'readonly="true"';
+                    }
+
                 } unset($options);
                 $form['patient']['keluhan'] = array(
                     '#type' => 'textarea',

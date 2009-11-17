@@ -31,6 +31,15 @@ class mainModule
         'perempuan',
         'laki-laki'
     );
+
+    var $goldarah = array(
+        'A',
+        'B',
+        'AB',
+        'O'
+    );
+
+
     var $agama = array(
         'islam',
         'kristen protestan',
@@ -121,6 +130,17 @@ class mainModule
         }
         return $result;
     }
+    // ------ add by emmank ----
+    function __get_goldarah_options(){
+        $result = array();
+        krsort($this->goldarah);
+        foreach($this->goldarah as $key => $value){
+            $result[$key] = ucwords(__t($value));
+        }
+        return $result;
+    }
+
+
 
     function __get_bahasa_options(){
         $result = array();
