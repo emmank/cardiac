@@ -27,11 +27,12 @@ function rendering_page(){
     __show_debug();
     unset_globals();
     $user = __get_user();
+    __check_registry();
 //    $modules = get_active_modules();
 //    $menus = __get_menu_lists();
 //    $mymenus = __get_active_menus();
     $path = get_path_array();
-    get_content($path);
+//    get_content($path);
     $exec_menus = get_exec_menus($path);
     $content['exec'] = __get_modul_exec($exec_menus);
     $content['output'] = exec_module_function($content['exec']);
@@ -46,6 +47,25 @@ function __show_debug(){
     global $configs;
     ini_set('display_errors', ($configs->debugshow !== false ? 1 : 0)); // Ensure errors get to the user.
     error_reporting(E_ALL & ~E_NOTICE);
+}
+
+function __check_registry(){
+    global $user, $systemquery, $configs;
+    if(isset($_COOKIE[$configs->cookiesession])){
+        $sql = $systemquery->getSelect(
+            array(),
+            array('registry'),
+            array(
+                array('&&', "id=" . $_COOKIE[$configs->cookiesession])
+            )
+        );
+        $systemquery->connect();
+        $getregistry = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        if($getregistry->_numOfRows < 1){
+            __write_registry();
+        } unset($getregistry);
+    }
 }
 
 /**
@@ -150,12 +170,13 @@ function __get_user(){
 }
 
 function __write_registry(){
-    global $configs, $systemquery;
+    global $configs, $systemquery, $user;
+//    echo '<pre>'; print_r($user); echo '</pre>';
     $menu_actives = __get_active_menus(1);
     $primary_links = __get_primary_links();
     $secondary_links = __get_secondary_links();
     $navigations = __get_navigations();
-//    echo '<pre>'; print_r($primary_links); echo '</pre>';
+//    echo '<pre>'; print_r($menu_actives); echo '</pre>'; exit();
     $thevalue = array();
     foreach ($primary_links as $key=>$value){
         if(in_array($value['menus'], $menu_actives)){
@@ -199,6 +220,8 @@ function __write_registry(){
         );
     } unset($checkit);
     $thevalue['id'] = $_COOKIE[$configs->cookiesession];
+//    echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
+
     $sql = $systemquery->saveData(
         'registry',
         $thevalue
@@ -208,6 +231,7 @@ function __write_registry(){
     $systemquery->close();
 
     // writing all elements , but that just for temporary until menu module is existing !
+/*
     $allelements = array();
     $dumpsights = __get_menu_sights();
     foreach($dumpsights as $key=>$value){
@@ -216,10 +240,8 @@ function __write_registry(){
     } unset($dumpsights);
     $modules = get_active_modules();
     foreach($modules as $key=>$value){
-//        echo $value . '<br />';
         require MODULES_DIR . DS . $value . DS . $value . '.module';
         $menu_lists = ${$value . '_exec'}->menu();
-//        if($value == 'group'){echo '<pre>'; print_r($menu_lists); echo '</pre>';}
         foreach($menu_lists as $ke=>$val){
             $allelements[$ke] = $val;
             $allelements[$ke]['module'] = $value;
@@ -257,5 +279,7 @@ function __write_registry(){
         $systemquery->conn->Execute($sql); unset($sql);
         $systemquery->close();
     }
+ *
+ */
     redirect_to('/');
 }

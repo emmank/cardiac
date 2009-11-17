@@ -25,7 +25,8 @@
 //Produce node items
 
 function get_content($path){
-    global $configs, $user;
+    global $configs, $user, $systemquery;
+//    echo '<pre>'; print_r($user); echo '<pre>'; exit();
     if(count($user) < 1){
         if($configs->user_required == TRUE){
             if($path['main'] != 'login'){
@@ -47,13 +48,22 @@ function get_content($path){
         if($path['main'] == 'login'){
             redirect_to('/');
         } else {
-//            $menus = __get_menu_lists();
             $checkmenus = __get_active_menus();
             $getallow_path = array();
-//            echo '<pre>'; print_r($checkmenus); echo '</pre>';
             foreach($checkmenus as $key => $value){
-                $getallow_path[] = $menus[$value]['path'];
+                $sql = $systemquery->getSelect(
+                    array('path'),
+                    array('menus'),
+                    array(
+                        array('&&', "id=" . $value)
+                    )
+                );
+                $systemquery->connect();
+                $getit = $systemquery->conn->Execute($sql); unset($sql);
+                $systemquery->close();
+                $getallow_path[] = $getit->fields['path'];
             }
+//            echo '<pre>'; print_r($getallow_path); echo '</pre>';
             if(isset($path['vars'])){
 //                echo 'disini';
                 $vars = explode('/', $path['vars']);
@@ -61,6 +71,7 @@ function get_content($path){
                 $gettruepath = $path['main'] . ($path['menu'] != '' ? '/' . $path['menu'] . ($vars != '' ? '/' . $vars : '') : '');
             } else {
                 $gettruepath = implode('/', $path);
+//                echo $gettruepath;
             }
             if(!preg_match('/^\//', $gettruepath)){
                 $gettruepath = '/' . preg_replace('/\/$/', '', $gettruepath);
