@@ -70,7 +70,7 @@
     <div id="<?php if(!isset($body_login)){ echo 'main-content';} else { echo 'main-container';}?>">
     <?php if(!isset($body_login)){?>
         <div id="left<?php if(!isset($body_login)){echo '-container';}?>">
-            <div id="picture"><IMG SRC="/themes/<?php echo $theme;?>/images/tux-taekwondo-80x80.png"></div>
+            <div id="picture"><a href="/"><IMG SRC="/themes/<?php echo $theme;?>/images/tux-taekwondo-80x80.png" border="0" alt="theme logo"></a></div>
             <div id="left">
                 <dl>
                 <?php if(isset($managed_menus['navigations'])){?>

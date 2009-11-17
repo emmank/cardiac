@@ -62,6 +62,10 @@ class mainModule
         '11' => 'november',
         '12' => 'desember'
     );
+    var $maritalStatus = array(
+        'kawin',
+        'tidak kawin'
+    );
     var $string_to_shuffle = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     
     function __get_id_insert_value($table, $id, $interpreter){
@@ -142,6 +146,15 @@ class mainModule
 
 
 
+    function __get_statusm_options(){
+        $result = array();
+//        krsort($this->maritalStatus);
+        foreach($this->maritalStatus as $key => $value){
+            $result[$key] = ucwords(__t($value));
+        }
+        return $result;
+    }
+
     function __get_bahasa_options(){
         $result = array();
         $this->sysquery->connect();
@@ -184,14 +197,49 @@ class mainModule
         return $result;
     }
 
-    function __write_form_cache(){
-//        echo '<pre>'; print_r($_POST); echo '</pre>'; exit();
+    function __get_kabupaten_options($field){
         $result = array();
-        $handle = fopen($this->config->fcache, 'w');
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('kabupaten'),
+            NULL,
+            $field
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        for($i=0; $i<$query->_numOfRows; $i++){
+            $result[$query->fields['id_kab']] = ucwords(__t($query->fields[$field]));
+            $query->MoveNext();
+        } unset($query);
+        $this->query->close();
+        return $result;
+    }
+
+    function __get_propinsi_options($field){
+        $result = array();
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('propinsi'),
+            NULL,
+            $field
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        for($i=0; $i<$query->_numOfRows; $i++){
+            $result[$query->fields['kode_bps']] = ucwords(__t($query->fields[$field]));
+            $query->MoveNext();
+        } unset($query);
+        $this->query->close();
+        return $result;
+    }
+
+    function __write_form_cache(){
+        $result = array();
+        $handle = '';
         $row = 0;
         foreach($_POST as $key=>$value){
             if($row > 0){
-                fwrite($handle, "\n");
+                $handle .= $this->config->cacheseparator;
             }
             if(eregi('tgl', $key)){
                 if(is_array($value)){
@@ -236,27 +284,90 @@ class mainModule
                 $value = $this->__reduce_newline($value);
                 $result[$key] = $value;
             }
-            fwrite($handle, $key . '=>' . $value); $row++;
+            $handle .= $key . '=>' . $value; $row++;
         } unset($row);
         if(isset($blank)){
             $result['blank'] = $blank;
-            fwrite($handle, "\n###blank###" . implode('|', $blank));
+            $handle .= $this->config->cacheseparator . "###blank###" . implode('|', $blank);
         }
-        fclose($handle); unset($handle);
+        $sql = $this->sysquery->getSelect(
+            array('id'),
+            array('caches'),
+            array(
+                array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+            )
+        );
+        $this->sysquery->connect();
+        $checkit = $this->sysquery->conn->Execute($sql);unset($sql);
+        $this->sysquery->close();
+        if($checkit->_numOfRows > 0){
+            $sql = $this->sysquery->setDelete(
+                'caches',
+                array(
+                    array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+                )
+            );
+            $this->sysquery->connect();
+            $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
+        }
+        $sql = $this->sysquery->saveData(
+            'caches',
+            array(
+                'id' => $_COOKIE[$this->config->cookiesession],
+                'caches' => $handle
+            )
+        );
+        unset($handle);
+        $this->sysquery->connect();
+        $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
         return $result;
     }
 
     function __write_custom_cache($strvar, $add=NULL){
-        $handle = fopen($this->config->fcache, (!is_null($add) ? 'a+' : 'w'));
-        fwrite($handle, "\n");
-//        echo '<pre>'; print_r($strvar); echo '</pre>';
+        $handle = '';
+        if(is_null($add)){
+            $sql = $this->sysquery->getSelect(
+                array('caches'),
+                array('caches'),
+                array(
+                    array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+                )
+            );
+            $this->sysquery->connect();
+            $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
+            $handle = $getit->fields['caches'];
+            unset($getit);
+        }
+        $sql = $this->sysquery->setDelete(
+            'caches',
+            array(
+                array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+            )
+        );
+        $this->sysquery->connect();
+        $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
+        $handle .= $this->config->cacheseparator;
         if(count($strvar) > 0){
             foreach($strvar as $key => $value){
-                if(isset($nl)){fwrite($handle, "\n");}
-                fwrite($handle, $key . '=>' . $value); $nl = 0;
+                if(isset($nl)){$handle .= $this->config->cacheseparator;}
+                $handle .= $key . '=>' . $value; $nl = 0;
             } unset($nl);
         }
-        fclose($handle); unset($handle);
+        $sql = $this->sysquery->saveData(
+            'caches',
+            array(
+                'id' => $_COOKIE[$this->config->cookiesession],
+                'caches' => $handle
+            )
+        );
+        $this->sysquery->connect();
+        $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
+        unset($handle);
     }
 
     function __reduce_newline($string){
@@ -264,10 +375,38 @@ class mainModule
         return($result);
     }
 
+    function __check_caches(){
+        $sql = $this->sysquery->getSelect(
+            array(),
+            array('caches'),
+            array(
+                array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+            )
+        );
+        $this->sysquery->connect();
+        $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
+        if($getit->_numOfRows > 0){
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
     function __read_form_cache(){
-        $handle = fopen($this->config->fcache, 'r');
-        while(!feof($handle)){
-            $buffer = fgets($handle);
+        $sql = $this->sysquery->getSelect(
+            array(),
+            array('caches'),
+            array(
+                array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+            )
+        );
+        $this->sysquery->connect();
+        $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
+        $handle = explode($this->config->cacheseparator, $getit->fields['caches']);
+        unset($getit);
+        foreach ($handle as $ky => $buffer){
             if(trim($buffer) != ''){
                 if(!eregi('###blank###',trim($buffer))){
                     list($key, $value) = explode('=>', trim($buffer));
@@ -277,13 +416,21 @@ class mainModule
                         $value = explode('|', trim($value));
                     }
                     $result[$key] = $value;
+                    unset($value, $key);
                 } else {
                     $result['blank'] = explode('|', str_ireplace('###blank###', '', trim($buffer)));
                 }
             }
-            unset($buffer);
-        }
-        fclose($handle); unset($handle);
+        } unset($handle);
+        $sql = $this->sysquery->setDelete(
+            'caches',
+            array(
+                array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+            )
+        );
+        $this->sysquery->connect();
+        $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
         return $result;
     }
 

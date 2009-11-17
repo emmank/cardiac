@@ -85,9 +85,20 @@ function __get_navigations(){
         );
         $child = $systemquery->conn->Execute($sql); unset($sql);
         for($o=0; $o<$child->_numOfRows; $o++){
-            $result[] = $child->fields;
-            $child->MoveNext();
-        }
+            $sql = $systemquery->getSelect(
+                array('menus'),
+                array('navigations'),
+                array(
+                    array('&&', "id=" . $query->fields['id'])
+                )
+            );
+            $systemquery->connect();
+            $getparent = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            $result[$o] = $child->fields;
+            $result[$o]['parent'] = $getparent->fields['menus'];
+            $child->MoveNext(); unset($getparent);
+        } unset($child);
         $query->MoveNext();
     } unset($query);
     $systemquery->close();
@@ -95,51 +106,88 @@ function __get_navigations(){
 }
 
 function menu_organize(){
-    global $configs;
+    global $configs, $systemquery;
     $result = array();
-    $menu_lists = __get_menu_lists();
-    $menu_actives = __get_active_menus();
-    $primary_links = __get_primary_links();
-    $secondary_links = __get_secondary_links();
-    $navigations = __get_navigations();
+    $sql = $systemquery->getSelect(
+        array(),
+        array('registry'),
+        array(
+            array('&&', "id=" . $_COOKIE[$configs->cookiesession])
+        )
+    );
+    $systemquery->connect();
+    $getit = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+    $primary_links = explode(',', $getit->fields['primary_links']);
+    $secondary_links = explode(',', $getit->fields['secondary_links']);
+    $navigations = explode(',', $getit->fields['navigations']);
         $i = 0;
         foreach ($primary_links as $key=>$value){
-            if(in_array($value['menus'], $menu_actives)){
-                foreach($menu_lists as $ky=>$vl){
-                    if($ky == $value['menus']){
-                        $result['primary_links'][$i] = $vl;
-                        $result['primary_links'][$i]['name'] = $ky;
-                        $i++;
-                        break;
-                    }
-                }
-            }
+            $sql = $systemquery->getSelect(
+                array(),
+                array('menus'),
+                array(
+                    array('&&', "id=" . trim($value))
+                )
+            );
+            $systemquery->connect();
+            $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            $result['primary_links'][$i] = $get_menu_lists->fields;
+            $result['primary_links'][$i]['name'] = trim($value);
+            $i++; unset($get_menu_lists);
         }
         $i = 0;
         foreach ($secondary_links as $key=>$value){
-            if(in_array($value['menus'], $menu_actives)){
-                foreach($menu_lists as $ky=>$vl){
-                    if($ky == $value['menus']){
-                        $result['secondary_links'][$i] = $vl;
-                        $result['secondary_links'][$i]['name'] = $ky;
-                        $i++;
-                        break;
-                    }
-                }
-            }
+            $sql = $systemquery->getSelect(
+                array(),
+                array('menus'),
+                array(
+                    array('&&', "id=" . trim($value))
+                )
+            );
+            $systemquery->connect();
+            $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            $result['secondary_links'][$i] = $get_menu_lists->fields;
+            $result['secondary_links'][$i]['name'] = trim($value);
+            $i++; unset($get_menu_lists);
         } $i = 0;
         foreach ($navigations as $key=>$value){
-            if(in_array($value['menus'], $menu_actives)){
-                foreach($menu_lists as $ky=>$vl){
-                    if($ky == $value['menus']){
-                        $result['navigations'][$i] = $vl;
-                        $result['navigations'][$i]['parent'] = $value['parent'];
-                        $result['navigations'][$i]['name'] = $ky;
-                        $i++;
-                        break;
-                    }
-                }
-            }
+            $sql = $systemquery->getSelect(
+                array(),
+                array('menus'),
+                array(
+                    array('&&', "id=" . trim($value))
+                )
+            );
+            $systemquery->connect();
+            $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            $result['navigations'][$i] = $get_menu_lists->fields;
+            $sql = $systemquery->getSelect(
+                array('parent'),
+                array('navigations'),
+                array(
+                    array('&&', "menus=" . trim($value))
+                )
+            );
+            $systemquery->connect();
+            $getparent = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            $sql = $systemquery->getSelect(
+                array('menus'),
+                array('navigations'),
+                array(
+                    array('&&', "id=" . $getparent->fields['parent'])
+                )
+            ); unset($getparent);
+            $systemquery->connect();
+            $getparent = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            $result['navigations'][$i]['parent'] = $getparent->fields['menus'];
+            $result['navigations'][$i]['name'] = trim($value);
+            $i++; unset($get_menu_lists, $getparent);
         } unset($i, $menu_actives, $menu_lists, $primary_links, $secondary_links, $navigations);
     return $result;
 }
@@ -159,9 +207,13 @@ function __get_group_permission($id){
     $systemquery->close();
 //    echo $query->fields['useradd'] . '<br />';
     if($query->_numOfRows > 0){
-        $useradd = explode(',', $query->fields['useradd']);
+        if(is_null($query->fields['useradd'])){
+            $useradd = array();
+        } else {
+            $useradd = explode(',', $query->fields['useradd']);
+        }
 //        echo '<pre>'; print_r($useradd); echo '</pre>';
-        if(in_array($user['id'], $useradd)){
+        if(count($useradd) > 0 && in_array($user['id'], $useradd)){
             return TRUE;
         } else {
             return FALSE;
@@ -171,90 +223,87 @@ function __get_group_permission($id){
     }
 }
 
-function __get_active_menus(){
-    global $user;
-//    echo '<pre>'; print_r($user); echo '</pre>';
+function __get_active_menus($forced=NULL){
+    global $user, $systemquery;
     $result = array();
-    $lists = __get_menu_lists();
+    $lists = __get_menu_lists(!is_null($forced) ? $forced : NULL);
 //    echo '<pre>'; print_r($lists); echo '</pre>';
     foreach($lists as $key=>$value){
-        if($value['source'] == 'modules'){
-            if($value['module'] == 'auth'){
-                if($key == __get_active_login()){
-                    $result[] = $key;
+        $sql = $systemquery->getSelect(
+            array(),
+            array('menus'),
+            array(
+                array('&&', "id=" . $value)
+            )
+        );
+        $systemquery->connect();
+        $getelements = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        if($getelements->fields['source'] == 'modules'){
+            if($getelements->fields['module'] == 'auth'){
+                if($value == __get_active_login()){
+                    $result[] = $value;
                 }
             } else {
-                if(!is_null($value['user_required']) && $value['user_required'] != '' && $value['user_required'] != '0' && $value['user_required'] != false){
-                    if($value['user_required'] == 'admin'){
+                if(!is_null($getelements->fields['user_required']) && $getelements->fields['user_required'] != '' && $getelements->fields['user_required'] != '0' && $getelements->fields['user_required'] != false){
+                    if($getelements->fields['user_required'] == 'admin'){
                         if($user['groups'] == 'admin'){
-                            $result[] = $key;
+                            $result[] = $value;
                         }
-                    } elseif($value['user_required'] == 'users'){
+                    } elseif($getelements->fields['user_required'] == 'users'){
                         if(count($user) > 0){
-                            $result[] = $key;
+                            $result[] = $value;
                         }
-                    } elseif($value['user_required'] != 'admin' && $value['user_required'] != 'users'){
-//                        echo $value['user_required'] . ' = ' . __get_group_permission($value['user_required']) . '<br>';
-                        if($user['groups'] == 'admin' || $user['groups'] == $value['user_required']){
-                            $result[] = $key;
-                        } elseif(__get_group_permission($value['user_required']) !== FALSE){
-                            $result[] = $key;
+                    } elseif($getelements->fields['user_required'] != 'admin' && $getelements->fields['user_required'] != 'users'){
+                        if($user['groups'] == 'admin' || $user['groups'] == $getelements->fields['user_required']){
+                            $result[] = $value;
+                        } elseif(__get_group_permission($getelements->fields['user_required']) !== FALSE){
+//                            echo 'here' . "<br />";
+                            $result[] = $value;
                         }
                     }
                 } else {
-                    $result[] = $key;
+                    $result[] = $value;
                 }
             }
-        } elseif($value['source'] == 'configs'){
-            if(!is_null($value['user_required']) && $value['user_required'] != '' && $value['user_required'] != '0' && $value['user_required'] != false){
+        } elseif($getelements->fields['source'] == 'configs'){
+            if(!is_null($getelements->fields['user_required']) && $getelements->fields['user_required'] != '' && $getelements->fields['user_required'] != '0' && $getelements->fields['user_required'] != false){
                 if($user['groups'] == 'admin'){
-                    $result[] = $key;
-                } elseif($value['user_required'] == 'users'){
+                    $result[] = $value;
+                } elseif($getelements->fields['user_required'] == 'users'){
                     if(count($user) > 0){
-                        $result[] = $key;
+                        $result[] = $value;
                     }
-                } elseif($value['user_required'] != 'admin' && $value['user_required'] != 'users'){
-                    if($user['groups'] == 'admin' || $user['groups'] == $value['user_required']){
-                        $result[] = $key;
+                } elseif($getelements->fields['user_required'] != 'admin' && $getelements->fields['user_required'] != 'users'){
+                    if($user['groups'] == 'admin' || $user['groups'] == $getelements->fields['user_required']){
+                        $result[] = $value;
                     }
                 }
             } else {
-                $result[] = $key;
+                $result[] = $value;
             }
-        }
+        } unset($getelements);
     }
-//    echo '<pre>'; print_r($result); echo '</pre>';
+//    echo '<pre>'; print_r($result); echo '</pre>'; exit();
     return $result;
 }
 
 function get_active_modules(){
     global $systemquery, $configs;
     $result = array();
-    $cache_filename = FILES_DIR . DS . 'registry' . DS . $_COOKIE[$configs->cookiesession];
-    clearstatcache();
-    if(is_file($cache_filename)){
-        require $cache_filename;
-        $result = $modulelists;
-    } else {
-        $nothing = 0;
-    } unset($cache_filename);
-    if(isset($nothing)){
-        unset($nothing);
-        $systemquery->connect();
-        $sql = $systemquery->getSelect(
-            array(),
-            array('modules'),
-            NULL,
-            'module'
-        );
-//        $systemquery->conn->debug=true;
-        $query = $systemquery->conn->Execute($sql); unset($sql);
-        for($i=0; $i<$query->_numOfRows; $i++){
-            $result[] = $query->fields['module'];
-            $query->MoveNext();
-        } unset($query);
-        $systemquery->connect();
-    }
+    $sql = $systemquery->getSelect(
+        array(),
+        array('modules'),
+        NULL,
+        'module'
+    );
+    $systemquery->connect();
+    $query = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+    for($i=0; $i<$query->_numOfRows; $i++){
+        $result[] = $query->fields['module'];
+        $query->MoveNext();
+    } unset($query);
     return $result;
 }
 
@@ -267,58 +316,46 @@ function __get_menu_sights(){
     return $result;
 }
 
-function __get_menu_lists(){
+function __get_menu_lists($forced = NULL){
     global $systemquery, $configs;
     $modules = get_active_modules();
     $result = array();
-    $cache_filename = FILES_DIR . DS . 'registry' . DS . $_COOKIE[$configs->cookiesession];
-    clearstatcache();
-    if(is_file($cache_filename)){
-        require $cache_filename;
-        $result = $menulists;
-    } else {
-        $nothing = 0;
-    } unset($cache_filename);
-    if(isset($nothing)){
-        unset($nothing);
-        foreach($modules as $value){
-            require MODULES_DIR . DS . $value . DS . $value . '.module';
-        }
-        $menu_sight_lists = __get_menu_sights();
-        $systemquery->connect();
-        $sql = $systemquery->getSelect(
-            array(),
-            array('navigations'),
-            array(
-                array('&&', "parent is null")
-            ),
-            'weight'
-        );
-        $query = $systemquery->conn->Execute($sql); unset($sql);
-        for($i=0; $i<$query->_numOfRows; $i++){
-            $result[$query->fields['menus']] = $query->fields;
-            foreach($menu_sight_lists[$query->fields['menus']] as $key => $value){
-                $result[$query->fields['menus']][$key] = $value;
+    $sql = $systemquery->getSelect(
+        array(),
+        array('registry'),
+        array(
+            array('&&', "id=" . $_COOKIE[$configs->cookiesession])
+        )
+    );
+    $systemquery->connect();
+    $registry = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+    if($registry->_numOfRows > 0 && is_null($forced)){
+        for($i=0; $i<$registry->_numOfRows; $i++){
+            if(!is_null($registry->fields['alls']) && trim($registry->fields['alls']) != ''){
+                $dumpr = explode(',', $registry->fields['alls']);
+                foreach($dumr as $value){
+                    $result[] = $value;
+                } unset($dumpr);
             }
-            $result[$query->fields['menus']]['source'] = 'configs';
-            $query->MoveNext();
-        } unset($query);
-        $systemquery->close();
-        foreach($modules as $key=>$value){
-//            echo $value . '<br />';
-            require MODULES_DIR . DS . $value . DS . $value . '.module';
-            $menu_lists = ${$value . '_exec'}->menu();
-    //        if($value == 'group'){echo '<pre>'; print_r($menu_lists); echo '</pre>';}
-            foreach($menu_lists as $ke=>$val){
-                $result[$ke] = $val;
-                $result[$ke]['module'] = $value;
-                $result[$ke]['source'] = 'modules';
-            } unset($menu_lists);
+            $registry->MoveNext();
         }
-        foreach($modules as $value){
-            unset(${$value . '_module'}, ${$value . '_config'}, ${$value . '_query'});
-        } unset($modules);
-    }
+    } else {
+        $sql = $systemquery->getSelect(
+            array('id'),
+            array('menus'),
+            NULL,
+            'parent, id'
+        );
+        $systemquery->connect();
+        $menus = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        for($i=0; $i<$menus->_numOfRows; $i++){
+            $result[] = $menus->fields['id'];
+            $menus->MoveNext();
+        } unset($menus);
+    } unset($registry);
+//    echo '<pre>'; print_r($result); echo '<pre>';
     return $result;
 }
 
@@ -346,12 +383,20 @@ function get_exec_menus($path){
     $the_path = preg_replace('/\/$/', '', implode('/',$dump));
     $the_path = (!preg_match('/^\//',$the_path) ? '/' : '') . $the_path;
     unset($dump);
-    $menu_lists = __get_menu_lists();
-    foreach($menu_lists as $key=>$value){
-        if($value['path'] == $the_path){
-            $result[] = $key;
-        }
-    }
+    $sql = $systemquery->getSelect(
+        array('id'),
+        array('menus'),
+        array(
+            array('&&', "path=" . $the_path)
+        )
+    );
+    $systemquery->connect();
+    $getmenus = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+    for($i=0; $i<$getmenus->_numOfRows; $i++){
+        $result[] = $getmenus->fields['id'];
+        $getmenus->MoveNext();
+    } unset($getmenus);
 //    echo '<pre>'; print_r($result); echo '</pre>'; exit();
     return $result;
 }

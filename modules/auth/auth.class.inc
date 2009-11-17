@@ -74,11 +74,19 @@ class authModule extends mainModule
             $result = $this->__get_vars($_COOKIE[$this->config->cookieid]);
         }
         if(isset($_COOKIE[$this->config->cookiesession])){
-            clearstatcache();
-            $cache_filename = FILES_DIR . DS . 'registry' . DS . $_COOKIE[$this->config->cookiesession];
-            if(!is_file($cache_filename)){
+            $sql = $this->sysquery->getSelect(
+                array(),
+                array('registry'),
+                array(
+                    array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+                )
+            );
+            $this->sysquery->connect();
+            $getregistry = $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
+            if($getregistry->_numOfRows < 1){
                 __write_registry();
-            } unset($cache_filename);
+            } unset($getregistry);
         }
         return $result;
     }

@@ -34,9 +34,12 @@ function get_content($path){
         } else {
             if($path['main'] == 'user' ||
             $path['main'] == 'admin' ||
-            (isset($path['menu']) && ($path['menu'] == 'add' ||
-            $path['menu'] == 'edit' ||
-            $path['menu'] == 'drop'))){
+                (isset($path['menu']) && (
+                    $path['menu'] == 'add' ||
+                    $path['menu'] == 'edit' ||
+                    $path['menu'] == 'drop')
+                )
+            ){
                 redirect_to('/login');
             }
         }
@@ -44,9 +47,10 @@ function get_content($path){
         if($path['main'] == 'login'){
             redirect_to('/');
         } else {
-            $menus = __get_menu_lists();
+//            $menus = __get_menu_lists();
             $checkmenus = __get_active_menus();
             $getallow_path = array();
+//            echo '<pre>'; print_r($checkmenus); echo '</pre>';
             foreach($checkmenus as $key => $value){
                 $getallow_path[] = $menus[$value]['path'];
             }
@@ -72,10 +76,21 @@ function get_content($path){
 function __get_modul_exec($exec_menus){
     global $systemquery;
     $execfunc = array();
-    $menu_lists = __get_menu_lists();
     foreach($exec_menus as $value){
-        $execfunc[] = (isset($menu_lists[$value]['module']) ? $menu_lists[$value]['module'] . '_' : '') . $menu_lists[$value]['exec'];
-    } unset($menu_lists);
+        $sql = $systemquery->getSelect(
+            array('module', 'exec'),
+            array('menus'),
+            array(
+                array('&&', "id=" . $value)
+            )
+        );
+        $systemquery->connect();
+        $query = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        $execfunc[] = (!is_null($query->fields['module']) ? $query->fields['module'] . '_' : '') . $query->fields['exec'];
+        unset($query);
+    }
+//    echo '<pre>'; print_r($execfunc); echo '</pre>';
     return $execfunc;
 }
 
