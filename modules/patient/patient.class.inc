@@ -29,7 +29,7 @@ class patientModule extends mainModule
     var $title = 'patient module';
     var $description = '';
     var $hidden_fields = array(
-        'id', 'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'strnum'
+        'id', 'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'strnum', 'foto'
     );
     var $formtype_fields = array(
         'id' => 'hidden',
@@ -40,10 +40,25 @@ class patientModule extends mainModule
         'tgl_lahir' => 'date',
         'gol_darah' => 'text',
         'alamat' => 'textarea',
-        'kota' => 'text',
-        'propinsi' => 'text',
+        'kota' => 'select',
+        'propinsi' => 'select',
+        'kode_pos' => 'text',
+        'no_tlp' => 'text',
+        'no_hp' => 'text',
         'no_identitas' => 'text',
         'sandi' => 'password',
+        'status' => 'select',
+        'nama_suami_istri' => 'text',
+        'pekerjaan_suami_istri' => 'text',
+        'foto' => 'hidden',
+        'pekerjaan' => 'text',
+        'pendidikan' => 'text',
+        'agama' => 'select',
+        'suku' => 'text',
+        'nama_ayah' => 'text',
+        'pekerjaan_ayah' => 'text',
+        'nama_ibu' => 'text',
+        'pekerjaan_ibu' => 'text',
         'inputtime' => 'hidden',
         'sesi' => 'hidden',
         'timelog' => 'hidden',
@@ -565,7 +580,6 @@ class patientModule extends mainModule
 
     function setstrnum(){
         $dump = $this->__write_form_cache();
-        //echo '<pre>'; print_r($dump); echo '</pre>'; exit();
         $this->query->connect();
         $sql = $this->query->getSelect(
             array(),
@@ -576,13 +590,11 @@ class patientModule extends mainModule
         );
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
-//        echo '<pre>'; print_r($query); echo '</pre>'; exit();
         if($query->_numOfRows > 0){
             $str = array();
             foreach($query->fields as $key => $value){
                 $str[$key] = $value;
             }
-//        echo '<pre>'; print_r($str); echo '</pre>'; exit();
             $this->__write_custom_cache($str, 1);
             unset($str);
         }
@@ -590,9 +602,9 @@ class patientModule extends mainModule
     }
 
     function form(){
-        if(is_file($this->config->fcache)){
+        if($this->__check_caches() === true){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
+//            unlink($this->config->fcache);
 //            echo '<pre>'; print_r($vcache); echo '</pre>';
         }
         if(!isset($vcache['strnum'])){
@@ -635,6 +647,14 @@ class patientModule extends mainModule
                             $options = $this->__get_kelamin_options();
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
+                        } elseif($value == 'status'){
+                            $options = $this->__get_statusm_options();
+                        } elseif($value == 'kota'){
+                            $options = $this->__get_kabupaten_options('kabupaten');
+                        } elseif($value == 'propinsi'){
+                            $options = $this->__get_propinsi_options('nama_propinsi');
+                        } elseif($value == 'agama'){
+                            $options = $this->__get_agama_options();
                         }
                         $form['patient'][$value]['#option'] = $options;
                     } elseif($value == 'strnum'){

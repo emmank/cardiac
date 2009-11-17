@@ -27,18 +27,17 @@ function rendering_page(){
     __show_debug();
     unset_globals();
     $user = __get_user();
-    $modules = get_active_modules();
-    $menus = __get_menu_lists();
-    $mymenus = __get_active_menus();
+//    $modules = get_active_modules();
+//    $menus = __get_menu_lists();
+//    $mymenus = __get_active_menus();
     $path = get_path_array();
-//    echo '<pre>'; print_r($path); echo '</pre>';
-//    if($path['vars'] == 'today_fekg_lists'){exit();}
-    $managed_menus = menu_organize();
     get_content($path);
     $exec_menus = get_exec_menus($path);
     $content['exec'] = __get_modul_exec($exec_menus);
     $content['output'] = exec_module_function($content['exec']);
     $theme = get_theme();
+    $managed_menus = menu_organize();
+//    echo '<pre>'; print_r($managed_menus); echo '</pre>'; exit();
     include_once INCLUDES_DIR . DS . 'renderme.inc';
     return;
 }
@@ -152,41 +151,111 @@ function __get_user(){
 
 function __write_registry(){
     global $configs, $systemquery;
-    $cache_filename = FILES_DIR . DS . 'registry' . DS . $_COOKIE[$configs->cookiesession];
-    clearstatcache();
-    if(is_file($cache_filename)){
-        unlink($cache_filename);
+    $menu_actives = __get_active_menus(1);
+    $primary_links = __get_primary_links();
+    $secondary_links = __get_secondary_links();
+    $navigations = __get_navigations();
+//    echo '<pre>'; print_r($primary_links); echo '</pre>';
+    $thevalue = array();
+    foreach ($primary_links as $key=>$value){
+        if(in_array($value['menus'], $menu_actives)){
+            if(isset($koma)){$thevalue['primary_links'] .= ',';} else {$thevalue['primary_links'] = '';}
+            $thevalue['primary_links'] .= $value['menus']; $koma = 0;
+        }
+    } unset($koma);
+    foreach ($secondary_links as $key=>$value){
+        if(in_array($value['menus'], $menu_actives)){
+            if(isset($koma)){$thevalue['secondary_links'] .= ',';} else {$thevalue['secondary_links'] = '';}
+            $thevalue['secondary_links'] .= $value['menus']; $koma = 0;
+        }
+    } unset($koma);
+    foreach ($navigations as $key=>$value){
+        if(in_array($value['menus'], $menu_actives)){
+            if(isset($koma)){$thevalue['navigations'] .= ',';} else {$thevalue['navigations'] = '';}
+            $thevalue['navigations'] .= $value['menus']; $koma = 0;
+        }
+    } unset($koma);
+    foreach ($menu_actives as $key=>$value){
+        if(isset($koma)){$thevalue['alls'] .= ',';} else {$thevalue['alls'] = '';}
+        $thevalue['alls'] .= $value; $koma = 0;
+    } unset($koma);
+
+    $sql = $systemquery->getSelect(
+        array('id'),
+        array('registry'),
+        array(
+            array('&&', "id=" . $_COOKIE[$configs->cookiesession])
+        )
+    );
+    $systemquery->connect();
+    $checkit = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+    if($checkit->_numOfRows > 0){
+        $sql = $systemquery->setDelete(
+            'registry',
+            array(
+                array('&&', "id=" . $_COOKIE[$configs->cookiesession])
+            )
+        );
+    } unset($checkit);
+    $thevalue['id'] = $_COOKIE[$configs->cookiesession];
+    $sql = $systemquery->saveData(
+        'registry',
+        $thevalue
+    ); unset($thevalue);
+    $systemquery->connect();
+    $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+
+    // writing all elements , but that just for temporary until menu module is existing !
+    $allelements = array();
+    $dumpsights = __get_menu_sights();
+    foreach($dumpsights as $key=>$value){
+        $allelements[$key] = $value;
+        $allelements[$key]['source'] = 'configs';
+    } unset($dumpsights);
+    $modules = get_active_modules();
+    foreach($modules as $key=>$value){
+//        echo $value . '<br />';
+        require MODULES_DIR . DS . $value . DS . $value . '.module';
+        $menu_lists = ${$value . '_exec'}->menu();
+//        if($value == 'group'){echo '<pre>'; print_r($menu_lists); echo '</pre>';}
+        foreach($menu_lists as $ke=>$val){
+            $allelements[$ke] = $val;
+            $allelements[$ke]['module'] = $value;
+            $allelements[$ke]['source'] = 'modules';
+        } unset($menu_lists);
+    } unset($modules);
+
+    foreach ($allelements as $key => $value){
+        $sql = $systemquery->getSelect(
+            array('id'),
+            'menus',
+            array(
+                array('&&', "id=" . $key)
+            )
+        );
+        $systemquery->connect();
+        $getexist = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        if($getexist->_numOfRows > 0){
+            $value['id'] = $key;
+            $sql = $systemquery->saveData(
+                'menus',
+                $value
+            ); unset($value['id']);
+        } else {
+            $sql = $systemquery->updateData(
+                'menus',
+                $value,
+                array(
+                    array('&&', "id=" . $key)
+                )
+            );
+        }
+        $systemquery->connect();
+        $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
     }
-    $getmodules = get_active_modules();
-    $getmenus = __get_menu_lists();
-    $handle = fopen($cache_filename, 'w');
-    fwrite($handle, "<?php\n");
-    fwrite($handle, "\$modulelists = array(");
-    foreach($getmodules as $key => $value){
-        if($key > 0){
-            fwrite($handle, ", ");
-        }
-        fwrite($handle, "'" . $value . "'");
-    } unset($getmodules);
-    fwrite($handle, ");\n");
-    fwrite($handle, "\$menulists = array(\n");
-    $i = 0;
-    foreach($getmenus as $key => $value){
-        if($i > 0){
-            fwrite($handle, ",\n");
-        }
-        fwrite($handle, "\t" . $key . " => array(\n");
-        $u = 0;
-        foreach($value as $ky => $vl){
-            if($u > 0){
-                fwrite($handle, ",\n");
-            }
-            fwrite($handle, "\t\t" . $ky . " => '" . $vl . "'");
-            $u++;
-        }
-        fwrite($handle, "\n\t)");
-        $i++;
-    } unset($i, $getmenus);
-    fwrite($handle, "\n);\n");
-    fclose($handle); unset($handle);
+    redirect_to('/');
 }

@@ -33,6 +33,7 @@ class config
     var $flog;
     var $security_features = TRUE;
     var $clean_url = TRUE;
+    var $cacheseparator = '][';
     var $systemdb = array(
         'rdbms' => 'mysql',
         'database' => array(
