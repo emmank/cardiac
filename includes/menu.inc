@@ -63,7 +63,6 @@ function __get_secondary_links(){
 function __get_navigations(){
     global $systemquery;
     $result = array();
-    $systemquery->connect();
     $sql = $systemquery->getSelect(
         array(),
         array('navigations'),
@@ -72,9 +71,14 @@ function __get_navigations(){
         ),
         'weight, menus'
     );
+    $systemquery->connect();
     $query = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+    $cnt = 0;
     for($i=0; $i<$query->_numOfRows; $i++){
-        $result[] = $query->fields;
+//        echo $query->fields['menus'] . '<br />';
+        $result[$cnt] = $query->fields;
+        $cnt++;
         $sql = $systemquery->getSelect(
             array(),
             array('navigations'),
@@ -83,7 +87,9 @@ function __get_navigations(){
             ),
             'weight, menus'
         );
+        $systemquery->connect();
         $child = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
         for($o=0; $o<$child->_numOfRows; $o++){
             $sql = $systemquery->getSelect(
                 array('menus'),
@@ -95,13 +101,14 @@ function __get_navigations(){
             $systemquery->connect();
             $getparent = $systemquery->conn->Execute($sql); unset($sql);
             $systemquery->close();
-            $result[$o] = $child->fields;
-            $result[$o]['parent'] = $getparent->fields['menus'];
+            $result[$cnt] = $child->fields;
+            $result[$cnt]['parent'] = $getparent->fields['menus'];
+            $cnt++;
             $child->MoveNext(); unset($getparent);
         } unset($child);
         $query->MoveNext();
     } unset($query);
-    $systemquery->close();
+//    echo '<pre>'; print_r($result); echo '</pre>';
     return $result;
 }
 
@@ -224,10 +231,27 @@ function __get_group_permission($id){
 }
 
 function __get_active_menus($forced=NULL){
-    global $user, $systemquery;
+    global $user, $systemquery, $configs;
     $result = array();
     $lists = __get_menu_lists(!is_null($forced) ? $forced : NULL);
-//    echo '<pre>'; print_r($lists); echo '</pre>';
+    if(count($user) < 1){
+        if(isset($_COOKIE[$configs->cookieid])){
+            $sql = $systemquery->getSelect(
+                array(),
+                array($configs->auth_use_table[0]),
+                array(
+                    array('&&', $configs->auth_use_table[4] . "=" . $_COOKIE[$configs->cookieid])
+                )
+            );
+            $systemquery->connect();
+            $getit = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            if($getit->_numOfRows > 0){
+                $user = $getit->fields;
+            } unset($getit);
+        }
+    }
+//    echo '<pre>'; print_r($lists); echo '</pre>'; exit();
     foreach($lists as $key=>$value){
         $sql = $systemquery->getSelect(
             array(),
@@ -334,7 +358,7 @@ function __get_menu_lists($forced = NULL){
         for($i=0; $i<$registry->_numOfRows; $i++){
             if(!is_null($registry->fields['alls']) && trim($registry->fields['alls']) != ''){
                 $dumpr = explode(',', $registry->fields['alls']);
-                foreach($dumr as $value){
+                foreach($dumpr as $value){
                     $result[] = $value;
                 } unset($dumpr);
             }

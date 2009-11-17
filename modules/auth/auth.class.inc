@@ -73,21 +73,6 @@ class authModule extends mainModule
             }
             $result = $this->__get_vars($_COOKIE[$this->config->cookieid]);
         }
-        if(isset($_COOKIE[$this->config->cookiesession])){
-            $sql = $this->sysquery->getSelect(
-                array(),
-                array('registry'),
-                array(
-                    array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
-                )
-            );
-            $this->sysquery->connect();
-            $getregistry = $this->sysquery->conn->Execute($sql); unset($sql);
-            $this->sysquery->close();
-            if($getregistry->_numOfRows < 1){
-                __write_registry();
-            } unset($getregistry);
-        }
         return $result;
     }
 
@@ -265,10 +250,19 @@ class authModule extends mainModule
                 );
                 $getdata = $this->sysquery->conn->Execute($sql); unset($sql);
                 $this->sysquery->close();
-                unlink($this->config->fcache);
-//                $this->__write_registry();
                 setcookie($this->config->cookieid, $getdata->fields[$this->config->auth_use_table[4]]);
                 unset($getdata);
+                $sql = $this->sysquery->setDelete(
+                    'registry',
+                    array(
+                        array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+                    )
+                );
+                $this->sysquery->connect();
+                $this->sysquery->conn->Execute($sql); unset($sql);
+                $this->sysquery->close();
+//                echo '<pre>'; print_r($user); echo '</pre>'; exit();
+//                __write_registry();
                 redirect_to('/');
             } else {
                 $strvar = array("\nerror=>" . __t("Your passcode doesn't match !"));
@@ -282,13 +276,26 @@ class authModule extends mainModule
         }
     }
 
+    function __flush_registry(){
+        $sql = $this->sysquery->setDelete(
+            'registry',
+            array(
+                array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+            )
+        );
+        $this->sysquery->connect();
+        $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
+    }
+
     function logout(){
+        $this->__flush_registry();
         setcookie($this->config->cookieid,"");
         if(!is_null($this->config->use_time_limit) && $this->config->use_time_limit != '' && $this->config->use_time_limit != '0'){
             $this->__set_time_session($_COOKIE[$this->config->cookieid]);
         }
         session_destroy();
-        redirect_to('/');
+        redirect_to('/regload');
     }
 
     function regload(){
