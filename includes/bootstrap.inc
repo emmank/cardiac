@@ -231,55 +231,6 @@ function __write_registry(){
     $systemquery->close();
 
     // writing all elements , but that just for temporary until menu module is existing !
-/*
-    $allelements = array();
-    $dumpsights = __get_menu_sights();
-    foreach($dumpsights as $key=>$value){
-        $allelements[$key] = $value;
-        $allelements[$key]['source'] = 'configs';
-    } unset($dumpsights);
-    $modules = get_active_modules();
-    foreach($modules as $key=>$value){
-        require MODULES_DIR . DS . $value . DS . $value . '.module';
-        $menu_lists = ${$value . '_exec'}->menu();
-        foreach($menu_lists as $ke=>$val){
-            $allelements[$ke] = $val;
-            $allelements[$ke]['module'] = $value;
-            $allelements[$ke]['source'] = 'modules';
-        } unset($menu_lists);
-    } unset($modules);
 
-    foreach ($allelements as $key => $value){
-        $sql = $systemquery->getSelect(
-            array('id'),
-            'menus',
-            array(
-                array('&&', "id=" . $key)
-            )
-        );
-        $systemquery->connect();
-        $getexist = $systemquery->conn->Execute($sql); unset($sql);
-        $systemquery->close();
-        if($getexist->_numOfRows > 0){
-            $value['id'] = $key;
-            $sql = $systemquery->saveData(
-                'menus',
-                $value
-            ); unset($value['id']);
-        } else {
-            $sql = $systemquery->updateData(
-                'menus',
-                $value,
-                array(
-                    array('&&', "id=" . $key)
-                )
-            );
-        }
-        $systemquery->connect();
-        $systemquery->conn->Execute($sql); unset($sql);
-        $systemquery->close();
-    }
- *
- */
     redirect_to('/');
 }

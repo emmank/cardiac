@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  module.php
+ *  
+ *  Created on Nov 18, 2009, 1:16:55 AM
+ */
+
+require_once MODULES_DIR . DS . 'module' . DS . 'module.class.inc';
+
+if(!isset($module_config)){
+    $module_config = new moduleConfig();
+} elseif(!$module_config instanceof moduleConfig) {
+    $module_config = new moduleConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $module_config->rdbms . DS . 'dbquery.php';
+if(!isset($module_query)){
+    $module_query = new dbset();
+} elseif(!$module_query instanceof dbset) {
+    $module_query = new dbset();
+}
+
+if(!isset($module_exec)){
+    $module_exec = new moduleModule();
+} elseif(!$module_exec instanceof moduleModule) {
+    $module_exec = new moduleModule();
+}
