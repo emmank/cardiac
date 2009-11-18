@@ -177,6 +177,7 @@ class patientModule extends mainModule
 
         $thedir = $this->__set_dqueue();
         $lists = __get_file_lists($thedir);
+        echo '<pre>'; print_r($lists); echo '</pre>';
         if(count($lists) > 0){
             sort($lists); $i = 0;
             foreach($lists as $key => $value){
@@ -198,7 +199,7 @@ class patientModule extends mainModule
                 fclose($handle); unset($handle);
             }
         }
-//        echo '<pre>'; print_r($result); echo '</pre>';
+        //echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -308,7 +309,7 @@ class patientModule extends mainModule
                     }
 
                 } unset($options);
-//                echo '<pre>'; print_r($vcache); echo '</pre>';
+                echo '<pre>'; print_r($vcache); echo '</pre>';
                 $form['patient']['keluhan'] = array(
                     '#type' => 'textarea',
                     '#value' => isset($vcache['keluhan']) ? $vcache['keluhan'] : '',
@@ -465,6 +466,7 @@ class patientModule extends mainModule
 
     function view(){
         $this->__clean_queue();
+        echo 'here';
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('daftar pasien yang mendaftar hari ini');
@@ -523,7 +525,7 @@ class patientModule extends mainModule
                 fclose($handle); unset($handle);
             }
         }
-//        echo '<pre>'; print_r($result); echo '</pre>';
+        //echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
