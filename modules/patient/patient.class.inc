@@ -38,7 +38,7 @@ class patientModule extends mainModule
         'kelamin' => 'select',
         'tp_lahir' => 'text',
         'tgl_lahir' => 'date',
-        'gol_darah' => 'radio',
+        'gol_darah' => 'select',
         'alamat' => 'textarea',
         'kota' => 'select',
         'propinsi' => 'select',
@@ -246,14 +246,15 @@ class patientModule extends mainModule
                 }
             }
         }
-            $form['patient'] = array(
+
+        $form['patient'] = array(
                 '#type' => 'fieldset',
                 '#id' => 'patient',
                 '#title' => __t('patient'),
                 '#collapsible' => TRUE,
                 '#collapsed' => FALSE,
                 '#weight' => -3,
-                '#action' => '/user/patient/register_form_submit',
+                '#action' => '/node/patient/form_submit',
                 '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
                 '#focused_item' => 'nama'
             );
@@ -264,7 +265,7 @@ class patientModule extends mainModule
                         $form['patient'][$value] = array(
                             '#type' => $this->formtype_fields[$value],
                             '#title' => __t($value),
-                            '#value' => (isset($vcache[$value]) ? $vcache[$value] : '') . (isset($warning[$key]) ? ' &laquo; ' . __t('update from old value') . ' ' . $warning[$key] : ''),
+                            '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
                     } elseif($value == 'id'){
@@ -275,9 +276,29 @@ class patientModule extends mainModule
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
                     }
+
                     if($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
                         if($value == 'kelamin') {
-                            $options = $this->__get_kelamin_options();
+                            $options = $this->__get_kelamin_options();                            
+                        } elseif($this->formtype_fields[$value] == 'date'){
+                            $options = $this->nama_bulan;
+                        } elseif($value == 'status'){
+                            $options = $this->__get_statusm_options();
+                        } elseif($value == 'kota'){
+                            $options = $this->__get_kabupaten_options('kabupaten');                            
+                        } elseif($value == 'propinsi'){
+                            $options = $this->__get_propinsi_options('nama_propinsi');
+                        } elseif($value == 'agama'){
+                            $options = $this->__get_agama_options();
+                        }
+                        $form['patient'][$value]['#option'] = $options;
+                    } elseif($value == 'strnum'){
+                        $form['patient'][$value]['#extra'] = 'readonly="true"';
+                    }
+                    // ------ Add by emmank -------
+                    if($this->formtype_fields[$value] == 'select'){
+                        if($value == 'gol_darah') {
+                            $options = $this->__get_goldarah_options();
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
                         }
@@ -285,7 +306,9 @@ class patientModule extends mainModule
                     } elseif($value == 'strnum'){
                         $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
+
                 } unset($options);
+//                echo '<pre>'; print_r($vcache); echo '</pre>';
                 $form['patient']['keluhan'] = array(
                     '#type' => 'textarea',
                     '#value' => isset($vcache['keluhan']) ? $vcache['keluhan'] : '',
@@ -301,13 +324,9 @@ class patientModule extends mainModule
                     '#option' => $options,
                     '#option_blank' => 1
                 ); unset($options);
-                $form['patient']['fqueue'] = array(
-                    '#type' => 'hidden',
-                    '#value' => isset($vcache['fqueue']) ? $vcache['fqueue'] : ''
-                );
                 $form['patient']['submit'] = array(
                     '#type' => 'submit',
-                    '#value' => __t('register'),
+                    '#value' => __t('submit'),
     //                '#title' => __t('&nbsp;'),
                     '#extra' => ' class="button"'
                );
@@ -641,10 +660,10 @@ class patientModule extends mainModule
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
-                    }
+                    } 
                     if($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
                         if($value == 'kelamin') {
-                            $options = $this->__get_kelamin_options();
+                            $options = $this->__get_kelamin_options();  
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
                         } elseif($value == 'status'){
@@ -661,7 +680,7 @@ class patientModule extends mainModule
                         $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
                     // ------ Add by emmank -------
-                    if($this->formtype_fields[$value] == 'radio'){
+                    if($this->formtype_fields[$value] == 'select'){
                         if($value == 'gol_darah') {
                             $options = $this->__get_goldarah_options();
                         } elseif($this->formtype_fields[$value] == 'date'){

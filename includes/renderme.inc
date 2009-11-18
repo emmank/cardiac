@@ -204,8 +204,10 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                     }
                     $result .= '<div>';
                     $result .= '<input type="' . $value['#type'] . '" name="' . $namekey . '" value="' . $ky . '"';
+                    echo '<pre>'; print_r($value); echo '</pre>';
                     if(in_array($ky, $value['#value'])){
                         $result .= ' checked="true"';
+                        echo "test";
                     }
                     if(isset($value['#style'])){
                         $result .= ' style="' . $value['#style'] . '"';
