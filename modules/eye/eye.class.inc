@@ -1710,8 +1710,8 @@ class eyeModule extends mainModule
         }
 //        echo '<pre>'; print_r($thevalue); echo '</pre>';
         unset($thevalue);
-//        $this->query->connect();
-//        $this->conn->execute($sql); unset($sql);
-//        $this->query->close();
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
     }
 }

@@ -27,7 +27,16 @@
 function __t($string){
     global $systemquery;
     $lang = __get_lang();
+    $sql = $systemquery->getSelect(
+        array('id'),
+        array('dumptr'),
+        array(
+            array('&&', "id=" . $string)
+        )
+    );
     $systemquery->connect();
+    $getit = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
     $sql = $systemquery->getSelect(
         array($lang),
         array('translations'),
@@ -35,11 +44,34 @@ function __t($string){
             array('&&', "strkey=" . $string)
         )
     );
+    $systemquery->connect();
     $result = $systemquery->conn->Execute($sql); unset($sql);
     $systemquery->close();
     if($result->_numOfRows > 0 && $result->fields[$lang] != ''){
+        if($getit->_numOfRows > 0){
+            $sql = $systemquery->setDelete(
+                'dumptr',
+                array(
+                    array('&&', "id=" . $string)
+                )
+            );
+            $systemquery->connect();
+            $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+        } unset($getit);
         return $result->fields[$lang];
     } else {
+        if($getit->_numOfRows < 1){
+            $sql = $systemquery->saveData(
+                'dumptr',
+                array(
+                    'id' => $string
+                )
+            );
+            $systemquery->connect();
+            $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+        } unset($getit);
         return $string;
     }
 }
