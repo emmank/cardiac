@@ -26,6 +26,8 @@ require_once MODULES_DIR . DS . 'auth' . DS . 'config.inc';
 
 class authModule extends mainModule
 {
+    var $title = 'auth';
+    var $description = '';
     var $query;
 
     function menu(){

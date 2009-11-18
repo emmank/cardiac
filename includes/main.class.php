@@ -731,4 +731,28 @@ class mainModule
         }
     }
 
+    function __include_module($module){
+        require MODULES_DIR . DS . $module . DS . $module . '.module';
+        $this->{$module . '_config'} = ${$module . '_config'};
+        $this->{$module . '_config'}->time = $this->config->time;
+        $this->{$module . '_config'}->timelog_idle = $this->onfig->timelog_idle;
+        $this->{$module . '_config'}->fcache = $this->config->fcache;
+        $this->{$module . '_config'}->flog = $this->config->flog;
+        $funcdb = $module == 'user' || $module == 'auth' || $module == 'group' ? 'dbuser' : 'db' . $module;
+        $this->{$module . '_query'} = ${$module . '_query'};
+        $this->{$module . '_query'}->dbname = $this->{$module . '_config'}->{$funcdb}['name'];
+        $this->{$module . '_query'}->dbprefix = $this->{$module . '_config'}->{$funcdb}['prefix'];
+        $this->{$module . '_query'}->dbsuffix = $this->{$module . '_config'}->{$funcdb}['suffix'];
+        $this->{$module . '_query'}->tbprefix = $this->{$module . '_config'}->{$funcdb}['tbprefix'];
+        $this->{$module . '_query'}->tbsuffix = $this->{$module . '_config'}->{$funcdb}['tbsuffix'];
+        $this->{$module . '_query'}->hostname = $this->{$module . '_config'}->{$funcdb}['host'];
+        $this->{$module . '_query'}->username = $this->{$module . '_config'}->{$funcdb}['user'];
+        $this->{$module . '_query'}->passwd = $this->{$module . '_config'}->{$funcdb}['passwd'];
+        $this->{$module . '_query'}->conn = &ADONewConnection($this->{$module . '_config'}->rdbms);
+        $this->{$module . '_exec'} = ${$module . '_exec'};
+        $this->{$module . '_exec'}->config = $this->{$module . '_config'};
+        $this->{$module . '_exec'}->sysquery = $this->sysquery;
+        $this->{$module . '_exec'}->query = $this->{$module . '_query'};
+   }
+
 }

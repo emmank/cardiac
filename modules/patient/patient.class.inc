@@ -26,8 +26,8 @@ require_once MODULES_DIR . DS . 'patient' . DS . 'config.inc';
 
 class patientModule extends mainModule
 {
-    var $title = 'patient module';
-    var $description = '';
+    var $title = 'patient';
+    var $description = 'Pengelola data pasien mulai dari pendaftaran s.d. registrasi';
     var $hidden_fields = array(
         'id', 'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'strnum', 'foto'
     );
