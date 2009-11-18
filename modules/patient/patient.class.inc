@@ -428,7 +428,7 @@ class patientModule extends mainModule
         $this->query->close();
         $dirqueue = $this->__set_dqueue();
         unlink($dirqueue . DS . $dump['fqueue']);
-        unlink($this->config->fcache);
+//        unlink($this->config->fcache);
         unset($dump, $dirqueue);
         redirect_to('/user/patient');
     }
@@ -732,7 +732,7 @@ class patientModule extends mainModule
         $thevalue['number'] = basename($fincrement);
         $fqueue = $this->__get_fqueue(basename($fincrement));
         $this->__input_queue($fqueue, $thevalue);
-        unlink($this->config->fcache);
+        //unlink($this->config->fcache);
         redirect_to('/node/patient/showme/' . basename($fqueue));
     }
 

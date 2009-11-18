@@ -64,7 +64,8 @@ class mainModule
     );
     var $maritalStatus = array(
         'kawin',
-        'tidak kawin'
+        'tidak kawin',
+        'cerai'
     );
     var $string_to_shuffle = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     
