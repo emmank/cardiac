@@ -178,13 +178,13 @@ class ekgModule extends mainModule
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
 //                                $vl = $this->agecount_in_month(strtotime($vl));
-                                $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
-                                $form['ekg']['umur'] = array(
-                                    '#type' => 'info',
-                                    '#value' => $vl . ' tahun',
-                                    '#title' => __t('umur'),
-                                    '#tbpos' => 3
-                                );
+//                                $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
+//                                $form['ekg']['umur'] = array(
+//                                    '#type' => 'info',
+//                                    '#value' => $vl . ' tahun',
+//                                    '#title' => __t('umur'),
+//                                    '#tbpos' => 3
+//                                );
                             } else {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
@@ -283,9 +283,9 @@ class ekgModule extends mainModule
         $form['ekg']['submit'] = array(
             '#type' => 'submit',
             '#value' => 'submit',
-//            '#extra' => ' class="button"'
+            '#extra' => ' class="button"'
         );
-//        echo '<pre>'; print_r($form); echo '</pre>';
+        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
     }
 
@@ -351,24 +351,38 @@ class ekgModule extends mainModule
             );
             $this->vardump['id'] = $thevalue['id'];
         }
-//        $this->query->connect();
-//        $this->query->conn->Execute($sql); unset($sql);
-//        $this->query->close();
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
         unset($thevalue);
-        $this->__loadPresentStatus('submit');
-        $this->__loadVitalSign('submit');
-        $this->__loadEye('submit');
-        $this->__loadEar('submit');
-        $this->__loadNose('submit');
-        $this->__loadHeadFace('submit');
-        $this->__loadNeck('submit');
-        $this->__loadMouth('submit');
-        $this->__loadThorax('submit');
-        $this->__loadParu('submit');
-        $this->__loadHearth('submit');
-        $this->__loadAbdomen('submit');
-        $this->__loadAnusrectum('submit');
-//        redirect_to('/user/ekg/form');
+//        $this->__loadPresentStatus('submit');
+//        $this->__loadVitalSign('submit');
+//        $this->__loadEye('submit');
+//        $this->__loadEar('submit');
+//        $this->__loadNose('submit');
+//        $this->__loadHeadFace('submit');
+//        $this->__loadNeck('submit');
+//        $this->__loadMouth('submit');
+//        $this->__loadThorax('submit');
+//        $this->__loadParu('submit');
+//        $this->__loadHearth('submit');
+//        $this->__loadAbdomen('submit');
+//        $this->__loadAnusrectum('submit');
+        if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
+            $sql = $this->query->updateData(
+                'kunjungan',
+                array(
+                    'doneby' => '1'
+                ),
+                array(
+                    array('&&', "id=" . $_POST['idkunjungan'])
+                )
+            );
+            $this->query->connect();
+            $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+        }
+        redirect_to('/user/ekg/form');
     }
 
     function __include_module($module){
