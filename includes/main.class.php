@@ -122,7 +122,7 @@ class mainModule
         $result = array();
         ksort($this->agama);
         foreach($this->agama as $key => $value){
-            $result[$key] = ucwords(__t($value));
+            $result[$value] = ucwords(__t($value));
         }
         return $result;
     }
@@ -140,7 +140,7 @@ class mainModule
         $result = array();
         krsort($this->goldarah);
         foreach($this->goldarah as $key => $value){
-            $result[$key] = ucwords(__t($value));
+            $result[$value] = ucwords(__t($value));
         }
         return $result;
     }
@@ -151,7 +151,7 @@ class mainModule
         $result = array();
 //        krsort($this->maritalStatus);
         foreach($this->maritalStatus as $key => $value){
-            $result[$key] = ucwords(__t($value));
+            $result[$value] = ucwords(__t($value));
         }
         return $result;
     }
@@ -209,7 +209,7 @@ class mainModule
         );
         $query = $this->query->conn->Execute($sql); unset($sql);
         for($i=0; $i<$query->_numOfRows; $i++){
-            $result[$query->fields['id_kab']] = ucwords(__t($query->fields[$field]));
+            $result[$query->fields[$field]] = ucwords(__t($query->fields[$field]));
             $query->MoveNext();
         } unset($query);
         $this->query->close();
@@ -227,7 +227,7 @@ class mainModule
         );
         $query = $this->query->conn->Execute($sql); unset($sql);
         for($i=0; $i<$query->_numOfRows; $i++){
-            $result[$query->fields['kode_bps']] = ucwords(__t($query->fields[$field]));
+            $result[$query->fields[$field]] = ucwords(__t($query->fields[$field]));
             $query->MoveNext();
         } unset($query);
         $this->query->close();
@@ -328,7 +328,7 @@ class mainModule
 
     function __write_custom_cache($strvar, $add=NULL){
         $handle = '';
-        if(is_null($add)){
+        if(!is_null($add)){
             $sql = $this->sysquery->getSelect(
                 array('caches'),
                 array('caches'),
@@ -423,16 +423,26 @@ class mainModule
                 }
             }
         } unset($handle);
-        $sql = $this->sysquery->setDelete(
-            'caches',
-            array(
-                array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
-            )
-        );
+        $this->__flush_caches();
+        return $result;
+    }
+
+    function __flush_caches($all = NULL){
+        if(!is_null($all)){
+            $sql = $this->sysquery->setDelete(
+                'caches'
+            );
+        } else {
+            $sql = $this->sysquery->setDelete(
+                'caches',
+                array(
+                    array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+                )
+            );
+        }
         $this->sysquery->connect();
         $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();
-        return $result;
     }
 
     function agecount_in_month($birthdate){
@@ -701,15 +711,22 @@ class mainModule
     }
 
     function __get_fqmax(){
-        $result = $this->__set_dincrement();
-        $lists = __get_file_lists($result);
-        if(count($lists) > 0){
-            $result .= DS . ((int)max($lists) + 1);
-        } else {
-            $result .= DS . '1';
+        $result = 1;
+        $sql = $this->query->getSelect(
+            array('max(nourut) as nourut'),
+            array('antrian'),
+            array(
+                array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                array('&&', "day(pukul)=" . date('j', $this->config->time))
+            )
+        );
+        $this->query->connect();
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            $result = $getit->fields['nourut'] + 1;
         }
-        $handle = fopen($result, 'w');
-        fclose($handle); unset($handle);
         return $result;
     }
 
