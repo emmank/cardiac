@@ -151,7 +151,7 @@ class patientModule extends mainModule
         $result['description'] = __t('antrian pasien yang mendaftar pada hari ini');
         $result['header'] = array(
             array(
-                'field' => 'none',
+                'field' => 'nourut',
                 'caption' => __t('no'),
                 'width' => '5%',
                 'align' => 'right'
@@ -175,6 +175,7 @@ class patientModule extends mainModule
             )
         );
 
+<<<<<<< HEAD:modules/patient/patient.class.inc
         $thedir = $this->__set_dqueue();
         $lists = __get_file_lists($thedir);
 //        echo '<pre>'; print_r($lists); echo '</pre>';
@@ -197,6 +198,29 @@ class patientModule extends mainModule
                 $result['data'][$i]['goto'] = '/user/patient/register/' . $value;
                 $i++;
                 fclose($handle); unset($handle);
+=======
+        $sql = $this->query->getSelect(
+            array('id', 'nama', 'tgl_lahir', 'alamat', 'nourut'),
+            array('antrian'),
+            array(
+                array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                array('&&', "day(pukul)=" . date('j', $this->config->time))
+            ),
+            'pukul'
+        );
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $result['data'][$i]['nama'] = $getit->fields['nama'];
+                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getit->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+                $result['data'][$i]['goto'] = '/user/patient/register/' . $getit->fields['id'];
+                $result['data'][$i]['nourut'] = $getit->fields['nourut'];
+                $getit->MoveNext();
+>>>>>>> a0c31c64d3609b86b948cdf69b8a7d0fe15e108c:modules/patient/patient.class.inc
             }
         }
 //        echo '<pre>'; print_r($result); echo '</pre>';
@@ -204,27 +228,27 @@ class patientModule extends mainModule
     }
 
     function register_form(){
-        if (is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(isset($dump[3])){
-                $filename = $dump[3];
-                $filedump = $this->__set_dqueue() . DS . $filename;
-                $vcache['fqueue'] = $filename;
-                if(is_file($filedump)){
-                    $handle = fopen($filedump, 'r');
-                    while (!feof($handle)){
-                        $buffer = fgets($handle);
-                        if(trim($buffer) != ''){
-                            list($key, $value) = explode('=>', trim($buffer));
-                            $vcache[$key] = $value;
-                            unset($key, $value);
-                        } unset($buffer);
+                $sql = $this->query->getSelect(
+                    array(),
+                    array('antrian'),
+                    array(
+                        array('&&', "id=" . $dump[3])
+                    )
+                );
+                $this->query->connect();
+                $getit = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getit->_numOfRows > 0){
+                    foreach($getit->fields as $key => $value){
+                        if($key == 'id'){$key = 'idantrian';}
+                        $vcache[$key] = $value;
                     }
-                    fclose($handle); unset($handle);
-                }
+                } unset($getit);
             } unset($dump[3]);
             $this->query->connect();
             $sql = $this->query->getSelect(
@@ -266,7 +290,7 @@ class patientModule extends mainModule
                 foreach($datafields as $value){
                     if(!in_array($value, $this->hidden_fields)){
                         $form['patient'][$value] = array(
-                            '#type' => $this->formtype_fields[$value],
+                            '#type' => ($value != 'kota' && $value != 'propinsi' ? $this->formtype_fields[$value] : 'text'),
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
@@ -319,14 +343,18 @@ class patientModule extends mainModule
                     '#error' => isset($vcache['blank']) && in_array('keluhan', $vcache['blank']) ? 1 : 0
                 );
                 $options = $this->__get_bagian_lists();
-                $form['patient']['rujukan'] = array(
+                $form['patient']['bagian'] = array(
                     '#type' => 'select',
-                    '#value' => isset($vcache['rujukan']) ? $vcache['rujukan'] : '',
-                    '#title' => __t('rujukan'),
-                    '#error' => isset($vcache['blank']) && in_array('rujukan', $vcache['blank']) ? 1 : 0,
+                    '#value' => isset($vcache['bagian']) ? $vcache['bagian'] : '',
+                    '#title' => __t('dirujuk ke'),
+                    '#error' => isset($vcache['blank']) && in_array('bagian', $vcache['blank']) ? 1 : 0,
                     '#option' => $options,
                     '#option_blank' => 1
                 ); unset($options);
+                $form['patient']['idantrian'] = array(
+                    '#type' => 'hidden',
+                    '#value' => isset($vcache['idantrian']) ? $vcache['idantrian'] : ''
+                );
                 $form['patient']['submit'] = array(
                     '#type' => 'submit',
                     '#value' => __t('submit'),
@@ -343,17 +371,17 @@ class patientModule extends mainModule
         $thevalue = array();
 //        echo '<pre>'; print_r($dump); echo '</pre>';
         foreach($dump as $key => $value){
-            if($key == 'nama' || $key == 'alamat' || $key == 'kota' || $key == 'rujukan'){
+            if($key == 'nama' || $key == 'alamat' || $key == 'kota' || $key == 'bagian'){
                 if(trim($value) == ''){
-                    $this->__write_custom_cache(array('error=>' . __t('Kolom nama, alamat, kota, dan rujukan tidak boleh kosong !')), 1);
-                    redirect_to('/user/patient/register'); exit;
+                    $this->__write_custom_cache(array('error' => __t('Kolom nama, alamat, kota, dan dirujuk ke tidak boleh kosong !')), 1);
+                    redirect_to('/user/patient/register/' . $dump['idantrian']); exit;
                 }
             } elseif ($key == 'date'){
                 $tgldump = explode('-', trim($value));
                 foreach($tgldump as $ky => $vl){
                     if(trim($vl) == ''){
                         $this->__write_custom_cache('error=>' . __t('Kolom tanggal tidak boleh kosong !'), 1);
-                        redirect_to('/user/patient/register'); exit;
+                        redirect_to('/user/patient/register' . $dump['idantrian']); exit;
                     } elseif(!ctype_digit($vl)){
                         $this->__write_custom_cache('error=>' . __t('Kolom tanggal harus numeric !'), 1);
                         redirect_to('/user/patient/register'); exit;
@@ -361,10 +389,10 @@ class patientModule extends mainModule
                 }
                 if(checkdate((int)$tgldump[1], (int)$tgldump[2], (int)$tgldump[0]) === false){
                     $this->__write_custom_cache('error=>' . __t('Format tanggal salah !'), 1);
-                    redirect_to('/user/patient/register'); exit;
+                    redirect_to('/user/patient/register' . $dump['idantrian']); exit;
                 } unset($tgldump);
             }
-            if($key != 'submit' && $key != 'blank' && $key != 'keluhan' && $key != 'rujukan' && $key != 'id' && $key != 'fqueue'){
+            if($key != 'submit' && $key != 'blank' && $key != 'keluhan' && $key != 'bagian' && $key != 'id' && $key != 'idantrian'){
                 $thevalue[$key] = $value;
             }
         }
@@ -372,11 +400,11 @@ class patientModule extends mainModule
         if ($dump['id']==''){
             echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             $nom = 1;
-            $this->query->connect();
             $sql = $this->query->getSelect(
                 array('max(nomor) as no'),
                 array('patients')
             );
+            $this->query->connect();
             $query = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             if($query->_numOfRows > 0){
@@ -414,7 +442,7 @@ class patientModule extends mainModule
             array('bagian'),
             array('bagian'),
             array(
-                array('&&', "id=" . $dump['rujukan'])
+                array('&&', "id=" . $dump['bagian'])
             )
         );
         $query = $this->query->conn->Execute($sql); unset($sql);
@@ -446,11 +474,11 @@ class patientModule extends mainModule
             'inputer' => $_COOKIE[$this->config->cookieid]
         );
         $thevalue['id'] = $this->__get_id_insert_value('kunjungan', 'id', $this->query);
-        $this->query->connect();
         $sql = $this->query->saveData(
             'kunjungan',
             $thevalue
         );
+<<<<<<< HEAD:modules/patient/patient.class.inc
 //        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
@@ -458,6 +486,24 @@ class patientModule extends mainModule
 //        unlink($dirqueue . DS . $dump['fqueue']);
         //unlink($this->config->fcache);
         unset($dump, $dirqueue);
+=======
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+
+        $sql = $this->query->setDelete(
+            'antrian',
+            array(
+                array('&&', "id=" . $dump['idantrian'])
+            )
+        );
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $this->__flush_caches();
+
+        unset($dump);
+>>>>>>> a0c31c64d3609b86b948cdf69b8a7d0fe15e108c:modules/patient/patient.class.inc
         redirect_to('/user/patient');
     }
 
@@ -474,7 +520,11 @@ class patientModule extends mainModule
     }
 
     function view(){
+<<<<<<< HEAD:modules/patient/patient.class.inc
         $this->__clean_queue();
+=======
+//        $this->__clean_queue();
+>>>>>>> a0c31c64d3609b86b948cdf69b8a7d0fe15e108c:modules/patient/patient.class.inc
 //        echo 'here';
         $result = array();
         $result['type'] = 'table';
@@ -487,7 +537,7 @@ class patientModule extends mainModule
         );
         $result['header'] = array(
             array(
-                'field' => 'none',
+                'field' => 'nourut',
                 'caption' => __t('no'),
                 'width' => '5%',
                 'align' => 'right'
@@ -511,30 +561,30 @@ class patientModule extends mainModule
             )
         );
 
-        $thedir = $this->__set_dqueue();
-        $lists = __get_file_lists($thedir);
-        if(count($lists) > 0){
-            sort($lists); $i = 0;
-            foreach($lists as $key => $value){
-                $handle = fopen($thedir . DS . $value, 'r');
-                while (!feof($handle)){
-                    $buffer = fgets($handle);
-                    if(trim($buffer) != ''){
-                        list($ky, $vl) = explode('=>', trim($buffer));
-                        if($ky == 'nama' || $ky == 'tgl_lahir' || $ky == 'alamat'){
-                            if($ky == 'tgl_lahir'){
-                                $vl = number_format(round($this->agecount_in_month(strtotime($vl))/12, 1), 1, ',','.') . ' th';
-                            }
-                            $result['data'][$i][$ky] = $vl;
-                        }
-                    }
-                }
-                $result['data'][$i]['goto'] = '/node/patient/showme/' . $value;
-                $i++;
-                fclose($handle); unset($handle);
+        $sql = $this->query->getSelect(
+            array('id', 'nama', 'tgl_lahir', 'alamat', 'nourut'),
+            array('antrian'),
+            array(
+                array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                array('&&', "day(pukul)=" . date('j', $this->config->time))
+            ),
+            'pukul'
+        );
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $result['data'][$i]['nama'] = $getit->fields['nama'];
+                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getit->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+                $result['data'][$i]['goto'] = '/node/patient/showme/' . $getit->fields['id'];
+                $result['data'][$i]['nourut'] = $getit->fields['nourut'];
+                $getit->MoveNext();
             }
         }
-        //echo '<pre>'; print_r($result); echo '</pre>';
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -544,37 +594,44 @@ class patientModule extends mainModule
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
 //        echo '<pre>'; print_r($dump); echo '</pre>';
         if(isset($dump[3])){
-            $filename = $dump[3];
-            $filename = FILES_DIR . DS . 'queue' . DS . date('Y-m-d', $this->config->time) . DS . 'queue' . DS . $filename;
-            if(is_file($filename)){
-                $thevalue = $this->__read_queue($filename);
-                $result['type'] = 'items_detail';
-                $result['title'] = __t('detil pasien');
-                $result['description'] = __t('informasi detil pasien terpilih yang mendaftar antrian');
-                $result['id'] = $thevalue['number'];
-                $result['dropable'] = '0';
-                $result['message'] = $thevalue['number'];
-                foreach($thevalue as $key => $value){
-                    if($key == 'kelamin'){
-                        $value = __t($this->kelamin[$value]);
-                    } elseif($key == 'tgl_lahir'){
-                        $usia = floor($this->agecount_in_month(strtotime($value))/12) . 'th ' . (($this->agecount_in_month(strtotime($value))%12) > 0 ? ($this->agecount_in_month(strtotime($value))%12) . 'bl' : '');
-                        $value = date('j-n-Y', strtotime($value));
-                        $value .= ' (' . $usia . ')';
-                        unset($usia);
-                    } elseif($key == 'rujukan'){
-                        $options = $this->__get_bagian_lists();
-                        $value = $options[$value];
-                        unset($options);
-                    }
-                    $result['data'][$key] = array(
-                        'key' => __t($key),
-                        'value' => $value,
-                        'hide' => in_array($key, $this->hidden_fields) ? 1 : 0
-                    );
+            $sql = $this->query->getSelect(
+                array(),
+                array('antrian'),
+                array(
+                    array('&&', "id=" . trim($dump[3]))
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            $thevalue = array();
+            foreach($getit->fields as $key => $value){
+                $thevalue[$key] = $value;
+            } unset($getit);
+            $result['type'] = 'items_detail';
+            $result['title'] = __t('detil pasien');
+            $result['description'] = __t('informasi detil pasien terpilih yang mendaftar antrian');
+            $result['id'] = $thevalue['id'];
+            $result['dropable'] = '0';
+            $result['message'] = $thevalue['nourut'];
+            foreach($thevalue as $key => $value){
+                if($key == 'kelamin'){
+                    $value = __t($this->kelamin[$value]);
+                } elseif($key == 'tgl_lahir'){
+                    $usia = floor($this->agecount_in_month(strtotime($value))/12) . 'th ' . (($this->agecount_in_month(strtotime($value))%12) > 0 ? ($this->agecount_in_month(strtotime($value))%12) . 'bl' : '');
+                    $value = date('j-n-Y', strtotime($value));
+                    $value .= ' (' . $usia . ')';
+                    unset($usia);
+                } elseif($key == 'bagian'){
+                    $options = $this->__get_bagian_lists();
+                    $value = $options[$value];
+                    unset($options);
                 }
-            } else {
-                redirect_to('/node/patient');
+                $result['data'][$key] = array(
+                    'key' => __t($key),
+                    'value' => $value,
+                    'hide' => in_array($key, $this->hidden_fields) ? 1 : 0
+                );
             }
         } else {
             redirect_to('/node/patient');
@@ -710,11 +767,11 @@ class patientModule extends mainModule
                     '#error' => isset($vcache['blank']) && in_array('keluhan', $vcache['blank']) ? 1 : 0
                 );
                 $options = $this->__get_bagian_lists();
-                $form['patient']['rujukan'] = array(
+                $form['patient']['bagian'] = array(
                     '#type' => 'select',
-                    '#value' => isset($vcache['rujukan']) ? $vcache['rujukan'] : '',
-                    '#title' => __t('rujukan'),
-                    '#error' => isset($vcache['blank']) && in_array('rujukan', $vcache['blank']) ? 1 : 0,
+                    '#value' => isset($vcache['bagian']) ? $vcache['bagian'] : '',
+                    '#title' => __t('dirujuk ke'),
+                    '#error' => isset($vcache['blank']) && in_array('bagian', $vcache['blank']) ? 1 : 0,
                     '#option' => $options,
                     '#option_blank' => 1
                 ); unset($options);
@@ -735,7 +792,7 @@ class patientModule extends mainModule
             if($key == 'nama' || $key == 'alamat' || $key == 'kota'){
                 if($value == ''){
                     $this->__write_custom_cache(array('error=>' . __t('Kolom nama, alamat, dan kota tidak boleh kosong !')), 1);
-                    redirect_to('/node/patient/form'); break; exit;
+                    //redirect_to('/node/patient/form'); break;
                 }
             } elseif ($key == 'date'){
                 $tgldump = explode('-', $value);
@@ -758,12 +815,21 @@ class patientModule extends mainModule
             }
         }
         $thevalue['strnum'] = $dump['strnum'] == '' ? substr(str_shuffle($this->string_to_shuffle), 7, 4) : $dump['strnum'];
-        $fincrement = $this->__get_fqmax();
-        $thevalue['number'] = basename($fincrement);
-        $fqueue = $this->__get_fqueue(basename($fincrement));
-        $this->__input_queue($fqueue, $thevalue);
-        //unlink($this->config->fcache);
-        redirect_to('/node/patient/showme/' . basename($fqueue));
+        $fqueue = $this->__get_fqmax();
+        $thevalue['nourut'] = $fqueue;
+        $thevalue['id'] = $this->__get_id_insert_value('antrian', 'id', $this->query);
+        $thevalue['pukul'] = date('Y-m-d H:i:s', $this->config->time);
+        $sql = $this->query->saveData(
+            'antrian',
+            $thevalue
+        );
+        unset($thevalue);
+        $this->query->connect();
+        $this->query->conn->debug=true;
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $this->__flush_caches();
+        redirect_to('/node/patient/showme/' . $fqueue);
     }
 
 }
