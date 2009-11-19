@@ -120,7 +120,7 @@ class patientModule extends mainModule
         $items['patient_register'] = array(
             'title' => __t('Patient Register'),
             'description' => __t('register patient into database'),
-            'path' => '/user/patient',
+            'path' => '/user/patient/register',
             'exec' => 'register',
             'weight' => 5,
             'user_required' => 'patient'
@@ -128,7 +128,7 @@ class patientModule extends mainModule
         $items['register_form'] = array(
             'title' => __t('Patient Register'),
             'description' => __t('execute registering patient into database'),
-            'path' => '/user/patient/register',
+            'path' => '/user/patient/register_form',
             'exec' => 'register_form',
             'weight' => 5,
             'user_required' => 'patient'
@@ -177,7 +177,7 @@ class patientModule extends mainModule
 
         $thedir = $this->__set_dqueue();
         $lists = __get_file_lists($thedir);
-        echo '<pre>'; print_r($lists); echo '</pre>';
+//        echo '<pre>'; print_r($lists); echo '</pre>';
         if(count($lists) > 0){
             sort($lists); $i = 0;
             foreach($lists as $key => $value){
@@ -199,7 +199,7 @@ class patientModule extends mainModule
                 fclose($handle); unset($handle);
             }
         }
-        //echo '<pre>'; print_r($result); echo '</pre>';
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -234,6 +234,7 @@ class patientModule extends mainModule
                     array('&&', "strnum=" . $vcache['strnum'])
                 )
             );
+//            echo '<pre>'; print_r($vcache); echo '</pre>';
             $query = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             if($query->_numOfRows > 0){
@@ -255,10 +256,11 @@ class patientModule extends mainModule
                 '#collapsible' => TRUE,
                 '#collapsed' => FALSE,
                 '#weight' => -3,
-                '#action' => '/node/patient/form_submit',
+                '#action' => '/user/patient/register_form_submit',
                 '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
                 '#focused_item' => 'nama'
             );
+            
             $datafields = $this->__get_data_fields('patients', $this->query);
             if(count($datafields) > 0){
                 foreach($datafields as $value){
@@ -309,7 +311,7 @@ class patientModule extends mainModule
                     }
 
                 } unset($options);
-                echo '<pre>'; print_r($vcache); echo '</pre>';
+//                echo '<pre>'; print_r($vcache); echo '</pre>';
                 $form['patient']['keluhan'] = array(
                     '#type' => 'textarea',
                     '#value' => isset($vcache['keluhan']) ? $vcache['keluhan'] : '',
@@ -332,12 +334,14 @@ class patientModule extends mainModule
                     '#extra' => ' class="button"'
                );
             }
+//            echo '<pre>'; print_r($form); echo '</pre>';
             return $form;
     }
 
     function register_submit(){
         $dump = $this->__write_form_cache();
         $thevalue = array();
+//        echo '<pre>'; print_r($dump); echo '</pre>';
         foreach($dump as $key => $value){
             if($key == 'nama' || $key == 'alamat' || $key == 'kota' || $key == 'rujukan'){
                 if(trim($value) == ''){
@@ -364,7 +368,9 @@ class patientModule extends mainModule
                 $thevalue[$key] = $value;
             }
         }
-        if(trim($dump['id']) == ''){
+        echo '<pre>'; print_r($dump); echo '</pre>';
+        if ($dump['id']==''){
+            echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             $nom = 1;
             $this->query->connect();
             $sql = $this->query->getSelect(
@@ -383,6 +389,7 @@ class patientModule extends mainModule
             $thevalue['id'] = $dump['id'];
             $thevalue['inputer'] = $_COOKIE[$this->config->cookieid];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
+//            echo '<pre>'; print_r($thevalue); echo '</pre>';
             $sql = $this->query->saveData(
                 'patients',
                 $thevalue
@@ -425,11 +432,11 @@ class patientModule extends mainModule
                 array('&&', "day(pukul)=" . date('j', $this->config->time))
             )
         );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if($query->_numOfRows > 0){
-            $no += $query->fields['no'];
-        } unset($query);
+//        $query = $this->query->conn->Execute($sql); unset($sql);
+//        $this->query->close();
+//        if($query->_numOfRows > 0){
+//            $no += $query->fields['no'];
+//        } unset($query);
         $thevalue = array(
             'pukul' => date('Y-m-d H:i:s', $this->config->time),
             'patients' => $dump['id'],
@@ -444,11 +451,12 @@ class patientModule extends mainModule
             'kunjungan',
             $thevalue
         );
+//        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         $dirqueue = $this->__set_dqueue();
-        unlink($dirqueue . DS . $dump['fqueue']);
-//        unlink($this->config->fcache);
+//        unlink($dirqueue . DS . $dump['fqueue']);
+        //unlink($this->config->fcache);
         unset($dump, $dirqueue);
         redirect_to('/user/patient');
     }
@@ -456,6 +464,7 @@ class patientModule extends mainModule
     function __clean_queue(){
         $dirqueue = FILES_DIR . DS . 'queue';
         $getlists = __get_file_lists($dirqueue);
+
         foreach($getlists as $key => $value){
             if(strtotime($value) < ($this->config->time - 86400)){
                 $dirdrop = $dirqueue . DS . $value;
@@ -466,7 +475,7 @@ class patientModule extends mainModule
 
     function view(){
         $this->__clean_queue();
-        echo 'here';
+//        echo 'here';
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('daftar pasien yang mendaftar hari ini');

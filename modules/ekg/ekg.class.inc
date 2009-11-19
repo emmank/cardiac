@@ -285,7 +285,7 @@ class ekgModule extends mainModule
             '#value' => 'submit',
             '#extra' => ' class="button"'
         );
-        echo '<pre>'; print_r($form); echo '</pre>';
+//        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
     }
 
