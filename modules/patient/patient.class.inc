@@ -234,7 +234,6 @@ class patientModule extends mainModule
                     array('&&', "strnum=" . $vcache['strnum'])
                 )
             );
-//            echo '<pre>'; print_r($vcache); echo '</pre>';
             $query = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             if($query->_numOfRows > 0){
@@ -246,6 +245,7 @@ class patientModule extends mainModule
                         $warning[$key] = $value;
                     }
                 }
+            echo '<pre>'; print_r($vcache); echo '</pre>'; exit();
             }
         }
 
@@ -356,15 +356,15 @@ class patientModule extends mainModule
                 $tgldump = explode('-', trim($value));
                 foreach($tgldump as $ky => $vl){
                     if(trim($vl) == ''){
-                        $this->__write_custom_cache('error=>' . __t('Kolom tanggal tidak boleh kosong !'), 1);
+                        $this->__write_custom_cache(array('error' => __t('Kolom tanggal tidak boleh kosong !')), 1);
                         redirect_to('/user/patient/register' . $dump['idantrian']); exit;
                     } elseif(!ctype_digit($vl)){
-                        $this->__write_custom_cache('error=>' . __t('Kolom tanggal harus numeric !'), 1);
+                        $this->__write_custom_cache(array('error' => __t('Kolom tanggal harus numeric !')), 1);
                         redirect_to('/user/patient/register'); exit;
                     }
                 }
                 if(checkdate((int)$tgldump[1], (int)$tgldump[2], (int)$tgldump[0]) === false){
-                    $this->__write_custom_cache('error=>' . __t('Format tanggal salah !'), 1);
+                    $this->__write_custom_cache(array('error' => __t('Format tanggal salah !')), 1);
                     redirect_to('/user/patient/register' . $dump['idantrian']); exit;
                 } unset($tgldump);
             }
@@ -373,7 +373,7 @@ class patientModule extends mainModule
             }
         }
 //        echo '<pre>'; print_r($dump); echo '</pre>';
-        if ($dump['id']==''){
+        if (trim($dump['id'])==''){
 //            echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             $nom = 1;
             $sql = $this->query->getSelect(
@@ -424,7 +424,6 @@ class patientModule extends mainModule
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         $bagian = $query->fields['bagian']; unset($query);
-        $this->query->connect();
         $no = 1;
         $sql = $this->query->getSelect(
             array('max(nourut) as no'),
@@ -436,11 +435,12 @@ class patientModule extends mainModule
                 array('&&', "day(pukul)=" . date('j', $this->config->time))
             )
         );
-//        $query = $this->query->conn->Execute($sql); unset($sql);
-//        $this->query->close();
-//        if($query->_numOfRows > 0){
-//            $no += $query->fields['no'];
-//        } unset($query);
+        $this->query->connect();
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows > 0){
+            $no += $query->fields['no'];
+        } unset($query);
         $thevalue = array(
             'pukul' => date('Y-m-d H:i:s', $this->config->time),
             'patients' => $dump['id'],
@@ -455,12 +455,6 @@ class patientModule extends mainModule
             $thevalue
         );
 //        echo '<pre>'; print_r($thevalue); echo '</pre>';
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        $dirqueue = $this->__set_dqueue();
-//        unlink($dirqueue . DS . $dump['fqueue']);
-        //unlink($this->config->fcache);
-        unset($dump, $dirqueue);
         $this->query->connect();
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
