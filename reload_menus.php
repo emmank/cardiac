@@ -72,7 +72,7 @@ foreach($modules as $key=>$value){
 foreach ($allelements as $key => $value){
     $sql = $systemquery->getSelect(
         array('id'),
-        'menus',
+        array('menus'),
         array(
             array('&&', "id=" . $key)
         )
@@ -94,7 +94,7 @@ foreach ($allelements as $key => $value){
                 array('&&', "id=" . $key)
             )
         );
-    }
+    } unset($getexist);
     $systemquery->connect();
     $systemquery->conn->Execute($sql); unset($sql);
     $systemquery->close();

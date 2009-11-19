@@ -74,7 +74,19 @@ class cardioModule extends mainModule
             'weight' => 5,
             'user_required' => 'kardio anak'
         );
+        $items['cardio_dewasa_view'] = array(
+            'title' => __t('explore cardio dewasa'),
+            'description' => __t('explore cardio dewasa'),
+            'path' => '/user/cardio_dewasa/view',
+            'exec' => 'dewasa_view',
+            'weight' => '0',
+            'user_required' => 'kardio dewasa'
+        );
         return $items;
+    }
+
+    function dewasa_view(){
+        
     }
 
     function __get_today_lists($teens=NULL){
