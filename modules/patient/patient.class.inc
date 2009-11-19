@@ -175,30 +175,7 @@ class patientModule extends mainModule
             )
         );
 
-<<<<<<< HEAD:modules/patient/patient.class.inc
-        $thedir = $this->__set_dqueue();
-        $lists = __get_file_lists($thedir);
-//        echo '<pre>'; print_r($lists); echo '</pre>';
-        if(count($lists) > 0){
-            sort($lists); $i = 0;
-            foreach($lists as $key => $value){
-                $handle = fopen($thedir . DS . $value, 'r');
-                while (!feof($handle)){
-                    $buffer = fgets($handle);
-                    if(trim($buffer) != ''){
-                        list($ky, $vl) = explode('=>', trim($buffer));
-                        if($ky == 'nama' || $ky == 'tgl_lahir' || $ky == 'alamat'){
-                            if($ky == 'tgl_lahir'){
-                                $vl = number_format(round($this->agecount_in_month(strtotime($vl))/12, 1), 1, ',','.') . ' th';
-                            }
-                            $result['data'][$i][$ky] = $vl;
-                        }
-                    }
-                }
-                $result['data'][$i]['goto'] = '/user/patient/register/' . $value;
-                $i++;
-                fclose($handle); unset($handle);
-=======
+       
         $sql = $this->query->getSelect(
             array('id', 'nama', 'tgl_lahir', 'alamat', 'nourut'),
             array('antrian'),
@@ -220,7 +197,6 @@ class patientModule extends mainModule
                 $result['data'][$i]['goto'] = '/user/patient/register/' . $getit->fields['id'];
                 $result['data'][$i]['nourut'] = $getit->fields['nourut'];
                 $getit->MoveNext();
->>>>>>> a0c31c64d3609b86b948cdf69b8a7d0fe15e108c:modules/patient/patient.class.inc
             }
         }
 //        echo '<pre>'; print_r($result); echo '</pre>';
@@ -396,9 +372,9 @@ class patientModule extends mainModule
                 $thevalue[$key] = $value;
             }
         }
-        echo '<pre>'; print_r($dump); echo '</pre>';
+//        echo '<pre>'; print_r($dump); echo '</pre>';
         if ($dump['id']==''){
-            echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+//            echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             $nom = 1;
             $sql = $this->query->getSelect(
                 array('max(nomor) as no'),
@@ -478,7 +454,6 @@ class patientModule extends mainModule
             'kunjungan',
             $thevalue
         );
-<<<<<<< HEAD:modules/patient/patient.class.inc
 //        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
@@ -486,7 +461,6 @@ class patientModule extends mainModule
 //        unlink($dirqueue . DS . $dump['fqueue']);
         //unlink($this->config->fcache);
         unset($dump, $dirqueue);
-=======
         $this->query->connect();
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
@@ -503,7 +477,6 @@ class patientModule extends mainModule
         $this->__flush_caches();
 
         unset($dump);
->>>>>>> a0c31c64d3609b86b948cdf69b8a7d0fe15e108c:modules/patient/patient.class.inc
         redirect_to('/user/patient');
     }
 
@@ -520,11 +493,9 @@ class patientModule extends mainModule
     }
 
     function view(){
-<<<<<<< HEAD:modules/patient/patient.class.inc
         $this->__clean_queue();
-=======
 //        $this->__clean_queue();
->>>>>>> a0c31c64d3609b86b948cdf69b8a7d0fe15e108c:modules/patient/patient.class.inc
+
 //        echo 'here';
         $result = array();
         $result['type'] = 'table';
@@ -825,11 +796,12 @@ class patientModule extends mainModule
         );
         unset($thevalue);
         $this->query->connect();
-        $this->query->conn->debug=true;
+//        $this->query->conn->debug=true;
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         $this->__flush_caches();
         redirect_to('/node/patient/showme/' . $fqueue);
     }
+
 
 }
