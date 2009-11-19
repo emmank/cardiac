@@ -31,6 +31,9 @@ class patientModule extends mainModule
     var $hidden_fields = array(
         'id', 'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'strnum', 'foto'
     );
+    var $system_job = array(
+        'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'foto'
+    );
     var $formtype_fields = array(
         'id' => 'hidden',
         'nomor' => 'hidden',
@@ -245,7 +248,7 @@ class patientModule extends mainModule
                         $warning[$key] = $value;
                     }
                 }
-            echo '<pre>'; print_r($vcache); echo '</pre>'; exit();
+//            echo '<pre>'; print_r($vcache); echo '</pre>'; exit();
             }
         }
 
@@ -271,9 +274,9 @@ class patientModule extends mainModule
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
-                    } elseif($value == 'id'){
+                    } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
-                            '#type' => $this->formtype_fields[$value],
+                            '#type' => 'hidden',
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
@@ -295,8 +298,8 @@ class patientModule extends mainModule
                             $options = $this->__get_agama_options();
                         }
                         $form['patient'][$value]['#option'] = $options;
-                    } elseif($value == 'strnum'){
-                        $form['patient'][$value]['#extra'] = 'readonly="true"';
+//                    } elseif($value == 'strnum'){
+//                        $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
                     // ------ Add by emmank -------
                     if($this->formtype_fields[$value] == 'select'){
@@ -306,8 +309,8 @@ class patientModule extends mainModule
                             $options = $this->nama_bulan;
                         }
                         $form['patient'][$value]['#option'] = $options;
-                    } elseif($value == 'strnum'){
-                        $form['patient'][$value]['#extra'] = 'readonly="true"';
+  //                  } elseif($value == 'strnum'){
+  //                      $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
 
                 } unset($options);
@@ -374,7 +377,6 @@ class patientModule extends mainModule
         }
 //        echo '<pre>'; print_r($dump); echo '</pre>';
         if (trim($dump['id'])==''){
-//            echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             $nom = 1;
             $sql = $this->query->getSelect(
                 array('max(nomor) as no'),
@@ -487,7 +489,7 @@ class patientModule extends mainModule
     }
 
     function view(){
-        $this->__clean_queue();
+//        $this->__clean_queue();
 //        $this->__clean_queue();
 
 //        echo 'here';
@@ -632,7 +634,6 @@ class patientModule extends mainModule
 
     function setstrnum(){
         $dump = $this->__write_form_cache();
-        $this->query->connect();
         $sql = $this->query->getSelect(
             array(),
             array('patients'),
@@ -640,6 +641,7 @@ class patientModule extends mainModule
                 array('&&', "strnum=" . $dump['strnum'])
             )
         );
+        $this->query->connect();
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($query->_numOfRows > 0){
@@ -657,7 +659,6 @@ class patientModule extends mainModule
         if($this->__check_caches() === true){
             $vcache = $this->__read_form_cache();
 //            unlink($this->config->fcache);
-//            echo '<pre>'; print_r($vcache); echo '</pre>';
         }
         if(!isset($vcache['strnum'])){
             redirect_to('/node/patient/strnumform'); exit;
@@ -686,14 +687,14 @@ class patientModule extends mainModule
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
-                    } elseif($value == 'id'){
+                    } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
-                            '#type' => $this->formtype_fields[$value],
+                            '#type' => 'hidden',
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
-                    } 
+                    }
                     if($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
                         if($value == 'kelamin') {
                             $options = $this->__get_kelamin_options();  

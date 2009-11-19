@@ -63,6 +63,7 @@ class moduleModule extends mainModule
             'module'
         );
         $this->sysquery->connect();
+        $this->sysquery->conn->debug = true;
         $getit = $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();
         if($getit->_numOfRows > 0){
@@ -72,7 +73,8 @@ class moduleModule extends mainModule
             }
         } unset($getit);
         $result['module']['module']['#value'] = $actives;
-        $result['module']['module']['#title'] = '';
+        $result['module']['module']['#title'] = '&nbsp;';
+//        echo '<pre>'; print_r($actives); echo '</pre>';
         unset($actives);
         $options = array();
         foreach($lists as $value){
