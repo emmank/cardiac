@@ -140,23 +140,60 @@ function __create_table($value){
     global $user;
     $result = '';
     if(isset($value['addmenu'])){
-        if(!isset($value['addmenu']['user_required'])){$ok = 1;}
-        elseif($value['addmenu']['user_required'] == $user['groups'] || $user['groups'] == 'admin'){$ok = 1;}
-        elseif(__get_group_permission($value['addmenu']['user_required']) !== FALSE){$ok = 1;}
+        foreach($value['addmenu'] as $ky => $vl){
+            if(eregi('#', $ky)){
+                if(!isset($vl['user_required'])){
+                    if(!isset($ok)){$ok = array();}
+                    $ok[$ky] = 1;
+                } elseif($l['user_required'] == $user['groups'] || $user['groups'] == 'admin'){
+                    if(!isset($ok)){$ok = array();}
+                    $ok[$ky] = 1;
+                } elseif(__get_group_permission($value['addmenu']['user_required']) !== FALSE){
+                    if(!isset($ok)){$ok = array();}
+                    $ok[$ky] = 1;
+                }
+            }
+        }
+        if(!isset($ok)){
+            if(!isset($value['addmenu']['user_required'])){$ok = 1;}
+            elseif($value['addmenu']['user_required'] == $user['groups'] || $user['groups'] == 'admin'){$ok = 1;}
+            elseif(__get_group_permission($value['addmenu']['user_required']) !== FALSE){$ok = 1;}
+        }
         if(isset($ok)){
-            unset($ok);
             $result .= '<div id="sticky-button">';
-            $valadd['add'] = array(
-                '#type' => 'fieldset',
-                '#title' => 'hidden',
-                '#action' => $value['addmenu']['action'],
-                'submit' => array(
-                    '#type' => 'submit',
-                    '#value' => $value['addmenu']['title'],
-                    '#class' => 'button'
-                )
-            );
-            $result .= __create_form($valadd);
+            if(is_array($ok)){
+                $result .= '<table align="center" cellspacing="10" cellpadding="0" width="100%"><tr>';
+                $i = 0;
+                foreach($ok as $ky => $vl){
+                    $valadd['add'] = array(
+                        '#type' => 'fieldset',
+                        '#title' => 'hidden',
+                        '#action' => $value['addmenu'][$ky]['action'],
+                        'submit' => array(
+                            '#type' => 'submit',
+                            '#value' => $value['addmenu'][$ky]['title'],
+                            '#class' => 'button'
+                        )
+                    );
+                    $result .= '<td align="' . ($i < 1 ? 'left' : 'right') . '">';
+                    $result .= __create_form($valadd);
+                    $result .= '</td>';
+                    $i++;
+                }
+                $result .= '</table></tr>';
+            } else {
+                $valadd['add'] = array(
+                    '#type' => 'fieldset',
+                    '#title' => 'hidden',
+                    '#action' => $value['addmenu']['action'],
+                    'submit' => array(
+                        '#type' => 'submit',
+                        '#value' => $value['addmenu']['title'],
+                        '#class' => 'button'
+                    )
+                );
+                $result .= __create_form($valadd);
+            } unset($ok);
             $result .= '</div>';
         }
     }

@@ -26,12 +26,13 @@ require_once MODULES_DIR . DS . 'cardio' . DS . 'config.inc';
 
 class cardioModule extends mainModule
 {
-    var $title = 'cardio module';
-    var $description = '';
+    var $title = 'cardio';
+    var $description = 'Manajemen data digital pasien cardiologi';
     var $hidden_fields = array(
         'id', 'teens', 'inputer','updated', 'inputtime'
     );
     var $vardump;
+    var $formhabit;
 
     function menu(){
         $items['cardio_dewasa_form'] = array(
@@ -82,11 +83,106 @@ class cardioModule extends mainModule
             'weight' => '0',
             'user_required' => 'kardio dewasa'
         );
+        $items['cardio_dewasa_detail'] = array(
+            'title' => __t('detail cardio dewasa'),
+            'description' => __t("detail cardio dewasa's patients"),
+            'path' => '/user/cardio_dewasa/detail',
+            'exec' => 'dewasa_detail',
+            'weight' => '0',
+            'user_required' => 'kardio dewasa'
+        );
+        $items['cardio_dewasa_search'] = array(
+            'title' => __t('search cardio dewasa'),
+            'description' => __t("search cardio dewasa's patients"),
+            'path' => '/user/cardio_dewasa/search',
+            'exec' => 'dewasa_search',
+            'weight' => '0',
+            'user_required' => 'kardio dewasa'
+        );
         return $items;
     }
 
     function dewasa_view(){
-        
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('daftar beberapa pasien');
+        $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
+        $result['addmenu']['#add'] = array(
+            'title' => __t('add'),
+            'action' => '/user/cardio_dewasa/form',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search'),
+            'action' => '/user/cardio_dewasa/search',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'nama',
+                'caption' => __t('nama'),
+                'width' => '25%',
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'tgl_lahir',
+                'caption' => __t('usia'),
+                'width' => '10%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'alamat',
+                'caption' => __t('alamat'),
+                'align' => 'left'
+            )
+        );
+
+        $sql = $this->query->getSelect(
+            array(),
+            array('cardio'),
+            array(
+                array('||', "teens is null"),
+                array('||', "teens=")
+            ),
+            'inputtime desc',
+            '0,10'
+        );
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $sql = $this->query->getSelect(
+                    array('id', 'nama', 'tgl_lahir', 'alamat'),
+                    array('patients'),
+                    array(
+                        array('&&', "id=" . $getit->fields['patients'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['nama'] = $getthis->fields['nama'];
+                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+                $result['data'][$i]['goto'] = '/user/cardio_dewasa/detail/' . $getit->fields['id'];
+                $getit->MoveNext();
+            }
+        }
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+
+    function dewasa_detail(){
+        $this->formhabit = 'readonly';
     }
 
     function __get_today_lists($teens=NULL){
@@ -163,7 +259,7 @@ class cardioModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/cardio_dewasa/form_submit',
+            '#action' => ($this->formhabit == 'readonly' ? '/user/cardio_dewasa/form/' . $vcache['idkunjungan'] : '/user/cardio_dewasa/form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'cardio' . DS . 'cardio.tpl',
         );
@@ -312,7 +408,7 @@ class cardioModule extends mainModule
 
         $form['cardio_dewasa']['submit'] = array(
             '#type' => 'submit',
-            '#value' => 'submit',
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit')),
 //            '#extra' => ' class="button"'
         );
 //        echo '<pre>'; print_r($form); echo '</pre>';
@@ -595,7 +691,7 @@ class cardioModule extends mainModule
             $sql = $this->query->updateData(
                 'kunjungan',
                 array(
-                    'doneby' => '1'
+                    'doneby' => $_COOKIE[$this->config->cookieid]
                 ),
                 array(
                     array('&&', "id=" . $_POST['idkunjungan'])

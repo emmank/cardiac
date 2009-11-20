@@ -197,7 +197,7 @@ class patientModule extends mainModule
             for($i=0; $i<$getit->_numOfRows; $i++){
                 $result['data'][$i]['nama'] = $getit->fields['nama'];
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getit->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
-                $result['data'][$i]['goto'] = '/user/patient/register/' . $getit->fields['id'];
+                $result['data'][$i]['goto'] = '/user/patient/register_form/' . $getit->fields['id'];
                 $result['data'][$i]['nourut'] = $getit->fields['nourut'];
                 $getit->MoveNext();
             }
@@ -353,22 +353,22 @@ class patientModule extends mainModule
             if($key == 'nama' || $key == 'alamat' || $key == 'kota' || $key == 'bagian'){
                 if(trim($value) == ''){
                     $this->__write_custom_cache(array('error' => __t('Kolom nama, alamat, kota, dan dirujuk ke tidak boleh kosong !')), 1);
-                    redirect_to('/user/patient/register/' . $dump['idantrian']); exit;
+                    redirect_to('/user/patient/register_form/' . $dump['idantrian']); exit;
                 }
             } elseif ($key == 'date'){
                 $tgldump = explode('-', trim($value));
                 foreach($tgldump as $ky => $vl){
                     if(trim($vl) == ''){
                         $this->__write_custom_cache(array('error' => __t('Kolom tanggal tidak boleh kosong !')), 1);
-                        redirect_to('/user/patient/register' . $dump['idantrian']); exit;
+                        redirect_to('/user/patient/register_form/' . $dump['idantrian']); exit;
                     } elseif(!ctype_digit($vl)){
                         $this->__write_custom_cache(array('error' => __t('Kolom tanggal harus numeric !')), 1);
-                        redirect_to('/user/patient/register'); exit;
+                        redirect_to('/user/patient/register_form/' . $dump['idantrian']); exit;
                     }
                 }
                 if(checkdate((int)$tgldump[1], (int)$tgldump[2], (int)$tgldump[0]) === false){
                     $this->__write_custom_cache(array('error' => __t('Format tanggal salah !')), 1);
-                    redirect_to('/user/patient/register' . $dump['idantrian']); exit;
+                    redirect_to('/user/patient/register_form/' . $dump['idantrian']); exit;
                 } unset($tgldump);
             }
             if($key != 'submit' && $key != 'blank' && $key != 'keluhan' && $key != 'bagian' && $key != 'id' && $key != 'idantrian'){
@@ -473,24 +473,25 @@ class patientModule extends mainModule
         $this->__flush_caches();
 
         unset($dump);
-        redirect_to('/user/patient');
+        redirect_to('/user/patient/register');
     }
 
     function __clean_queue(){
-        $dirqueue = FILES_DIR . DS . 'queue';
-        $getlists = __get_file_lists($dirqueue);
-
-        foreach($getlists as $key => $value){
-            if(strtotime($value) < ($this->config->time - 86400)){
-                $dirdrop = $dirqueue . DS . $value;
-                __remove_folder($dirdrop . DS . 'increment');
-            }
-        }
+        $getday = $this->config->time - (86400 * $this->config->limitcacheindays);
+        $sql = $this->query->setDelete(
+            'antrian',
+            array(
+                array('&&', "UNIX_TIMESTAMP(pukul)<" . $getday)
+            )
+        );
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        unset($getday);
     }
 
     function view(){
-//        $this->__clean_queue();
-//        $this->__clean_queue();
+        $this->__clean_queue();
 
 //        echo 'here';
         $result = array();

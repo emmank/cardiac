@@ -72,6 +72,7 @@ class config
     var $identity_message = 'Fakultas Kedokteran Universitas Hasanuddin, Cardiac Center Rumah Sakit Wahidin Sudiro Husodo';
     var $systitle = 'Cardiac Center';
     var $user_required = FALSE;
+    var $limitcacheindays = 2; //Batas maksimal antrian di simpan
     var $formtypelists = array(
         'text' => 'text',
         'textarea' => 'textarea',
