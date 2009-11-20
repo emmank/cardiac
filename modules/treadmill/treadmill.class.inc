@@ -275,6 +275,7 @@ class treadmillModule extends mainModule
         }
 
 //        $form['treadmill']['tab_items']['presentStatus'] = $this->__loadPresentStatus();
+          $form['treadmill']['tab_items']['faselatihan'] = $this -> __loadfaselatihan();
 //        $form['treadmill']['tab_items']['vitalSign'] = $this->__loadVitalSign();
 //        $form['treadmill']['tab_items']['eye'] = $this->__loadEye();
 //        $form['treadmill']['tab_items']['ear'] = $this->__loadEar();
@@ -297,6 +298,20 @@ class treadmillModule extends mainModule
         );
 //        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
+    }
+
+    function __loadfaselatihan() {
+        $this->__include_module('faseLatihan');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->faseLatihan_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->faseLatihan_exec->treadmill_submit();
+            }
+        } else {
+            return $this->faseLatihan_exec->treadmill_menu();
+        }
     }
 
     function __loadHearth($exec=NULL){

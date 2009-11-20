@@ -1386,4 +1386,41 @@ class faseLatihanModule extends mainModule
         redirect_to('/reference/faseLatihan_respon_jantung');
     }
 
+    function treadmill_menu(){
+        $result = array();
+        $result['#title'] = __t('Fase Latihan');
+        $result['#tpl'] = MODULES_DIR . DS . 'faseLatihan' . DS . 'faseLatihan.tpl';
+        $datafields = $this->__get_data_fields('treadmill_faselatihan', $this->query);
+        //echo '<pre>'; print_r($this->config->faseLatihan); echo '</pre>';
+        foreach($this -> config->faseLatihan as $key => $value){
+
+            $result['datafields'][$key] = array(
+                'title' => __t($key),
+            );
+
+            foreach ($value as $isi) {
+                $result['datafields'][$key][$isi]= array (
+                    'title' => __t($isi),
+                    'type' => "text",
+                    'size' => '5'
+                );
+            }
+
+//            if(in_array($value, $this->config->fieldsisarray)){
+//                $result['datafields'][$value]['theref'] = $this->__get_refs($value);
+//            } elseif($this->config->typeoffields[$value] == 'datetime'){
+//                $result['datafields'][$value]['theref'] = $this->nama_bulan;
+//                $result['datafields'][$value]['timenow'] = $this->config->time;
+//            } else {
+//                $result['datafields'][$value]['size'] = 6;
+//            }
+        }
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+
+
+
+
 }
+

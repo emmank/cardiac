@@ -38,4 +38,23 @@ class faseLatihanConfig extends config
     var $hiddenfields = array(
         'id'
     );
+    var $faseLatihan = array (
+        'fase_istirahat' => array (
+            "tensi_berbaring_/_mmHg","tensi_berdiri_/_mmHg", "tensi_hiperventilasi_/_mmHg",
+            "denyut_jantung_berbaring","denyut_jantung_berdiri","denyut_jantung_hiperventilasi",
+            "ekg_berdiri","ekg_berbaring","ekg_hiperventilasi"
+        ),
+        'fase_latihan' => array (
+            "protokol_bruce_stage", "rekaman_EKG"
+        ),
+        'fase_recovery' => array (
+            
+        )
+    );
+//    var $typeoffields = array(
+//        'id' => 'hidden',
+//        'inspections' => 'checkbox'
+//
+//    );
+
 }
