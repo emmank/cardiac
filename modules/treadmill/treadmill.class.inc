@@ -66,14 +66,6 @@ class treadmillModule extends mainModule
             'weight' => 5,
             'user_required' => 'treadmill'
         );
-        $items['treadmill_anak_message'] = array(
-            'title' => __t('treadmill message'),
-            'description' => __t('get treadmill message'),
-            'path' => '/user/treadmill_anak/message',
-            'exec' => 'message',
-            'weight' => 5,
-            'user_required' => 'kardio anak'
-        );
         return $items;
     }
 
@@ -275,7 +267,7 @@ class treadmillModule extends mainModule
         }
 
 //        $form['treadmill']['tab_items']['presentStatus'] = $this->__loadPresentStatus();
-          $form['treadmill']['tab_items']['faselatihan'] = $this -> __loadfaselatihan();
+//        $form['treadmill']['faselatihan'] = $this -> __loadfaselatihan();
 //        $form['treadmill']['tab_items']['vitalSign'] = $this->__loadVitalSign();
 //        $form['treadmill']['tab_items']['eye'] = $this->__loadEye();
 //        $form['treadmill']['tab_items']['ear'] = $this->__loadEar();
@@ -314,215 +306,6 @@ class treadmillModule extends mainModule
         }
     }
 
-    function __loadHearth($exec=NULL){
-        $this->__include_module('hearth');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->hearth_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->hearth_exec->treadmill_submit();
-            }
-        } else {
-            return $this->hearth_exec->treadmill_menu();
-        }
-    }
-
-    function __loadAbdomen($exec=NULL){
-        $this->__include_module('abdomen');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->abdomen_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->abdomen_exec->treadmill_submit();
-            }
-        } else {
-            return $this->abdomen_exec->treadmill_menu();
-        }
-    }
-    
-    function __loadAnusrectum($exec=NULL){
-        $this->__include_module('anusrectum');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->anusrectum_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->anusrectum_exec->treadmill_submit();
-            }
-        } else {
-            return $this->anusrectum_exec->treadmill_menu();
-        }
-    }
-
-    function __loadPunggung($exec=NULL){
-        $this->__include_module('punggung');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->punggung_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->punggung_exec->treadmill_submit();
-            }
-        } else {
-            return $this->punggung_exec->treadmill_menu();
-        }
-    }
-
-    function __loadExtermitas($exec=NULL){
-        $this->__include_module('extermitas');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->extermitas_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->extermitas_exec->treadmill_submit();
-            }
-        } else {
-            return $this->extermitas_exec->treadmill_menu();
-        }
-    }
-
-    function __loadParu($exec=NULL){
-        $this->__include_module('paru');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->paru_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->paru_exec->treadmill_submit();
-            }
-        } else {
-            return $this->paru_exec->treadmill_menu();
-        }
-    }
-
-    function __loadThorax($exec=NULL){
-        $this->__include_module('thorax');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->thorax_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->thorax_exec->treadmill_submit();
-            }
-        } else {
-            return $this->thorax_exec->treadmill_menu();
-        }
-    }
-
-    function __loadNeck($exec=NULL){
-        $this->__include_module('neck');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->neck_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->neck_exec->treadmill_submit();
-            }
-        } else {
-            return $this->neck_exec->treadmill_menu();
-        }
-    }
-
-    function __loadMouth($exec=NULL){
-        $this->__include_module('mouth');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->mouth_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->mouth_exec->treadmill_submit();
-            }
-        } else {
-            return $this->mouth_exec->treadmill_menu();
-        }
-    }
-
-    function __loadPresentStatus($exec=NULL){
-        $this->__include_module('presentStatus');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->presentStatus_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->presentStatus_exec->treadmill_submit();
-            }
-        } else {
-            return $this->presentStatus_exec->treadmill_menu();
-        }
-    }
-
-    function __loadVitalSign($exec=NULL){
-        $this->__include_module('vitalSign');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->vitalSign_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->vitalSign_exec->treadmill_submit();
-            }
-        } else {
-            return $this->vitalSign_exec->treadmill_menu();
-        }
-    }
-
-    function __loadHeadFace($exec=NULL){
-        $this->__include_module('headface');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->headface_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->headface_exec->treadmill_submit();
-            }
-        } else {
-            return $this->headface_exec->treadmill_menu();
-        }
-    }
-
-    function __loadEye($exec=NULL){
-        $this->__include_module('eye');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->eye_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->eye_exec->treadmill_submit();
-            }
-        } else {
-            return $this->eye_exec->treadmill_menu();
-        }
-    }
-
-    function __loadNose($exec=NULL){
-        $this->__include_module('nose');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->nose_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->nose_exec->treadmill_submit();
-            }
-        } else {
-            return $this->nose_exec->treadmill_menu();
-        }
-    }
-
-    function __loadEar($exec=NULL){
-        $this->__include_module('ear');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->ear_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->ear_exec->treadmill_submit();
-            }
-        } else {
-            return $this->ear_exec->treadmill_menu();
-        }
-    }
 
     function treadmill_form_submit(){
         $this->vardump = $this->__write_form_cache();
@@ -571,6 +354,7 @@ class treadmillModule extends mainModule
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         unset($thevalue);
+/*
         $this->__loadPresentStatus('submit');
         $this->__loadVitalSign('submit');
         $this->__loadEye('submit');
@@ -586,6 +370,8 @@ class treadmillModule extends mainModule
         $this->__loadAnusrectum('submit');
         $this->__loadPunggung('submit');
         $this->__loadExtermitas('submit');
+ * 
+ */
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',

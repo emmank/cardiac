@@ -466,7 +466,7 @@ class patientModule extends mainModule
 
     function view(){
         $this->__clean_queue();
-        echo 'here';
+        //echo 'here';
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('daftar pasien yang mendaftar hari ini');

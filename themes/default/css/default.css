@@ -1,3 +1,17 @@
+html {
+    height:101%;
+/*    overflow: -moz-scrollbars-vertical;
+    overflow-y: scroll;*/
+}
+/*
+#main-content {
+    min-height:600px;
+}
+
+#container {
+    min-height:600px;
+}
+*/
 .message {
         font-size:100%;
         padding-left:1%;
@@ -120,7 +134,7 @@
   width: 100%;
   bottom: 0px;
   margin-bottom: 2px;
-  position: fixed;
+  /*position: fixed;*/
   z-index: 100;
   right: 0;
   /*border: 1px silver solid;*/

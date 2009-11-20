@@ -51,6 +51,8 @@ class faseLatihanConfig extends config
             
         )
     );
+ 
+
 //    var $typeoffields = array(
 //        'id' => 'hidden',
 //        'inspections' => 'checkbox'

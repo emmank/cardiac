@@ -105,12 +105,11 @@
     </div>
 </div>
 
-    <div id="<?php if (!isset($body_login)){echo 'message-';}?>footer"><?php echo $configs->identity_message;?></div>
-
-<?php if(!isset($body_login)){?>
 <div id="footer">
+<?php
+echo str_replace(",","<br />",$configs->identity_message);
+?>
 </div>
-<?php }?>
-
+    
 </body>
 </html>
