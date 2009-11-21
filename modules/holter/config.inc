@@ -36,69 +36,55 @@ class holterConfig extends config
         'passwd' => 'emmank'
     );
     var $hiddenfields = array(
-        'id', 'id_pasien'
+        'id'
     );
     var $fields_form_type = array(
         'id' => 'hidden',
         'patients' => 'hidden',
         'tgl' => 'hidden',
-        'irama_dasar' => 'select',
-        'denyut_jantung' => 'select',
-        'gelombang_p' => 'select',
-        'interval_pr' => 'select',
-        'qrs_axis' => 'select',
-        'qrs_durasi' => 'select',
-        'qrs_konfigurasi_patologi' => 'select',
-        'qrs_konfigurasi_r_s' => 'select',
-        'segmen_st_depresi_1mm_2mm' => 'select',
-        'segmen_st_depresi_2mm_3mm' => 'select',
-        'segmen_st_depresi_3mm' => 'select',
-        'segmen_st_elevasi_1mm_2mm' => 'select',
-        'segmen_st_elevasi_2mm_3mm' => 'select',
-        'segmen_st_elevasi_3mm' => 'select',
-        'gelombang_t_normal' => 'checkbox',
-        'gelombang_t_inverted' => 'select',
-        'q_interval' => 'select',
+        'the_average_HR' => 'text',
+        'the_maximum_HR' => 'text',
+        'the_minimum_HR' => 'text',
+        'pause' => 'text',
+        'segment_st_depresi' => 'select',        
+        'segment_st_elevasi' => 'select',
+        'gelombang_t' => 'radio',
+        'VES' => 'text',
+        'AES' => 'text',
+        'SVT' => 'text',
+        'VT' => 'text',
+        'AF' => 'text',
+        'heart_block_1_degree' => 'text',
+        'heart_block_2_degree' => 'text',
+        'heart_block_3_degree' => 'text',
         'inputer' => 'hidden',
         'inputtime' => 'hedden',
         'updated' => 'hedden'
     );
 
     var $fieldsisarray = array(
-        'irama_dasar',
-        'denyut_jantung',
-        'gelombang_p',
-        'interval_pr',
-        'qrs_axis',
-        'qrs_durasi',
-        'qrs_konfigurasi_patologi',
-        'qrs_konfigurasi_r_s',
-        'segmen_st_depresi_1mm_2mm' ,
-        'segmen_st_depresi_2mm_3mm',
-        'segmen_st_depresi_3mm' ,
-        'segmen_st_elevasi_1mm_2mm' ,
-        'segmen_st_elevasi_2mm_3mm',
-        'segmen_st_elevasi_3mm' ,
-        'gelombang_t_inverted',
-        'q_interval'
+        'pause' ,
+        'segment_st_depresi',
+        'segment_st_elevasi',
+        'gelombang_t',
+        'VES' => 'text',
+        'AES' => 'text',
+        'SVT' => 'text',
+        'VT' => 'text',
+        'AF' => 'text',
+        'heart_block' => 'text'
     );
 
     var $reftable = array(
-        'irama_dasar' => array('ref_holter_irama','irama'),
-        'denyut_jantung' => array('ref_holter_denyut_jantung', 'denyut_jantung'),
-        'gelombang_p' => array('ref_holter_gelombangP', 'gelombangP'),
-        'interval_pr' => array('ref_holter_intervalPR', 'intervalPR'),
-        'qrs_axis' => array('ref_holterQrs_axis', 'axis'),
-        'qrs_durasi' => array('ref_holterQrs_durasi', 'durasi'),
-        'qrs_konfigurasi_patologi' => array('ref_holter_sandapan', 'sandapan'),
-        'qrs_konfigurasi_r_s' => array('ref_holterQrs_RlbS', 'RlbS'),
-        'segmen_st_depresi_1mm_2mm' => array('ref_holter_sandapan', 'sandapan'),
-        'segmen_st_depresi_2mm_3mm' => array('ref_holter_sandapan', 'sandapan'),
-        'segmen_st_depresi_3mm' => array('ref_holter_sandapan', 'sandapan'),
-        'segmen_st_elevasi_1mm_2mm' => array('ref_holter_sandapan', 'sandapan'),
-        'segmen_st_elevasi_2mm_3mm' => array('ref_holter_sandapan', 'sandapan'),
-        'segmen_st_elevasi_3mm' => array('ref_holter_sandapan', 'sandapan'),
-        'gelombang_t_inverted' => array('ref_holter_sandapan', 'sandapan'),
-        'q_interval' => array('ref_holter_q_interval', 'q_interval')
+        'pause' => array('ref_holter_irama','irama'),
+        'segment_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
+        'segment_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
+        'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
+        'VES'  => array('ref_holter_sandapan', 'sandapan'),
+        'AES' => array('ref_holter_sandapan', 'sandapan'),
+        'SVT'  => array('ref_holter_sandapan', 'sandapan'),
+        'VT'  => array('ref_holter_sandapan', 'sandapan'),
+        'AF'  => array('ref_holter_sandapan', 'sandapan'),
+        'heart_block'  => array('ref_holter_sandapan', 'sandapan')
     );
 }

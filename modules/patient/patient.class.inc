@@ -207,6 +207,7 @@ class patientModule extends mainModule
     }
 
     function register_form(){
+        echo "test";
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
         } else {

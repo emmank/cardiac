@@ -43,7 +43,7 @@ class holterModule extends mainModule
             'user_required' => 'holter'
         );
         $items['holter_form_submit'] = array(
-            'title' => __t('form holter'),
+            'title' => __t('form holter submit'),
             'description' => __t('formulir holter'),
             'path' => '/user/holter/form_submit',
             'exec' => 'form_submit',
@@ -51,7 +51,7 @@ class holterModule extends mainModule
             'user_required' => 'holter'
         );
         $items['holter_get_lists'] = array(
-            'title' => __t('form holter'),
+            'title' => __t('form holter today list'),
             'description' => __t('formulir holter'),
             'path' => '/user/holter/today_holter_lists',
             'exec' => '__get_today_lists',
@@ -177,14 +177,6 @@ class holterModule extends mainModule
                     if(count($query) > 0){
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
-//                                $vl = $this->agecount_in_month(strtotime($vl));
-//                                $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
-//                                $form['holter']['umur'] = array(
-//                                    '#type' => 'info',
-//                                    '#value' => $vl . ' tahun',
-//                                    '#title' => __t('umur'),
-//                                    '#tbpos' => 3
-//                                );
                             } else {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
@@ -264,6 +256,7 @@ class holterModule extends mainModule
                     }
 //                    $this->query->close();
                 }
+                // JIka value bukan id,tgl,patient
                 if($value != 'no_registrasi'){
                     $form['holter'][$value] = array(
                         '#type' => $this->config->fields_form_type[$value],
@@ -272,6 +265,8 @@ class holterModule extends mainModule
                         '#title' => __t($value),
                         '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                     );
+//                    echo '<pre>'; print_r($form); echo '</pre>';
+
                     if(in_array($value, $this->config->fieldsisarray)){
                         $form['holter'][$value]['#theref'] = $this->__get_refs($value);
                     }
@@ -355,19 +350,7 @@ class holterModule extends mainModule
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         unset($thevalue);
-//        $this->__loadPresentStatus('submit');
-//        $this->__loadVitalSign('submit');
-//        $this->__loadEye('submit');
-//        $this->__loadEar('submit');
-//        $this->__loadNose('submit');
-//        $this->__loadHeadFace('submit');
-//        $this->__loadNeck('submit');
-//        $this->__loadMouth('submit');
-//        $this->__loadThorax('submit');
-//        $this->__loadParu('submit');
-//        $this->__loadHearth('submit');
-//        $this->__loadAbdomen('submit');
-//        $this->__loadAnusrectum('submit');
+
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',
