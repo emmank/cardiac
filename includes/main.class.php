@@ -327,6 +327,7 @@ class mainModule
     }
 
     function __write_custom_cache($strvar, $add=NULL){
+        $result = array();
         $handle = '';
         if(!is_null($add)){
             $sql = $this->sysquery->getSelect(
@@ -355,6 +356,7 @@ class mainModule
         if(count($strvar) > 0){
             foreach($strvar as $key => $value){
                 if(isset($nl)){$handle .= $this->config->cacheseparator;}
+                $result[$key] = $value;
                 $handle .= $key . '=>' . $value; $nl = 0;
             } unset($nl);
         }
@@ -369,6 +371,7 @@ class mainModule
         $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();
         unset($handle);
+        return $result;
     }
 
     function __reduce_newline($string){

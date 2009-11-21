@@ -3266,10 +3266,29 @@ class hearthModule extends mainModule
         $result['#title'] = __t('Jantung');
         $result['#tpl'] = MODULES_DIR . DS . 'hearth' . DS . 'hearth.tpl';
         $datafields = $this->__get_data_fields('hearth', $this->query);
+        if (count($this->config->free_val) > 0){
+            $vcache = $this->config->free_val;
+            $sql = $this->query->getSelect(
+                array(),
+                array('hearth'),
+                array(
+                    array('&&', "id=" . $vcache['id'])
+                )
+            ); unset($vcache);
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                foreach($getit->fields as $key => $value){
+                    $vcache[$key] = $value;
+                }
+            }
+        }
         foreach($datafields as $key => $value){
             $result['datafields'][$value] = array(
                 'title' => __t($value),
-                'type' => $this->config->typeoffields[$value]
+                'type' => $this->config->typeoffields[$value],
+                'value' => isset($vcache[$value]) ? $vcache[$value] : ''
             );
             if(in_array($value, $this->config->fieldsisarray)){
                 $result['datafields'][$value]['theref'] = $this->__get_refs($value);
@@ -3279,6 +3298,7 @@ class hearthModule extends mainModule
             } else {
                 $result['datafields'][$value]['size'] = 6;
             }
+            $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
         return $result;
     }
@@ -3298,7 +3318,7 @@ class hearthModule extends mainModule
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $sql = $this->query->updateData(
-                'paru',
+                'hearth',
                 $thevalue,
                 array(
                     array('&&', "id=" . $_POST['id'])
@@ -3306,7 +3326,7 @@ class hearthModule extends mainModule
             );
         } else {
             $sql = $this->query->saveData(
-                'paru',
+                'hearth',
                 $thevalue
             );
         }

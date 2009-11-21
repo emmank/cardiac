@@ -34,11 +34,11 @@ function rendering_page(){
     $path = get_path_array();
 //    get_content($path);
     $exec_menus = get_exec_menus($path);
+//    echo '<pre>'; print_r($path); echo '</pre>'; exit();
     $content['exec'] = __get_modul_exec($exec_menus);
     $content['output'] = exec_module_function($content['exec']);
     $theme = get_theme();
     $managed_menus = menu_organize();
-//    echo '<pre>'; print_r($managed_menus); echo '</pre>'; exit();
     include_once INCLUDES_DIR . DS . 'renderme.inc';
     return;
 }

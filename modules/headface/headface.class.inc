@@ -857,10 +857,29 @@ class headfaceModule extends mainModule
         $result['#title'] = __t('Kepala dan Muka');
         $result['#tpl'] = MODULES_DIR . DS . 'headface' . DS . 'headface.tpl';
         $datafields = $this->__get_data_fields('head_n_face', $this->query);
+        if (count($this->config->free_val) > 0){
+            $vcache = $this->config->free_val;
+            $sql = $this->query->getSelect(
+                array(),
+                array('head_n_face'),
+                array(
+                    array('&&', "id=" . $vcache['id'])
+                )
+            ); unset($vcache);
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                foreach($getit->fields as $key => $value){
+                    $vcache[$key] = $value;
+                }
+            }
+        }
         foreach($datafields as $key => $value){
             $result['datafields'][$value] = array(
                 'title' => __t($value),
-                'type' => $this->config->typeoffields[$value]
+                'type' => $this->config->typeoffields[$value],
+                'value' => isset($vcache[$value]) ? $vcache[$value] : ''
             );
             if(in_array($value, $this->config->fieldsisarray)){
                 $result['datafields'][$value]['theref'] = $this->__get_refs($value);
@@ -870,6 +889,7 @@ class headfaceModule extends mainModule
             } else {
                 $result['datafields'][$value]['size'] = 6;
             }
+            $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
         return $result;
     }
