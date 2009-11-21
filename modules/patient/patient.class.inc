@@ -180,7 +180,7 @@ class patientModule extends mainModule
 
        
         $sql = $this->query->getSelect(
-            array('id', 'nama', 'tgl_lahir', 'alamat', 'nourut'),
+            array('id', 'nama', 'tgl_lahir', 'alamat', 'nourut', 'kota'),
             array('antrian'),
             array(
                 array('&&', "year(pukul)=" . date('Y', $this->config->time)),
@@ -199,6 +199,7 @@ class patientModule extends mainModule
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getit->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
                 $result['data'][$i]['goto'] = '/user/patient/register_form/' . $getit->fields['id'];
                 $result['data'][$i]['nourut'] = $getit->fields['nourut'];
+                $result['data'][$i]['alamat'] = $getit->fields['alamat'] . ' ' . $getit->fields['kota'];
                 $getit->MoveNext();
             }
         }
