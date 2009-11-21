@@ -69,32 +69,38 @@ foreach($modules as $key=>$value){
         $allelements[$ke]['source'] = 'modules';
     } unset($menu_lists);
 } unset($modules);
+$sql = $systemquery->setDelete(
+    'menus'
+);
+$systemquery->connect();
+$systemquery->conn->Execute($sql); unset($sql);
+$systemquery->close();
 foreach ($allelements as $key => $value){
-    $sql = $systemquery->getSelect(
-        array('id'),
-        array('menus'),
-        array(
-            array('&&', "id=" . $key)
-        )
-    );
-    $systemquery->connect();
-    $getexist = $systemquery->conn->Execute($sql); unset($sql);
-    $systemquery->close();
-    if($getexist->_numOfRows < 1){
+//    $sql = $systemquery->getSelect(
+//        array('id'),
+//        array('menus'),
+//        array(
+//            array('&&', "id=" . $key)
+//        )
+//    );
+//    $systemquery->connect();
+//    $getexist = $systemquery->conn->Execute($sql); unset($sql);
+//    $systemquery->close();
+//    if($getexist->_numOfRows < 1){
         $value['id'] = $key;
         $sql = $systemquery->saveData(
             'menus',
             $value
         ); unset($value['id']);
-    } else {
-        $sql = $systemquery->updateData(
-            'menus',
-            $value,
-            array(
-                array('&&', "id=" . $key)
-            )
-        );
-    } unset($getexist);
+//    } else {
+//        $sql = $systemquery->updateData(
+//            'menus',
+//            $value,
+//            array(
+//                array('&&', "id=" . $key)
+//            )
+//        );
+//    } unset($getexist);
     $systemquery->connect();
     $systemquery->conn->Execute($sql); unset($sql);
     $systemquery->close();
