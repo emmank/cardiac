@@ -106,6 +106,7 @@ foreach ($allelements as $key => $value){
     $systemquery->close();
 }
 
-echo "done\n";
+//echo "done\n";
 
+header('Location:/regload');
 ?>

@@ -1147,6 +1147,11 @@ class presentStatusModule extends mainModule
             }
         }
         foreach($datafields as $key => $value){
+            if($value == 'catched'){
+                if(!isset($vcache['catched']) || $vcache['catched'] == ''){
+                    $vcache['catched'] = date('Y-m-d H:i:s', $this->config->time);
+                }
+            }
             $result['datafields'][$value] = array(
                 'title' => __t($value),
                 'type' => $this->config->typeoffields[$value],

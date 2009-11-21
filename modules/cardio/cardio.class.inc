@@ -59,6 +59,14 @@ class cardioModule extends mainModule
             'weight' => '0',
             'user_required' => 'kardio dewasa'
         );
+        $items['cardio_anak_form_submit'] = array(
+            'title' => __t('form cardio anak'),
+            'description' => __t('formulir cardio anak'),
+            'path' => '/user/cardio_anak/form_submit',
+            'exec' => 'anak_form_submit',
+            'weight' => '0',
+            'user_required' => 'kardio anak'
+        );
         $items['cardio_anak_get_lists'] = array(
             'title' => __t('list antrian cardio anak'),
             'description' => __t('list antrian cardio anak'),
@@ -437,16 +445,18 @@ class cardioModule extends mainModule
                     }
 //                    $this->query->close();
                 }
-                if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients' && $value != 'tgl'){
+                if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
                     $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')][$value] = array(
-                        '#type' => $this->formtype_fields[$value],
+                        '#type' => $this->config->fields_form_type[$value],
                         '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
-                        '#size' => $this->formtype_fields[$value] != 'select' && $this->formtype_fields[$value] != 'date' ? 20 : 1,
+                        '#size' => $this->config->fields_form_type[$value] != 'select' && $this->formtype_fields[$value] != 'date' ? 20 : 1,
                         '#title' => __t($value),
                         '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                     );
                 }
-                $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')][$value]['#extra'] = 'readonly="true"';
+                if($this->formhabit == 'readonly'){
+                    $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')][$value]['#extra'] = 'readonly="true"';
+                }
             }
         }
 
@@ -716,9 +726,12 @@ class cardioModule extends mainModule
                 $thevalue[$key] = $value;
             }
         } unset($thefields);
+        if($teens != 0 && $teens != '0'){
+            $thevalue['teens'] = 1;
+        }
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
-            $thevalue['updated'] = $user['userid'] . '|' . date('Y-m-d H:i:s', $this->config->time);
+            $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
             $sql = $this->query->updateData(
                 'cardio',
                 $thevalue,
