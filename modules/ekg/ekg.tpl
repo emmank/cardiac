@@ -90,9 +90,17 @@ foreach($data as $key => $value){
                 if($cnt < 1){
                     $result .= '<tr valign="top">' . "\n";
                 }
-                $result .= '<td>' .ucwords( str_replace("_", " ", $lv['#title'])) . '</td>';
+//                $result .= '<td>' .ucwords( str_replace("_", " ", $lv['#title'])) . '</td>';
+                $result .= '<td align="right">' . $lv['#title'] . '</td>';
                 $result .= '<td>';
+//                $lv['#value'] = explode('|', $lv['#value']);
+//                           echo '<pre>'; print_r($lv); echo '</pre>';
                 if($lv['#type'] == 'select'){
+                    if(preg_match('/$qrs_/',$yk)){
+                        echo "1111 \n";
+                    } else {
+                        echo "tidak dapat \n";
+                    }
                     $result .= '<select name="' . $yk . '" size="' . $lv['#size']. '">' . "\n";
                     if(isset($lv['#blankopt'])){
                         $result .= '<option value=""></option>';
@@ -103,7 +111,7 @@ foreach($data as $key => $value){
                     $result .= '</select>' . "\n";
                 } elseif($lv['#type'] == 'select2'){
                     $result .= '<input type="radio" name="' . $yk . '[0]" value="1mm - 2mm"> 1mm - 2mm' ;
-                    $result .= ', pada sendapan <select name="' . $yk . '" size="1">' . "\n";
+                    $result .= ', pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
                     if(isset($lv['#blankopt'])){
                         $result .= '<option value=""></option>';
                     }
@@ -113,7 +121,7 @@ foreach($data as $key => $value){
                     $result .= '</select>' . "<br />  \n";
 
                     $result .= '<input type="radio" name="' . $yk . '[0]" value=">2mm - 3mm"> > 2mm - 3mm';
-                    $result .= ', pada sendapan <select name="' . $yk . '" size="1">' . "\n";
+                    $result .= ', pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
                     if(isset($lv['#blankopt'])){
                         $result .= '<option value=""></option>';
                     }
@@ -123,7 +131,7 @@ foreach($data as $key => $value){
                     $result .= '</select>' . "<br />  \n";
                     $result .= '<input type="radio" name="' . $yk . '[0]" value=">3mm"> > 3mm';
 
-                    $result .= ', pada sendapan <select name="' . $yk . '" size="1">' . "\n";
+                    $result .= ', pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
                     if(isset($lv['#blankopt'])){
                         $result .= '<option value=""></option>';
                     }
@@ -131,6 +139,7 @@ foreach($data as $key => $value){
                         $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
                     }
                     $result .= '</select>' . "\n";
+                    
                 } elseif($lv['#type'] == 'checkbox'){
                     if (count($lv['theref'])>0) {
                     $cnt = 0;
@@ -138,14 +147,14 @@ foreach($data as $key => $value){
                         $result .= '<input type="checkbox" name="' . $yk . '[' . $cnt . ']" value="' . $kc . '">';
                         $result .= $isi . "<br />";
                         $cnt++;
-                    } //unset($cnt);
+                    } unset($cnt);
                     } else {
                         $result .= '<input type="checkbox" name="' . $yk . '" value="1">';
                     }
                 } elseif($lv['#type'] == 'radio'){
                     $result .= '<input type="radio" name="' . $yk . '[0]" value="Normal"> Normal <br />' ;
-                    $result .= '<input type="radio" name="' . $yk . '[1]" value="Inverted"> Inverted' ;
-                    $result .= ', pada sendapan <select name="' . $yk . '" size="1">' . "\n";
+                    $result .= '<input type="radio" name="' . $yk . '[0]" value="Inverted"> Inverted' ;
+                    $result .= ', pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
                     if(isset($lv['#blankopt'])){
                         $result .= '<option value=""></option>';
                     }

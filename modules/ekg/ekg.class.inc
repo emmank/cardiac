@@ -276,7 +276,6 @@ class ekgModule extends mainModule
                         $form['ekg'][$value]['#theref'] = $this->__get_refs($value);
                     }
                 }
-                
             }
         }
 
@@ -328,7 +327,14 @@ class ekgModule extends mainModule
         $thefields = $this->__get_data_fields('ekg', $this->query);
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
-                $thevalue[$key] = $value;
+//                $thevalue[$key] = implode('|', $theva);
+                if (is_array($value)){
+                    $thevalue[$key] = implode('|', $value);
+                }else {
+                    $thevalue[$key] = $value;
+                }
+//                
+//                echo '<pre>'; print_r($thevalue); echo '</pre>';
             }
         } unset($thefields);
         $user = $this->__get_user_info();
@@ -351,9 +357,11 @@ class ekgModule extends mainModule
             );
             $this->vardump['id'] = $thevalue['id'];
         }
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+//        $this->query->connect();
+//        $this->query->conn->Execute($sql); unset($sql);
+//        $this->query->close();
+//                echo '<pre>'; print_r($thevalue); echo '</pre>';
+//                echo '<pre>'; print_r($_POST); echo '</pre>';
         unset($thevalue);
 //        $this->__loadPresentStatus('submit');
 //        $this->__loadVitalSign('submit');
@@ -378,9 +386,9 @@ class ekgModule extends mainModule
                     array('&&', "id=" . $_POST['idkunjungan'])
                 )
             );
-            $this->query->connect();
-            $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
+//            $this->query->connect();
+//            $this->query->conn->Execute($sql); unset($sql);
+//            $this->query->close();
         }
         redirect_to('/user/ekg/form');
     }

@@ -94,7 +94,7 @@ foreach($data as $key => $value){
                 $result .= '<td align="right">' . $lv['#title'] . '</td>';
                 $result .= '<td>';
 //                if(preg_match('/_HR$/',$yk)){
-                    $lv['#value'] = explode('|', $lv['#value']);
+//                    $lv['#value'] = explode('|', $lv['#value']);
 //                } else {
 //                    $lv['#value'] = explode('|', $lv['#value']);
 //                }
@@ -140,8 +140,8 @@ foreach($data as $key => $value){
                         $result .= '<input type="checkbox" name="' . $yk . '" value="1">';
                     }
                 } elseif($lv['#type'] == 'radio'){
-                    $result .= '<input type="radio" name="' . $yk . '[0]" value="Normal"> Normal <br />' ;
-                    $result .= '<input type="radio" name="' . $yk . '[1]" value="Inverted"> Inverted' ;
+                    $result .= '<input type="radio" name="' . $yk . '" value="Normal"> Normal <br />' ;
+                    $result .= '<input type="radio" name="' . $yk . '" value="Inverted"> Inverted' ;
                     $result .= ', pada sendapan <select name="' . $yk . '" size="1">' . "\n";
                     if(isset($lv['#blankopt'])){
                         $result .= '<option value=""></option>';
