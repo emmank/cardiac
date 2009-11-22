@@ -53,6 +53,33 @@ require INCLUDES_DIR . DS . 'defaultvars.inc';
 //    return $result;
 //}
 
+$sql = $systemquery->getDescribe('menus');
+$systemquery->connect();
+$getit = $systemquery->conn->Execute($sql); unset($sql);
+$systemquery->close();
+if($getit->_numOfRows < 1){
+    $sql = $systemquery->createTable(
+        'menus',
+        array(
+            'id' => 'varchar(255) not null',
+            'menus' => 'varchar(255) not null',
+            'parent' => 'varchar(100)',
+            'weight' => 'varchar(100)',
+            'title' => 'varchar(100)',
+            'description' => 'varchar(255)',
+            'user_required' => 'varchar(100)',
+            'path' => 'varchar(255)',
+            'exec' => 'varchar(255)',
+            'source' => 'varchar(255)',
+            'module' => 'varchar(100)'
+        ),
+        'id'
+    );
+    $systemquery->connect();
+    $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+} unset($getit);
+
 $allelements = array();
 $dumpsights = __get_menu_sights();
 foreach($dumpsights as $key=>$value){
