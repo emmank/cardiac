@@ -73,6 +73,7 @@ class config
     var $systitle = 'Cardiac Center';
     var $user_required = FALSE;
     var $limitcacheindays = 2; //Batas maksimal antrian di simpan
+    var $abjad = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
     var $formtypelists = array(
         'text' => 'text',
         'textarea' => 'textarea',

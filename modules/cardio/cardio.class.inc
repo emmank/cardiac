@@ -131,7 +131,173 @@ class cardioModule extends mainModule
             'weight' => '0',
             'user_required' => 'kardio dewasa'
         );
+        $items['cardio_anak_search'] = array(
+            'title' => __t('search cardio anak'),
+            'description' => __t("search cardio anak's patients"),
+            'path' => '/user/cardio_anak/search',
+            'exec' => 'anak_search',
+            'weight' => '0',
+            'user_required' => 'kardio anak'
+        );
+        $items['cardio_dewasa_search_submit'] = array(
+            'title' => __t('submitted search cardio dewasa'),
+            'description' => __t("submitted search cardio dewasa's patients"),
+            'path' => '/user/cardio_dewasa/search_submit',
+            'exec' => 'dewasa_search_submit',
+            'weight' => '0',
+            'user_required' => 'kardio dewasa'
+        );
+        $items['cardio_anak_search_submit'] = array(
+            'title' => __t('submitted search cardio anak'),
+            'description' => __t("submitted search cardio anak's patients"),
+            'path' => '/user/cardio_anak/search_submit',
+            'exec' => 'anak_search_submit',
+            'weight' => '0',
+            'user_required' => 'kardio anak'
+        );
         return $items;
+    }
+
+    function dewasa_search_submit(){
+        return $this->__get_search_submit();
+    }
+
+    function anak_search_submit(){
+        return $this->__get_search_submit(1);
+    }
+
+    function __get_search_submit($teens=0){
+        if(isset($_POST['data'])){
+            $str = $_POST['data'];
+            $dump = $this->__get_patients_search($str);
+        } else {
+            $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+            $str = '';
+            if(trim($dump[3]) != ''){
+                $str = trim($dump[3]);
+                $dump = $this->__get_patients_search($str);
+            } else {
+                $dump = array();
+            }
+        }
+        $result = array();
+        $result['type'] = 'notelist';
+        $result['title'] = __t('hasil pencarian');
+        $result['description'] = __t('hasil pencarian') . ' <strong>"' . $str . '"</strong>';
+        unset($str);
+        if(count($dump) > 0){
+            foreach($dump as $key => $value){
+                foreach($value as $ky => $vl){
+                    $sql = $this->query->getSelect(
+                        array('id', 'inputtime'),
+                        array('cardio'),
+                        array(
+                            array('&&', "patients=" . $vl),
+                            array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
+                        )
+                    );
+                    $this->query->connect();
+                    $getit = $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                    if($getit->_numOfRows > 0){
+                        if(!isset($cnt)){
+                            $cnt = 0;
+                            $result['data'] = array();
+                        }
+                        for($i=0; $i<$getit->_numOfRows; $i++){
+                            if(!isset($dumpid)){$dumpid = array();}
+                            if(!in_array($getit->fields['id'], $dumpid)){
+                                if(count($dumpid) > 0){
+                                    $cnt++;
+                                }
+                                $dumpid[] = $getit->fields['id'];
+                                $result['data'][$cnt]['links'] = '/user/cardio_' . ($teens != 0 ? 'anak' : 'dewasa') . '/detail_form/' . $getit->fields['id'];
+                                $result['data'][$cnt]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                            }
+                            $sql = $this->query->getSelect(
+                                array(),
+                                array('patients'),
+                                array(
+                                    array('&&', "id=" . $vl)
+                                )
+                            );
+                            $this->query->connect();
+                            $getthis = $this->query->conn->Execute($sql); unset($sql);
+                            $this->query->close();
+                            if($getthis->_numOfRows > 0){
+                                foreach($getthis->fields as $yk => $lv){
+                                    if(eregi($key, $lv)){
+                                        $result['data'][$cnt]['string'][$yk] = eregi_replace($key, '<strong>' . $key . '</strong>', $lv);
+                                    }
+                                }
+                                if(!isset($result['data'][$cnt]['string']['nama'])){
+                                    $result['data'][$cnt]['string']['nama'] = $getthis->fields['nama'];
+                                }
+                            } unset($getthis);
+                            $getit->MoveNext();
+                        }
+                    } unset($getit);
+                }
+            }
+        } unset($dump);
+//        echo '<pre>'; print_r($result); echo '</pre>'; exit();
+        return $result;
+    }
+
+    function dewasa_search(){
+        return $this->__get_search();
+    }
+
+    function anak_search(){
+        return $this->__get_search(1);
+    }
+
+    function __get_search($teens=0){
+        $result = array();
+        $result['type'] = 'search';
+        $result['title'] = __t('Cari data pasien cardio');
+        $result['description'] = __t('Mencari data pasien cardio');
+        $result['dataform']['character'] = array(
+            '#type' => 'character'
+        );
+        $i = 0;
+        foreach($this->config->abjad as $value){
+            $result['dataform']['character']['data'][$i]['show'] = $value;
+            $sql = $this->query->getSelect(
+                array('cardio|id as cardio_id'),
+                array('cardio', 'patients'),
+                array(
+                    array('&&', "cardio|patients=patients|id"),
+                    array('&&', "patients|nama like '" . strtolower($value) . "%'"),
+                    array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            $result['dataform']['character']['data'][$i]['links'] = $getit->_numOfRows > 0 ? '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/search/' . $value : NULL;
+            unset($getit); $i++;
+        } unset($i);
+        $result['dataform']['form'] = array(
+            '#type' => 'form',
+            '#action' => '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/search',
+            '#id' => 'cardio_search',
+            '#title' => __t('search'),
+            'data' => array(
+                '#type' => 'text',
+                '#size' => 40
+            ),
+            'submit' => array(
+                '#type' => 'submit',
+                '#value' => __t('search')
+            )
+        );
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($_POST['data']) || isset($dump[3])){
+            $result['result'] = $this->__get_search_submit($teens);
+        } unset($dump);
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
     }
 
     function dewasa_view(){
@@ -185,16 +351,12 @@ class cardioModule extends mainModule
             )
         );
 
-        if($teens != 0){
-            $where = array(
-                array('&&', "teens=" . $teens)
-            );
-        } else {$where = NULL;}
-
         $sql = $this->query->getSelect(
             array(),
             array('cardio'),
-            $where,
+            array(
+                array('&&', "teens=" . ($teens != 0 ? $teens : 0))
+            ),
             'inputtime desc',
             '0,10'
         ); unset($where);

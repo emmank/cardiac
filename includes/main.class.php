@@ -775,4 +775,70 @@ class mainModule
         $this->{$module . '_exec'}->query = $this->{$module . '_query'};
    }
 
+   function __iterate($data){
+       $result = array();
+       foreach($data as $key => $value){
+           $result[] = $value;
+           $dump = $value;
+           for($i=($key+1); $i<count($data); $i++){
+               $dump .= ' ' . $data[$i];
+               $result[] = $dump;
+           }
+       }
+       return $result;
+   }
+
+   function __get_patients_search($data){
+       $result = array();
+       $patient_fields = $this->__get_data_fields('patients', $this->query);
+       if(strlen(trim($data)) < 2){
+           $sql = $this->query->getSelect(
+               array('id'),
+               array('patients'),
+               array(
+                   array('&&', "nama like '" . trim($data) . "%'")
+               )
+           );
+           $this->query->connect();
+           $getit = $this->query->conn->Execute($sql); unset($sql);
+           $this->query->close();
+           if($getit->_numOfRows > 0){
+               $result[trim($data)] = array($getit->fields['id']);
+           }
+       } else {
+           $dump = explode(' ', trim($data));
+           $getdump = array();
+           foreach($dump as $value){
+               $getdump[] = trim($value);
+           } unset($dump);
+           $dump = $this->__iterate($getdump);
+    //       echo '<pre>'; print_r($dump); echo '</re>'; exit();
+           unset($getdump);
+           foreach($dump as $key => $value){
+               $sql = $this->query->getSelect(
+                   array(),
+                   array('isearch_patients'),
+                   array(
+                       array('&&', "phrase like '%" . $value . "%'")
+                   )
+               );
+               $this->query->connect();
+    //           $this->query->conn->debug=true;
+               $getit = $this->query->conn->Execute($sql); unset($sql);
+               $this->query->close();
+               if($getit->_numOfRows > 0){
+                   $getdump = array();
+                   for($i=0; $i<$getit->_numOfRows; $i++){
+                       $getdump[] = $getit->fields['id'];
+                       $getit->MoveNext();
+                   }
+                   $result[$value] = $getdump;
+                   unset($getdump);
+               }
+           } unset($dump);
+       }
+//       echo '<pre>'; print_r($result); echo '</pre>';
+       return $result;
+   }
+
 }

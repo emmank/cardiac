@@ -447,6 +447,7 @@ function __create_form_close(){
 
 function __create_form($dataform, $idform=NULL, $classform=NULL, $iditem=NULL, $classitem=NULL){
     global $forminput, $formtextarea, $formselect;
+//    echo '<pre>'; print_r($dataform); echo '</pre>';
     $result = '';
     foreach($dataform as $key => $value){
         $created = array(); $formhead = array();
@@ -468,6 +469,60 @@ function __create_info($value){
     $result = '';
     $result .= '<div>';
     $result .= $value['show'];
+    $result .= '</div>' . "\n";
+    return $result;
+}
+
+function __create_search($value){
+//    echo '<pre>'; print_r($value); echo '</pre>'; exit();
+    $result = "\n";
+    if(is_array($value)){
+        foreach($value as $yk => $lv){
+            if($yk == 'dataform'){
+                foreach($lv as $key => $val){
+                    if(isset($next)){
+                        $result .= "\n" . "<hr>\n";
+                    }
+                    if($val['#type'] == 'character'){
+                        foreach($val['data'] as $ky => $vl){
+                            if(isset($koma)){$result .= ', ';}
+                            $result .= !is_null($vl['links']) ? '<a href="' . $vl['links'] . '">' : '';
+                            $result .= $vl['show'];
+                            $result .= !is_null($vl['links']) ? '</a>' : '';
+                            $koma = 0;
+                        } unset($koma);
+                    } elseif($val['#type'] == 'form'){
+                        $getform[] = $val;
+                        $result .= __create_form($getform);
+                        unset($getform);
+                    } $next = 0;
+                    $result .= "<br />\n";
+                } unset($next);
+            } elseif($yk == 'result'){
+                $result .= __create_notelist($lv);
+            }
+        }
+    }
+    return $result;
+}
+
+function __create_notelist($value){
+//    echo '<pre>'; print_r($value); echo '</pre>';
+    $result = "\n";
+    $result .= '<div>' . "\n";
+    $result .= '<div>' . $value['description'] . '</div>' . "\n";
+    if(count($value['data']) > 0){
+        foreach($value['data'] as $key => $val){
+            $result .= '<hr>' . "\n";
+            $result .= '<div><a href="' . $val['links'] . '"><strong><font size=+2>Data Tanggal ' . $val['inputtime'] . '</font></strong></a>' . "\n";
+            $result .= '<div>' . "\n";
+            foreach ($val['string'] as $ky => $vl){
+                if(isset($koma)){$result .= ', ';}
+                $result .= '<strong style="color:green">' . $ky . '</strong> : ' . $vl; $koma = 0;
+            } unset($koma);
+            $result .= '</div>' . "\n";
+        }
+    }
     $result .= '</div>' . "\n";
     return $result;
 }

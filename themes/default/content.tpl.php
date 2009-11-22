@@ -21,6 +21,7 @@
  *  
  *  Created on Sep 6, 2009, 11:03:48 AM
  */
+//echo '<div align="left"><pre>'; print_r($content['output']); echo '</pre></div>'; exit();
 ?>
 <div id="header-info">
 &nbsp;
@@ -67,6 +68,10 @@
             <?php echo __create_items_detail($value);?>
         <?php } elseif($value['type'] == 'info') {?>
             <?php echo __create_info($value);?>
+        <?php } elseif($value['type'] == 'search') {?>
+            <?php echo __create_search($value);?>
+        <?php } elseif($value['type'] == 'notelist') {?>
+            <?php echo __create_notelist($value);?>
         <?php }?>
     <?php }?>
 <?php }?>
