@@ -107,6 +107,14 @@ class cardioModule extends mainModule
             'weight' => '0',
             'user_required' => 'kardio dewasa'
         );
+        $items['cardio_anak_detail'] = array(
+            'title' => __t('detail cardio anak'),
+            'description' => __t("detail cardio anak's patients"),
+            'path' => '/user/cardio_anak/detail_form',
+            'exec' => 'anak_detail_form',
+            'weight' => '0',
+            'user_required' => 'kardio anak'
+        );
         $items['cardio_dewasa_detail'] = array(
             'title' => __t('detail cardio dewasa'),
             'description' => __t("detail cardio dewasa's patients"),
