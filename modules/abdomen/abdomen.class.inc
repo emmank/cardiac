@@ -608,9 +608,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_relief_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -653,7 +652,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom "') . '<strong>' . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_relief/form');
                     exit();
@@ -672,7 +671,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_relief');
 //        } else {
 //            redirect_to('/reference/abdomen_relief/form');
@@ -829,9 +827,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_abdomen_perkusi_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -874,7 +871,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_perkusi/form');
                     exit();
@@ -893,7 +890,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_perkusi');
 //        } else {
 //            redirect_to('/reference/abdomen_perkusi/form');
@@ -1049,9 +1045,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_center_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1094,7 +1089,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_center/form');
                     exit();
@@ -1113,7 +1108,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_center');
 //        } else {
 //            redirect_to('/reference/abdomen_center/form');
@@ -1269,9 +1263,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_skin_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1314,7 +1307,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_skin/form');
                     exit();
@@ -1333,7 +1326,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_skin');
 //        } else {
 //            redirect_to('/reference/abdomen_skin/form');
@@ -1489,9 +1481,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_gerakan_dinding_perut_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1534,7 +1525,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_gerakan_dinding_perut/form');
                     exit();
@@ -1553,7 +1544,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_gerakan_dinding_perut');
 //        } else {
 //            redirect_to('/reference/abdomen_gerakan_dinding_perut/form');
@@ -1714,9 +1704,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_hepar_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1762,7 +1751,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_hepar/form');
                     exit();
@@ -1781,7 +1770,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_hepar');
 //        } else {
 //            redirect_to('/reference/abdomen_hepar/form');
@@ -1945,9 +1933,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_liver_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1993,7 +1980,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_liver/form');
                     exit();
@@ -2012,7 +1999,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_liver');
 //        } else {
 //            redirect_to('/reference/abdomen_liver/form');
@@ -2176,9 +2162,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_ginjal_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -2224,7 +2209,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_ginjal/form');
                     exit();
@@ -2243,7 +2228,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_ginjal');
 //        } else {
 //            redirect_to('/reference/abdomen_ginjal/form');
@@ -2407,9 +2391,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_inspeksi_ginjal_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -2455,7 +2438,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_inspeksi_ginjal/form');
                     exit();
@@ -2474,7 +2457,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_inspeksi_ginjal');
 //        } else {
 //            redirect_to('/reference/abdomen_inspeksi_ginjal/form');
@@ -2635,9 +2617,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_perkusi_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -2680,7 +2661,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_perkusi/form');
                     exit();
@@ -2699,7 +2680,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_perkusi');
 //        } else {
 //            redirect_to('/reference/abdomen_perkusi/form');
@@ -2857,9 +2837,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_auscultation_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -2902,7 +2881,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_auscultation/form');
                     exit();
@@ -2921,7 +2900,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_auscultation');
 //        } else {
 //            redirect_to('/reference/abdomen_auscultation/form');
@@ -3077,9 +3055,8 @@ class abdomenModule extends mainModule
     }
 
     function ref_peristaltik_usus_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -3122,7 +3099,7 @@ class abdomenModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/abdomen_peristaltik_usus/form');
                     exit();
@@ -3141,7 +3118,6 @@ class abdomenModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/abdomen_peristaltik_usus');
 //        } else {
 //            redirect_to('/reference/abdomen_peristaltik_usus/form');

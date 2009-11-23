@@ -208,7 +208,6 @@ class patientModule extends mainModule
     }
 
     function register_form(){
-        echo "test";
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
         } else {
@@ -414,6 +413,25 @@ class patientModule extends mainModule
         }
         $this->query->connect();
 //        $this->query->conn->debug=true;
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $sql = $this->query->setDelete(
+            'isearch_patients',
+            array(
+                array('&&', "id=" . $thevalue['id'])
+            )
+        );
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $sql = $this->query->saveData(
+            'isearch_patients',
+            array(
+                'id' => $thevalue['id'],
+                'phrase' => implode(' ', $thevalue)
+            )
+        );
+        $this->query->connect();
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         unset($thevalue);

@@ -134,6 +134,24 @@ foreach ($allelements as $key => $value){
 }
 
 //echo "done\n";
+//$sql = $systemquery->getSelect(
+//    array('id'),
+//    array('registry'),
+//    array(
+//        array('&&', "id=default")
+//    )
+//);
+//$systemquery->connect();
+//$getit = $systemquery->conn->Execute($sql); unset($sql);
+//$systemquery->close();
+//if($getit->_numOfRows < 1){
+//    $sql = $systemquery->saveData(
+//        'registry',
+//        array(
+//            'id' => 'default'
+//        )
+//    );
+//}
 
 header('Location:/regload');
 ?>

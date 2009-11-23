@@ -131,9 +131,8 @@ class vascularModule extends mainModule
     }
 
     function form($vascular_id=NULL){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         } elseif(isset($vascular_id) && !is_null($vascular_id)){
             $vcache = $this->__get_vascular_data($vascular_id);
         } else {
@@ -365,7 +364,6 @@ class vascularModule extends mainModule
         $query = $this->query->conn->Eecute($sql); unset($sql);
         $this->query->close();
         unset($dump, $thevalue);
-        unlink($this->config->fcache);
         $message = 'data pemeriksaan vascular pasien atas nama ' . $query->fields['nama'] . ' telah disimpan !';
         unset($query);
         redirect_to('/user/vascular/message/' . rawurlencode($message));

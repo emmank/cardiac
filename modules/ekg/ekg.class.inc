@@ -110,9 +110,8 @@ class ekgModule extends mainModule
     }
 
     function form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         } elseif(isset($ekg_id) && !is_null($ekg_id)){
             $vcache = $this->__get_ekg_data($ekg_id);
         } else {

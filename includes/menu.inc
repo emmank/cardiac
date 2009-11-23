@@ -125,77 +125,81 @@ function menu_organize(){
     $systemquery->connect();
     $getit = $systemquery->conn->Execute($sql); unset($sql);
     $systemquery->close();
+    if(!isset($_COOKIE[$configs->cookiesession]) || $getit->_numOfRows < 1){
+        header('Location:/reload_menus.php'); exit();
+    }
     $primary_links = explode(',', $getit->fields['primary_links']);
     $secondary_links = explode(',', $getit->fields['secondary_links']);
     $navigations = explode(',', $getit->fields['navigations']);
-        $i = 0;
-        foreach ($primary_links as $key=>$value){
-            $sql = $systemquery->getSelect(
-                array(),
-                array('menus'),
-                array(
-                    array('&&', "id=" . trim($value))
-                )
-            );
-            $systemquery->connect();
-            $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
-            $systemquery->close();
-            $result['primary_links'][$i] = $get_menu_lists->fields;
-            $result['primary_links'][$i]['name'] = trim($value);
-            $i++; unset($get_menu_lists);
-        }
-        $i = 0;
-        foreach ($secondary_links as $key=>$value){
-            $sql = $systemquery->getSelect(
-                array(),
-                array('menus'),
-                array(
-                    array('&&', "id=" . trim($value))
-                )
-            );
-            $systemquery->connect();
-            $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
-            $systemquery->close();
-            $result['secondary_links'][$i] = $get_menu_lists->fields;
-            $result['secondary_links'][$i]['name'] = trim($value);
-            $i++; unset($get_menu_lists);
-        } $i = 0;
-        foreach ($navigations as $key=>$value){
-            $sql = $systemquery->getSelect(
-                array(),
-                array('menus'),
-                array(
-                    array('&&', "id=" . trim($value))
-                )
-            );
-            $systemquery->connect();
-            $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
-            $systemquery->close();
-            $result['navigations'][$i] = $get_menu_lists->fields;
-            $sql = $systemquery->getSelect(
-                array('parent'),
-                array('navigations'),
-                array(
-                    array('&&', "menus=" . trim($value))
-                )
-            );
-            $systemquery->connect();
-            $getparent = $systemquery->conn->Execute($sql); unset($sql);
-            $systemquery->close();
-            $sql = $systemquery->getSelect(
-                array('menus'),
-                array('navigations'),
-                array(
-                    array('&&', "id=" . $getparent->fields['parent'])
-                )
-            ); unset($getparent);
-            $systemquery->connect();
-            $getparent = $systemquery->conn->Execute($sql); unset($sql);
-            $systemquery->close();
-            $result['navigations'][$i]['parent'] = $getparent->fields['menus'];
-            $result['navigations'][$i]['name'] = trim($value);
-            $i++; unset($get_menu_lists, $getparent);
-        } unset($i, $menu_actives, $menu_lists, $primary_links, $secondary_links, $navigations);
+    unset($getit);
+    $i = 0;
+    foreach ($primary_links as $key=>$value){
+        $sql = $systemquery->getSelect(
+            array(),
+            array('menus'),
+            array(
+                array('&&', "id=" . trim($value))
+            )
+        );
+        $systemquery->connect();
+        $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        $result['primary_links'][$i] = $get_menu_lists->fields;
+        $result['primary_links'][$i]['name'] = trim($value);
+        $i++; unset($get_menu_lists);
+    }
+    $i = 0;
+    foreach ($secondary_links as $key=>$value){
+        $sql = $systemquery->getSelect(
+            array(),
+            array('menus'),
+            array(
+                array('&&', "id=" . trim($value))
+            )
+        );
+        $systemquery->connect();
+        $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        $result['secondary_links'][$i] = $get_menu_lists->fields;
+        $result['secondary_links'][$i]['name'] = trim($value);
+        $i++; unset($get_menu_lists);
+    } $i = 0;
+    foreach ($navigations as $key=>$value){
+        $sql = $systemquery->getSelect(
+            array(),
+            array('menus'),
+            array(
+                array('&&', "id=" . trim($value))
+            )
+        );
+        $systemquery->connect();
+        $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        $result['navigations'][$i] = $get_menu_lists->fields;
+        $sql = $systemquery->getSelect(
+            array('parent'),
+            array('navigations'),
+            array(
+                array('&&', "menus=" . trim($value))
+            )
+        );
+        $systemquery->connect();
+        $getparent = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        $sql = $systemquery->getSelect(
+            array('menus'),
+            array('navigations'),
+            array(
+                array('&&', "id=" . $getparent->fields['parent'])
+            )
+        ); unset($getparent);
+        $systemquery->connect();
+        $getparent = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        $result['navigations'][$i]['parent'] = $getparent->fields['menus'];
+        $result['navigations'][$i]['name'] = trim($value);
+        $i++; unset($get_menu_lists, $getparent);
+    } unset($i, $menu_actives, $menu_lists, $primary_links, $secondary_links, $navigations);
     return $result;
 }
 
