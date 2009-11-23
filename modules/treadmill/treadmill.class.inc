@@ -66,6 +66,7 @@ class treadmillModule extends mainModule
             'weight' => 5,
             'user_required' => 'treadmill'
         );
+<<<<<<< HEAD:modules/treadmill/treadmill.class.inc
         $items['treadmill_anak_message'] = array(
             'title' => __t('treadmill message'),
             'description' => __t('get treadmill message'),
@@ -74,6 +75,8 @@ class treadmillModule extends mainModule
             'weight' => 5,
             'user_required' => 'kardio anak'
         );
+=======
+>>>>>>> 0f42ffbe6b10086a88120d51884e9992df30638d:modules/treadmill/treadmill.class.inc
         return $items;
     }
 
@@ -91,7 +94,11 @@ class treadmillModule extends mainModule
     function __get_treadmill_data($id){
         $result = array();
         $this->query->connect();
+<<<<<<< HEAD:modules/treadmill/treadmill.class.inc
         $this->query->getSelect(
+=======
+        $sql=$this->query->getSelect(
+>>>>>>> 0f42ffbe6b10086a88120d51884e9992df30638d:modules/treadmill/treadmill.class.inc
             array(),
             array('treadmill'),
             array(
@@ -108,9 +115,41 @@ class treadmillModule extends mainModule
         return $result;
     }
 
+<<<<<<< HEAD:modules/treadmill/treadmill.class.inc
     function form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
+=======
+    function __treadmill_ref ($tabel,$field,$sort=NULL) {
+        $result = array();
+        $sql=$this->query->getSelect(
+            array(),
+            array($tabel),
+            NULL,
+            (is_null($sort) ? NULL : $sort)
+        );
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $getData = $this->query->conn->Execute($sql); unset ($sql);
+        $this->query->close();
+        if($getData->_numOfRows > 0){
+            //while ( $query->_numOfRows >)
+            for ($i=0; $i < $getData->_numOfRows; $i++ ) {
+                $result[$getData->fields['id']] = $getData->fields[$field];
+                $getData->MoveNext();
+            }
+        } unset($query);
+//        echo "<pre>"; print_r($result); echo "</pre>";
+        return $result;
+    }
+
+
+
+    function form(){
+        if(is_file($this->config->fcache)){
+            $vcache = $this->__read_form_cache();
+            unlink($this->config->fcache);
+>>>>>>> 0f42ffbe6b10086a88120d51884e9992df30638d:modules/treadmill/treadmill.class.inc
         } elseif(isset($treadmill_id) && !is_null($treadmill_id)){
             $vcache = $this->__get_treadmill_data($treadmill_id);
         } else {
@@ -174,7 +213,10 @@ class treadmillModule extends mainModule
                     if(count($query) > 0){
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
+<<<<<<< HEAD:modules/treadmill/treadmill.class.inc
 //                                $vl = $this->agecount_in_month(strtotime($vl));
+=======
+>>>>>>> 0f42ffbe6b10086a88120d51884e9992df30638d:modules/treadmill/treadmill.class.inc
                                 $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
                                 $form['treadmill']['umur'] = array(
                                     '#type' => 'info',
@@ -259,7 +301,10 @@ class treadmillModule extends mainModule
                         );
                         unset($getsender);
                     }
+<<<<<<< HEAD:modules/treadmill/treadmill.class.inc
 //                    $this->query->close();
+=======
+>>>>>>> 0f42ffbe6b10086a88120d51884e9992df30638d:modules/treadmill/treadmill.class.inc
                 }
                 if($value != 'no_registrasi'){
                     $form['treadmill'][$value] = array(
@@ -273,6 +318,7 @@ class treadmillModule extends mainModule
             }
         }
 
+<<<<<<< HEAD:modules/treadmill/treadmill.class.inc
 //        $form['treadmill']['tab_items']['presentStatus'] = $this->__loadPresentStatus();
 //        $form['treadmill']['tab_items']['vitalSign'] = $this->__loadVitalSign();
 //        $form['treadmill']['tab_items']['eye'] = $this->__loadEye();
@@ -506,6 +552,24 @@ class treadmillModule extends mainModule
         } else {
             return $this->ear_exec->treadmill_menu();
         }
+=======
+        $form['treadmill']['submit'] = array(
+            '#type' => 'submit',
+            '#value' => 'submit',
+        );
+//        echo '<pre>'; print_r($form); echo '</pre>';
+
+        $form['treadmill_layout']['perubahan_gelombang'] = $this->__treadmill_ref('ref_faseLatihan_perubahan_gelombang','perubahan_gelombang');
+        $form['treadmill_layout']['latihan_dihentikan'] = $this->__treadmill_ref('ref_faseLatihan_dihentikan','dihentikan');
+        $form['treadmill_layout']['respon_jantung'] = $this->__treadmill_ref('ref_faseLatihan_respon_jantung','respon');
+        $form['treadmill_layout']['respon_darah'] = $this->__treadmill_ref('ref_faseLatihan_tekanan_darah','respon');
+        $form['treadmill_layout']['uljb'] = $this->__treadmill_ref('ref_threadKesimpulanSaran_Ulib','Ulib');
+        $form['treadmill_layout']['kesegaran_jasmani'] = $this->__treadmill_ref('ref_threadKesimpulanSaran_kesegaran','kesegaran');
+        $form['treadmill_layout']['fungsional'] = $this->__treadmill_ref('ref_threadKesimpulanSaran_fungsional','fungsional');
+        $form['treadmill_layout']['saran_darah'] = $this->__treadmill_ref('ref_threadKesimpulanSaran_tekananDarah','tekananDarah');
+
+        return $form;
+>>>>>>> 0f42ffbe6b10086a88120d51884e9992df30638d:modules/treadmill/treadmill.class.inc
     }
 
     function treadmill_form_submit(){
@@ -555,6 +619,10 @@ class treadmillModule extends mainModule
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         unset($thevalue);
+<<<<<<< HEAD:modules/treadmill/treadmill.class.inc
+=======
+/*
+>>>>>>> 0f42ffbe6b10086a88120d51884e9992df30638d:modules/treadmill/treadmill.class.inc
         $this->__loadPresentStatus('submit');
         $this->__loadVitalSign('submit');
         $this->__loadEye('submit');
@@ -570,6 +638,11 @@ class treadmillModule extends mainModule
         $this->__loadAnusrectum('submit');
         $this->__loadPunggung('submit');
         $this->__loadExtermitas('submit');
+<<<<<<< HEAD:modules/treadmill/treadmill.class.inc
+=======
+ * 
+ */
+>>>>>>> 0f42ffbe6b10086a88120d51884e9992df30638d:modules/treadmill/treadmill.class.inc
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',

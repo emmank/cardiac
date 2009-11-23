@@ -70,7 +70,7 @@
     <div id="<?php if(!isset($body_login)){ echo 'main-content';} else { echo 'main-container';}?>">
     <?php if(!isset($body_login)){?>
         <div id="left<?php if(!isset($body_login)){echo '-container';}?>">
-            <div id="picture"><a href="/"><IMG SRC="/themes/<?php echo $theme;?>/images/tux-taekwondo-80x80.png" border="0" alt="theme logo"></a></div>
+            <div id="picture"><a href="/"><IMG SRC="/themes/<?php echo $theme;?>/images/default_user.png" border="0" height="160" width="160" alt="theme logo"></a></div>
             <div id="left">
                 <dl>
                 <?php if(isset($managed_menus['navigations'])){?>
@@ -105,12 +105,11 @@
     </div>
 </div>
 
-    <div id="<?php if (!isset($body_login)){echo 'message-';}?>footer"><?php echo $configs->identity_message;?></div>
-
-<?php if(!isset($body_login)){?>
 <div id="footer">
+<?php
+echo str_replace(",","<br />",$configs->identity_message);
+?>
 </div>
-<?php }?>
-
+    
 </body>
 </html>
