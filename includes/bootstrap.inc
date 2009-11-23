@@ -176,6 +176,7 @@ function __write_registry(){
     $primary_links = __get_primary_links();
     $secondary_links = __get_secondary_links();
     $navigations = __get_navigations();
+//    echo '<pre>'; print_r($navigations); echo '</pre>'; exit();
 //    echo '<pre>'; print_r($menu_actives); echo '</pre>'; exit();
     $thevalue = array();
     foreach ($primary_links as $key=>$value){
@@ -218,6 +219,9 @@ function __write_registry(){
                 array('&&', "id=" . $_COOKIE[$configs->cookiesession])
             )
         );
+        $systemquery->connect();
+        $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
     } unset($checkit);
     $thevalue['id'] = $_COOKIE[$configs->cookiesession];
 //    echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();

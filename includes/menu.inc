@@ -76,7 +76,7 @@ function __get_navigations(){
     $systemquery->close();
     $cnt = 0;
     for($i=0; $i<$query->_numOfRows; $i++){
-//        echo $query->fields['menus'] . '<br />';
+//        echo $cnt . ' => ' . $query->fields['menus'] . '<br />';
         $result[$cnt] = $query->fields;
         $cnt++;
         $sql = $systemquery->getSelect(
@@ -108,7 +108,7 @@ function __get_navigations(){
         } unset($child);
         $query->MoveNext();
     } unset($query);
-//    echo '<pre>'; print_r($result); echo '</pre>';
+//    echo '<pre>'; print_r($result); echo '</pre>'; exit();
     return $result;
 }
 
@@ -239,12 +239,12 @@ function __get_active_menus($forced=NULL){
     $result = array();
     $lists = __get_menu_lists(!is_null($forced) ? $forced : NULL);
     if(count($user) < 1){
-        if(isset($_COOKIE[$configs->cookieid])){
+        if(isset($_COOKIE[$configs->cookiesession])){
             $sql = $systemquery->getSelect(
                 array(),
                 array($configs->auth_use_table[0]),
                 array(
-                    array('&&', $configs->auth_use_table[4] . "=" . $_COOKIE[$configs->cookieid])
+                    array('&&', $configs->auth_use_table[3] . "=" . $_COOKIE[$configs->cookiesession])
                 )
             );
             $systemquery->connect();
@@ -255,7 +255,7 @@ function __get_active_menus($forced=NULL){
             } unset($getit);
         }
     }
-//    echo '<pre>'; print_r($lists); echo '</pre>'; exit();
+//    echo '<pre>'; print_r($user); echo '</pre>'; exit();
     foreach($lists as $key=>$value){
         $sql = $systemquery->getSelect(
             array(),
