@@ -205,10 +205,11 @@ class userModule extends mainModule
     }
 
     function password_form_submit(){
-        $handle = fopen($this->config->fcache, 'w');
-        foreach($_POST as $key => $value){
+        $dump = $this->__write_form_cache();
+        $thevalue = array();
+        foreach($dump as $key => $value){
             if($key == 'sandi0'){
-                fwrite($handle, $key . '=>' . $value);
+                $thevalue[$key] = $value;
             }
             if($value == ''){
                 if(!isset($blank)){$blank = array($key);}
@@ -216,18 +217,15 @@ class userModule extends mainModule
             }
         }
         if(isset($blank)){
-            fwrite($handle, "\n###blank###" . implode('|', $blank));
-            $strerror = array(
-                "\nerror=>" . __t('Mohon diisi semua')
-            );
+            $this->__write_custom_cache(array("###blank###" => implode('|', $blank)), 1);
+            $this->__write_custom_cache(array("error" => __t('Mohon diisi semua')), 1);
         }
-        fclose($handle); unset($handle);
         $userinfo = $this->__get_user_info();
         $salt = substr($userinfo[$this->config->auth_use_table[2]], 0, $this->config->salt[0]);
         $passwd = substr_replace(sha1($_POST[$this->config->auth_use_table[2] . '0']), $salt, 0, $this->config->salt[1]);
         if($passwd == $userinfo[$this->config->auth_use_table[2]]){
             if($_POST['sandi1'] != $_POST['sandi2']){
-                $strerror[] = "\nerror=>" . __t("New password doesn't match");
+                $strerror['error'] = __t("New password doesn't match");
                 $this->__write_custom_cache($strerror, 1);
                 redirect_to('/user/sandi');
             } else {
@@ -252,9 +250,8 @@ class userModule extends mainModule
     }
 
     function password_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         } else {
             $vcache = $this->__get_user_info();
         }
@@ -293,9 +290,8 @@ class userModule extends mainModule
     }
 
     function seting_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         } else {
             $vcache = $this->__get_user_info();
         }
@@ -343,9 +339,8 @@ class userModule extends mainModule
     }
 
     function form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['user'] = array(
@@ -416,7 +411,7 @@ class userModule extends mainModule
         foreach($dump as $key => $value){
             if($value == ''){
                 $this->__write_custom_cache(
-                    array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                    array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                 );
                 redirect_to('/user/edit');
                 exit();
@@ -436,7 +431,6 @@ class userModule extends mainModule
         $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();
         unset($thevalue);
-        unlink($this->config->fcache);
         redirect_to('/user');
     }
 
@@ -446,7 +440,7 @@ class userModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/admin/user/form');
                     exit();
@@ -476,7 +470,6 @@ class userModule extends mainModule
             $this->sysquery->conn->Execute($sql); unset($sql);
             $this->sysquery->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/admin/user');
         } else {
             redirect_to('/admin/user/form');

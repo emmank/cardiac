@@ -68,7 +68,23 @@ function __create_form_special($data){
 }
 
 function __create_items_detail($value){
-    global $forminput, $formtextarea, $formselect, $user;
+    global $forminput, $formtextarea, $formselect, $systemquery, $configs;
+    $sql = $systemquery->getSelect(
+        array(),
+        array($configs->auth_use_table[0]),
+        array(
+            array('&&', $configs->auth_use_table[3] . "=" . $_COOKIE[$configs->cookiesession])
+        )
+    );
+    $systemquery->connect();
+    $getit = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+    $user = array();
+    if($getit->_numOfRows > 0){
+        foreach($getit->fields as $key=>$val){
+            $user[$key] = $val;
+        }
+    } unset($getit);
     $result = '';
     if(isset($value['title']) && $value['title'] != 'hidden'){
         $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
@@ -136,8 +152,23 @@ function __create_items_detail($value){
 }
 
 function __create_table($value){
-//    echo '<pre>'; print_r($value); echo '</pre>';
-    global $user;
+    global $systemquery, $configs;
+    $sql = $systemquery->getSelect(
+        array(),
+        array($configs->auth_use_table[0]),
+        array(
+            array('&&', $configs->auth_use_table[3] . "=" . $_COOKIE[$configs->cookiesession])
+        )
+    );
+    $systemquery->connect();
+    $getit = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+    $user = array();
+    if($getit->_numOfRows > 0){
+        foreach($getit->fields as $key=>$val){
+            $user[$key] = $val;
+        }
+    } unset($getit);
     $result = '';
     if(isset($value['addmenu'])){
         foreach($value['addmenu'] as $ky => $vl){

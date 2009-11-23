@@ -92,7 +92,7 @@ class cardioModule extends mainModule
             'user_required' => 'kardio dewasa'
         );
         $items['cardio_anak_view'] = array(
-            'title' => __t('explore cardio anak'),
+            'title' => __t('cardio anak'),
             'description' => __t('explore cardio anak'),
             'path' => '/user/cardio_anak/view',
             'exec' => 'anak_view',
@@ -100,7 +100,7 @@ class cardioModule extends mainModule
             'user_required' => 'kardio anak'
         );
         $items['cardio_dewasa_view'] = array(
-            'title' => __t('explore cardio dewasa'),
+            'title' => __t('cardio dewasa'),
             'description' => __t('explore cardio dewasa'),
             'path' => '/user/cardio_dewasa/view',
             'exec' => 'dewasa_view',

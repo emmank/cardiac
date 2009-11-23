@@ -138,19 +138,19 @@ class authModule extends mainModule
         $query = $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();
         foreach($query->fields as $key=>$value){
-            if($key == 'groups'){
-                $this->sysquery->connect();
-                $sql = $this->sysquery->getSelect(
-                    array('name'),
-                    array('groups'),
-                    array(
-                        array('&&', "id=" . $value)
-                    )
-                );
-                $groups = $this->sysquery->conn->Execute($sql); unset($sql);
-                $this->sysquery->connect();
-                $value = $groups->fields['name']; unset($groups);
-            }
+//            if($key == 'groups'){
+//                $this->sysquery->connect();
+//                $sql = $this->sysquery->getSelect(
+//                    array('name'),
+//                    array('groups'),
+//                    array(
+//                        array('&&', "id=" . $value)
+//                    )
+//                );
+//                $groups = $this->sysquery->conn->Execute($sql); unset($sql);
+//                $this->sysquery->connect();
+//                $value = $groups->fields['name']; unset($groups);
+//            }
             $result[$key] = $value;
         } unset($query);
         $this->query->connect();
