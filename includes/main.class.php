@@ -742,6 +742,7 @@ class mainModule
                 array('&&', $fieldname . "=" . $id)
             )
         );
+//        $interpreter->conn->debug=true;
         $query = $interpreter->conn->Execute($sql); unset($sql);
         $interpreter->close();
         if($query->_numOfRows < 1){
