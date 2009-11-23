@@ -357,9 +357,9 @@ class ekgModule extends mainModule
             );
             $this->vardump['id'] = $thevalue['id'];
         }
-//        $this->query->connect();
-//        $this->query->conn->Execute($sql); unset($sql);
-//        $this->query->close();
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
 //                echo '<pre>'; print_r($thevalue); echo '</pre>';
 //                echo '<pre>'; print_r($_POST); echo '</pre>';
         unset($thevalue);
@@ -386,9 +386,9 @@ class ekgModule extends mainModule
                     array('&&', "id=" . $_POST['idkunjungan'])
                 )
             );
-//            $this->query->connect();
-//            $this->query->conn->Execute($sql); unset($sql);
-//            $this->query->close();
+            $this->query->connect();
+            $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
         }
         redirect_to('/user/ekg/form');
     }

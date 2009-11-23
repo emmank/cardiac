@@ -96,11 +96,11 @@ foreach($data as $key => $value){
 //                $lv['#value'] = explode('|', $lv['#value']);
 //                           echo '<pre>'; print_r($lv); echo '</pre>';
                 if($lv['#type'] == 'select'){
-                    if(preg_match('/$qrs_/',$yk)){
-                        echo "1111 \n";
-                    } else {
-                        echo "tidak dapat \n";
-                    }
+//                    if(preg_match('/qrs_/',$yk)){
+//                        echo "1111 \n";
+//                    } else {
+//                        echo "tidak dapat \n";
+//                    }
                     $result .= '<select name="' . $yk . '" size="' . $lv['#size']. '">' . "\n";
                     if(isset($lv['#blankopt'])){
                         $result .= '<option value=""></option>';

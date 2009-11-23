@@ -198,6 +198,14 @@ foreach($data as $key => $value){
                         for($htg=0; $htg<3; $htg++){
                             if ($htg==0){
                                 $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '[' . $htg . ']" ' . (isset($lv['#size']) ? ' size="6"' : '') . (isset($lv['#value'][$htg]) ? ' value="' . $lv['#value'][$htg] . '"' : '') . '>' . " type \n";
+//                                $result .= '<select name="' . $yk . '" size="1">' . "\n";
+//                                if(isset($lv['#blankopt'])){
+//                                    $result .= '<option value=""></option>';
+//                                }
+//                                foreach($lv['#theref'] as $kc => $isi){
+//                                    $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
+//                                }
+//                                $result .= '</select>';
                             } elseif ($htg==1) {
                                 $result .= '&nbsp;&nbsp;&nbsp;&nbsp; <input type="' . $lv['#type'] . '" name="' . $yk . '[' . $htg . ']" ' . (isset($lv['#size']) ? ' size="6"' : '') . (isset($lv['#value'][$htg]) ? ' value="' . $lv['#value'][$htg] . '"' : '') . '>' . " Kali \n";
                             } else {
