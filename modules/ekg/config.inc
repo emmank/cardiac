@@ -48,7 +48,7 @@ class ekgConfig extends config
         'interval_pr' => 'select',
         'qrs_axis' => 'select',
         'qrs_durasi' => 'select',
-        'qrs_konfigurasi_patologi' => 'select',
+        'qrs_konfigurasi_patologi' => 'select3',
         'qrs_konfigurasi_r_s' => 'select',
         'segmen_st_depresi' => 'select2',
         'segmen_st_elevasi' => 'select2',

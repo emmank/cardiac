@@ -140,6 +140,20 @@ foreach($data as $key => $value){
                     }
                     $result .= '</select>' . "\n";
                     
+                } elseif($lv['#type'] == 'select3'){
+//                    $result .= '<input type="radio" name="' . $yk . '[0]" value="Q Patologi +"> Q Patologi +' ;
+                    $result .= '<select name="' . $yk . '[0]" size="1">' . "\n";
+                    $result .= '<option value="Q Patologi +">Q Patologi +</option>';
+                    $result .= '<option value="Q Patologi -">Q Patologi -</option>';
+                    $result .= '</select>';
+                    $result .= ' pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
+                    if(isset($lv['#blankopt'])){
+                        $result .= '<option value=""></option>';
+                    }
+                    foreach($lv['#theref'] as $kc => $isi){
+                        $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
+                    }
+                    $result .= '</select>' . "<br />  \n";
                 } elseif($lv['#type'] == 'checkbox'){
                     if (count($lv['theref'])>0) {
                     $cnt = 0;
