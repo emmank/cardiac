@@ -26,7 +26,7 @@
 
 
 //echo '<pre>'; print_r($data); echo '</pre>';
-foreach($data as $key => $value){
+//foreach($data as $key => $value){
 //    if(isset($value['#error']) && $value['#error'] !== FALSE){
 //        $result .= '<div class="error">' . $value['#error'] . '</div><br /><br />' . "\n";
 //    }
@@ -58,7 +58,7 @@ foreach($data as $key => $value){
             $result .= '<div id="kolom">' . "\n";
             $setdiv = 1;
         }
-        $result .= '<label>' . ucwords($vl['#title']) . '</label>';
+        $result .= '<label>' . ucwords (str_replace ("_"," ",($vl['#title'])) ) . '</label>';
         if($vl['#type'] != 'textarea'){
             $result .= '<input type="text" value="' . $vl['#value'] .'" readonly="true"> <br />' . "\n";
         } else {
@@ -91,9 +91,12 @@ foreach($data as $key => $value){
             }
         } unset($ke);
         $result .= '</div>' . "\n";
-    }
+ //   }
 
-    $result .= treadmill_form_tpl();
+   // $result .= treadmill_form_tpl();
+    //$result .= ref_perubahan_gelombang($data['treadmill_layout']);
+    //$result .= treadmill_footer();
+    //$result .= test_saja();
 
     if(isset($value['submit'])){
         $result .= '<div>' . "\n";
@@ -110,9 +113,10 @@ foreach($data as $key => $value){
 }
 
 
-function treadmill_form_tpl() {
-$result .=<<< treadmill
-<form>
+
+//echo "<pre>"; print_r ($data) ; echo "</pre>";
+
+$result .= '
 <ul id="treadmilltabs" class="shadetabs">
 <li><a href="#" rel="treadmill1" class="selected">Fase Istirahat,Latihan &amp;Recovery </a></li>
 <li><a href="#" rel="treadmill2">Kesimpulan &amp; Saran</a></li>
@@ -157,9 +161,14 @@ $result .=<<< treadmill
 	</TR>
 	<TR>
 		<TD width="25"></TD>
-		<TD width="200"></TD>
-        <td colspan="2"><select><option>Bruce</option></select>stage</td>
-		<td>lamanya<input type="text" size=4> menit</td>
+		<TD width="200">Bruce Stage </TD>
+                <td colspan="2">
+                    <!--
+                    <select><option>Bruce</option></select>stage
+                    -->
+                    lamanya <input type="text" size=4> menit
+                </td>
+		<td></td>
 	</TR>
 	<TR>
 		<TD colspan="2"><strong>B. Rekaman EKG</strong></TD>
@@ -196,13 +205,39 @@ $result .=<<< treadmill
 	<tr>
 		<TD></TD>
 		<TD>3. Perubahan Gelombang R</TD>
-		<TD colspan="2">
-			<select>
-				<option>Menetap</option>
-				<option>Meninggi</option>
-				<option>Menurun</option>
-			</select>
-		</TD>
+';
+
+
+//echo "<pre>";print_r($data['treadmill_layout']); echo "</pre>";
+
+//echo array_search($data['treadmill_layout']);
+
+/*
+foreach ($data as $name => $isinya) {
+    echo "<pre>";print_r($name); echo "</pre>";
+}
+*/
+
+$result .= "<td><select name=perubahan_gelombang>";
+foreach ($data['treadmill_layout']['perubahan_gelombang'] as $key => $value) {
+    $result .= "<option value=$key>$value</option>";
+}
+$result .= "</select></td>";
+
+
+/*
+$result .= '<td>
+<select>
+            <option>Menetap</option>
+            <option>Meninggi</option>
+            <option>Menurun</option>
+   </select>
+</td>
+';
+*/
+
+
+$result .= '</TD>
 		<TD></TD>
 	</tr>
 
@@ -216,16 +251,16 @@ $result .=<<< treadmill
 	<TR>
 		<TD colspan="2" valign="top"><strong>C. Dihentikan Karena</strong></TD>
 		<TD colspan="2">
-			<input type="radio">Nyeri Dada<br>
-			<input type="radio">Kecapean<br>
-			<input type="radio">THR Tercapai<br>
-		</td>
-		<td>
-			<input type="radio">Aritmia<br>
-			<input type="radio">Dyspnoe<br>
-			<input type="radio">Lain - lain (pusing)
+';
 
-		</TD>
+$result .= "<select name=latihan_dihentikan>";
+//echo "<pre>";print_r($data['treadmill_layout']['latihan_dihentikan']); echo "</pre>";
+foreach ($data['treadmill_layout']['latihan_dihentikan'] as $key => $value) {
+    $result .= "<option value=$key>$value</option>";
+}
+$result .= "</select></td>";
+
+$result .= '	</TD>
 	</TR>
 	<TR>
 		<TD colspan="4"><strong>D. Perubahan Hermodinamik</strong></TD>
@@ -234,12 +269,16 @@ $result .=<<< treadmill
 		<TD></TD>
 		<TD>1. Denyut Jantung</TD>
 		<TD>Respons</TD>
-		<TD colspan="2">
-			<select>
-				<option>Kurang</option>
-				<option>Tidak mencapai 129 x/ menit wlp ULJB cukup</option>
-			</select>
-		</TD>
+		<TD colspan="2">';
+
+$result .= "<select name=respon_jantung>";
+//echo "<pre>";print_r($data['treadmill_layout']['respon_jantung']); echo "</pre>";
+foreach ($data['treadmill_layout']['respon_jantung'] as $key => $value) {
+    $result .= "<option value=$key>$value</option>";
+}
+$result .= "</select></td>";
+
+$result .= '
 		<TD></TD>
 	</tr>
 	<tr>
@@ -263,11 +302,18 @@ $result .=<<< treadmill
 		<TD>2. Tekanan Darah</TD>
 		<TD>Respons</TD>
 		<TD colspan="2">
-			<select>
-				<option>Kurang</option>
-				<option>Tidak mencapai 140 mmHg</option>
-			</select>
-		</TD>
+';
+
+
+$result .= "<select name=respon_darah>";
+//echo "<pre>";print_r($data['treadmill_layout']['respon_darah']); echo "</pre>";
+foreach ($data['treadmill_layout']['respon_darah'] as $key => $value) {
+    $result .= "<option value=$key>$value</option>";
+}
+$result .= "</select>";
+
+
+$result .= '		</TD>
 		<TD></TD>
 	</tr>
 	<tr>
@@ -355,36 +401,67 @@ $result .=<<< treadmill
     <tr>
       <td>ULIB dengan treadmill terhadap penyakit jantung koroner</td>
       <td>
-<select>
-	<option>Positif</option>
-	<option>Negatif</option>
-	<option>Meragukan</option>
-	<option>Tidak dapat di interpretasi</option>
-</select>
-	</td>
+';
+
+$result .= "<select name=uljb>";
+//echo "<pre>";print_r($data['treadmill_layout']['uljb']); echo "</pre>";
+foreach ($data['treadmill_layout']['uljb'] as $key => $value) {
+    $result .= "<option value=$key>$value</option>";
+}
+$result .= "</select>";
+
+
+
+ $result .= '
+ </td>
     </tr>
     <tr>
       <td>Respon tekanan Darah</td>
-      <td><input type="text">
-	  </td>
+      <td>
+ ';
+
+$result .= "<select name=saran_darah>";
+//echo "<pre>";print_r($data['treadmill_layout']['uljb']); echo "</pre>";
+foreach ($data['treadmill_layout']['saran_darah'] as $key => $value) {
+    $result .= "<option value=$key>$value</option>";
+}
+$result .= "</select>";
+
+ $result .= '
+      </td>
     </tr>
     <tr>
       <td>Tingkat Kesegaran Jasmani</td>
-      <td><select>
-	<option>Rendah</option>
-	<option>Kurang</option>
-	<option>Rata - rata</option>
-	<option>Baik</option>
-    <option>Baik Sekali</option>
-</select></td>
+      <td>
+';
+
+
+$result .= "<select name=kesegaran>";
+//echo "<pre>";print_r($data['treadmill_layout']['kesegaran_jasmani']); echo "</pre>";
+foreach ($data['treadmill_layout']['kesegaran_jasmani'] as $key => $value) {
+    $result .= "<option value=$key>$value</option>";
+}
+$result .= "</select>";
+
+
+$result .='
+	</td>
     </tr>
     <tr>
       <td>Klasifikasi Fungsional</td>
-      <td><select>
-	<option>I (Normal)</option>
-	<option>II</option>
-	<option>III</option>
-</select></td>
+      <td>
+';
+
+$result .= "<select name=fungsional>";
+//echo "<pre>";print_r($data['treadmill_layout']['kesegaran_jasmani']); echo "</pre>";
+foreach ($data['treadmill_layout']['fungsional'] as $key => $value) {
+    $result .= "<option value=$key>$value</option>";
+}
+$result .= "</select>";
+
+
+$result .='
+    </td>
     </tr>
     <tr>
       <td>Kapasitas Aerobik</td>
@@ -471,9 +548,12 @@ $result .=<<< treadmill
   </tbody>
 </table>
 
+
 </div>
 
 </div>
+
+<input type=submit>
 
 <script type="text/javascript">
 
@@ -485,7 +565,4 @@ tabs.init()
 </script>
 
 </form>
-treadmill;
-
-return $result;
-}
+';
