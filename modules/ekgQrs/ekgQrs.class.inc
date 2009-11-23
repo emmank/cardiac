@@ -280,9 +280,8 @@ class ekgQrsModule extends mainModule
     }
 
     function ref_axis_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -325,7 +324,7 @@ class ekgQrsModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/ekgQrs_axis/form');
                     exit();
@@ -344,7 +343,6 @@ class ekgQrsModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/ekgQrs_axis');
 //        } else {
 //            redirect_to('/reference/ekgQrs_axis/form');
@@ -500,9 +498,8 @@ class ekgQrsModule extends mainModule
     }
 
     function ref_durasi_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -545,7 +542,7 @@ class ekgQrsModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/ekgQrs_durasi/form');
                     exit();
@@ -564,7 +561,6 @@ class ekgQrsModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/ekgQrs_durasi');
 //        } else {
 //            redirect_to('/reference/ekgQrs_durasi/form');
@@ -720,9 +716,8 @@ class ekgQrsModule extends mainModule
     }
 
     function ref_Qpatologi_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -765,7 +760,7 @@ class ekgQrsModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/ekgQrs_Qpatologi/form');
                     exit();
@@ -784,7 +779,6 @@ class ekgQrsModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/ekgQrs_Qpatologi');
 //        } else {
 //            redirect_to('/reference/ekgQrs_Qpatologi/form');
@@ -940,9 +934,8 @@ class ekgQrsModule extends mainModule
     }
 
     function ref_RlbS_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -985,7 +978,7 @@ class ekgQrsModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/ekgQrs_RlbS/form');
                     exit();
@@ -1004,7 +997,6 @@ class ekgQrsModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/ekgQrs_RlbS');
 //        } else {
 //            redirect_to('/reference/ekgQrs_RlbS/form');

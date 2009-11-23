@@ -109,9 +109,8 @@ class treadmillModule extends mainModule
     }
 
     function form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         } elseif(isset($treadmill_id) && !is_null($treadmill_id)){
             $vcache = $this->__get_treadmill_data($treadmill_id);
         } else {

@@ -110,9 +110,8 @@ class holterModule extends mainModule
     }
 
     function form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         } elseif(isset($holter_id) && !is_null($holter_id)){
             $vcache = $this->__get_holter_data($holter_id);
         } else {

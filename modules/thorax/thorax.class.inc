@@ -174,9 +174,8 @@ class thoraxModule extends mainModule
     }
 
     function ref_inspections_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -219,7 +218,7 @@ class thoraxModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/thorax_inspections/form');
                     exit();
@@ -238,7 +237,6 @@ class thoraxModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/thorax_inspections');
 //        } else {
 //            redirect_to('/reference/thorax_inspections/form');
@@ -394,9 +392,8 @@ class thoraxModule extends mainModule
     }
 
     function ref_relief_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -439,7 +436,7 @@ class thoraxModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/thorax_relief/form');
                     exit();
@@ -458,7 +455,6 @@ class thoraxModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/thorax_relief');
 //        } else {
 //            redirect_to('/reference/thorax_relief/form');

@@ -366,9 +366,8 @@ class eyeModule extends mainModule
     }
 
     function ref_inspections_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -411,7 +410,7 @@ class eyeModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/eye_inspections/form');
                     exit();
@@ -430,7 +429,6 @@ class eyeModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/eye_inspections');
 //        } else {
 //            redirect_to('/reference/eye_inspections/form');
@@ -586,9 +584,8 @@ class eyeModule extends mainModule
     }
 
     function ref_tekanan_bola_mata_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -631,7 +628,7 @@ class eyeModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/eye_tekanan_bola_mata/form');
                     exit();
@@ -650,7 +647,6 @@ class eyeModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/eye_tekanan_bola_mata');
 //        } else {
 //            redirect_to('/reference/eye_tekanan_bola_mata/form');
@@ -806,9 +802,8 @@ class eyeModule extends mainModule
     }
 
     function ref_kelopak_mata_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -851,7 +846,7 @@ class eyeModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/eye_kelopak_mata/form');
                     exit();
@@ -870,7 +865,6 @@ class eyeModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/eye_kelopak_mata');
 //        } else {
 //            redirect_to('/reference/eye_kelopak_mata/form');
@@ -1026,9 +1020,8 @@ class eyeModule extends mainModule
     }
 
     function ref_konjunctifa_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1071,7 +1064,7 @@ class eyeModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/eye_konjunctifa/form');
                     exit();
@@ -1090,7 +1083,6 @@ class eyeModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/eye_konjunctifa');
 //        } else {
 //            redirect_to('/reference/eye_konjunctifa/form');
@@ -1246,9 +1238,8 @@ class eyeModule extends mainModule
     }
 
     function ref_cornea_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1291,7 +1282,7 @@ class eyeModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/eye_cornea/form');
                     exit();
@@ -1310,7 +1301,6 @@ class eyeModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/eye_cornea');
 //        } else {
 //            redirect_to('/reference/eye_cornea/form');
@@ -1466,9 +1456,8 @@ class eyeModule extends mainModule
     }
 
     function ref_pupil_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1511,7 +1500,7 @@ class eyeModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/eye_pupil/form');
                     exit();
@@ -1530,7 +1519,6 @@ class eyeModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/eye_pupil');
 //        } else {
 //            redirect_to('/reference/eye_pupil/form');

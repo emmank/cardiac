@@ -270,9 +270,8 @@ class mouthModule extends mainModule
     }
 
     function ref_inspections_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -315,7 +314,7 @@ class mouthModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/mouth_inspections/form');
                     exit();
@@ -334,7 +333,6 @@ class mouthModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/mouth_inspections');
 //        } else {
 //            redirect_to('/reference/mouth_inspections/form');
@@ -490,9 +488,8 @@ class mouthModule extends mainModule
     }
 
     function ref_lips_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -535,7 +532,7 @@ class mouthModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/mouth_lips/form');
                     exit();
@@ -554,7 +551,6 @@ class mouthModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/mouth_lips');
 //        } else {
 //            redirect_to('/reference/mouth_lips/form');
@@ -710,9 +706,8 @@ class mouthModule extends mainModule
     }
 
     function ref_gums_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -755,7 +750,7 @@ class mouthModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/mouth_gums/form');
                     exit();
@@ -774,7 +769,6 @@ class mouthModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/mouth_gums');
 //        } else {
 //            redirect_to('/reference/mouth_gums/form');
@@ -930,9 +924,8 @@ class mouthModule extends mainModule
     }
 
     function ref_tongue_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -975,7 +968,7 @@ class mouthModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/mouth_tongue/form');
                     exit();
@@ -994,7 +987,6 @@ class mouthModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/mouth_tongue');
 //        } else {
 //            redirect_to('/reference/mouth_tongue/form');

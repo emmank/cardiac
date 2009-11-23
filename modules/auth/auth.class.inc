@@ -170,9 +170,8 @@ class authModule extends mainModule
     }
 
     function login_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
         $form['login'] = array(
             '#type' => 'fieldset',
@@ -267,12 +266,12 @@ class authModule extends mainModule
 //                __write_registry();
                 redirect_to('/');
             } else {
-                $strvar = array("\nerror=>" . __t("Your passcode doesn't match !"));
+                $strvar = array("error" => __t("Your passcode doesn't match !"));
                 $this->__write_custom_cache($strvar, 1);
                 redirect_to('/login');
             }
         } else {
-            $strvar = array("\nerror=>" . __t('No data available, you unauthorized !'));
+            $strvar = array("error" => __t('No data available, you unauthorized !'));
             $this->__write_custom_cache($strvar, 1);
             redirect_to('/login');
         }

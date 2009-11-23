@@ -274,9 +274,8 @@ class threadKesimpulanSaranModule extends mainModule
     }
 
     function ref_Ulib_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -320,7 +319,7 @@ class threadKesimpulanSaranModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/threadKesimpulanSaran_Ulib/form');
                     exit();
@@ -339,7 +338,6 @@ class threadKesimpulanSaranModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/threadKesimpulanSaran_Ulib');
 //        } else {
 //            redirect_to('/reference/threadKesimpulanSaran_type/form');
@@ -496,9 +494,8 @@ class threadKesimpulanSaranModule extends mainModule
     }
 
     function ref_tekananDarah_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -542,7 +539,7 @@ class threadKesimpulanSaranModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/threadKesimpulanSaran_tekananDarah/form');
                     exit();
@@ -561,7 +558,6 @@ class threadKesimpulanSaranModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/threadKesimpulanSaran_tekananDarah');
 //        } else {
 //            redirect_to('/reference/threadKesimpulanSaran_tekananDarah/form');
@@ -718,9 +714,8 @@ class threadKesimpulanSaranModule extends mainModule
     }
 
     function ref_kesegaran_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -763,7 +758,7 @@ class threadKesimpulanSaranModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/threadKesimpulanSaran_kesegaran/form');
                     exit();
@@ -782,7 +777,6 @@ class threadKesimpulanSaranModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/threadKesimpulanSaran_kesegaran');
 //        } else {
 //            redirect_to('/reference/threadKesimpulanSaran_kesegaran/form');
@@ -939,9 +933,8 @@ class threadKesimpulanSaranModule extends mainModule
     }
 
     function ref_fungsional_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -984,7 +977,7 @@ class threadKesimpulanSaranModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/threadKesimpulanSaran_fungsional/form');
                     exit();
@@ -1003,7 +996,6 @@ class threadKesimpulanSaranModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/threadKesimpulanSaran_fungsional');
 //        } else {
 //            redirect_to('/reference/threadKesimpulanSaran_fungsional/form');

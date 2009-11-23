@@ -171,9 +171,8 @@ class echocardiographyModule extends mainModule
     }
 
     function form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         } elseif(isset($vascular_id) && !is_null($vascular_id)){
             $vcache = $this->__get_vascular_data($vascular_id);
         } else {

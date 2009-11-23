@@ -60,6 +60,35 @@ class dbset
 	return $sql;
 	}
 
+        function createTable($table, $elements, $primary=NULL, $tabletype=NULL){
+            $sql = 'CREATE TABLE ' . $this->getTblName($table) . ' (';
+            foreach($elements as $key => $value){
+                if(isset($koma)){
+                    $sql .= ', ';
+                }
+                $sql .= $key . ' ' . $value;
+                $koma = 0;
+            } unset($koma);
+            if(!is_null($primary)){
+                $sql .= ', PRIMARY KEY (';
+                if(is_array($primary)){
+                    foreach($primary as $key => $value){
+                        if(isset($koma)){$sql .= ', ';}
+                        $sql .= $value;
+                        $koma = 0;
+                    } unset($koma);
+                } else {
+                    $sql .= $primary;
+                }
+                $sql .= ')';
+            }
+            if(!is_null($tabletype)){
+                $sql .= ' ' . $tabletype;
+            }
+            $sql .= ')';
+            return $sql;
+        }
+
 	function setDelete($table,$where=NULL){
 	$sql = 'DELETE FROM '.$this->getTblName($table);
 		if(isset($where) && !is_null($where) && is_array($where)){$sql .= $this->getWhere($where);}

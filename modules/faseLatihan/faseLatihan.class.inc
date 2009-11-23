@@ -327,9 +327,8 @@ class faseLatihanModule extends mainModule
     }
 
     function ref_protokol_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -372,7 +371,7 @@ class faseLatihanModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/faseLatihan_protokol/form');
                     exit();
@@ -391,7 +390,6 @@ class faseLatihanModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/faseLatihan_protokol');
 //        } else {
 //            redirect_to('/reference/faseLatihan_protokol/form');
@@ -548,9 +546,8 @@ class faseLatihanModule extends mainModule
     }
 
     function ref_konfig_rekaman_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -593,7 +590,7 @@ class faseLatihanModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/faseLatihan_konfig_rekaman/form');
                     exit();
@@ -612,7 +609,6 @@ class faseLatihanModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/faseLatihan_konfig_rekaman');
 //        } else {
 //            redirect_to('/reference/faseLatihan_konfig_rekaman/form');
@@ -769,9 +765,8 @@ class faseLatihanModule extends mainModule
     }
 
     function ref_perubahan_gelombang_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -814,7 +809,7 @@ class faseLatihanModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/faseLatihan_perubahan_gelombang/form');
                     exit();
@@ -833,7 +828,6 @@ class faseLatihanModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/faseLatihan_perubahan_gelombang');
 //        } else {
 //            redirect_to('/reference/faseLatihan_perubahan_gelombang/form');
@@ -990,9 +984,8 @@ class faseLatihanModule extends mainModule
     }
 
     function ref_dihentikan_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1035,7 +1028,7 @@ class faseLatihanModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/faseLatihan_dihentikan/form');
                     exit();
@@ -1054,7 +1047,6 @@ class faseLatihanModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/faseLatihan_dihentikan');
 //        } else {
 //            redirect_to('/reference/faseLatihan_dihentikan/form');
@@ -1211,9 +1203,8 @@ class faseLatihanModule extends mainModule
     }
 
     function ref_respon_jantung_form(){
-        if(is_file($this->config->fcache)){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
         }
 //        echo '<pre>'; print_r($vcache); echo '</pre>';
         $form['group'] = array(
@@ -1256,7 +1247,7 @@ class faseLatihanModule extends mainModule
             foreach($dump as $key => $value){
                 if($value == ''){
                     $this->__write_custom_cache(
-                        array('error=>' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
+                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                     );
                     redirect_to('/reference/faseLatihan_respon_jantung/form');
                     exit();
@@ -1275,7 +1266,6 @@ class faseLatihanModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             unset($thevalue);
-            unlink($this->config->fcache);
             redirect_to('/reference/faseLatihan_respon_jantung');
 //        } else {
 //            redirect_to('/reference/faseLatihan_respon_jantung/form');
