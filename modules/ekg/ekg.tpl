@@ -91,13 +91,25 @@ foreach($data as $key => $value){
                     $result .= '<tr valign="top">' . "\n";
                 }
 //                $result .= '<td>' .ucwords( str_replace("_", " ", $lv['#title'])) . '</td>';
-                $result .= '<td align="right">' . $lv['#title'] . '</td>';
-                $result .= '<td>';
+                if(preg_match('/qrs_/',$yk)){
+
+                        if (!isset($qrs)){
+                            $result .= '<td rowspan="4" align="right">QRS Complex :</td>';
+                            $qrs = '1';
+                        }
+                        $result .= '<td align="right">' . $lv['#title'] . '</td>';
+                        $result .= '<td>';
+                } else {
+                        $result .= '<td align="right">' . $lv['#title'] . '</td>';
+                        $result .= '<td colspan="2">';
+                }
+//                $result .= '<td align="right">' . $lv['#title'] . '</td>';
+//                $result .= '<td>';
 //                $lv['#value'] = explode('|', $lv['#value']);
 //                           echo '<pre>'; print_r($lv); echo '</pre>';
                 if($lv['#type'] == 'select'){
 //                    if(preg_match('/qrs_/',$yk)){
-//                        echo "1111 \n";
+//                        $result .= 'QRS Complex</td>';
 //                    } else {
 //                        echo "tidak dapat \n";
 //                    }
@@ -205,13 +217,14 @@ foreach($data as $key => $value){
                 }
                 $result .= '</td>' . "\n";
                 //$cnt++;
+
                 if($cnt > 1){
                     $cnt = 0;
                     $result .= '</tr>' . "\n";
                 }
             }
         }
-    } unset($cnt);
+    } unset($cnt,$qrs);
     $result .= '</table>' . "\n";
     $result .= '</div>' . "\n";
 
