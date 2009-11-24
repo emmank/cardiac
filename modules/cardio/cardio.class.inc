@@ -97,7 +97,7 @@ class cardioModule extends mainModule
             'path' => '/user/cardio_anak/view',
             'exec' => 'anak_view',
             'weight' => 5,
-            'user_required' => 'kardio anak'
+            'user_required' => 'users'
         );
         $items['cardio_dewasa_view'] = array(
             'title' => __t('cardio dewasa'),
@@ -105,7 +105,7 @@ class cardioModule extends mainModule
             'path' => '/user/cardio_dewasa/view',
             'exec' => 'dewasa_view',
             'weight' => '0',
-            'user_required' => 'kardio dewasa'
+            'user_required' => 'users'
         );
         $items['cardio_anak_detail'] = array(
             'title' => __t('detail cardio anak'),
@@ -113,7 +113,7 @@ class cardioModule extends mainModule
             'path' => '/user/cardio_anak/detail_form',
             'exec' => 'anak_detail_form',
             'weight' => '0',
-            'user_required' => 'kardio anak'
+            'user_required' => 'users'
         );
         $items['cardio_dewasa_detail'] = array(
             'title' => __t('detail cardio dewasa'),
@@ -121,7 +121,7 @@ class cardioModule extends mainModule
             'path' => '/user/cardio_dewasa/detail_form',
             'exec' => 'dewasa_detail_form',
             'weight' => '0',
-            'user_required' => 'kardio dewasa'
+            'user_required' => 'users'
         );
         $items['cardio_dewasa_search'] = array(
             'title' => __t('search cardio dewasa'),
@@ -129,7 +129,7 @@ class cardioModule extends mainModule
             'path' => '/user/cardio_dewasa/search',
             'exec' => 'dewasa_search',
             'weight' => '0',
-            'user_required' => 'kardio dewasa'
+            'user_required' => 'users'
         );
         $items['cardio_anak_search'] = array(
             'title' => __t('search cardio anak'),
@@ -137,7 +137,7 @@ class cardioModule extends mainModule
             'path' => '/user/cardio_anak/search',
             'exec' => 'anak_search',
             'weight' => '0',
-            'user_required' => 'kardio anak'
+            'user_required' => 'users'
         );
         $items['cardio_dewasa_search_submit'] = array(
             'title' => __t('submitted search cardio dewasa'),
@@ -145,7 +145,7 @@ class cardioModule extends mainModule
             'path' => '/user/cardio_dewasa/search_submit',
             'exec' => 'dewasa_search_submit',
             'weight' => '0',
-            'user_required' => 'kardio dewasa'
+            'user_required' => 'users'
         );
         $items['cardio_anak_search_submit'] = array(
             'title' => __t('submitted search cardio anak'),
@@ -153,7 +153,7 @@ class cardioModule extends mainModule
             'path' => '/user/cardio_anak/search_submit',
             'exec' => 'anak_search_submit',
             'weight' => '0',
-            'user_required' => 'kardio anak'
+            'user_required' => 'users'
         );
         return $items;
     }

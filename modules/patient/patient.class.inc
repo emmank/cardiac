@@ -176,6 +176,14 @@ class patientModule extends mainModule
             'weight' => '0',
             'user_required' => 'patient'
         );
+        $items['patient_medical_record'] = array(
+            'title' => __t('medical record'),
+            'description' => __t("Medical records of patient"),
+            'path' => '/user/patient/medical_record',
+            'exec' => 'medical_record',
+            'weight' => '0',
+            'user_required' => 'patient'
+        );
         return $items;
     }
 
@@ -503,7 +511,7 @@ class patientModule extends mainModule
             if(!is_null($readonly)){
                 $form['patient']['#addmenu'] = array(
                     'title' => __t('medical record'),
-                    'action' => '/user/patient/medical_record',
+                    'action' => '/user/patient/medical_record/' . $vcache['id'],
                     'position' => 'top',
                     'class' => 'button'
                 );
@@ -1234,6 +1242,114 @@ class patientModule extends mainModule
         $this->query->close();
         $this->__flush_caches();
         redirect_to('/node/patient/showme/' . $fqueue);
+    }
+
+    function medical_record(){
+        $result = array();
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($dump[3])){
+            $id = trim($dump[3]);
+        } elseif(isset($_POST['id']) && trim($_POST['id']) != ''){
+            $id = $_POST['id'];
+        } else {
+            redirect('/'); exit();
+        }
+        $sql = $this->query->getSelect(
+            array('nama'),
+            array('patients'),
+            array(
+                array('&&', "id=" . $id)
+            )
+        );
+        $this->query->connect();
+        $patient = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $result['type'] = 'table';
+        $result['title'] = __t('Medical Record Pasien a.n. ') . $patient->fields['nama'];
+        $result['description'] = __t('Medical record pasien atas nama ') . $patient->fields['nama'];
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'bagian',
+                'caption' => __t('bagian'),
+                'width' => '20%',
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'pukul',
+                'caption' => __t('Tanggal'),
+                'width' => '30%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'doneby',
+                'caption' => __t('Ditangani oleh'),
+                'align' => 'left'
+            )
+        );
+
+
+        $sql = $this->query->getSelect(
+            array('id', 'bagian', 'pukul', 'doneby'),
+            array('kunjungan'),
+            array(
+                array('&&', "patients=" . $id)
+            ),
+            'pukul desc'
+        );
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $result['data'][$i]['bagian'] = __t($getit->fields['bagian']);
+                $result['data'][$i]['pukul'] = date('j-n-Y H:i:s', strtotime($getit->fields['pukul']));
+                $sql = $this->query->getSelect(
+                    array('nama'),
+                    array('stafs'),
+                    array(
+                        array('&&', "id=" . $getit->fields['doneby'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['doneby'] = $getthis->fields['nama'];
+                unset($getthis);
+                $sql = $this->query->getSelect(
+                    array(),
+                    array('bagian'),
+                    array(
+                        array('&&', "bagian=" . $getit->fields['bagian'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $sql = $this->query->getSelect(
+                    array('id'),
+                    array($getthis->fields['tableuse']),
+                    array(
+                        array('&&', "patients=" . $id),
+                        array('&&', "kunjungan=" . $getit->fields['id'])
+                    )
+                ); unset($getthis);
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['goto'] = '/user/' . $getit->fields['bagian'] . '/detail_form/' . $getthis->fields['id'];
+                unset($getthis);
+                $getit->MoveNext();
+            }
+        } unset($getit);
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
     }
 
 }
