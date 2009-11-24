@@ -1339,12 +1339,12 @@ class patientModule extends mainModule
                         array('&&', "patients=" . $id),
                         array('&&', "kunjungan=" . $getit->fields['id'])
                     )
-                ); unset($getthis);
+                );
                 $this->query->connect();
-                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $getthat = $this->query->conn->Execute($sql); unset($sql);
                 $this->query->close();
-                $result['data'][$i]['goto'] = '/user/' . $getit->fields['bagian'] . '/detail_form/' . $getthis->fields['id'];
-                unset($getthis);
+                $result['data'][$i]['goto'] = '/user/' . $getthis->fields['tableuse'] . (eregi('dewasa', $getit->fields['bagian']) ? '_dewasa' : '_anak') . '/detail_form/' . $getthat->fields['id'];
+                unset($getthis, $getthat);
                 $getit->MoveNext();
             }
         } unset($getit);
