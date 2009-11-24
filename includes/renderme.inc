@@ -157,6 +157,7 @@ function __create_items_detail($value){
     $user = __get_vars_of_active_user();
     $result = '';
     if(isset($value['title']) && $value['title'] != 'hidden'){
+//        $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
         $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
     }
     foreach($value['data'] as $key => $val){
@@ -257,7 +258,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     $result = '';
 //    echo '<pre>'; print_r($data); echo '</pre>';
     foreach($data as $key => $value){
-        $result .= '<div>';
+//        $result .= '<div>';
         if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden'){
             $result .= '<label for="'. $key .'">' . ucwords($value['#title']) . '</label>';
         }
@@ -278,7 +279,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                         if($o > 0){
                             $result .= '<label for="'. $namekey .'">&nbsp;</label>';
                         }
-                        $result .= '<div>';
+//                        $result .= '<div>';
                         $result .= '<input type="' . $value['#type'] . '" name="' . $namekey . '" value="' . $ky . '"';
     //                    echo '<pre>'; print_r($value); echo '</pre>';
                         if(in_array($ky, $value['#value'])){
@@ -299,12 +300,12 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                         }
                         $result .= '>';
                         $result .= ' ' . $vl;
-                        $result .= '</div>' . "\n";
+//                        $result .= '</div>' . "\n";
                         $o++;
                         unset($namekey);
                     }
                 }
-                $result .= '</div>' . "\n";
+//                $result .= '</div>' . "\n";
             } else {
                 $result .= '<input type="' . $value['#type'] . '" name="' . $key . '"';
                 if(isset($value['#size'])){
@@ -448,7 +449,8 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
         if(isset($value['#message'])){
             $result .= ' ' . $value['#message'];
         }
-        $result .= '</div>' . "\n";
+        $result .= '</br>' . "\n";
+//        $result .= '</div>' . "\n";
     }
     return $result;
 }
@@ -469,9 +471,13 @@ function __create_form_open($data, $name, $idform=NULL, $classform=NULL){
         $result .= ' class="' . $classform . '"';
     }
     $result .= '>' . "\n";
+    /*
+     * Title di matikan, yang dipake yang di file content.tpl
+     * 
     if(isset($data['#title']) && $data['#title'] != 'hidden'){
-        $result .= '<div>'. ucwords($data['#title']) .'</div>' . "\n";
+        $result .= '<div class="judul">'. ucwords($data['#title']) .'</div>' . "\n";
     }
+    */
     if(isset($data['#message']) && $data['#message'] != 'hidden'){
         if(is_array($data['#message'])){
             foreach($data['#message'] as $ky => $vl){

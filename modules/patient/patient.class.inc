@@ -942,9 +942,15 @@ class patientModule extends mainModule
         $result['type'] = 'table';
         $result['title'] = __t('daftar pasien yang mendaftar hari ini');
         $result['description'] = __t('antrian pasien yang mendaftar pada hari ini');
-        $result['addmenu'] = array(
+        $result['addmenu']['#add'] = array(
             'title' => __t('add patient'),
             'action' => '/node/patient/form',
+            'position' => 'top',
+            'class' => 'button'
+        );
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search patient'),
+            'action' => '/node/patient/search',
             'position' => 'top',
             'class' => 'button'
         );
