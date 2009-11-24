@@ -236,7 +236,7 @@ body {
 	width:750px;
 	margin:10px;
 	text-align:justify;
-	padding:5px 10px 5px 10px;
+	padding:20px 10px 5px 10px;
 }
 
 
@@ -293,6 +293,7 @@ body {
 
 #main-info #kolom select {
         max-width:115px;
+        width:100px;
         display:block;
         float:left;
         clear:right;

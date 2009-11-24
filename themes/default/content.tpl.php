@@ -21,10 +21,13 @@
  *  
  *  Created on Sep 6, 2009, 11:03:48 AM
  */
-//echo '<div align="left"><pre>'; print_r($content['output']); echo '</pre></div>'; exit();
+//echo '<div align="left"><pre>'; print_r($content['output']['form']['0']['user']); echo '</pre></div>';
 ?>
 <div id="header-info">
-&nbsp;
+<?php 
+echo '<div class="title">'. ucwords($content['output']['form']['0']['user']['#title']).'</div>';
+echo $content['output']['form']['0']['user']['#title'];
+?>
 </div>
 <div id="main-<?php if(isset($body_login)){?>content<?php } else {?>info<?php }?>">
 <?php if (isset($body_login)){?>
