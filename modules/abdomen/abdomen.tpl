@@ -37,7 +37,7 @@ foreach($vl['datafields'] as $yk => $lv){
             if($lv['readonly'] === true){
                 $result .= $lv['theref'][$lv['value']] . "\n";
             } else {
-                $result .= '<select name="' . $yk . '" size="' . $lv['size']. '">' . "\n";
+                $result .= '<select style="width:100px;" name="' . $yk . '" size="' . $lv['size']. '">' . "\n";
                 if(isset($lv['blankopt'])){
                     $result .= '<option value=""></option>';
                 }
