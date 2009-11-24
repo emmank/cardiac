@@ -846,6 +846,7 @@ class patientModule extends mainModule
             'title' => __t('add patient'),
             'action' => '/node/patient/form',
             'position' => 'top',
+            'class' => 'button'
         );
         $result['header'] = array(
             array(

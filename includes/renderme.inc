@@ -191,9 +191,11 @@ function __create_table($value){
             elseif(__get_group_permission($value['addmenu']['user_required']) !== FALSE){$ok = 1;}
         }
         if(isset($ok)){
-            $result .= '<div id="sticky-button">';
+//            $result .= '<div id="sticky-button">';
+            $result .= '<div id="button">';
             if(is_array($ok)){
-                $result .= '<table align="center" cellspacing="10" cellpadding="0" width="100%"><tr>';
+//                $result .= '<table align="center" cellspacing="10" cellpadding="0" <width="100%"><tr>';
+                $result .= '<table align="left" cellspacing="10" cellpadding="0" ><tr>';
                 $i = 0;
                 foreach($ok as $ky => $vl){
                     $valadd['add'] = array(
