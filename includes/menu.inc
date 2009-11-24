@@ -428,3 +428,26 @@ function get_exec_menus($path){
 //    echo '<pre>'; print_r($result); echo '</pre>'; exit();
     return $result;
 }
+
+function __get_menu_info($data){
+    global $systemquery, $configs;
+    $result = array();
+    foreach($data as $key => $value){
+        $sql = $systemquery->getSelect(
+            array(),
+            array('menus'),
+            array(
+                array('&&', "id=" . $value)
+            )
+        );
+        $systemquery->connect();
+        $getit = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        if($getit->_numOfRows > 0){
+            foreach($getit->fields as $ky => $vl){
+                $result[$ky] = $vl;
+            }
+        }
+    }
+    return $result;
+}
