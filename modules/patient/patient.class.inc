@@ -1315,19 +1315,6 @@ class patientModule extends mainModule
         if($getit->_numOfRows > 0){
             for($i=0; $i<$getit->_numOfRows; $i++){
                 $result['data'][$i]['bagian'] = __t($getit->fields['bagian']);
-                $result['data'][$i]['pukul'] = date('j-n-Y H:i:s', strtotime($getit->fields['pukul']));
-                $sql = $this->query->getSelect(
-                    array('nama'),
-                    array('stafs'),
-                    array(
-                        array('&&', "id=" . $getit->fields['doneby'])
-                    )
-                );
-                $this->query->connect();
-                $getthis = $this->query->conn->Execute($sql); unset($sql);
-                $this->query->close();
-                $result['data'][$i]['doneby'] = $getthis->fields['nama'];
-                unset($getthis);
                 $sql = $this->query->getSelect(
                     array(),
                     array('bagian'),
@@ -1339,7 +1326,7 @@ class patientModule extends mainModule
                 $getthis = $this->query->conn->Execute($sql); unset($sql);
                 $this->query->close();
                 $sql = $this->query->getSelect(
-                    array('id'),
+                    array(),
                     array($getthis->fields['tableuse']),
                     array(
                         array('&&', "patients=" . $id),
@@ -1350,7 +1337,20 @@ class patientModule extends mainModule
                 $getthat = $this->query->conn->Execute($sql); unset($sql);
                 $this->query->close();
                 $result['data'][$i]['goto'] = '/user/' . $getthis->fields['tableuse'] . (eregi('dewasa', $getit->fields['bagian']) ? '_dewasa' : '_anak') . '/detail_form/' . $getthat->fields['id'];
-                unset($getthis, $getthat);
+                unset($getthis);
+                $result['data'][$i]['pukul'] = date('j-n-Y H:i:s', strtotime($getthat->fields['inputtime']));
+                $sql = $this->query->getSelect(
+                    array('nama'),
+                    array('stafs'),
+                    array(
+                        array('&&', "id=" . $getthat->fields['inputer'])
+                    )
+                ); unset($getthat);
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['doneby'] = $getthis->fields['nama'];
+                unset($getthis);
                 $getit->MoveNext();
             }
         } unset($getit);

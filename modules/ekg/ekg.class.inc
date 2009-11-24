@@ -31,7 +31,6 @@ class ekgModule extends mainModule
     var $hidden_fields = array(
         'id', 'id_pasien', 'inputer','updated', 'inputtime','tgl'
     );
-    var $vardump;
 
     function menu(){
         $items['ekg_form'] = array(
@@ -66,13 +65,29 @@ class ekgModule extends mainModule
             'weight' => 5,
             'user_required' => 'ekg'
         );
-        $items['ekg_anak_message'] = array(
+        $items['ekg_message'] = array(
             'title' => __t('ekg message'),
             'description' => __t('get ekg message'),
-            'path' => '/user/ekg_anak/message',
+            'path' => '/user/ekg/message',
             'exec' => 'message',
             'weight' => 5,
-            'user_required' => 'kardio anak'
+            'user_required' => 'ekg'
+        );
+        $items['ekg_view'] = array(
+            'title' => __t('ekg'),
+            'description' => __t('explore ekg'),
+            'path' => '/user/ekg/view',
+            'exec' => 'view',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['ekg_detail'] = array(
+            'title' => __t('detail ekg'),
+            'description' => __t("detail ekg's patients"),
+            'path' => '/user/ekg/detail_form',
+            'exec' => 'detail_form',
+            'weight' => '0',
+            'user_required' => 'users'
         );
         return $items;
     }
@@ -80,7 +95,6 @@ class ekgModule extends mainModule
     function __get_today_lists(){
         $result = array();
         $result = $this->today_patient_lists();
-//        echo '<pre>'; print_r($result); echo '</pre>'; exit();
         if(count($result['data'])>0){
             foreach($result['data'] as $key => $value){
                 $result['data'][$key] = $value;
@@ -91,14 +105,14 @@ class ekgModule extends mainModule
 
     function __get_ekg_data($id){
         $result = array();
-        $this->query->connect();
-        $this->query->getSelect(
+        $sql = $this->query->getSelect(
             array(),
             array('ekg'),
             array(
                 array('&&', "id=" . $id)
             )
         );
+        $this->query->connect();
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($query->_numOfRows > 0){
@@ -109,33 +123,47 @@ class ekgModule extends mainModule
         return $result;
     }
 
+    function detail_form(){
+        $this->formhabit = 'readonly';
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $vcache = $this->__get_ekg_data((int)$dump[3]);
+        $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
+        $result = $this->form();
+        return $result;
+    }
+
     function form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-        } elseif(isset($ekg_id) && !is_null($ekg_id)){
-            $vcache = $this->__get_ekg_data($ekg_id);
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
-                $vcache['idkunjungan'] = $dump[3]; unset($dump);
-                $this->query->connect();
-                $sql = $this->query->getSelect(
-                    array('patients', 'inputer'),
-                    array('kunjungan'),
-                    array(
-                        array('&&', "id=" . $vcache['idkunjungan'])
-                    )
-                );
-                $query = $this->query->conn->Execute($sql); unset($sql);
-                $this->query->close();
-                $pengirim = $query->fields['inputer'];
-                $idpatients = $query->fields['patients']; unset($query);
-                $vcache['patients'] = $idpatients;
-                unset($idpatients);
-
+                if(preg_match('/^edit_/', $dump[3])){
+                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
+                    $vcache = $this->__get_ekg_data((int)$ekg_id);
+                    $this->vardump = $vcache;
+                    unset($cardio_id);
+                } else {
+                    $vcache['kunjungan'] = $dump[3]; unset($dump);
+                }
             } else {
                 redirect_to('/user/ekg/today_ekg_lists');
             } unset($dump);
+        }
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array('patients', 'inputer'),
+            array('kunjungan'),
+            array(
+                array('&&', "id=" . $vcache['kunjungan'])
+            )
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $pengirim = $query->fields['inputer'];
+        if(!isset($vcache['patients'])){
+            $vcache['patients'] = $query->fields['patients']; unset($query);
         }
         $form['ekg'] = array(
             '#type' => 'special',
@@ -144,16 +172,15 @@ class ekgModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/ekg/form_submit',
+            '#action' => '/user/ekg/' . ($this->formhabit == 'readonly' ? 'edit' . $vcache['id'] : 'form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'ekg' . DS . 'ekg.tpl',
         );
-        $form['ekg']['idkunjungan'] = array(
+        $form['ekg']['kunjungan'] = array(
             '#type' => 'hidden',
-            '#value' => isset($vcache['idkunjungan']) ? $vcache['idkunjungan'] : ''
+            '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
         );
         $thefields = $this->__get_data_fields('ekg', $this->query);
-//        echo '<pre>'; print_r($thefields); echo '</pre>';
         foreach($thefields as $value){
             if(in_array($value, $this->hidden_fields)){
                 if($value == 'id'){
@@ -261,9 +288,8 @@ class ekgModule extends mainModule
                         );
                         unset($getsender);
                     }
-//                    $this->query->close();
                 }
-                if($value != 'no_registrasi'){
+                if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
                     $form['ekg'][$value] = array(
                         '#type' => $this->config->fields_form_type[$value],
                         '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
@@ -275,15 +301,16 @@ class ekgModule extends mainModule
                         $form['ekg'][$value]['#theref'] = $this->__get_refs($value);
                     }
                 }
+                if($this->formhabit == 'readonly'){
+                    $form['ekg'][$value]['#extra'] = 'readonly="true"';
+                }
             }
         }
 
         $form['ekg']['submit'] = array(
             '#type' => 'submit',
-            '#value' => 'submit',
-            '#extra' => ' class="button"'
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
-//        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
     }
 
@@ -312,7 +339,7 @@ class ekgModule extends mainModule
             array(),
             array('kunjungan'),
             array(
-                array('&&', "id=" . $_POST['idkunjungan'])
+                array('&&', "id=" . $_POST['kunjungan'])
             )
         );
         $this->query->connect();
@@ -326,14 +353,11 @@ class ekgModule extends mainModule
         $thefields = $this->__get_data_fields('ekg', $this->query);
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
-//                $thevalue[$key] = implode('|', $theva);
                 if (is_array($value)){
                     $thevalue[$key] = implode('|', $value);
-                }else {
+                } else {
                     $thevalue[$key] = $value;
                 }
-//                
-//                echo '<pre>'; print_r($thevalue); echo '</pre>';
             }
         } unset($thefields);
         $user = $this->__get_user_info();
@@ -359,61 +383,97 @@ class ekgModule extends mainModule
         $this->query->connect();
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
-//                echo '<pre>'; print_r($thevalue); echo '</pre>';
-//                echo '<pre>'; print_r($_POST); echo '</pre>';
         unset($thevalue);
-//        $this->__loadPresentStatus('submit');
-//        $this->__loadVitalSign('submit');
-//        $this->__loadEye('submit');
-//        $this->__loadEar('submit');
-//        $this->__loadNose('submit');
-//        $this->__loadHeadFace('submit');
-//        $this->__loadNeck('submit');
-//        $this->__loadMouth('submit');
-//        $this->__loadThorax('submit');
-//        $this->__loadParu('submit');
-//        $this->__loadHearth('submit');
-//        $this->__loadAbdomen('submit');
-//        $this->__loadAnusrectum('submit');
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',
                 array(
-                    'doneby' => '1'
+                    'doneby' => $_COOKIE[$this->config->cookieid]
                 ),
                 array(
-                    array('&&', "id=" . $_POST['idkunjungan'])
+                    array('&&', "id=" . $_POST['kunjungan'])
                 )
             );
             $this->query->connect();
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/user/ekg/form');
+        redirect_to('/user/ekg/view');
     }
 
-    function __include_module($module){
-        require MODULES_DIR . DS . $module . DS . $module . '.module';
-        $this->{$module . '_config'} = ${$module . '_config'};
-        $this->{$module . '_config'}->time = $this->config->time;
-        $this->{$module . '_config'}->timelog_idle = $this->onfig->timelog_idle;
-        $this->{$module . '_config'}->fcache = $this->config->fcache;
-        $this->{$module . '_config'}->flog = $this->config->flog;
-        $funcdb = $module == 'user' || $module == 'auth' || $module == 'group' ? 'dbuser' : 'db' . $module;
-        $this->{$module . '_query'} = ${$module . '_query'};
-        $this->{$module . '_query'}->dbname = $this->{$module . '_config'}->{$funcdb}['name'];
-        $this->{$module . '_query'}->dbprefix = $this->{$module . '_config'}->{$funcdb}['prefix'];
-        $this->{$module . '_query'}->dbsuffix = $this->{$module . '_config'}->{$funcdb}['suffix'];
-        $this->{$module . '_query'}->tbprefix = $this->{$module . '_config'}->{$funcdb}['tbprefix'];
-        $this->{$module . '_query'}->tbsuffix = $this->{$module . '_config'}->{$funcdb}['tbsuffix'];
-        $this->{$module . '_query'}->hostname = $this->{$module . '_config'}->{$funcdb}['host'];
-        $this->{$module . '_query'}->username = $this->{$module . '_config'}->{$funcdb}['user'];
-        $this->{$module . '_query'}->passwd = $this->{$module . '_config'}->{$funcdb}['passwd'];
-        $this->{$module . '_query'}->conn = &ADONewConnection($this->{$module . '_config'}->rdbms);
-        $this->{$module . '_exec'} = ${$module . '_exec'};
-        $this->{$module . '_exec'}->config = $this->{$module . '_config'};
-        $this->{$module . '_exec'}->sysquery = $this->sysquery;
-        $this->{$module . '_exec'}->query = $this->{$module . '_query'};
-   }
+    function view(){
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('daftar beberapa pasien');
+        $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
+        $result['addmenu']['#add'] = array(
+            'title' => __t('add'),
+            'action' => '/user/ekg/form',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search'),
+            'action' => '/user/ekg/search',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'nama',
+                'caption' => __t('nama'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'tgl_lahir',
+                'caption' => __t('usia'),
+                'width' => '10%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'inputtime',
+                'caption' => __t('tgl periksa'),
+                'width' => '25%',
+                'align' => 'right'
+            )
+        );
+
+        $sql = $this->query->getSelect(
+            array(),
+            array('ekg'),
+            NULL,
+            'inputtime desc',
+            '0,10'
+        ); unset($where);
+        $this->query->connect();
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $sql = $this->query->getSelect(
+                    array('id', 'nama', 'tgl_lahir', 'inputtime'),
+                    array('patients'),
+                    array(
+                        array('&&', "id=" . $getit->fields['patients'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['nama'] = $getthis->fields['nama'];
+                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+                $result['data'][$i]['goto'] = '/user/ekg/detail_form/' . $getit->fields['id'];
+                $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                $getit->MoveNext();
+            }
+        }
+        return $result;
+    }
 
 }
