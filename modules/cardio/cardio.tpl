@@ -75,14 +75,19 @@ foreach($data as $key => $value){
         $result .= '<ul id="fisistabs" class="shadetabs">' . "\n";
         $ke = 1;
         foreach($value['tab_items'] as $ky => $vl){
-            $result .= '<li><a href="#" rel="fisis' . $ke . '">' . $vl['#title'] . '</a></li>' . "\n";
+            if ($ky != "space") {
+                $result .= '<li><a href="#" rel="fisis' . $ke . '">' . $vl['#title'] . '</a></li>' . "\n";
+            } else {
+                $result .= "<p></p>";
+                $ke--;
+            }
             $ke++;
         } unset($ke);
         $result .= '</ul>' . "\n";
         $result .= '<div style="border:1px solid gray; width:725px; margin-bottom: 1em; padding: 10px">' . "\n";
         $ke = 1;
         foreach($value['tab_items'] as $ky => $vl){
-            if(isset($vl['#tpl'])){
+            if(isset($vl['#tpl'])  ){
                 require_once $vl['#tpl'];
                 $ke++;
             }
