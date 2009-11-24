@@ -31,7 +31,7 @@ foreach($vl['datafields'] as $yk => $lv){
         if($cnt < 1){
             $result .= '<tr valign="top">' . "\n";
         }
-        $result .= '<td>' . $lv['title'] . '</td>';
+        $result .= '<td>' .ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
         $result .= '<td>';
         if($lv['type'] == 'select'){
             if($lv['readonly'] === true){

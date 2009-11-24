@@ -55,7 +55,7 @@ foreach($data as $key => $value){
             $result .= '<div id="kolom">' . "\n";
             $setdiv = 1;
         }
-        $result .= '<label>' . ucwords($vl['#title']) . '</label>';
+        $result .= '<label>' . ucwords (str_replace ("_"," ",$vl['#title'])) . '</label>';
         if($vl['#type'] != 'textarea'){
             $result .= '<input type="text" value="' . $vl['#value'] .'" readonly="true"> <br />' . "\n";
         } else {
