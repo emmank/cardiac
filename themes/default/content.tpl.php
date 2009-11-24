@@ -22,11 +22,12 @@
  *  Created on Sep 6, 2009, 11:03:48 AM
  */
 //echo '<div align="left"><pre>'; print_r($content['output']['form']['0']['user']); echo '</pre></div>';
+
 ?>
 <div id="header-info">
 <?php 
-echo '<div class="title">'. ucwords($content['output']['form']['0']['user']['#title']).'</div>';
-echo $content['output']['form']['0']['user']['#title'];
+//print_r($menu_info);
+echo '<div class="title">'. ucwords($menu_info['title']).'</div>'. ucfirst ($menu_info['description']);
 ?>
 </div>
 <div id="main-<?php if(isset($body_login)){?>content<?php } else {?>info<?php }?>">
