@@ -156,7 +156,23 @@ class patientModule extends mainModule
             'title' => __t('patient detail'),
             'description' => __t("Detail of patient's info"),
             'path' => '/user/patient/detail',
-            'exec' => 'detail',
+            'exec' => 'detail_form',
+            'weight' => '0',
+            'user_required' => 'patient'
+        );
+        $items['patient_update'] = array(
+            'title' => __t('patient update'),
+            'description' => __t("Updating patient's info"),
+            'path' => '/user/patient/update',
+            'exec' => 'update_form',
+            'weight' => '0',
+            'user_required' => 'patient'
+        );
+        $items['patient_update_submit'] = array(
+            'title' => __t('patient update'),
+            'description' => __t("Submitting update patient's info execution"),
+            'path' => '/user/patient/update_submit',
+            'exec' => 'update_form_submit',
             'weight' => '0',
             'user_required' => 'patient'
         );
@@ -278,7 +294,11 @@ class patientModule extends mainModule
     function __get_search_submit($teens=0){
         if(isset($_POST['data'])){
             $str = $_POST['data'];
-            $dump = $this->__get_patients_search($str);
+            if(trim($_POST['data']) != ''){
+                $dump = $this->__get_patients_search($str);
+            } else {
+                $dump = array();
+            }
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             $str = '';
@@ -369,7 +389,7 @@ class patientModule extends mainModule
         return $result;
     }
 
-    function detail(){
+    function detail_form(){
         if(isset($_POST['id'])){
             $id = $_POST['id'];
         } else {
@@ -390,11 +410,39 @@ class patientModule extends mainModule
         $this->query->close();
         if($getit->_numOfRows > 0){
             $this->__write_custom_cache($getit->fields);
-            $result = $this->__get_form(1);
+            $result = $this->__set_form(1);
         }
+//        echo '<pre>'; print_r($result); echo '</pre>'; exit();
+        return $result;
     }
 
-    function __get_form($readonly=NULL){
+    function update_form(){
+        if(isset($_POST['id'])){
+            $sql = $this->query->getSelect(
+                array(),
+                array('patients'),
+                array(
+                    array('&&', "id=" . $_POST['id'])
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $this->__write_custom_cache($getit->fields);
+                $result = $this->__set_form();
+            }
+        } else {
+            $result = $this->__set_form();
+        }
+        return $result;
+    }
+
+    function update_form_submit(){
+        $this->__set_form_submit();
+    }
+
+    function __set_form($readonly=NULL){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
         } else {
@@ -447,10 +495,19 @@ class patientModule extends mainModule
                 '#collapsible' => TRUE,
                 '#collapsed' => FALSE,
                 '#weight' => -3,
-                '#action' => '/user/patient/register_form_submit',
+                '#action' => '/user/patient/' . (!is_null($readonly) ? 'update' : 'update_submit'),
                 '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
                 '#focused_item' => 'nama'
             );
+
+            if(!is_null($readonly)){
+                $form['patient']['#addmenu'] = array(
+                    'title' => __t('medical record'),
+                    'action' => '/user/patient/medical_record',
+                    'position' => 'top',
+                    'class' => 'button'
+                );
+            }
 
             $datafields = $this->__get_data_fields('patients', $this->query);
             if(count($datafields) > 0){
@@ -460,7 +517,7 @@ class patientModule extends mainModule
                             '#type' => ($value != 'kota' && $value != 'propinsi' ? $this->formtype_fields[$value] : 'text'),
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
-                            '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
+                            '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0,
                         );
                     } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
@@ -500,36 +557,19 @@ class patientModule extends mainModule
   //                  } elseif($value == 'strnum'){
   //                      $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
-
+                    if(!is_null($readonly)){
+                        $form['patient'][$value]['#readonly'] = true;
+                    }
                 } unset($options);
 //                echo '<pre>'; print_r($vcache); echo '</pre>';
-                $form['patient']['keluhan'] = array(
-                    '#type' => 'textarea',
-                    '#value' => isset($vcache['keluhan']) ? $vcache['keluhan'] : '',
-                    '#title' => __t('keluhan'),
-                    '#error' => isset($vcache['blank']) && in_array('keluhan', $vcache['blank']) ? 1 : 0
-                );
-                $options = $this->__get_bagian_lists();
-                $form['patient']['bagian'] = array(
-                    '#type' => 'select',
-                    '#value' => isset($vcache['bagian']) ? $vcache['bagian'] : '',
-                    '#title' => __t('dirujuk ke'),
-                    '#error' => isset($vcache['blank']) && in_array('bagian', $vcache['blank']) ? 1 : 0,
-                    '#option' => $options,
-                    '#option_blank' => 1
-                ); unset($options);
-                $form['patient']['idantrian'] = array(
-                    '#type' => 'hidden',
-                    '#value' => isset($vcache['idantrian']) ? $vcache['idantrian'] : ''
-                );
                 $form['patient']['submit'] = array(
                     '#type' => 'submit',
-                    '#value' => __t('submit'),
+                    '#value' => __t((!is_null($readonly) ? 'edit' : 'submit')),
     //                '#title' => __t('&nbsp;'),
                     '#extra' => ' class="button"'
                );
             }
-//            echo '<pre>'; print_r($form); echo '</pre>';
+//            echo '<pre>'; print_r($form); echo '</pre>'; exit();
             return $form;
     }
 
@@ -741,25 +781,7 @@ class patientModule extends mainModule
 //        $this->query->conn->debug=true;
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
-        $sql = $this->query->setDelete(
-            'isearch_patients',
-            array(
-                array('&&', "id=" . $thevalue['id'])
-            )
-        );
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        $sql = $this->query->saveData(
-            'isearch_patients',
-            array(
-                'id' => $thevalue['id'],
-                'phrase' => implode(' ', $thevalue)
-            )
-        );
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        $this->__update_isearch($thevalue);
         unset($thevalue);
         $this->query->connect();
         $sql = $this->query->getSelect(
@@ -822,6 +844,54 @@ class patientModule extends mainModule
         redirect_to('/user/patient/register');
     }
 
+    function __set_form_submit(){
+        $dump = $this->__write_form_cache();
+        $thevalue = array();
+        foreach($dump as $key => $value){
+            if($key == 'nama' || $key == 'alamat' || $key == 'kota'){
+                if(trim($value) == ''){
+                    $this->__write_custom_cache(array('error' => __t('Kolom nama, alamat, dan kota tidak boleh kosong !')), 1);
+                    redirect_to('/user/patient/update'); exit;
+                }
+            } elseif ($key == 'date'){
+                $tgldump = explode('-', trim($value));
+                foreach($tgldump as $ky => $vl){
+                    if(trim($vl) == ''){
+                        $this->__write_custom_cache(array('error' => __t('Kolom tanggal tidak boleh kosong !')), 1);
+                        redirect_to('/user/patient/update'); exit;
+                    } elseif(!ctype_digit($vl)){
+                        $this->__write_custom_cache(array('error' => __t('Kolom tanggal harus numeric !')), 1);
+                        redirect_to('/user/patient/update'); exit;
+                    }
+                }
+                if(checkdate((int)$tgldump[1], (int)$tgldump[2], (int)$tgldump[0]) === false){
+                    $this->__write_custom_cache(array('error' => __t('Format tanggal salah !')), 1);
+                    redirect_to('/user/patient/update'); exit;
+                } unset($tgldump);
+            }
+            if($key != 'submit' && $key != 'blank' && $key != 'id'){
+                $thevalue[$key] = $value;
+            }
+        }
+        $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
+        $sql = $this->query->updateData(
+            'patients',
+            $thevalue,
+            array(
+                array('&&', "id=" . $dump['id'])
+            )
+        );
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $thevalue['id'] = $dump['id'];
+        $this->__update_isearch($thevalue);
+        unset($thevalue);
+        $this->__flush_caches();
+        redirect_to('/user/patient/detail/' . $dump['id']);
+    }
+
     function __clean_queue(){
         $getday = $this->config->time - (86400 * $this->config->limitcacheindays);
         $sql = $this->query->setDelete(
@@ -834,6 +904,28 @@ class patientModule extends mainModule
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         unset($getday);
+    }
+
+    function __update_isearch($thevalue){
+        $sql = $this->query->setDelete(
+            'isearch_patients',
+            array(
+                array('&&', "id=" . $thevalue['id'])
+            )
+        );
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $sql = $this->query->saveData(
+            'isearch_patients',
+            array(
+                'id' => $thevalue['id'],
+                'phrase' => implode(' ', $thevalue)
+            )
+        );
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
     }
 
     function view(){
@@ -1143,6 +1235,5 @@ class patientModule extends mainModule
         $this->__flush_caches();
         redirect_to('/node/patient/showme/' . $fqueue);
     }
-
 
 }
