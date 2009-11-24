@@ -34,7 +34,8 @@ function rendering_page(){
     $path = get_path_array();
 //    get_content($path);
     $exec_menus = get_exec_menus($path);
-//    echo '<pre>'; print_r($path); echo '</pre>'; exit();
+    $menu_info = __get_menu_info($exec_menus);
+//    echo '<pre>'; print_r($menu_info); echo '</pre>'; exit();
     $content['exec'] = __get_modul_exec($exec_menus);
     $content['output'] = exec_module_function($content['exec']);
     $theme = get_theme();

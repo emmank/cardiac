@@ -67,8 +67,72 @@ function __create_form_special($data){
     return $result;
 }
 
-function __create_items_detail($value){
-    global $forminput, $formtextarea, $formselect, $systemquery, $configs;
+function __create_add_menu($data){
+    $user = __get_vars_of_active_user();
+    $result = '';
+    foreach($data as $ky => $vl){
+        if(eregi('#', $ky)){
+            if(!isset($vl['user_required'])){
+                if(!isset($ok)){$ok = array();}
+                $ok[$ky] = 1;
+            } elseif($vl['user_required'] == $user['groups'] || $user['groups'] == 'admin'){
+                if(!isset($ok)){$ok = array();}
+                $ok[$ky] = 1;
+            } elseif(__get_group_permission($vl['user_required']) !== FALSE){
+                if(!isset($ok)){$ok = array();}
+                $ok[$ky] = 1;
+            }
+        }
+    }
+    if(!isset($ok)){
+        if(!isset($data['user_required'])){$ok = 1;}
+        elseif($data['user_required'] == $user['groups'] || $user['groups'] == 'admin'){$ok = 1;}
+        elseif(__get_group_permission($data['user_required']) !== FALSE){$ok = 1;}
+    }
+    if(isset($ok)){
+//            $result .= '<div id="sticky-button">';
+        $result .= '<div id="button">';
+        if(is_array($ok)){
+//                $result .= '<table align="center" cellspacing="10" cellpadding="0" <width="100%"><tr>';
+            $result .= '<table align="left" cellspacing="10" cellpadding="0" ><tr>';
+            $i = 0;
+            foreach($ok as $ky => $vl){
+                $valadd['add'] = array(
+                    '#type' => 'fieldset',
+                    '#title' => 'hidden',
+                    '#action' => $data[$ky]['action'],
+                    'submit' => array(
+                        '#type' => 'submit',
+                        '#value' => $data[$ky]['title'],
+                        '#class' => 'button'
+                    )
+                );
+                $result .= '<td align="' . ($i < 1 ? 'left' : 'right') . '">';
+                $result .= __create_form($valadd);
+                $result .= '</td>';
+                $i++;
+            }
+            $result .= '</tr></table>';
+        } else {
+            $valadd['add'] = array(
+                '#type' => 'fieldset',
+                '#title' => 'hidden',
+                '#action' => $data['action'],
+                'submit' => array(
+                    '#type' => 'submit',
+                    '#value' => $data['title'],
+                    '#class' => 'button'
+                )
+            );
+            $result .= __create_form($valadd);
+        } unset($ok, $valadd);
+        $result .= '</div>';
+    }
+    return $result;
+}
+
+function __get_vars_of_active_user(){
+    global $systemquery, $configs;
     $sql = $systemquery->getSelect(
         array(),
         array($configs->auth_use_table[0]),
@@ -85,8 +149,15 @@ function __create_items_detail($value){
             $user[$key] = $val;
         }
     } unset($getit);
+    return $user;
+}
+
+function __create_items_detail($value){
+    global $forminput, $formtextarea, $formselect;
+    $user = __get_vars_of_active_user();
     $result = '';
     if(isset($value['title']) && $value['title'] != 'hidden'){
+//        $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
         $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
     }
     foreach($value['data'] as $key => $val){
@@ -152,81 +223,10 @@ function __create_items_detail($value){
 }
 
 function __create_table($value){
-    global $systemquery, $configs;
-    $sql = $systemquery->getSelect(
-        array(),
-        array($configs->auth_use_table[0]),
-        array(
-            array('&&', $configs->auth_use_table[3] . "=" . $_COOKIE[$configs->cookiesession])
-        )
-    );
-    $systemquery->connect();
-    $getit = $systemquery->conn->Execute($sql); unset($sql);
-    $systemquery->close();
-    $user = array();
-    if($getit->_numOfRows > 0){
-        foreach($getit->fields as $key=>$val){
-            $user[$key] = $val;
-        }
-    } unset($getit);
+    $user = __get_vars_of_active_user();
     $result = '';
     if(isset($value['addmenu'])){
-        foreach($value['addmenu'] as $ky => $vl){
-            if(eregi('#', $ky)){
-                if(!isset($vl['user_required'])){
-                    if(!isset($ok)){$ok = array();}
-                    $ok[$ky] = 1;
-                } elseif($l['user_required'] == $user['groups'] || $user['groups'] == 'admin'){
-                    if(!isset($ok)){$ok = array();}
-                    $ok[$ky] = 1;
-                } elseif(__get_group_permission($value['addmenu']['user_required']) !== FALSE){
-                    if(!isset($ok)){$ok = array();}
-                    $ok[$ky] = 1;
-                }
-            }
-        }
-        if(!isset($ok)){
-            if(!isset($value['addmenu']['user_required'])){$ok = 1;}
-            elseif($value['addmenu']['user_required'] == $user['groups'] || $user['groups'] == 'admin'){$ok = 1;}
-            elseif(__get_group_permission($value['addmenu']['user_required']) !== FALSE){$ok = 1;}
-        }
-        if(isset($ok)){
-            $result .= '<div id="sticky-button">';
-            if(is_array($ok)){
-                $result .= '<table align="center" cellspacing="10" cellpadding="0" width="100%"><tr>';
-                $i = 0;
-                foreach($ok as $ky => $vl){
-                    $valadd['add'] = array(
-                        '#type' => 'fieldset',
-                        '#title' => 'hidden',
-                        '#action' => $value['addmenu'][$ky]['action'],
-                        'submit' => array(
-                            '#type' => 'submit',
-                            '#value' => $value['addmenu'][$ky]['title'],
-                            '#class' => 'button'
-                        )
-                    );
-                    $result .= '<td align="' . ($i < 1 ? 'left' : 'right') . '">';
-                    $result .= __create_form($valadd);
-                    $result .= '</td>';
-                    $i++;
-                }
-                $result .= '</table></tr>';
-            } else {
-                $valadd['add'] = array(
-                    '#type' => 'fieldset',
-                    '#title' => 'hidden',
-                    '#action' => $value['addmenu']['action'],
-                    'submit' => array(
-                        '#type' => 'submit',
-                        '#value' => $value['addmenu']['title'],
-                        '#class' => 'button'
-                    )
-                );
-                $result .= __create_form($valadd);
-            } unset($ok);
-            $result .= '</div>';
-        }
+        $result .= __create_add_menu($value['addmenu']);
     }
     $result .= "<!--div style=\"font-wieght:bold;font-size:1em\">" . strtoupper($value['title']) . "</div-->\n";
     $result .= '<div>' . strtoupper($value['title']) . '</div>' . "\n";
@@ -258,44 +258,54 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     $result = '';
 //    echo '<pre>'; print_r($data); echo '</pre>';
     foreach($data as $key => $value){
-        $result .= '<div>';
+//        $result .= '<div>';
         if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden'){
             $result .= '<label for="'. $key .'">' . ucwords($value['#title']) . '</label>';
         }
         if(in_array($value['#type'], $forminput)){
             if($value['#type'] == 'checkbox' || $value['#type'] == 'radio'){
                 $result .= '<div>' . "\n"; $o = 0;
-                foreach($value['#option'] as $ky => $vl){
-                    $namekey = $value['#type'] == 'checkbox' ? $key . '[' . $o . ']' : $key;
-                    if($o > 0){
-                        $result .= '<label for="'. $namekey .'">&nbsp;</label>';
+                if(isset($value['#readonly']) && $value['readonly'] !== FALSE){
+                    $dumpit = array();
+                    $value['#value'] = explode(',', $value['#value']);
+                    foreach($value['#value'] as $ky => $vl){
+                        $dumpit[] = $vl;
                     }
-                    $result .= '<div>';
-                    $result .= '<input type="' . $value['#type'] . '" name="' . $namekey . '" value="' . $ky . '"';
-//                    echo '<pre>'; print_r($value); echo '</pre>';
-                    if(in_array($ky, $value['#value'])){
-                        $result .= ' checked="true"';
-                        echo "test";
+                    $result .= implode(', ', $dumpit) . "\n";
+                    unset($dumpit);
+                } else {
+                    foreach($value['#option'] as $ky => $vl){
+                        $namekey = $value['#type'] == 'checkbox' ? $key . '[' . $o . ']' : $key;
+                        if($o > 0){
+                            $result .= '<label for="'. $namekey .'">&nbsp;</label>';
+                        }
+//                        $result .= '<div>';
+                        $result .= '<input type="' . $value['#type'] . '" name="' . $namekey . '" value="' . $ky . '"';
+    //                    echo '<pre>'; print_r($value); echo '</pre>';
+                        if(in_array($ky, $value['#value'])){
+                            $result .= ' checked="true"';
+                            echo "test";
+                        }
+                        if(isset($value['#style'])){
+                            $result .= ' style="' . $value['#style'] . '"';
+                        }
+                        if(isset($value['#extra'])){
+                            $result .= ' ' . $value['#extra'];
+                        }
+                        if(isset($iditem) && !is_null($iditem)){
+                            $result .= ' id="' . $iditem . '"';
+                        }
+                        if(isset($classitem) && !is_null($classitem)){
+                            $result .= ' class="' . $classitem . '"';
+                        }
+                        $result .= '>';
+                        $result .= ' ' . $vl;
+//                        $result .= '</div>' . "\n";
+                        $o++;
+                        unset($namekey);
                     }
-                    if(isset($value['#style'])){
-                        $result .= ' style="' . $value['#style'] . '"';
-                    }
-                    if(isset($value['#extra'])){
-                        $result .= ' ' . $value['#extra'];
-                    }
-                    if(isset($iditem) && !is_null($iditem)){
-                        $result .= ' id="' . $iditem . '"';
-                    }
-                    if(isset($classitem) && !is_null($classitem)){
-                        $result .= ' class="' . $classitem . '"';
-                    }
-                    $result .= '>';
-                    $result .= ' ' . $vl;
-                    $result .= '</div>' . "\n";
-                    $o++;
-                    unset($namekey);
                 }
-                $result .= '</div>' . "\n";
+//                $result .= '</div>' . "\n";
             } else {
                 $result .= '<input type="' . $value['#type'] . '" name="' . $key . '"';
                 if(isset($value['#size'])){
@@ -306,6 +316,9 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                 }
                 if(isset($value['#style'])){
                     $result .= ' style="' . $value['#style'] . '"';
+                }
+                if(isset($value['#readonly']) && $value['#readonly'] !== FALSE){
+                    $result .= ' readonly="' . $value['#readonly'] . '"';
                 }
                 if(isset($value['#extra'])){
                     $result .= ' ' . $value['#extra'];
@@ -326,6 +339,9 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
             if(isset($value['#style'])){
                 $result .= ' style="' . $value['#style'] . '"';
             }
+            if(isset($value['#readonly']) && $value['#readonly'] !== FALSE){
+                $result .= ' readonly="' . $value['#readonly'] . '"';
+            }
             if(isset($value['#extra'])){
                 $result .= ' ' . $value['#extra'];
             }
@@ -341,58 +357,66 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
             }
             $result .= '</textarea>' . "\n";
         } elseif(in_array($value['#type'], $formselect)){
-            $result .= '<select name="' . $key . '" size="' . (isset($value['#size']) ? $value['#size'] : 1) . '"';
-            if(isset($value['#style'])){
-                $result .= ' style="' . $value['#style'] . '"';
-            }
-            if(isset($value['#extra'])){
-                $result .= ' ' . $value['#extra'];
-            }
-            if(isset($iditem) && !is_null($iditem)){
-                $result .= ' id="' . $iditem . '"';
-            }
-            if(isset($classitem) && !is_null($classitem)){
-                $result .= ' class="' . $classitem . '"';
-            }
-            $result .= '>';
-            if(isset($value['#option_blank']) && $value['#option_blank'] == '1'){
-                $result .= '<option value=""></option>' . "\n";
-            }
-            foreach($value['#option'] as $yk => $lv){
-                $result .= '<option value="' . $yk . '"';
-                if($yk == $value['#value']){
-                    $result .= ' selected';
+            if(isset($value['#readonly']) && $value['#readonly'] !== FALSE){
+                $result .= $value['#option'][$value['#value']] . "\n";
+            } else {
+                $result .= '<select name="' . $key . '" size="' . (isset($value['#size']) ? $value['#size'] : 1) . '"';
+                if(isset($value['#style'])){
+                    $result .= ' style="' . $value['#style'] . '"';
                 }
-                $result .= '>' . $lv . '</option>';
+                if(isset($value['#extra'])){
+                    $result .= ' ' . $value['#extra'];
+                }
+                if(isset($iditem) && !is_null($iditem)){
+                    $result .= ' id="' . $iditem . '"';
+                }
+                if(isset($classitem) && !is_null($classitem)){
+                    $result .= ' class="' . $classitem . '"';
+                }
+                $result .= '>';
+                if(isset($value['#option_blank']) && $value['#option_blank'] == '1'){
+                    $result .= '<option value=""></option>' . "\n";
+                }
+                foreach($value['#option'] as $yk => $lv){
+                    $result .= '<option value="' . $yk . '"';
+                    if($yk == $value['#value']){
+                        $result .= ' selected';
+                    }
+                    $result .= '>' . $lv . '</option>';
+                }
+                $result .= '</select>';
             }
-            $result .= '</select>';
         } elseif($value['#type'] == 'date'){
             $value['#value'] = $value['#value'] == '' ? array('1970', '01', '01') : explode('-', $value['#value']);
             krsort($value['#value']);
             foreach($value['#value'] as $kk => $vv){
                 if($kk == 1){
-                    $result .= '<select name="' . $key . '[' . $kk . ']" size="1"';
-                    if(isset($value['#style'])){
-                        $result .= ' style="' . $value['#style'] . '"';
-                    }
-                    if(isset($value['#extra'])){
-                        $result .= ' ' . $value['#extra'];
-                    }
-                    if(isset($iditem) && !is_null($iditem)){
-                        $result .= ' id="' . $iditem . '"';
-                    }
-                    if(isset($classitem) && !is_null($classitem)){
-                        $result .= ' class="' . $classitem . '"';
-                    }
-                    $result .= '>';
-                    foreach($value['#option'] as $yk => $lv){
-                        $result .= '<option value="' . $yk . '"';
-                        if($yk == $vv){
-                            $result .= ' selected';
+                    if(isset($value['#readonly']) && $value['#readonly'] !== FALSE){
+                        $result .= ucwords($value['#option'][(int)$vv]) . "\n";
+                    } else {
+                        $result .= '<select name="' . $key . '[' . $kk . ']" size="1"';
+                        if(isset($value['#style'])){
+                            $result .= ' style="' . $value['#style'] . '"';
                         }
-                        $result .= '>' . ucwords($lv) . '</option>';
+                        if(isset($value['#extra'])){
+                            $result .= ' ' . $value['#extra'];
+                        }
+                        if(isset($iditem) && !is_null($iditem)){
+                            $result .= ' id="' . $iditem . '"';
+                        }
+                        if(isset($classitem) && !is_null($classitem)){
+                            $result .= ' class="' . $classitem . '"';
+                        }
+                        $result .= '>';
+                        foreach($value['#option'] as $yk => $lv){
+                            $result .= '<option value="' . $yk . '"';
+                            if($yk == (int)$vv){
+                                $result .= ' selected';
+                            }
+                            $result .= '>' . ucwords($lv) . '</option>';
+                        }
+                        $result .= '</select>' . "\n";
                     }
-                    $result .= '</select>' . "\n";
                 } else {
                     $result .= '<input type="text" name="' . $key . '[' . $kk . ']" maxlength="' . ($kk > 0 ? 2 : 4) . '" size="' . ($kk > 0 ? 2 : 4) . '"';
                     if(isset($value['#value'])){
@@ -400,6 +424,9 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                     }
                     if(isset($value['#style'])){
                         $result .= ' style="' . $value['#style'] . '"';
+                    }
+                    if(isset($value['#readonly']) && $value['#readonly'] !== FALSE){
+                        $result .= ' readonly="' . $value['#readonly'] . '"';
                     }
                     if(isset($value['#extra'])){
                         $result .= ' ' . $value['#extra'];
@@ -422,7 +449,8 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
         if(isset($value['#message'])){
             $result .= ' ' . $value['#message'];
         }
-        $result .= '</div>' . "\n";
+        $result .= '</br>' . "\n";
+//        $result .= '</div>' . "\n";
     }
     return $result;
 }
@@ -443,9 +471,13 @@ function __create_form_open($data, $name, $idform=NULL, $classform=NULL){
         $result .= ' class="' . $classform . '"';
     }
     $result .= '>' . "\n";
+    /*
+     * Title di matikan, yang dipake yang di file content.tpl
+     * 
     if(isset($data['#title']) && $data['#title'] != 'hidden'){
-        $result .= '<div>'. ucwords($data['#title']) .'</div>' . "\n";
+        $result .= '<div class="judul">'. ucwords($data['#title']) .'</div>' . "\n";
     }
+    */
     if(isset($data['#message']) && $data['#message'] != 'hidden'){
         if(is_array($data['#message'])){
             foreach($data['#message'] as $ky => $vl){
@@ -488,6 +520,9 @@ function __create_form($dataform, $idform=NULL, $classform=NULL, $iditem=NULL, $
             } else {
                 $formhead[$ky] = $vl;
             }
+        }
+        if(isset($value['#addmenu'])){
+            $result .= __create_add_menu($value['#addmenu']);
         }
         $result .= __create_form_open($formhead, $key, $idform, $classform); unset($formhead);
         $result .= __create_form_items($created, $iditem, $classitem); unset($created);
@@ -545,11 +580,11 @@ function __create_notelist($value){
     if(count($value['data']) > 0){
         foreach($value['data'] as $key => $val){
             $result .= '<hr>' . "\n";
-            $result .= '<div><a href="' . $val['links'] . '"><strong><font size=+2>Data Tanggal ' . $val['inputtime'] . '</font></strong></a>' . "\n";
+            $result .= '<div><a href="' . $val['links'] . '"><strong><font size=+1>' . $val['caption'] . '</font></strong></a>' . "\n";
             $result .= '<div>' . "\n";
             foreach ($val['string'] as $ky => $vl){
-                if(isset($koma)){$result .= ', ';}
-                $result .= '<strong style="color:green">' . $ky . '</strong> : ' . $vl; $koma = 0;
+                if(isset($koma)){$result .= '; ';}
+                $result .= '<font style="color:green">' . $ky . '</font> ' . $vl; $koma = 0;
             } unset($koma);
             $result .= '</div>' . "\n";
         }

@@ -236,7 +236,21 @@ body {
 	width:750px;
 	margin:10px;
 	text-align:justify;
-	padding:5px 10px 5px 10px;
+	padding:20px 10px 5px 10px;
+}
+
+
+#button {
+/*	border:1px solid #A80003;
+	background-color:#FFE2E2;
+	color:#B60003;
+	margin-left:140px;*/
+        clear:both;
+        display:inline-table;
+}
+
+#button input .button {
+    border:1px solid #A80003;
 }
 
 
@@ -279,6 +293,7 @@ body {
 
 #main-info #kolom select {
         max-width:115px;
+        width:100px;
         display:block;
         float:left;
         clear:right;
@@ -335,27 +350,29 @@ body {
 }
 
 table.tbl {
-	background: #E6E7FF;
+	background: #ffe5e5;/* #E6E7FF;*/
+
 }
 
 table.tbl TH {
-	background-color: #6D6258;
-	color: #ffffff;
+	/*background-color: #6D6258;*/
+	background-color: #7F0002;
+	color: #ffd1d1;
 	list-style-type: disc;
 	list-style-position: inside;
-	border: outset #6D6258 1px;
+	/*border: outset #6D6258 1px;*/
 	font-weight: normal;
 	text-align:center;
 }
 
 table.tbl td {
-	background-color: #ffffff;
+	background-color: #FFF;
 }
 
 table tr.menu_plain, td.menu_plain
 {
 	background-color: white;
-	color		: black;
+	color		: #7f0002;
 }
 
 table tr.menu_plain_grey td
@@ -372,8 +389,8 @@ table tr.menu_plain_softgrey td
 
 table tr.menu_highlight td
 {
-	background-color: black;
-	color		: #E6E7FF;
+	background-color: #ffd1d1;
+	/*color		: #E6E7FF;*/
 	font-weight	: bold;
 }
 

@@ -31,13 +31,13 @@ foreach($vl['datafields'] as $yk => $lv){
         if($cnt < 1){
             $result .= '<tr valign="top">' . "\n";
         }
-        $result .= '<td>' . $lv['title'] . '</td>';
+        $result .= '<td>' .ucwords( str_replace ("_"," ",$lv['title'])) . '</td>';
         $result .= '<td>';
         if($lv['type'] == 'select'){
             if($lv['readonly'] === true){
                 $result .= $lv['theref'][$lv['value']] . "\n";
             } else {
-                $result .= '<select name="' . $yk . '" size="' . $lv['size']. '">' . "\n";
+                $result .= '<select style="width:100px;" name="' . $yk . '" size="' . $lv['size']. '">' . "\n";
                 if(isset($lv['blankopt'])){
                     $result .= '<option value=""></option>';
                 }
