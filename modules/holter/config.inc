@@ -63,28 +63,56 @@ class holterConfig extends config
     );
 
     var $fieldsisarray = array(
-        'pause' ,
         'segment_st_depresi',
         'segment_st_elevasi',
         'gelombang_t',
-        'VES' => 'text',
-        'AES' => 'text',
-        'SVT' => 'text',
-        'VT' => 'text',
-        'AF' => 'text',
-        'heart_block' => 'text'
+        'VES',
+        'AES' ,
+        'SVT' ,
+        'AF' ,
+        'heart_block_2_degree' 
     );
+    var $fieldsisarray2 = array(
+        'VES',
+        'AES' ,
+        'SVT' ,
+        'AF' ,
+        'heart_block_2_degree'
+    );
+    
+    var $fieldtype = array(
+        'pause',
+        'VES',
+        'AES',
+        'SVT',
+        'VT',
+        'AF' ,
+        'heart_block_1_degree',
+        'heart_block_2_degree' ,
+        'heart_block_3_degree' 
+    );
+//    var $fieldtype = array(
+//        'pause' => 'text',
+//        'VES' => 'select',
+//        'AES' => 'select',
+//        'SVT' => 'select',
+//        'VT' => 'text',
+//        'AF' => 'select',
+//        'heart_block_1_degree' => 'text',
+//        'heart_block_2_degree' => 'select',
+//        'heart_block_3_degree' => 'text'
+//    );
+
+
 
     var $reftable = array(
-        'pause' => array('ref_holter_irama','irama'),
         'segment_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
         'segment_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
         'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
-        'VES'  => array('ref_holter_sandapan', 'sandapan'),
-        'AES' => array('ref_holter_sandapan', 'sandapan'),
-        'SVT'  => array('ref_holter_sandapan', 'sandapan'),
-        'VT'  => array('ref_holter_sandapan', 'sandapan'),
-        'AF'  => array('ref_holter_sandapan', 'sandapan'),
-        'heart_block'  => array('ref_holter_sandapan', 'sandapan')
+        'VES'  => array('ref_holterref_VES', 'VES'),
+        'AES' => array('ref_holterref_VES', 'VES'),
+        'SVT'  => array('ref_holterref_SVT', 'SVT'),
+        'AF'  => array('ref_holterref_AF', 'AF'),
+        'heart_block_2_degree'  => array('ref_holterref_heartblock', 'heartblock')
     );
 }

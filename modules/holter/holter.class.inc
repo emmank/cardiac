@@ -269,10 +269,30 @@ class holterModule extends mainModule
                     if(in_array($value, $this->config->fieldsisarray)){
                         $form['holter'][$value]['#theref'] = $this->__get_refs($value);
                     }
+//                    echo '<pre>'; print_r($value); echo '</pre>';
+
+                    if(in_array($value, $this->config->fieldtype)){
+                        $form['holter']['#fieldtype'][$value]['#type']= $this->config->fieldtype;
+//                        $form['holter']['#fieldtype'][$value]['#fieldtheref'] = $this->__get_refs($value);
+                    }
+                    if(in_array($value, $this->config->fieldsisarray2)){
+//                        $form['holter']['#fieldtype'] = $this->config->fieldtype;
+                        $form['holter']['#fieldtype'][$value]['#fieldtheref'] = $this->__get_refs($value);
+                    }
+
+//                    if(in_array($value, $this->config->fieldtype)){
+//                        $form['holter']['#fieldtype']['#fieldtheref'] = $this->__get_refs($value);
+//                    }
                 }
-                
             }
         }
+
+//        $fieldtype = $this->config->fieldtype;
+//        foreach ( $fieldtype as $nilai ){
+//            $form['holter']['#fieldtype']= $fieldtype;
+//        }
+//        echo '<pre>'; print_r($value); echo '</pre>';
+//        echo '<pre>'; print_r($form['holter']['#fieldtype']); echo '</pre>';
 
         $form['holter']['submit'] = array(
             '#type' => 'submit',
@@ -322,8 +342,13 @@ class holterModule extends mainModule
         $thefields = $this->__get_data_fields('holter', $this->query);
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
-                $thevalue[$key] = $value;
+                if (is_array($value)){
+                    $thevalue[$key] = implode('|', $value);
+                }else {
+                    $thevalue[$key] = $value;
+                }
             }
+            echo '<pre>'; print_r($thevalue); echo '</pre>';
         } unset($thefields);
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){

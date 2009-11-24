@@ -82,7 +82,7 @@ foreach($data as $key => $value){
     $result .= '</fieldset>' . "\n";
     
     $result .= '<div>' . "\n";
-    $result .= '<table width=100% class="table">' . "\n";
+    $result .= '<table width=100% class="table" border="0">' . "\n";
     $cnt = 0;
     foreach($value as $yk => $lv){
         if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
@@ -92,13 +92,19 @@ foreach($data as $key => $value){
                 }
 //                $result .= '<td>' .ucwords( str_replace("_", " ", $lv['#title'])) . '</td>';
                 if(preg_match('/qrs_/',$yk)){
-
                         if (!isset($qrs)){
                             $result .= '<td rowspan="4" align="right">QRS Complex :</td>';
                             $qrs = '1';
                         }
                         $result .= '<td align="right">' . $lv['#title'] . '</td>';
                         $result .= '<td>';
+                } elseif (preg_match('/segmen_/',$yk)) {
+                        if (!isset($seg)){
+                            $result .= '<td rowspan="2" align="right">Segment ST :</td>';
+                            $seg = '1';
+                        }
+                        $result .= '<td align="right">' . $lv['#title'] . '</td>';
+                        $result .= '<td>';;
                 } else {
                         $result .= '<td align="right">' . $lv['#title'] . '</td>';
                         $result .= '<td colspan="2">';
@@ -224,7 +230,7 @@ foreach($data as $key => $value){
                 }
             }
         }
-    } unset($cnt,$qrs);
+    } unset($cnt,$qrs,$seg);
     $result .= '</table>' . "\n";
     $result .= '</div>' . "\n";
 
