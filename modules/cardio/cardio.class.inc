@@ -212,7 +212,7 @@ class cardioModule extends mainModule
                                 }
                                 $dumpid[] = $getit->fields['id'];
                                 $result['data'][$cnt]['links'] = '/user/cardio_' . ($teens != 0 ? 'anak' : 'dewasa') . '/detail_form/' . $getit->fields['id'];
-                                $result['data'][$cnt]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                                $result['data'][$cnt]['caption'] = 'Data Tanggal ' . date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
                             }
                             $sql = $this->query->getSelect(
                                 array(),
@@ -379,7 +379,7 @@ class cardioModule extends mainModule
                 $result['data'][$i]['nama'] = $getthis->fields['nama'];
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
                 $result['data'][$i]['goto'] = '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/detail_form/' . $getit->fields['id'];
-                $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getthis->fields['inputtime']));
+                $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
                 $getit->MoveNext();
             }
         }

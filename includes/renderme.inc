@@ -547,11 +547,11 @@ function __create_notelist($value){
     if(count($value['data']) > 0){
         foreach($value['data'] as $key => $val){
             $result .= '<hr>' . "\n";
-            $result .= '<div><a href="' . $val['links'] . '"><strong><font size=+2>Data Tanggal ' . $val['inputtime'] . '</font></strong></a>' . "\n";
+            $result .= '<div><a href="' . $val['links'] . '"><strong><font size=+1>' . $val['caption'] . '</font></strong></a>' . "\n";
             $result .= '<div>' . "\n";
             foreach ($val['string'] as $ky => $vl){
-                if(isset($koma)){$result .= ', ';}
-                $result .= '<strong style="color:green">' . $ky . '</strong> : ' . $vl; $koma = 0;
+                if(isset($koma)){$result .= '; ';}
+                $result .= '<font style="color:green">' . $ky . '</font> ' . $vl; $koma = 0;
             } unset($koma);
             $result .= '</div>' . "\n";
         }
