@@ -31,8 +31,6 @@ class cardioModule extends mainModule
     var $hidden_fields = array(
         'id', 'teens', 'inputer','updated', 'inputtime'
     );
-    var $vardump;
-    var $formhabit;
 
     function menu(){
         $items['cardio_dewasa_form'] = array(
@@ -459,7 +457,6 @@ class cardioModule extends mainModule
     function __get_form($teens=0){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-//            echo '<pre>'; print_r($vcache); echo '</pre>';
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
@@ -496,7 +493,7 @@ class cardioModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => ($this->formhabit == 'readonly' ? '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/form/edit_' . $vcache['id'] : '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/form_submit'),
+            '#action' => '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/form/' . ($this->formhabit == 'readonly' ? 'edit_' . $vcache['id'] : '/form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'cardio' . DS . 'cardio.tpl',
         );
@@ -505,7 +502,6 @@ class cardioModule extends mainModule
             '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
         );
         $thefields = $this->__get_data_fields('cardio', $this->query);
-//        echo '<pre>'; print_r($vcache); echo '</pre>';
         foreach($thefields as $value){
             if(in_array($value, $this->hidden_fields)){
                 if($value == 'id'){
@@ -528,7 +524,6 @@ class cardioModule extends mainModule
                     if(count($query) > 0){
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
-//                                $vl = $this->agecount_in_month(strtotime($vl));
                                 $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
                                 $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['umur'] = array(
                                     '#type' => 'info',
@@ -648,10 +643,8 @@ class cardioModule extends mainModule
 
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['submit'] = array(
             '#type' => 'submit',
-            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit')),
-//            '#extra' => ' class="button"'
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
-//        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
     }
 

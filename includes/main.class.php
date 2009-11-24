@@ -27,6 +27,8 @@ class mainModule
     var $config;
     var $sysquery;
     var $path_vars;
+    var $vardump;
+    var $formhabit;
     var $kelamin = array(
         'perempuan',
         'laki-laki'
