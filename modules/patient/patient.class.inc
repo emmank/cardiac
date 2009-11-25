@@ -1304,12 +1304,12 @@ class patientModule extends mainModule
             array('id', 'bagian', 'pukul', 'doneby'),
             array('kunjungan'),
             array(
-                array('&&', "patients=" . $id)
+                array('&&', "patients=" . $id),
+                array('&&', "doneby is not null")
             ),
             'pukul desc'
         );
         $this->query->connect();
-//        $this->query->conn->debug=true;
         $getit = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($getit->_numOfRows > 0){
@@ -1336,7 +1336,7 @@ class patientModule extends mainModule
                 $this->query->connect();
                 $getthat = $this->query->conn->Execute($sql); unset($sql);
                 $this->query->close();
-                $result['data'][$i]['goto'] = '/user/' . $getthis->fields['tableuse'] . (eregi('dewasa', $getit->fields['bagian']) ? '_dewasa' : '_anak') . '/detail_form/' . $getthat->fields['id'];
+                $result['data'][$i]['goto'] = '/user/' . $getthis->fields['tableuse'] . ($getthis->fields['tableuse'] == 'cardio' ? (eregi('dewasa', $getit->fields['bagian']) ? '_dewasa' : '_anak') : '') . '/detail_form/' . $getthat->fields['id'];
                 unset($getthis);
                 $result['data'][$i]['pukul'] = date('j-n-Y H:i:s', strtotime($getthat->fields['inputtime']));
                 $sql = $this->query->getSelect(

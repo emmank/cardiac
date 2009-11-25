@@ -127,8 +127,8 @@ class ekgModule extends mainModule
         $this->formhabit = 'readonly';
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         $vcache = $this->__get_ekg_data((int)$dump[3]);
-        $this->vardump = $this->__write_custom_cache($vcache);
         $this->vardump['readonly'] = $this->formhabit;
+        $this->vardump = $this->__write_custom_cache($vcache);
         $result = $this->form();
         return $result;
     }
@@ -136,6 +136,7 @@ class ekgModule extends mainModule
     function form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
+//            echo '<pre>'; print_r($vcache); echo '</pre>';
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
@@ -172,7 +173,7 @@ class ekgModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/ekg/' . ($this->formhabit == 'readonly' ? 'edit' . $vcache['id'] : 'form_submit'),
+            '#action' => '/user/ekg/' . ($this->formhabit == 'readonly' ? 'form/edit_' . $vcache['id'] : 'form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'ekg' . DS . 'ekg.tpl',
         );
@@ -300,9 +301,30 @@ class ekgModule extends mainModule
                     if(in_array($value, $this->config->fieldsisarray)){
                         $form['ekg'][$value]['#theref'] = $this->__get_refs($value);
                     }
+                    if(in_array($value, $this->config->qrs_complex) || in_array($value, $this->config->segment_st) || $value == 'gelombang_t'){
+                        $form['ekg'][$value]['#customized']['title'] = in_array($value, $this->config->qrs_complex) ? __t('qrs_complex') : ($value == 'gelombang_t' ? __t('gelombang_t') : __t('segment_st'));
+                        $form['ekg'][$value]['#customized']['id'] = in_array($value, $this->config->qrs_complex) ? 'qrs_complex' : ($value == 'gelombang_t' ? 'gelombang_t' : 'segment_st');
+                        if($this->config->fields_form_type[$value] == 'select2'){
+                            $form['ekg'][$value]['#customized']['option'] =  array(
+                                '1mm - 2mm' => '1mm - 2mm',
+                                '> 2mm - 3mm' => '> 2mm - 3mm',
+                                '> 3mm' => '> 3mm'
+                            );
+                        } elseif ($this->config->fields_form_type[$value] == 'select3') {
+                            $form['ekg'][$value]['#customized']['option'] =  array(
+                                'Q Patologi +' => 'Q Patologi +',
+                                'Q Patologi -' => 'Q Patologi -'
+                            );
+                        } elseif ($value == 'gelombang_t') {
+                            $form['ekg'][$value]['#customized']['option'] =  array(
+                                'Normal' => 'Normal',
+                                'Inverted' => 'Inverted'
+                            );
+                        }
+                    }
                 }
                 if($this->formhabit == 'readonly'){
-                    $form['ekg'][$value]['#extra'] = 'readonly="true"';
+                    $form['ekg'][$value]['#readonly'] = TRUE;
                 }
             }
         }
@@ -354,6 +376,7 @@ class ekgModule extends mainModule
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
                 if (is_array($value)){
+                    ksort($value);
                     $thevalue[$key] = implode('|', $value);
                 } else {
                     $thevalue[$key] = $value;
@@ -381,8 +404,10 @@ class ekgModule extends mainModule
             $this->vardump['id'] = $thevalue['id'];
         }
         $this->query->connect();
+//        $this->query->conn->debug=true;
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
+//        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
         unset($thevalue);
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
@@ -398,6 +423,7 @@ class ekgModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
+        $this->__flush_caches();
         redirect_to('/user/ekg/view');
     }
 
