@@ -88,4 +88,10 @@ class ekgConfig extends config
         'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
         'q_interval' => array('ref_ekg_q_interval', 'q_interval')
     );
+    var $qrs_complex = array(
+        'qrs_axis', 'qrs_durasi', 'qrs_konfigurasi_patologi', 'qrs_konfigurasi_r_s'
+    );
+    var $segment_st = array(
+        'segmen_st_depresi', 'segmen_st_elevasi'
+    );
 }

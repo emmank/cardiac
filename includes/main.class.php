@@ -806,8 +806,14 @@ class mainModule
            $getit = $this->query->conn->Execute($sql); unset($sql);
            $this->query->close();
            if($getit->_numOfRows > 0){
-               $result[trim($data)] = array($getit->fields['id']);
-           }
+               $dump = array();
+               for($i=0; $i<$getit->_numOfRows; $i++){
+                   $dump[] = $getit->fields['id'];
+                   $getit->MoveNext();
+               }
+               $result[trim($data)] = $dump;
+               unset($dump);
+           } unset($getit);
        } else {
            $dump = explode(' ', trim($data));
            $getdump = array();

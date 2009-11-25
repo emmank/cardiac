@@ -24,17 +24,7 @@
  */
 
 //echo '<pre>'; print_r($data); echo '</pre>';
-
-/*  ekg.php
- *  
- *  Created on Nov 12, 2009, 5:40:49 AM
- */
-
-// echo '<pre>'; print_r($data); echo '</pre>';
 foreach($data as $key => $value){
-//    if(isset($value['#error']) && $value['#error'] !== FALSE){
-//        $result .= '<div class="error">' . $value['#error'] . '</div><br /><br />' . "\n";
-//    }
     $result .= __create_form_open($value, $key);
     $result .= "\n" . '<fieldset>' . "\n";
     $result .= '<legend>' . __t('Identitas Pasien') . '</legend>' . "\n";
@@ -57,8 +47,6 @@ foreach($data as $key => $value){
         }
     }
     ksort($gettbpos);
-//    echo '<pre>'; print_r($gettbpos); echo '</pre>';
-    //echo '<pre>'; print_r($gettbpos); echo '</pre>';
     foreach($gettbpos as $ky => $vl){
         if((int)$ky < 1 || (int)$ky % 5 == 0){
             $result .= '<div id="kolom">' . "\n";
@@ -83,154 +71,137 @@ foreach($data as $key => $value){
     
     $result .= '<div>' . "\n";
     $result .= '<table width=100% class="table" border="0">' . "\n";
+    foreach($value as $yk => $lv){
+        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
+            if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
+                if(isset($lv['#customized'])){
+                    if(!isset($rowspan[$lv['#customized']['id']])){$rowspan[$lv['#customized']['id']] = array();}
+                    $rowspan[$lv['#customized']['id']][] = $yk;
+                }
+            }
+        }
+    }
     $cnt = 0;
     foreach($value as $yk => $lv){
         if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
             if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
-                if($cnt < 1){
-                    $result .= '<tr valign="top">' . "\n";
-                }
-//                $result .= '<td>' .ucwords( str_replace("_", " ", $lv['#title'])) . '</td>';
-                if(preg_match('/qrs_/',$yk)){
-                        if (!isset($qrs)){
-                            $result .= '<td rowspan="4" align="right">QRS Complex :</td>';
-                            $qrs = '1';
+                $result .= '<tr valign="top">' . "\n";
+                if(!isset($lv['#customized'])){
+                    $result .= '<td align="left" width="15%">' . ucwords($lv['#title']) . '</td>' . "\n";
+                    $result .= '<td align="left" colspan="4">';
+                    if($lv['#type'] == 'select'){
+                        if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
+                            $result .= $lv['#theref'][$lv['#value']];
+                        } else {
+                            $result .= '<select name="' . $yk . '" size="1">';
+                            $result .= '<option value=""> --- ' . __t('choose') . ' --- </option>';
+                            foreach($lv['#theref'] as $kk => $vv){
+                                $result .= '<option value="' . $kk . '"' . (isset($lv['#value']) && $lv['#value'] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>';
+                            }
+                            $result .= '</select>';
                         }
-                        $result .= '<td align="right">' . $lv['#title'] . '</td>';
-                        $result .= '<td>';
-                } elseif (preg_match('/segmen_/',$yk)) {
-                        if (!isset($seg)){
-                            $result .= '<td rowspan="2" align="right">Segment ST :</td>';
-                            $seg = '1';
+                    } else {
+                        if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
+                            $result .= $lv['#value'];
+                        } else {
+                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '"' . (isset($lv['#size']) ? ' size="' . $lv['#size'] . '"' : '') . '>';
                         }
-                        $result .= '<td align="right">' . $lv['#title'] . '</td>';
-                        $result .= '<td>';;
+                    }
+                    $result .= '</td>' . "\n";
                 } else {
-                        $result .= '<td align="right">' . $lv['#title'] . '</td>';
-                        $result .= '<td colspan="2">';
-                }
-//                $result .= '<td align="right">' . $lv['#title'] . '</td>';
-//                $result .= '<td>';
-//                $lv['#value'] = explode('|', $lv['#value']);
-//                           echo '<pre>'; print_r($lv); echo '</pre>';
-                if($lv['#type'] == 'select'){
-//                    if(preg_match('/qrs_/',$yk)){
-//                        $result .= 'QRS Complex</td>';
-//                    } else {
-//                        echo "tidak dapat \n";
-//                    }
-                    $result .= '<select name="' . $yk . '" size="' . $lv['#size']. '">' . "\n";
-                    if(isset($lv['#blankopt'])){
-                        $result .= '<option value=""></option>';
+                    if(!is_array($lv['#value'])){
+                        $lv['#value'] = explode('|', $lv['#value']);
                     }
-                    foreach($lv['#theref'] as $kc => $isi){
-                        $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
+                    if(!isset($dumpt)){$dumpt = array();}
+                    if(!in_array($lv['#customized']['title'], $dumpt)){
+                        $dumpt[] = $lv['#customized']['title'];
+                        $result .= '<td align="left" rowspan="' . count($rowspan[$lv['#customized']['id']]) . '">' . ucwords($lv['#customized']['title']) . '</td>' . "\n";
                     }
-                    $result .= '</select>' . "\n";
-                } elseif($lv['#type'] == 'select2'){
-                    $result .= '<input type="radio" name="' . $yk . '[0]" value="1mm - 2mm"> 1mm - 2mm' ;
-                    $result .= ', pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
-                    if(isset($lv['#blankopt'])){
-                        $result .= '<option value=""></option>';
-                    }
-                    foreach($lv['#theref'] as $kc => $isi){
-                        $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
-                    }
-                    $result .= '</select>' . "<br />  \n";
-
-                    $result .= '<input type="radio" name="' . $yk . '[0]" value=">2mm - 3mm"> > 2mm - 3mm';
-                    $result .= ', pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
-                    if(isset($lv['#blankopt'])){
-                        $result .= '<option value=""></option>';
-                    }
-                    foreach($lv['#theref'] as $kc => $isi){
-                        $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
-                    }
-                    $result .= '</select>' . "<br />  \n";
-                    $result .= '<input type="radio" name="' . $yk . '[0]" value=">3mm"> > 3mm';
-
-                    $result .= ', pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
-                    if(isset($lv['#blankopt'])){
-                        $result .= '<option value=""></option>';
-                    }
-                    foreach($lv['#theref'] as $kc => $isi){
-                        $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
-                    }
-                    $result .= '</select>' . "\n";
-                    
-                } elseif($lv['#type'] == 'select3'){
-//                    $result .= '<input type="radio" name="' . $yk . '[0]" value="Q Patologi +"> Q Patologi +' ;
-                    $result .= '<select name="' . $yk . '[0]" size="1">' . "\n";
-                    $result .= '<option value="Q Patologi +">Q Patologi +</option>';
-                    $result .= '<option value="Q Patologi -">Q Patologi -</option>';
-                    $result .= '</select>';
-                    $result .= ' pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
-                    if(isset($lv['#blankopt'])){
-                        $result .= '<option value=""></option>';
-                    }
-                    foreach($lv['#theref'] as $kc => $isi){
-                        $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
-                    }
-                    $result .= '</select>' . "<br />  \n";
-                } elseif($lv['#type'] == 'checkbox'){
-                    if (count($lv['theref'])>0) {
-                    $cnt = 0;
-                    foreach($lv['theref'] as $kc => $isi){
-                        $result .= '<input type="checkbox" name="' . $yk . '[' . $cnt . ']" value="' . $kc . '">';
-                        $result .= $isi . "<br />";
-                        $cnt++;
-                    } unset($cnt);
+                    $result .= '<td width="20%" align="' . ($yk != 'gelombang_t' ? 'right' : 'left') . '">';
+                    if($yk != 'gelombang_t'){
+                        $result .= ucwords($lv['#title']);
                     } else {
-                        $result .= '<input type="checkbox" name="' . $yk . '" value="1">';
+                        if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
+                            $result .= $lv['#value'][0];
+                        } else {
+                            foreach($lv['#customized']['option'] as $kk => $vv){
+                                if(isset($koma)){
+                                    $result .= '<br />';
+                                }
+                                $result .= '<input type="radio" name="' . $yk . '[0]" value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' checked="true"' : '') . '> ' . $vv;
+                                $koma = 0;
+                            } unset($koma);
+                        }
                     }
-                } elseif($lv['#type'] == 'radio'){
-                    $result .= '<input type="radio" name="' . $yk . '[0]" value="Normal"> Normal <br />' ;
-                    $result .= '<input type="radio" name="' . $yk . '[0]" value="Inverted"> Inverted' ;
-                    $result .= ', pada sendapan <select name="' . $yk . '[1]" size="1">' . "\n";
-                    if(isset($lv['#blankopt'])){
-                        $result .= '<option value=""></option>';
-                    }
-                    foreach($lv['#theref'] as $kc => $isi){
-                        $result .= '<option value="' . $kc . '"' . (isset($lv['#value']) && $lv['#value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
-                    }
-                    $result .= '</select>' . "<br />  \n";
-//                    foreach($lv['#theref'] as $kc => $isi){
-//                        $result .= '<input type="radio" name="' . $yk . '[' . $cnt . ']" value="' . $kc . '">';
-//                        $result .= $isi . "<br />";
-//                    }
-                } elseif($lv['#type'] == 'datetime'){
-                    if(isset($lv['#value'])){
-                        $datetime = $lv['#value'];
+                    $result .= '</td>' . "\n";
+                    $result .= '<td align="left"' . ($lv['#type'] != 'select2' ? ' colspan="2"' : '') . '>';
+                    if($yk != 'gelombang_t'){
+                        if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
+                            $result .= ($lv['#type'] == 'select' ? $lv['#theref'][$lv['#value'][0]] : $lv['#value'][0]) . ($lv['#type'] == 'select' ? '' : ' ' . __t('pada sendapan') . ' ' . $lv['#theref'][$lv['#value'][1]]);
+                        } else {
+                            if($lv['#type'] == 'select2'){
+//                                echo '<pre>'; print_r($lv['#value']); echo '</pre>';
+                                foreach($lv['#customized']['option'] as $kk => $vv){
+                                    if(isset($koma)){
+                                        $result .= '<br />';
+                                    }
+                                    $result .= '<input type="radio" name="' . $yk . '[0]" value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' checked="true"' : '') . '> ' . $vv . "\n";
+                                    $koma = 0;
+                                } unset($koma);
+                            } elseif($lv['#type'] == 'select3') {
+                                $result .= '<select name="' . $yk . '[0]" size="1">';
+                                $result .= '<option value=""> --- ' . __t('choose') . ' --- </option>' . "\n";
+                                foreach($lv['#customized']['option'] as $kk => $vv){
+                                    $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
+                                }
+                                $result .= '</select>' . "\n";
+                                $result .= __t('pada sendapan') . "\n";
+                                $result .= '<select name="' . $yk . '[1]" size="1">';
+                                $result .= '<option value=""> --- ' . __t('choose') . ' --- </option>' . "\n";
+                                foreach($lv['#theref'] as $kk => $vv){
+                                    $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][1]) && $lv['#value'][1] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
+                                }
+                                $result .= '</select>' . "\n";
+                            } else {
+                                $result .= '<select name="' . $yk . '[0]" size="1">';
+                                $result .= '<option value=""> --- ' . __t('choose') . ' --- </option>' . "\n";
+                                foreach($lv['#theref'] as $kk => $vv){
+                                    $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
+                                }
+                                $result .= '</select>' . "\n";
+                            }
+                        }
                     } else {
-                        $datetime = date('Y-m-d H:i:s', $lv['#timenow']);
+                        $result .= __t('pada sendapan') . "\n";
+                        if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
+                            $result .= $lv['#theref'][$lv['#value'][1]];
+                        } else {
+                            $result .= '<select name="' . $yk . '[1]" size="1">' . "\n";
+                            $result .= '<option value=""> --- ' . __t('choose') . ' --- </option>' . "\n";
+                            foreach($lv['#theref'] as $kk => $vv){
+                                $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][1]) && $lv['#value'][1] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
+                            }
+                            $result .= '</select>' . "\n";
+                        }
                     }
-                    list($dumptgl, $dumptime) = explode(' ', $datetime);
-                    unset($datetime);
-                    $dumptgl = explode('-', $dumptgl);
-                    $dumptime = explode(':', $dumptime);
-                    $result .= '<input type="text" name="' . $yk . '[2]" size="2" maxlength="2" value="' . $dumptgl[2] . '">' . "&nbsp";
-                    $result .= '<select name="' . $yk . '[1]" size="1">' . "\n";
-                    foreach($lv['#theref'] as $kc => $isi){
-                        $result .= '<option value="' . $kc . '"' . ($dumptgl[1] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
+                    $result .= '</td>' . "\n";
+                    if($lv['#type'] == 'select2' && (!isset($lv['#readonly']) || $lv['#readonly'] !== TRUE)){
+                        $result .= '<td align="left">' . "\n";
+                        $result .= __t('pada sendapan') . "\n";
+                        $result .= '<select name="' . $yk . '[1]" size="1">';
+                        $result .= '<option value=""> --- ' . __t('choose') . ' --- </option>' . "\n";
+                        foreach($lv['#theref'] as $kk => $vv){
+                            $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][1]) && $lv['#value'][1] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
+                        }
+                        $result .= '</select>' . "\n";
+                        $result .= '</td>';
                     }
-                    $result .= '</select>' . "&nbsp;";
-                    $result .= '<input type="text" name="' . $yk . '[0]" size="4" maxlength="4" value="' . $dumptgl[0] . '">' . "<br />";
-                    $result .= '<input type="text" name="' . $yk . '[5]" size="2" maxlength="2" value="' . $dumptime[0] . '">' . ":";
-                    $result .= '<input type="text" name="' . $yk . '[6]" size="2" maxlength="2" value="' . $dumptime[1] . '">' . ":";
-                    $result .= '<input type="text" name="' . $yk . '[7]" size="2" maxlength="2" value="' . $dumptime[2] . '">' . "\n";
-                } else {
-                    $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '"' . (isset($lv['#size']) ? ' size="' . $lv['#size'] . '"' : '') . '>' . "\n";
                 }
-                $result .= '</td>' . "\n";
-                //$cnt++;
-
-                if($cnt > 1){
-                    $cnt = 0;
-                    $result .= '</tr>' . "\n";
-                }
+                $result .= '</tr>' . "\n";
+                $cnt++;
             }
         }
-    } unset($cnt,$qrs,$seg);
+    } unset($dumpt, $cnt, $rowspan);
     $result .= '</table>' . "\n";
     $result .= '</div>' . "\n";
 
