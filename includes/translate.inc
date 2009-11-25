@@ -72,7 +72,7 @@ function __t($string){
             $systemquery->conn->Execute($sql); unset($sql);
             $systemquery->close();
         } unset($getit);
-        return $string;
+        return ucwords(str_replace("_"," ",$string));
     }
 }
 
