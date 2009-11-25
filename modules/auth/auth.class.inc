@@ -109,7 +109,6 @@ class authModule extends mainModule
     }
 
     function __set_time_session($uid, $go=NULL){
-        $this->sysquery->connect();
         $sql = $this->sysquery->updateData(
             $this->config->auth_use_table[0],
             array(
@@ -120,9 +119,12 @@ class authModule extends mainModule
                 array('&&', $this->config->auth_use_table[4] . "=" . $uid)
             )
         );
-//        $this->sysquery->debug=true;
+//        echo $sql;
+        $this->sysquery->connect();
+        $this->sysquery->debug=true;
         $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();
+//        exit();
     }
 
     function __get_vars($userid){
@@ -291,12 +293,12 @@ class authModule extends mainModule
 
     function logout(){
         $this->__flush_registry();
-        setcookie($this->config->cookieid,"");
         if(!is_null($this->config->use_time_limit) && $this->config->use_time_limit != '' && $this->config->use_time_limit != '0'){
             $this->__set_time_session($_COOKIE[$this->config->cookieid]);
         }
+        setcookie($this->config->cookieid,"");
         session_destroy();
-        redirect_to('/regload');
+        redirect_to('/');
     }
 
     function regload(){
