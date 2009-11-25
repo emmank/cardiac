@@ -25,61 +25,49 @@
 //Produce node items
 
 function get_content($path){
-    global $configs, $user, $systemquery;
-//    echo '<pre>'; print_r($user); echo '<pre>'; exit();
-    if(count($user) < 1){
-        if($configs->user_required == TRUE){
-            if($path['main'] != 'login'){
-                redirect_to('/login');
-            }
-        } else {
-            if($path['main'] == 'user' ||
-            $path['main'] == 'admin' ||
-                (isset($path['menu']) && (
-                    $path['menu'] == 'add' ||
-                    $path['menu'] == 'edit' ||
-                    $path['menu'] == 'drop')
-                )
-            ){
-                redirect_to('/login');
-            }
+    global $configs, $systemquery;
+    clearstatcache();
+    if($path['main'] != 'node'){
+        if(!isset($_COOKIE[$configs->cookiesession])){
+            redirect_to('/'); exit();
         }
-    } else {
-        if($path['main'] == 'login'){
-            redirect_to('/');
-        } else {
-            $checkmenus = __get_active_menus();
-            $getallow_path = array();
-            foreach($checkmenus as $key => $value){
-                $sql = $systemquery->getSelect(
-                    array('path'),
-                    array('menus'),
-                    array(
-                        array('&&', "id=" . $value)
-                    )
-                );
-                $systemquery->connect();
-                $getit = $systemquery->conn->Execute($sql); unset($sql);
-                $systemquery->close();
-                $getallow_path[] = $getit->fields['path'];
-            }
-//            echo '<pre>'; print_r($getallow_path); echo '</pre>';
-            if(isset($path['vars'])){
-//                echo 'disini';
-                $vars = explode('/', $path['vars']);
-                $vars = $vars[0];
-                $gettruepath = $path['main'] . ($path['menu'] != '' ? '/' . $path['menu'] . ($vars != '' ? '/' . $vars : '') : '');
-            } else {
-                $gettruepath = implode('/', $path);
-//                echo $gettruepath;
-            }
-            if(!preg_match('/^\//', $gettruepath)){
-                $gettruepath = '/' . preg_replace('/\/$/', '', $gettruepath);
-            }
-            if(!in_array($gettruepath, $getallow_path)){
-                redirect_to('/');
-            }
-//            echo '<pre>'; print_r($gettruepath); echo '</pre>'; exit();
+        $sql = $systemquery->getSelect(
+            array('alls'),
+            array('registry'),
+            array(
+                array('&&', "id=" . $_COOKIE[$configs->cookiesession])
+            )
+        );
+        $systemquery->connect();
+        $getit = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        if($getit->_numOfRows < 1){
+            redirect_to('/'); exit();
+        }
+        $listmenus = explode(',', $getit->fields['alls']);
+        $listpath = array();
+        foreach($listmenus as $value){
+            $sql = $systemquery->getSelect(
+                array('path'),
+                array('menus'),
+                array(
+                    array('&&', "id=" . trim($value))
+                )
+            );
+            $systemquery->connect();
+            $getthis = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            $listpath[] = $getthis->fields['path'];
+        } unset($listmenus);
+        $dump = $path;
+        $vars = explode('/',$dump['vars']);
+        $dump['vars'] = $vars[0]; unset($vars);
+        $the_path = preg_replace('/\/$/', '', implode('/',$dump));
+        $the_path = (!preg_match('/^\//',$the_path) ? '/' : '') . $the_path;
+        unset($dump);
+        if(!in_array($the_path, $listpath)){
+            unset($the_path, $listpath);
+            redirect_to('/'); exit();
         }
     }
 }
