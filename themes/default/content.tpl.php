@@ -27,7 +27,9 @@
 <div id="header-info">
 <?php 
 //print_r($menu_info);
-echo '<div class="title">'. ucwords($menu_info['title']).'</div>'. ucfirst ($menu_info['description']);
+if ($menu_info['id'] != "login") {
+    echo '<div class="title">'. ucwords($menu_info['title']).'</div>'. ucfirst ($menu_info['description']);
+}
 ?>
 </div>
 <div id="main-<?php if(isset($body_login)){?>content<?php } else {?>info<?php }?>">
