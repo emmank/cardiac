@@ -48,4 +48,5 @@ class treadmillConfig extends config
         'inputtime' => 'hidden',
         'updated' => 'hidden'
     );
+    var $teenlimit = 12;
 }

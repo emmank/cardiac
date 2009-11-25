@@ -26,12 +26,11 @@ require_once MODULES_DIR . DS . 'treadmill' . DS . 'config.inc';
 
 class treadmillModule extends mainModule
 {
-    var $title = 'treadmill module';
-    var $description = '';
+    var $title = 'treadmill';
+    var $description = 'Manajemen data digital pasien treadmill';
     var $hidden_fields = array(
         'id', 'teens', 'inputer','updated', 'inputtime'
     );
-    var $vardump;
 
     function menu(){
         $items['treadmill_form'] = array(
@@ -42,16 +41,40 @@ class treadmillModule extends mainModule
             'weight' => '0',
             'user_required' => 'treadmill'
         );
+//        $items['treadmill_anak_form'] = array(
+//            'title' => __t('form treadmillanak'),
+//            'description' => __t('formulir treadmillanak'),
+//            'path' => '/user/treadmill_anak/form',
+//            'exec' => 'anak_form',
+//            'weight' => '0',
+//            'user_required' => 'treadmillanak'
+//        );
         $items['treadmill_form_submit'] = array(
             'title' => __t('form treadmill'),
             'description' => __t('formulir treadmill'),
             'path' => '/user/treadmill/form_submit',
-            'exec' => 'treadmill_form_submit',
+            'exec' => '_form_submit',
             'weight' => '0',
             'user_required' => 'treadmill'
         );
+//        $items['treadmill_anak_form_submit'] = array(
+//            'title' => __t('form treadmillanak'),
+//            'description' => __t('formulir treadmillanak'),
+//            'path' => '/user/treadmill_anak/form_submit',
+//            'exec' => 'anak_form_submit',
+//            'weight' => '0',
+//            'user_required' => 'treadmillanak'
+//        );
+//        $items['treadmill_anak_get_lists'] = array(
+//            'title' => __t('list antrian treadmillanak'),
+//            'description' => __t('list antrian treadmillanak'),
+//            'path' => '/user/treadmill_anak/today_treadmill_lists',
+//            'exec' => '__get_today_lists',
+//            'weight' => '0',
+//            'user_required' => 'treadmillanak'
+//        );
         $items['treadmill_get_lists'] = array(
-            'title' => __t('form treadmill'),
+            'title' => __t('list antrian treadmill'),
             'description' => __t('formulir treadmill'),
             'path' => '/user/treadmill/today_treadmill_lists',
             'exec' => '__get_today_lists',
@@ -59,30 +82,346 @@ class treadmillModule extends mainModule
             'user_required' => 'treadmill'
         );
         $items['treadmill_message'] = array(
-            'title' => __t('treadmill message'),
-            'description' => __t('get treadmill message'),
+            'title' => __t('treadmillmessage'),
+            'description' => __t('get treadmillmessage'),
             'path' => '/user/treadmill/message',
             'exec' => 'message',
             'weight' => 5,
             'user_required' => 'treadmill'
         );
-        $items['treadmill_anak_message'] = array(
-            'title' => __t('treadmill message'),
-            'description' => __t('get treadmill message'),
-            'path' => '/user/treadmill_anak/message',
-            'exec' => 'message',
+        $items['treadmill_anak_view'] = array(
+            'title' => __t('treadmillanak'),
+            'description' => __t('explore treadmillanak'),
+            'path' => '/user/treadmill_anak/view',
+            'exec' => 'anak_view',
             'weight' => 5,
-            'user_required' => 'kardio anak'
+            'user_required' => 'users'
+        );
+        $items['treadmill_view'] = array(
+            'title' => __t('treadmill'),
+            'description' => __t('explore treadmill'),
+            'path' => '/user/treadmill/view',
+            'exec' => 'view',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['treadmill_anak_detail'] = array(
+            'title' => __t('detail treadmillanak'),
+            'description' => __t("detail treadmillanak's patients"),
+            'path' => '/user/treadmill_anak/detail_form',
+            'exec' => 'anak_detail_form',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['treadmill_detail'] = array(
+            'title' => __t('detail treadmill'),
+            'description' => __t("detail treadmill's patients"),
+            'path' => '/user/treadmill_/detail_form',
+            'exec' => '_detail_form',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['treadmill_search'] = array(
+            'title' => __t('search treadmill'),
+            'description' => __t("search treadmill's patients"),
+            'path' => '/user/treadmill_/search',
+            'exec' => '_search',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['treadmill_anak_search'] = array(
+            'title' => __t('search treadmillanak'),
+            'description' => __t("search treadmillanak's patients"),
+            'path' => '/user/treadmill_anak/search',
+            'exec' => 'anak_search',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['treadmill_search_submit'] = array(
+            'title' => __t('submitted search treadmill'),
+            'description' => __t("submitted search treadmill's patients"),
+            'path' => '/user/treadmill_/search_submit',
+            'exec' => '_search_submit',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['treadmill_anak_search_submit'] = array(
+            'title' => __t('submitted search treadmillanak'),
+            'description' => __t("submitted search treadmillanak's patients"),
+            'path' => '/user/treadmill_anak/search_submit',
+            'exec' => 'anak_search_submit',
+            'weight' => '0',
+            'user_required' => 'users'
         );
         return $items;
     }
 
-    function __get_today_lists(){
+    function _search_submit(){
+        return $this->__get_search_submit();
+    }
+
+    function anak_search_submit(){
+        return $this->__get_search_submit(1);
+    }
+
+    function __get_search_submit($teens=0){
+        if(isset($_POST['data'])){
+            $str = $_POST['data'];
+            $dump = $this->__get_patients_search($str);
+        } else {
+            $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+            $str = '';
+            if(trim($dump[3]) != ''){
+                $str = trim($dump[3]);
+                $dump = $this->__get_patients_search($str);
+            } else {
+                $dump = array();
+            }
+        }
+        $result = array();
+        $result['type'] = 'notelist';
+        $result['title'] = __t('hasil pencarian');
+        $result['description'] = __t('hasil pencarian') . ' <strong>"' . $str . '"</strong>';
+        unset($str);
+        if(count($dump) > 0){
+            foreach($dump as $key => $value){
+                foreach($value as $ky => $vl){
+                    $sql = $this->query->getSelect(
+                        array('id', 'inputtime'),
+                        array('treadmill'),
+                        array(
+                            array('&&', "patients=" . $vl),
+                            array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
+                        )
+                    );
+                    $this->query->connect();
+                    $getit = $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                    if($getit->_numOfRows > 0){
+                        if(!isset($cnt)){
+                            $cnt = 0;
+                            $result['data'] = array();
+                        }
+                        for($i=0; $i<$getit->_numOfRows; $i++){
+                            if(!isset($dumpid)){$dumpid = array();}
+                            if(!in_array($getit->fields['id'], $dumpid)){
+                                if(count($dumpid) > 0){
+                                    $cnt++;
+                                }
+                                $dumpid[] = $getit->fields['id'];
+                                $result['data'][$cnt]['links'] = '/user/treadmill_' . ($teens != 0 ? 'anak' : '') . '/detail_form/' . $getit->fields['id'];
+                                $result['data'][$cnt]['caption'] = 'Data Tanggal ' . date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                            }
+                            $sql = $this->query->getSelect(
+                                array(),
+                                array('patients'),
+                                array(
+                                    array('&&', "id=" . $vl)
+                                )
+                            );
+                            $this->query->connect();
+                            $getthis = $this->query->conn->Execute($sql); unset($sql);
+                            $this->query->close();
+                            if($getthis->_numOfRows > 0){
+                                foreach($getthis->fields as $yk => $lv){
+                                    if(eregi($key, $lv)){
+                                        $result['data'][$cnt]['string'][$yk] = eregi_replace($key, '<strong>' . $key . '</strong>', $lv);
+                                    }
+                                }
+                                if(!isset($result['data'][$cnt]['string']['nama'])){
+                                    $result['data'][$cnt]['string']['nama'] = $getthis->fields['nama'];
+                                }
+                            } unset($getthis);
+                            $getit->MoveNext();
+                        }
+                    } unset($getit);
+                }
+            }
+        } unset($dump);
+//        echo '<pre>'; print_r($result); echo '</pre>'; exit();
+        return $result;
+    }
+
+    function _search(){
+        return $this->__get_search();
+    }
+
+    function anak_search(){
+        return $this->__get_search(1);
+    }
+
+    function __get_search($teens=0){
+        $result = array();
+        $result['type'] = 'search';
+        $result['title'] = __t('Cari data pasien treadmill');
+        $result['description'] = __t('Mencari data pasien treadmill');
+        $result['dataform']['character'] = array(
+            '#type' => 'character'
+        );
+        $i = 0;
+        foreach($this->config->abjad as $value){
+            $result['dataform']['character']['data'][$i]['show'] = $value;
+            $sql = $this->query->getSelect(
+                array('treadmill|id as treadmill_id'),
+                array('treadmill', 'patients'),
+                array(
+                    array('&&', "treadmill|patients=patients|id"),
+                    array('&&', "patients|nama like '" . strtolower($value) . "%'"),
+                    array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            $result['dataform']['character']['data'][$i]['links'] = $getit->_numOfRows > 0 ? '/user/treadmill_' . ($teens == 0 ? '' : 'anak') . '/search/' . $value : NULL;
+            unset($getit); $i++;
+        } unset($i);
+        $result['dataform']['form'] = array(
+            '#type' => 'form',
+            '#action' => '/user/treadmill_' . ($teens == 0 ? '' : 'anak') . '/search',
+            '#id' => 'treadmill_search',
+            '#title' => __t('search'),
+            'data' => array(
+                '#type' => 'text',
+                '#size' => 40
+            ),
+            'submit' => array(
+                '#type' => 'submit',
+                '#value' => __t('search')
+            )
+        );
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($_POST['data']) || isset($dump[3])){
+            $result['result'] = $this->__get_search_submit($teens);
+        } unset($dump);
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+
+    function view(){
+        return $this->__get_view();
+    }
+
+    function anak_view(){
+        return $this->__get_view(1);
+    }
+
+    function __get_view(){
+        $result = array();
+//        echo "adaka disini";
+        $result['type'] = 'table';
+        $result['title'] = __t('daftar beberapa pasien');
+        $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
+        $result['addmenu']['#add'] = array(
+            'title' => __t('add'),
+            'action' => '/user/treadmill/form',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search'),
+            'action' => '/user/treadmill/search',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'nama',
+                'caption' => __t('nama'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'tgl_lahir',
+                'caption' => __t('usia'),
+                'width' => '10%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'inputtime',
+                'caption' => __t('tgl periksa'),
+                'width' => '25%',
+                'align' => 'right'
+            )
+        );
+
+        $sql = $this->query->getSelect(
+            array(),
+            array('treadmill'),
+            array(
+                //array('&&', "teens=" . ($teens != 0 ? $teens : 0))
+            ),
+            'inputtime desc',
+            '0,10'
+        ); unset($where);
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $sql = $this->query->getSelect(
+                    array('id', 'nama', 'tgl_lahir', 'inputtime'),
+                    array('patients'),
+                    array(
+                        array('&&', "id=" . $getit->fields['patients'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['nama'] = $getthis->fields['nama'];
+                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+                $result['data'][$i]['goto'] = '/user/treadmill_' . ($teens == 0 ? '' : 'anak') . '/detail_form/' . $getit->fields['id'];
+                $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                $getit->MoveNext();
+            }
+        }
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+
+    function _detail_form(){
+        return $this->__detail_form();
+    }
+
+    function anak_detail_form(){
+        return $this->__detail_form(1);
+    }
+
+    function __detail_form($teens=0){
+        $this->formhabit = 'readonly';
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $vcache = $this->__get_treadmill_data((int)$dump[3]);
+        $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
+        if($teens == 0){
+            $result = $this->_form();
+        } else {
+            $result = $this->anak_form();
+        }
+        return $result;
+    }
+
+    function __get_today_lists($teens=NULL){
         $result = array();
         $result = $this->today_patient_lists();
         if(count($result['data'])>0){
             foreach($result['data'] as $key => $value){
-                $result['data'][$key] = $value;
+                if(!is_null($teens)){
+                    if($value['age'] <= $this->config->teenlimit){
+                        $result['data'][$key] = $value;
+                    }
+                } else {
+                    if($value['age'] > $this->config->teenlimit){
+                        $result['data'][$key] = $value;
+                    }
+                }
             }
         }
         return $result;
@@ -90,14 +429,14 @@ class treadmillModule extends mainModule
 
     function __get_treadmill_data($id){
         $result = array();
-        $this->query->connect();
-        $sql=$this->query->getSelect(
+        $sql = $this->query->getSelect(
             array(),
             array('treadmill'),
             array(
                 array('&&', "id=" . $id)
             )
         );
+        $this->query->connect();
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($query->_numOfRows > 0){
@@ -108,84 +447,66 @@ class treadmillModule extends mainModule
         return $result;
     }
 
-//    function form(){
-//        if ($this->__check_caches() === TRUE){
-//            $vcache = $this->__read_form_cache();
-
-    function __treadmill_ref ($tabel,$field,$sort=NULL) {
-        $result = array();
-        $sql=$this->query->getSelect(
-            array(),
-            array($tabel),
-            NULL,
-            (is_null($sort) ? NULL : $sort)
-        );
-        $this->query->connect();
-//        $this->query->conn->debug=true;
-        $getData = $this->query->conn->Execute($sql); unset ($sql);
-        $this->query->close();
-        if($getData->_numOfRows > 0){
-            //while ( $query->_numOfRows >)
-            for ($i=0; $i < $getData->_numOfRows; $i++ ) {
-                $result[$getData->fields['id']] = $getData->fields[$field];
-                $getData->MoveNext();
-            }
-        } unset($query);
-//        echo "<pre>"; print_r($result); echo "</pre>";
-        return $result;
+    function form(){
+        return $this->__get_form();
     }
 
+    function anak_form(){
+        return $this->__get_form(1);
+    }
 
-
-    function form(){
-        if(is_file($this->config->fcache)){
+    function __get_form($teens=0){
+        if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-            unlink($this->config->fcache);
-        } elseif(isset($treadmill_id) && !is_null($treadmill_id)){
-            $vcache = $this->__get_treadmill_data($treadmill_id);
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
-                $vcache['idkunjungan'] = $dump[3]; unset($dump);
-                $this->query->connect();
-                $sql = $this->query->getSelect(
-                    array('patients', 'inputer'),
-                    array('kunjungan'),
-                    array(
-                        array('&&', "id=" . $vcache['idkunjungan'])
-                    )
-                );
-                $query = $this->query->conn->Execute($sql); unset($sql);
-                $this->query->close();
-                $pengirim = $query->fields['inputer'];
-                $idpatients = $query->fields['patients']; unset($query);
-                $vcache['patients'] = $idpatients;
-                unset($idpatients);
+                if(preg_match('/^edit_/', $dump[3])){
+                    $treadmill_id = preg_replace('/^edit_/','',$dump[3]);
+                    $vcache = $this->__get_treadmill_data((int)$treadmill_id);
+                    $this->vardump = $vcache;
+                    unset($treadmill_id);
+                } else {
+                    $vcache['kunjungan'] = $dump[3]; unset($dump);
+                }
             } else {
-                redirect_to('/user/treadmill/today_treadmill_lists');
+                redirect_to('/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/today_treadmill_lists');
             } unset($dump);
         }
-        $form['treadmill'] = array(
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array('patients', 'inputer'),
+            array('kunjungan'),
+            array(
+                array('&&', "id=" . $vcache['kunjungan'])
+            )
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $pengirim = $query->fields['inputer'];
+        if(!isset($vcache['patients'])){
+            $vcache['patients'] = $query->fields['patients']; unset($query);
+        }
+        $form['treadmill_' . ($teens == 0 ? '' : 'anak')] = array(
             '#type' => 'special',
-            '#id' => 'treadmill',
-            '#title' => __t('treadmill'),
+            '#id' => 'treadmill_' . ($teens == 0 ? '' : 'anak'),
+            '#title' => __t('treadmill' . ($teens == 0 ? '' : 'anak')),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/treadmill/form_submit',
+            '#action' => '/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/form/' . ($this->formhabit == 'readonly' ? 'edit_' . $vcache['id'] : '/form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'treadmill' . DS . 'treadmill.tpl',
         );
-        $form['treadmill']['idkunjungan'] = array(
+        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['kunjungan'] = array(
             '#type' => 'hidden',
-            '#value' => isset($vcache['idkunjungan']) ? $vcache['idkunjungan'] : ''
+            '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
         );
         $thefields = $this->__get_data_fields('treadmill', $this->query);
-//        echo '<pre>'; print_r($thefields); echo '</pre>';
         foreach($thefields as $value){
             if(in_array($value, $this->hidden_fields)){
                 if($value == 'id'){
-                    $form['treadmill'][$value] = array(
+                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$value] = array(
                         '#type' => 'hidden',
                         '#value' => isset($vcache['id']) ? $vcache['id'] : ''
                     );
@@ -196,7 +517,7 @@ class treadmillModule extends mainModule
                         $vcache['tgl'] = date('Y-m-d', $this->config->time);
                     }
                 } elseif($value == 'patients'){
-                    $form['treadmill'][$value] = array(
+                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$value] = array(
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
@@ -204,9 +525,8 @@ class treadmillModule extends mainModule
                     if(count($query) > 0){
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
-//                                $vl = $this->agecount_in_month(strtotime($vl));
                                 $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
-                                $form['treadmill']['umur'] = array(
+                                $form['treadmill' . ($teens == 0 ? '' : 'anak')]['umur'] = array(
                                     '#type' => 'info',
                                     '#value' => $vl . ' tahun',
                                     '#title' => __t('umur'),
@@ -228,18 +548,18 @@ class treadmillModule extends mainModule
                                     } elseif($ky == 'gol_darah'){
                                         $tbpos = 5;
                                     }
-                                    $form['treadmill'][$ky] = array(
+                                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky] = array(
                                         '#type' => $ky == 'alamat' ? 'textarea' : 'info',
                                         '#value' => $vl,
                                         '#title' => __t($ky),
                                         '#tbpos' => $tbpos
                                     );
                                     if($ky == 'alamat'){
-                                        $form['treadmill'][$ky]['#extra'] = 'readonly="true"';
-                                        $form['treadmill'][$ky]['#cols'] = '55';
-                                        $form['treadmill'][$ky]['#rows'] = '3';
+                                        $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky]['#extra'] = 'readonly="true"';
+                                        $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky]['#cols'] = '55';
+                                        $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky]['#rows'] = '3';
                                     } elseif($ky == 'no_registrasi'){
-                                        $form['treadmill'][$ky]['#link'] = '/user/treadmill/today_patient_lists';
+                                        $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky]['#link'] = '/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/today_patient_lists';
                                     }
                                     unset($tbpos);
                                 }
@@ -264,7 +584,7 @@ class treadmillModule extends mainModule
                             unset($buffer);
                             $getfrek->MoveNext();
                         }
-                        $form['treadmill']['kunjungan_ke'] = array(
+                        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['kunjungan_ke'] = array(
                             '#type' => 'info',
                             '#value' => count($dumpfrek),
                             '#title' => __t('kunjungan_ke'),
@@ -281,7 +601,7 @@ class treadmillModule extends mainModule
                         $this->query->connect();
                         $getsender = $this->query->conn->Execute($sql); unset($sql);
                         $this->query->close();
-                        $form['treadmill']['pengirim'] = array(
+                        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['pengirim'] = array(
                             '#type' => 'info',
                             '#value' => $getsender->fields['nama'],
                             '#title' => __t('pengirim'),
@@ -291,240 +611,102 @@ class treadmillModule extends mainModule
                     }
 //                    $this->query->close();
                 }
-                if($value != 'no_registrasi'){
-                    $form['treadmill'][$value] = array(
-                        '#type' => $this->formtype_fields[$value],
+                if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
+                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$value] = array(
+                        '#type' => $this->config->fields_form_type[$value],
                         '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
-                        '#size' => $this->formtype_fields[$value] != 'select' && $this->formtype_fields[$value] != 'date' ? 20 : 1,
+                        '#size' => $this->config->fields_form_type[$value] != 'select' && $this->formtype_fields[$value] != 'date' ? 20 : 1,
                         '#title' => __t($value),
                         '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                     );
                 }
+                if($this->formhabit == 'readonly'){
+                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$value]['#extra'] = 'readonly="true"';
+                }
             }
         }
 
-//        $form['treadmill']['tab_items']['presentStatus'] = $this->__loadPresentStatus();
-//        $form['treadmill']['tab_items']['vitalSign'] = $this->__loadVitalSign();
-//        $form['treadmill']['tab_items']['eye'] = $this->__loadEye();
-//        $form['treadmill']['tab_items']['ear'] = $this->__loadEar();
-//        $form['treadmill']['tab_items']['nose'] = $this->__loadNose();
-//        $form['treadmill']['tab_items']['headface'] = $this->__loadHeadFace();
-//        $form['treadmill']['tab_items']['neck'] = $this->__loadNeck();
-//        $form['treadmill']['tab_items']['mouth'] = $this->__loadMouth();
-//        $form['treadmill']['tab_items']['thorax'] = $this->__loadThorax();
-//        $form['treadmill']['tab_items']['paru'] = $this->__loadParu();
-//        $form['treadmill']['tab_items']['hearth'] = $this->__loadHearth();
-//        $form['treadmill']['tab_items']['abdomen'] = $this->__loadAbdomen();
-//        $form['treadmill']['tab_items']['anusrectum'] = $this->__loadAnusrectum();
-//        $form['treadmill']['tab_items']['punggung'] = $this->__loadPunggung();
-//        $form['treadmill']['tab_items']['extermitas'] = $this->__loadExtermitas();
+        $form['treadmill']['tab_items']['FaseIstirahat'] = $this->__loadFaseIstirahat();
+//        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
+//        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
+//        $form['treadmill']['tab_items']['Kesimpulan'] = $this->__loadKesimpulan();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['nose'] = $this->__loadNose();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['headface'] = $this->__loadHeadFace();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['neck'] = $this->__loadNeck();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['mouth'] = $this->__loadMouth();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['thorax'] = $this->__loadThorax();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['space'] = "";
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['paru'] = $this->__loadParu();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['hearth'] = $this->__loadHearth();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['abdomen'] = $this->__loadAbdomen();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['anusrectum'] = $this->__loadAnusrectum();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['punggung'] = $this->__loadPunggung();
+//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['extermitas'] = $this->__loadExtermitas();
 
-        $form['treadmill']['submit'] = array(
+        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['submit'] = array(
             '#type' => 'submit',
-            '#value' => 'submit',
-//            '#extra' => ' class="button"'
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
-//        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
     }
 
-    function __loadHearth($exec=NULL){
-        $this->__include_module('hearth');
+    function __loadFaseIstirahat($exec=NULL){
+        $this->__include_module('istirahat');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->hearth_config->free_val = $this->vardump;
+            $this->FaseIstirahat_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
-                return $this->hearth_exec->treadmill_submit();
+                return $this->istirahat_exec->treadmill_submit();
             }
         } else {
-            return $this->hearth_exec->treadmill_menu();
+            return $this->istirahat_exec->treadmill_menu();
         }
     }
 
-    function __loadAbdomen($exec=NULL){
-        $this->__include_module('abdomen');
+    function __loadFaseLatihan($exec=NULL){
+        $this->__include_module('latihan');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->abdomen_config->free_val = $this->vardump;
+            $this->FaseLatihan_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
-                return $this->abdomen_exec->treadmill_submit();
+                return $this->FaseLatihan_exec->treadmill_submit();
             }
         } else {
-            return $this->abdomen_exec->treadmill_menu();
-        }
-    }
-    
-    function __loadAnusrectum($exec=NULL){
-        $this->__include_module('anusrectum');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->anusrectum_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->anusrectum_exec->treadmill_submit();
-            }
-        } else {
-            return $this->anusrectum_exec->treadmill_menu();
+            return $this->FaseLatihan_exec->treadmill_menu();
         }
     }
 
-    function __loadPunggung($exec=NULL){
-        $this->__include_module('punggung');
+//    function __loadHeadFace($exec=NULL){
+//        $this->__include_module('headface');
+//        if(isset($this->vardump) && count($this->vardump) > 0){
+//            $this->headface_config->free_val = $this->vardump;
+//        }
+//        if(!is_null($exec)){
+//            if($exec == 'submit'){
+//                return $this->headface_exec->treadmill_submit();
+//            }
+//        } else {
+//            return $this->headface_exec->treadmill_menu();
+//        }
+//    }
+
+    function __loadFaseRecovery($exec=NULL){
+        $this->__include_module('recovery');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->punggung_config->free_val = $this->vardump;
+            $this->FaseRecovery_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
-                return $this->punggung_exec->treadmill_submit();
+                return $this->FaseRecovery_exec->treadmill_submit();
             }
         } else {
-            return $this->punggung_exec->treadmill_menu();
+            return $this->FaseRecovery_exec->treadmill_menu();
         }
     }
 
-    function __loadExtermitas($exec=NULL){
-        $this->__include_module('extermitas');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->extermitas_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->extermitas_exec->treadmill_submit();
-            }
-        } else {
-            return $this->extermitas_exec->treadmill_menu();
-        }
-    }
-
-    function __loadParu($exec=NULL){
-        $this->__include_module('paru');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->paru_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->paru_exec->treadmill_submit();
-            }
-        } else {
-            return $this->paru_exec->treadmill_menu();
-        }
-    }
-
-    function __loadThorax($exec=NULL){
-        $this->__include_module('thorax');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->thorax_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->thorax_exec->treadmill_submit();
-            }
-        } else {
-            return $this->thorax_exec->treadmill_menu();
-        }
-    }
-
-    function __loadNeck($exec=NULL){
-        $this->__include_module('neck');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->neck_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->neck_exec->treadmill_submit();
-            }
-        } else {
-            return $this->neck_exec->treadmill_menu();
-        }
-    }
-
-    function __loadMouth($exec=NULL){
-        $this->__include_module('mouth');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->mouth_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->mouth_exec->treadmill_submit();
-            }
-        } else {
-            return $this->mouth_exec->treadmill_menu();
-        }
-    }
-
-    function __loadPresentStatus($exec=NULL){
-        $this->__include_module('presentStatus');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->presentStatus_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->presentStatus_exec->treadmill_submit();
-            }
-        } else {
-            return $this->presentStatus_exec->treadmill_menu();
-        }
-    }
-
-    function __loadVitalSign($exec=NULL){
-        $this->__include_module('vitalSign');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->vitalSign_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->vitalSign_exec->treadmill_submit();
-            }
-        } else {
-            return $this->vitalSign_exec->treadmill_menu();
-        }
-    }
-
-    function __loadHeadFace($exec=NULL){
-        $this->__include_module('headface');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->headface_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->headface_exec->treadmill_submit();
-            }
-        } else {
-            return $this->headface_exec->treadmill_menu();
-        }
-    }
-
-    function __loadEye($exec=NULL){
-        $this->__include_module('eye');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->eye_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->eye_exec->treadmill_submit();
-            }
-        } else {
-            return $this->eye_exec->treadmill_menu();
-        }
-    }
-
-    function __loadNose($exec=NULL){
-        $this->__include_module('nose');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->nose_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->nose_exec->treadmill_submit();
-            }
-        } else {
-            return $this->nose_exec->treadmill_menu();
-        }
-    }
-
-    function __loadEar($exec=NULL){
+    function __loadKesimpulan($exec=NULL){
         $this->__include_module('ear');
         if(isset($this->vardump) && count($this->vardump) > 0){
             $this->ear_config->free_val = $this->vardump;
@@ -536,31 +718,23 @@ class treadmillModule extends mainModule
         } else {
             return $this->ear_exec->treadmill_menu();
         }
-        $form['treadmill']['submit'] = array(
-            '#type' => 'submit',
-            '#value' => 'submit',
-        );
-//        echo '<pre>'; print_r($form); echo '</pre>';
-
-        $form['treadmill_layout']['perubahan_gelombang'] = $this->__treadmill_ref('ref_faseLatihan_perubahan_gelombang','perubahan_gelombang');
-        $form['treadmill_layout']['latihan_dihentikan'] = $this->__treadmill_ref('ref_faseLatihan_dihentikan','dihentikan');
-        $form['treadmill_layout']['respon_jantung'] = $this->__treadmill_ref('ref_faseLatihan_respon_jantung','respon');
-        $form['treadmill_layout']['respon_darah'] = $this->__treadmill_ref('ref_faseLatihan_tekanan_darah','respon');
-        $form['treadmill_layout']['uljb'] = $this->__treadmill_ref('ref_threadKesimpulanSaran_Ulib','Ulib');
-        $form['treadmill_layout']['kesegaran_jasmani'] = $this->__treadmill_ref('ref_threadKesimpulanSaran_kesegaran','kesegaran');
-        $form['treadmill_layout']['fungsional'] = $this->__treadmill_ref('ref_threadKesimpulanSaran_fungsional','fungsional');
-        $form['treadmill_layout']['saran_darah'] = $this->__treadmill_ref('ref_threadKesimpulanSaran_tekananDarah','tekananDarah');
-
-        return $form;
     }
 
-    function treadmill_form_submit(){
+    function _form_submit(){
+        return $this->__get_form_submit();
+    }
+
+    function anak_form_submit(){
+        return $this->__get_form_submit(1);
+    }
+
+    function __get_form_submit($teens=0){
         $this->vardump = $this->__write_form_cache();
         $sql = $this->query->getSelect(
             array(),
             array('kunjungan'),
             array(
-                array('&&', "id=" . $_POST['idkunjungan'])
+                array('&&', "id=" . $_POST['kunjungan'])
             )
         );
         $this->query->connect();
@@ -577,9 +751,12 @@ class treadmillModule extends mainModule
                 $thevalue[$key] = $value;
             }
         } unset($thefields);
+        if($teens != 0 && $teens != '0'){
+            $thevalue['teens'] = 1;
+        }
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
-            $thevalue['updated'] = $user['userid'] . '|' . date('Y-m-d H:i:s', $this->config->time);
+            $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
             $sql = $this->query->updateData(
                 'treadmill',
                 $thevalue,
@@ -601,36 +778,36 @@ class treadmillModule extends mainModule
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         unset($thevalue);
-//        $this->__loadPresentStatus('submit');
-//        $this->__loadVitalSign('submit');
-//        $this->__loadEye('submit');
-//        $this->__loadEar('submit');
-//        $this->__loadNose('submit');
-//        $this->__loadHeadFace('submit');
-//        $this->__loadNeck('submit');
-//        $this->__loadMouth('submit');
-//        $this->__loadThorax('submit');
-//        $this->__loadParu('submit');
-//        $this->__loadHearth('submit');
-//        $this->__loadAbdomen('submit');
-//        $this->__loadAnusrectum('submit');
-//        $this->__loadPunggung('submit');
-//        $this->__loadExtermitas('submit');
+        $this->__loadFaseIstirahat('submit');
+        $this->__loadFaseLatihan('submit');
+        $this->__loadFaseRecovery('submit');
+        $this->__loadKesimpulan('submit');
+        $this->__loadNose('submit');
+        $this->__loadHeadFace('submit');
+        $this->__loadNeck('submit');
+        $this->__loadMouth('submit');
+        $this->__loadThorax('submit');
+        $this->__loadParu('submit');
+        $this->__loadHearth('submit');
+        $this->__loadAbdomen('submit');
+        $this->__loadAnusrectum('submit');
+        $this->__loadPunggung('submit');
+        $this->__loadExtermitas('submit');
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',
                 array(
-                    'doneby' => '1'
+                    'doneby' => $_COOKIE[$this->config->cookieid]
                 ),
                 array(
-                    array('&&', "id=" . $_POST['idkunjungan'])
+                    array('&&', "id=" . $_POST['kunjungan'])
                 )
             );
             $this->query->connect();
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/user/treadmill/form');
+        redirect_to('/user/treadmill_' . ($teens == 0 ? '' : 'anak') . '/view');
     }
 
 }

@@ -137,7 +137,7 @@ foreach($data as $key => $value){
                     $result .= '<td align="left"' . ($lv['#type'] != 'select2' ? ' colspan="2"' : '') . '>';
                     if($yk != 'gelombang_t'){
                         if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
-                            $result .= ($lv['#type'] == 'select' ? $lv['#theref'][$lv['#value'][0]] : $lv['#value'][0]) . ($lv['#type'] == 'select' ? '' : ' ' . __t('pada sendapan') . ' ' . $lv['#theref'][$lv['#value'][1]]);
+                            $result .= ($lv['#type'] == 'select' ? $lv['#theref'][$lv['#value'][0]] : $lv['#value'][0]) . ($lv['#type'] == 'select' ? '' : ' ' . __t('pada sandapan') . ' ' . $lv['#theref'][$lv['#value'][1]]);
                         } else {
                             if($lv['#type'] == 'select2'){
 //                                echo '<pre>'; print_r($lv['#value']); echo '</pre>';
@@ -155,7 +155,7 @@ foreach($data as $key => $value){
                                     $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
                                 }
                                 $result .= '</select>' . "\n";
-                                $result .= __t('pada sendapan') . "\n";
+                                $result .= __t('pada sandapan') . "\n";
                                 $result .= '<select name="' . $yk . '[1]" size="1">';
                                 $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
                                 foreach($lv['#theref'] as $kk => $vv){
@@ -172,7 +172,7 @@ foreach($data as $key => $value){
                             }
                         }
                     } else {
-                        $result .= __t('pada sendapan') . "\n";
+                        $result .= '<br />' . __t('pada sandapan') . "\n";
                         if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
                             $result .= $lv['#theref'][$lv['#value'][1]];
                         } else {
@@ -187,7 +187,7 @@ foreach($data as $key => $value){
                     $result .= '</td>' . "\n";
                     if($lv['#type'] == 'select2' && (!isset($lv['#readonly']) || $lv['#readonly'] !== TRUE)){
                         $result .= '<td align="left">' . "\n";
-                        $result .= __t('pada sendapan') . "\n";
+                        $result .= __t('pada sandapan') . "\n";
                         $result .= '<select name="' . $yk . '[1]" size="1">';
                         $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
                         foreach($lv['#theref'] as $kk => $vv){

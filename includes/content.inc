@@ -138,6 +138,7 @@ function exec_module_function($func){
                 ${$get_module . '_exec'}->query = ${$get_module . '_query'};
 
                 if(preg_match('/form$/', $value)){
+//                    echo '<pre>'; print_r($value); echo '</pre>';
                     $output['form'][] = ${$get_module . '_exec'}->$value();
                 } else {
                     if($get_module == 'core'){
