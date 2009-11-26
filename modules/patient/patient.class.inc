@@ -715,7 +715,8 @@ class patientModule extends mainModule
     //                '#title' => __t('&nbsp;'),
                     '#extra' => ' class="button"'
                );
-            }echo '<pre>'; print_r($result); echo '</pre>';
+            }
+//            echo '<pre>'; print_r($result); echo '</pre>';
 //            echo '<pre>'; print_r($form); echo '</pre>';
             return $form;
     }
@@ -1199,7 +1200,8 @@ class patientModule extends mainModule
     //                '#title' => __t('&nbsp;'),
                     '#extra' => ' class="button"'
                );
-            }echo '<pre>'; print_r($result); echo '</pre>';//===add by emmank
+            }
+//            echo '<pre>'; print_r($result); echo '</pre>';//===add by emmank
             return $form;
     }
 

@@ -43,7 +43,27 @@ class dbset
 
 	function close(){
         $this->conn->Close();
-    }
+        }
+
+        function alterTableColumn($table, $colname = array(), $operation='drop', $type='int', $notnull=FALSE, $default=''){
+            $result = '';
+            if(count($colname) > 0){
+                $result .= 'ALTER TABLE ' . $this->getTblName($table) . ' ' . $operation . ' COLUMN ' . $colname[0];
+                if($operation == "change"){
+                    $result .=  ' ' . $colname[1];
+                }
+                if(!eregi('drop', $operation)){
+                    $result .= ' ' . $type;
+                    if($notnull !== FALSE){
+                        $result .= ' NOT NULL';
+                    }
+                    if(trim($default) != ''){
+                        $result .= ' DEFAULT ' . $default;
+                    }
+                }
+            }
+            return $result;
+        }
 
 	function getDbName(){
 	$dbname = (!is_null($this->dbprefix)&&$this->dbprefix!=''?$this->dbprefix.'_':'').$this->dbname.(!is_null($this->dbsuffix)&&$this->dbsuffix!=''?'_'.$this->dbsuffix:'');

@@ -170,8 +170,29 @@ function __get_user(){
 
 function __write_registry(){
     global $configs, $systemquery, $user;
-//    echo '<pre>'; print_r($user); echo '</pre>';
+    $sql = $systemquery->getSelect(
+        array('id'),
+        array('registry'),
+        array(
+            array('&&', "id=" . $_COOKIE[$configs->cookiesession])
+        )
+    );
+    $systemquery->connect();
+    $checkit = $systemquery->conn->Execute($sql); unset($sql);
+    $systemquery->close();
+    if($checkit->_numOfRows > 0){
+        $sql = $systemquery->setDelete(
+            'registry',
+            array(
+                array('&&', "id=" . $_COOKIE[$configs->cookiesession])
+            )
+        );
+        $systemquery->connect();
+        $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+    } unset($checkit);
     $menu_actives = __get_active_menus(1);
+    $path_actives = __get_active_paths(1);
     $primary_links = __get_primary_links();
     $secondary_links = __get_secondary_links();
     $navigations = __get_navigations();
@@ -200,28 +221,11 @@ function __write_registry(){
         if(isset($koma)){$thevalue['alls'] .= ',';} else {$thevalue['alls'] = '';}
         $thevalue['alls'] .= $value; $koma = 0;
     } unset($koma);
+    foreach ($path_actives as $key=>$value){
+        if(isset($koma)){$thevalue['path_alls'] .= ',';} else {$thevalue['path_alls'] = '';}
+        $thevalue['path_alls'] .= $value; $koma = 0;
+    } unset($koma);
 
-    $sql = $systemquery->getSelect(
-        array('id'),
-        array('registry'),
-        array(
-            array('&&', "id=" . $_COOKIE[$configs->cookiesession])
-        )
-    );
-    $systemquery->connect();
-    $checkit = $systemquery->conn->Execute($sql); unset($sql);
-    $systemquery->close();
-    if($checkit->_numOfRows > 0){
-        $sql = $systemquery->setDelete(
-            'registry',
-            array(
-                array('&&', "id=" . $_COOKIE[$configs->cookiesession])
-            )
-        );
-        $systemquery->connect();
-        $systemquery->conn->Execute($sql); unset($sql);
-        $systemquery->close();
-    } unset($checkit);
     $thevalue['id'] = $_COOKIE[$configs->cookiesession];
 //    echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
 

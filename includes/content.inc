@@ -32,7 +32,7 @@ function get_content($path){
             redirect_to('/'); exit();
         }
         $sql = $systemquery->getSelect(
-            array('alls'),
+            array('path_alls'),
             array('registry'),
             array(
                 array('&&', "id=" . $_COOKIE[$configs->cookiesession])
@@ -44,21 +44,7 @@ function get_content($path){
         if($getit->_numOfRows < 1){
             redirect_to('/'); exit();
         }
-        $listmenus = explode(',', $getit->fields['alls']);
-        $listpath = array();
-        foreach($listmenus as $value){
-            $sql = $systemquery->getSelect(
-                array('path'),
-                array('menus'),
-                array(
-                    array('&&', "id=" . trim($value))
-                )
-            );
-            $systemquery->connect();
-            $getthis = $systemquery->conn->Execute($sql); unset($sql);
-            $systemquery->close();
-            $listpath[] = $getthis->fields['path'];
-        } unset($listmenus);
+        $listpath = explode(',', $getit->fields['path_alls']);
         $dump = $path;
         $vars = explode('/',$dump['vars']);
         $dump['vars'] = $vars[0]; unset($vars);

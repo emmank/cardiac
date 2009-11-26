@@ -340,6 +340,110 @@ function __get_active_menus($forced=NULL){
     return $result;
 }
 
+function __get_active_paths($forced=NULL){
+    global $user, $systemquery, $configs;
+    $result = array();
+    $lists = __get_menu_lists(!is_null($forced) ? $forced : NULL);
+    if(count($user) < 1){
+        if(isset($_COOKIE[$configs->cookiesession])){
+            $sql = $systemquery->getSelect(
+                array(),
+                array($configs->auth_use_table[0]),
+                array(
+                    array('&&', $configs->auth_use_table[3] . "=" . $_COOKIE[$configs->cookiesession])
+                )
+            );
+            $systemquery->connect();
+            $getit = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            if($getit->_numOfRows > 0){
+                $user = $getit->fields;
+            } unset($getit);
+        }
+    }
+//    echo '<pre>'; print_r($user); echo '</pre>'; exit();
+//    echo '<pre>'; print_r($lists); echo '</pre>'; exit();
+    foreach($lists as $key=>$value){
+        $sql = $systemquery->getSelect(
+            array(),
+            array('menus'),
+            array(
+                array('&&', "id=" . $value)
+            )
+        );
+        $systemquery->connect();
+        $getelements = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        if($getelements->fields['source'] == 'modules'){
+            if($getelements->fields['module'] == 'auth'){
+                if($value == 'login' || $value == 'logout'){
+                    if($value == __get_active_login()){
+                        $result[] = $getelements->fields['path'];
+                    }
+                } else {
+                    if(!is_null($getelements->fields['user_required']) && $getelements->fields['user_required'] != '' && $getelements->fields['user_required'] != '0' && $getelements->fields['user_required'] != false){
+                        if($getelements->fields['user_required'] == 'admin'){
+                            if($user['groups'] == 'admin'){
+                                $result[] = $getelements->fields['path'];
+                            }
+                        } elseif($getelements->fields['user_required'] == 'users'){
+                            if(count($user) > 0){
+                                $result[] = $getelements->fields['path'];
+                            }
+                        } elseif($getelements->fields['user_required'] != 'admin' && $getelements->fields['user_required'] != 'users'){
+                            if($user['groups'] == 'admin' || $user['groups'] == $getelements->fields['user_required']){
+                                $result[] = $getelements->fields['path'];
+                            } elseif(__get_group_permission($getelements->fields['user_required']) !== FALSE){
+                                $result[] = $getelements->fields['path'];
+                            }
+                        }
+                    } else {
+                        $result[] = $getelements->fields['path'];
+                    }
+                }
+            } else {
+                if(!is_null($getelements->fields['user_required']) && $getelements->fields['user_required'] != '' && $getelements->fields['user_required'] != '0' && $getelements->fields['user_required'] != false){
+                    if($getelements->fields['user_required'] == 'admin'){
+                        if($user['groups'] == 'admin'){
+                            $result[] = $getelements->fields['path'];
+                        }
+                    } elseif($getelements->fields['user_required'] == 'users'){
+                        if(count($user) > 0){
+                            $result[] = $getelements->fields['path'];
+                        }
+                    } elseif($getelements->fields['user_required'] != 'admin' && $getelements->fields['user_required'] != 'users'){
+                        if($user['groups'] == 'admin' || $user['groups'] == $getelements->fields['user_required']){
+                            $result[] = $getelements->fields['path'];
+                        } elseif(__get_group_permission($getelements->fields['user_required']) !== FALSE){
+                            $result[] = $getelements->fields['path'];
+                        }
+                    }
+                } else {
+                    $result[] = $getelements->fields['path'];
+                }
+            }
+        } elseif($getelements->fields['source'] == 'configs'){
+            if(!is_null($getelements->fields['user_required']) && $getelements->fields['user_required'] != '' && $getelements->fields['user_required'] != '0' && $getelements->fields['user_required'] != false){
+                if($user['groups'] == 'admin'){
+                    $result[] = $getelements->fields['path'];
+                } elseif($getelements->fields['user_required'] == 'users'){
+                    if(count($user) > 0){
+                        $result[] = $getelements->fields['path'];
+                    }
+                } elseif($getelements->fields['user_required'] != 'admin' && $getelements->fields['user_required'] != 'users'){
+                    if($user['groups'] == 'admin' || $user['groups'] == $getelements->fields['user_required']){
+                        $result[] = $getelements->fields['path'];
+                    }
+                }
+            } else {
+                $result[] = $getelements->fields['path'];
+            }
+        } unset($getelements);
+    }
+//    echo '<pre>'; print_r($result); echo '</pre>'; exit();
+    return $result;
+}
+
 function get_active_modules(){
     global $systemquery, $configs;
     $result = array();
