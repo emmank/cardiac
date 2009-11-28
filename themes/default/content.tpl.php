@@ -51,7 +51,9 @@ if ($menu_info['id'] != "login") {
             }
             break;
         }?>
-        <div<?php if($formname == 'login'){?> id="login-form"<?php }?>>
+        
+        <?php if($formname == 'login'){?> <div id="login-form"><?php }?>
+
         <?php if($formtype == 'special'){?>
             <?php
             echo __create_form_special($value);
@@ -63,8 +65,12 @@ if ($menu_info['id'] != "login") {
         <?php } else {?>
             <?php echo __create_form($value);?>
         <?php }?>
-        <?php unset($formname, $formtype);?>
+        <?php if ($formname == "login") {?>
         </div>
+        <?php }?>
+
+        <?php unset($formname, $formtype);?>
+        
     <?php }?>
 <?php } else { ?>
     <?php

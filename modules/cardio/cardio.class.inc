@@ -633,8 +633,8 @@ class cardioModule extends mainModule
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['headface'] = $this->__loadHeadFace();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['neck'] = $this->__loadNeck();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['mouth'] = $this->__loadMouth();
-        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['thorax'] = $this->__loadThorax();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['space'] = "";
+        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['thorax'] = $this->__loadThorax();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['paru'] = $this->__loadParu();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['hearth'] = $this->__loadHearth();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['abdomen'] = $this->__loadAbdomen();
