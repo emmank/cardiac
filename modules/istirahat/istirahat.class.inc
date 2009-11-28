@@ -345,7 +345,7 @@ class istirahatModule extends mainModule
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'nutrient', 'present_status', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'nutrient', 'istirahat', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
         $result['title'] = __t('detil referensi gizi');
@@ -429,7 +429,7 @@ class istirahatModule extends mainModule
     }
 
     function nutrient_drop(){
-        if($this->__is_dropable($_POST['id'], 'nutrient', 'present_status', $this->query) !== FALSE){
+        if($this->__is_dropable($_POST['id'], 'nutrient', 'istirahat', $this->query) !== FALSE){
             $this->query->connect();
             $sql = $this->query->setDelete(
                 'ref_present_nutrient',
@@ -563,7 +563,7 @@ class istirahatModule extends mainModule
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'soreness', 'present_status', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'soreness', 'istirahat', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
         $result['title'] = __t('detil referensi gizi');
@@ -647,7 +647,7 @@ class istirahatModule extends mainModule
     }
 
     function soreness_drop(){
-        if($this->__is_dropable($_POST['id'], 'soreness', 'present_status', $this->query) !== FALSE){
+        if($this->__is_dropable($_POST['id'], 'soreness', 'istirahat', $this->query) !== FALSE){
             $this->query->connect();
             $sql = $this->query->setDelete(
                 'ref_present_soreness',
@@ -781,7 +781,7 @@ class istirahatModule extends mainModule
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'risk_factor', 'present_status', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'risk_factor', 'istirahat', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
         $result['title'] = __t('detil referensi gizi');
@@ -865,7 +865,7 @@ class istirahatModule extends mainModule
     }
 
     function ref_risk_factor_drop(){
-        if($this->__is_dropable($_POST['id'], 'risk_factor', 'present_status', $this->query) !== FALSE){
+        if($this->__is_dropable($_POST['id'], 'risk_factor', 'istirahat', $this->query) !== FALSE){
             $this->query->connect();
             $sql = $this->query->setDelete(
                 'ref_present_risk_factor',
@@ -999,7 +999,7 @@ class istirahatModule extends mainModule
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'illness_history', 'present_status', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'illness_history', 'istirahat', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
         $result['title'] = __t('detil referensi gizi');
@@ -1083,7 +1083,7 @@ class istirahatModule extends mainModule
     }
 
     function ref_illness_history_drop(){
-        if($this->__is_dropable($_POST['id'], 'illness_history', 'present_status', $this->query) !== FALSE){
+        if($this->__is_dropable($_POST['id'], 'illness_history', 'istirahat', $this->query) !== FALSE){
             $this->query->connect();
             $sql = $this->query->setDelete(
                 'ref_present_illness_history',
@@ -1117,14 +1117,14 @@ class istirahatModule extends mainModule
 
     function treadmill_menu(){
         $result = array();
-        $result['#title'] = __t('Status Present');
+        $result['#title'] = __t('Fase Istirahat');
         $result['#tpl'] = MODULES_DIR . DS . 'istirahat' . DS . 'istirahat.tpl';
-        $datafields = $this->__get_data_fields('present_status', $this->query);
+        $datafields = $this->__get_data_fields('istirahat', $this->query);
         if (count($this->config->free_val) > 0){
             $vcache = $this->config->free_val;
             $sql = $this->query->getSelect(
                 array(),
-                array('present_status'),
+                array('istirahat'),
                 array(
                     array('&&', "id=" . $vcache['id'])
                 )
@@ -1164,7 +1164,7 @@ class istirahatModule extends mainModule
     }
 
     function treadmill_submit(){
-        $thefields = $this->__get_data_fields('present_status', $this->query);
+        $thefields = $this->__get_data_fields('istirahat', $this->query);
         foreach($this->config->free_val as $key => $value){
             if(in_array($key, $thefields)){
                 if($key == 'catched'){
@@ -1180,7 +1180,7 @@ class istirahatModule extends mainModule
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $sql = $this->query->updateData(
-                'present_status',
+                'istirahat',
                 $thevalue,
                 array(
                     array('&&', "id=" . $_POST['id'])
@@ -1188,7 +1188,7 @@ class istirahatModule extends mainModule
             );
         } else {
             $sql = $this->query->saveData(
-                'present_status',
+                'istirahat',
                 $thevalue
             );
         }

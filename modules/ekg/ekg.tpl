@@ -141,13 +141,19 @@ foreach($data as $key => $value){
                         } else {
                             if($lv['#type'] == 'select2'){
 //                                echo '<pre>'; print_r($lv['#value']); echo '</pre>';
+                                $result .= '<select name="' . $yk . '[0]" size="1">';
+                                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
                                 foreach($lv['#customized']['option'] as $kk => $vv){
-                                    if(isset($koma)){
-                                        $result .= '<br />';
-                                    }
-                                    $result .= '<input type="radio" name="' . $yk . '[0]" value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' checked="true"' : '') . '> ' . $vv . "\n";
-                                    $koma = 0;
-                                } unset($koma);
+                                    $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
+                                }
+                                $result .= '</select>' . "\n";
+//                                foreach($lv['#customized']['option'] as $kk => $vv){
+//                                    if(isset($koma)){
+//                                        $result .= '<br />';
+//                                    }
+//                                    $result .= '<input type="radio" name="' . $yk . '[0]" value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' checked="true"' : '') . '> ' . $vv . "\n";
+//                                    $koma = 0;
+//                                } unset($koma);
                             } elseif($lv['#type'] == 'select3') {
                                 $result .= '<select name="' . $yk . '[0]" size="1">';
                                 $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
