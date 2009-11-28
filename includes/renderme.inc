@@ -593,18 +593,11 @@ function __create_notelist($value){
     return $result;
 }
 
-function __create_desc($value)
+function __create_main_image()
 {
-    echo "<pre>";
-    print_r ($value);
-    echo "</pre>";
+    $result .= '<center><IMG SRC="/themes/default/images/main_image.png"></center><br />';
     
-    if ($value == "node") {
-    //$result = "coba aja : test";
-    $result .= "Form pelayanan Pasien <br>";
-    }
-
-    //$result .= '<IMG SRC="/themes/default/images/main_image.png">';
+    $result .= "<br />";
     return $result;
 }
 

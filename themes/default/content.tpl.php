@@ -88,21 +88,7 @@ if ($menu_info['id'] != "login") {
             <?php }?>
         <?php }?>
     <?php } else {?>
-        <?php
-              echo __create_desc("");
-              $path = get_path_array();
-             
-              echo "<pre>";
-              print_r ($path);
-              echo "</pre>";
-          
-              foreach ($path as $key => $value) {
-                  if ($value == "node") {
-                   echo __create_desc($value);
-                  }
-              }
-
-        ?>
+        <?php echo __create_main_image(); ?>
     <?php } ?>
 <?php }?>
 
