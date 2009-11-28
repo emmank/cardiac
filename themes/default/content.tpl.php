@@ -40,10 +40,7 @@ if ($menu_info['id'] != "login") {
 <?php } else {?>
     <!--div id=content-title>Cardiac Center</div-->
 <?php }?>
-<pre>
-test
-<?php print_r($content); ?>
-</pre>
+
 <?php if(isset($content['output']['form'])){?>
     <?php foreach($content['output']['form'] as $key => $value){?>
         <?php foreach($value as $ke => $val){
@@ -70,6 +67,13 @@ test
         </div>
     <?php }?>
 <?php } else { ?>
+    <?php
+        /*
+         * cek $content['output'] punya key, jika ada, set display berdasarkan key.
+         * jika tidak buatkan default display
+         */
+        if (count ($content['output']) > 0) {;
+    ?>
     <?php foreach($content['output'] as $value){?>
             <?php if ($value['type'] == 'table'){?>
                 <?php echo __create_table($value);?>
@@ -83,6 +87,23 @@ test
                 <?php echo __create_notelist($value);?>
             <?php }?>
         <?php }?>
+    <?php } else {?>
+        <?php
+              echo __create_desc("");
+              $path = get_path_array();
+             
+              echo "<pre>";
+              print_r ($path);
+              echo "</pre>";
+          
+              foreach ($path as $key => $value) {
+                  if ($value == "node") {
+                   echo __create_desc($value);
+                  }
+              }
+
+        ?>
+    <?php } ?>
 <?php }?>
 
 
