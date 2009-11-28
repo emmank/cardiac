@@ -40,7 +40,10 @@ if ($menu_info['id'] != "login") {
 <?php } else {?>
     <!--div id=content-title>Cardiac Center</div-->
 <?php }?>
-
+<pre>
+test
+<?php print_r($content); ?>
+</pre>
 <?php if(isset($content['output']['form'])){?>
     <?php foreach($content['output']['form'] as $key => $value){?>
         <?php foreach($value as $ke => $val){
@@ -68,18 +71,18 @@ if ($menu_info['id'] != "login") {
     <?php }?>
 <?php } else { ?>
     <?php foreach($content['output'] as $value){?>
-        <?php if ($value['type'] == 'table'){?>
-            <?php echo __create_table($value);?>
-        <?php } elseif($value['type'] == 'items_detail') {?>
-            <?php echo __create_items_detail($value);?>
-        <?php } elseif($value['type'] == 'info') {?>
-            <?php echo __create_info($value);?>
-        <?php } elseif($value['type'] == 'search') {?>
-            <?php echo __create_search($value);?>
-        <?php } elseif($value['type'] == 'notelist') {?>
-            <?php echo __create_notelist($value);?>
+            <?php if ($value['type'] == 'table'){?>
+                <?php echo __create_table($value);?>
+            <?php } elseif($value['type'] == 'items_detail') {?>
+                <?php echo __create_items_detail($value);?>
+            <?php } elseif($value['type'] == 'info') {?>
+                <?php echo __create_info($value);?>
+            <?php } elseif($value['type'] == 'search') {?>
+                <?php echo __create_search($value);?>
+            <?php } elseif($value['type'] == 'notelist') {?>
+                <?php echo __create_notelist($value);?>
+            <?php }?>
         <?php }?>
-    <?php }?>
 <?php }?>
 
 

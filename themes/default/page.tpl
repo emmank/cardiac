@@ -53,7 +53,7 @@
 <body<?php if (isset($body_login)){echo " onLoad=\"".$body_login. "\"";}?>>
 
 <div id="container">
-
+    
 <?php if(!isset($body_login)){?>
 <div id="header">
 <a href="/regload"><IMG src="/themes/<?php echo $theme;?>/images/cardiac_logo.png" border="0" align="left"></a>
