@@ -67,19 +67,29 @@ if ($menu_info['id'] != "login") {
         </div>
     <?php }?>
 <?php } else { ?>
+    <?php
+        /*
+         * cek $content['output'] punya key, jika ada, set display berdasarkan key.
+         * jika tidak buatkan default display
+         */
+        if (count ($content['output']) > 0) {;
+    ?>
     <?php foreach($content['output'] as $value){?>
-        <?php if ($value['type'] == 'table'){?>
-            <?php echo __create_table($value);?>
-        <?php } elseif($value['type'] == 'items_detail') {?>
-            <?php echo __create_items_detail($value);?>
-        <?php } elseif($value['type'] == 'info') {?>
-            <?php echo __create_info($value);?>
-        <?php } elseif($value['type'] == 'search') {?>
-            <?php echo __create_search($value);?>
-        <?php } elseif($value['type'] == 'notelist') {?>
-            <?php echo __create_notelist($value);?>
+            <?php if ($value['type'] == 'table'){?>
+                <?php echo __create_table($value);?>
+            <?php } elseif($value['type'] == 'items_detail') {?>
+                <?php echo __create_items_detail($value);?>
+            <?php } elseif($value['type'] == 'info') {?>
+                <?php echo __create_info($value);?>
+            <?php } elseif($value['type'] == 'search') {?>
+                <?php echo __create_search($value);?>
+            <?php } elseif($value['type'] == 'notelist') {?>
+                <?php echo __create_notelist($value);?>
+            <?php }?>
         <?php }?>
-    <?php }?>
+    <?php } else {?>
+        <?php echo __create_main_image(); ?>
+    <?php } ?>
 <?php }?>
 
 

@@ -593,6 +593,14 @@ function __create_notelist($value){
     return $result;
 }
 
+function __create_main_image()
+{
+    $result .= '<center><IMG SRC="/themes/default/images/main_image.png"></center><br />';
+    
+    $result .= "<br />";
+    return $result;
+}
+
 require_once THEMES_DIR . DS . $theme . DS . 'page.tpl';
 
 //end of file;
