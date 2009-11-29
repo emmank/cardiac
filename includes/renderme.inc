@@ -101,13 +101,22 @@ function __create_add_menu($data){
                 $valadd['add'] = array(
                     '#type' => 'fieldset',
                     '#title' => 'hidden',
-                    '#action' => $data[$ky]['action'],
-                    'submit' => array(
+                    '#action' => $data[$ky]['action']
+                );
+                if(isset($data[$ky]['methode']) && $data[$ky]['methode'] == 'choose'){
+                    $valadd['add'][$data[$ky]['filter']] = array(
+                        '#type' => 'select',
+                        '#size' => 1,
+                        '#option' => $data[$ky]['options'],
+                        '#extra' => 'onchange="javascript:this.form.submit()"'
+                    );
+                } else {
+                    $valadd['add']['submit'] = array(
                         '#type' => 'submit',
                         '#value' => $data[$ky]['title'],
                         '#class' => 'button'
-                    )
-                );
+                    );
+                }
                 $result .= '<td align="' . ($i < 1 ? 'left' : 'right') . '">';
                 $result .= __create_form($valadd);
                 $result .= '</td>';
@@ -119,12 +128,21 @@ function __create_add_menu($data){
                 '#type' => 'fieldset',
                 '#title' => 'hidden',
                 '#action' => $data['action'],
-                'submit' => array(
+            );
+            if(isset($data['methode']) && $data['methode'] == 'choose'){
+                $valadd['add'][$data['filter']] = array(
+                    '#type' => 'select',
+                    '#size' => 1,
+                    '#option' => $data['options'],
+                    '#extra' => 'onchange="javascript:this.form.submit()"'
+                );
+            } else {
+                $valadd['add']['submit'] = array(
                     '#type' => 'submit',
                     '#value' => $data['title'],
                     '#class' => 'button'
-                )
-            );
+                );
+            }
             $result .= __create_form($valadd);
         } unset($ok, $valadd);
         $result .= '</div>';
@@ -259,9 +277,9 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     $result = '';
 //    echo '<pre>'; print_r($data); echo '</pre>';
     foreach($data as $key => $value){
-        $result .= '<div>';
+        $result .= '<div>' . "\n";
         if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden'){
-            $result .= '<label for="'. $key .'">' . ucwords($value['#title']) . '</label>';
+            $result .= '<label for="'. $key .'">' . ucwords($value['#title']) . '</label>' . "\n";
         }
         if(in_array($value['#type'], $forminput)){
             if($value['#type'] == 'checkbox' || $value['#type'] == 'radio'){
@@ -374,7 +392,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                 if(isset($classitem) && !is_null($classitem)){
                     $result .= ' class="' . $classitem . '"';
                 }
-                $result .= '>';
+                $result .= '>' . "\n";
                 if(isset($value['#option_blank']) && $value['#option_blank'] == '1'){
                     $result .= '<option value=""></option>' . "\n";
                 }
@@ -383,9 +401,9 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                     if($yk == $value['#value']){
                         $result .= ' selected';
                     }
-                    $result .= '>' . $lv . '</option>';
+                    $result .= '>' . $lv . '</option>' . "\n";
                 }
-                $result .= '</select>';
+                $result .= '</select>' . "\n";
             }
         } elseif($value['#type'] == 'date'){
             $value['#value'] = $value['#value'] == '' ? array('1970', '01', '01') : explode('-', $value['#value']);
