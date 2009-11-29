@@ -23,6 +23,7 @@
  */
 
 class istirahatConfig extends config
+
 {
     var $rdbms = 'mysql';
     var $dbistirahat = array(
@@ -40,22 +41,48 @@ class istirahatConfig extends config
     );
     var $typeoffields = array(
         'id' => 'hidden',
-        'tall' => 'text',
-        'weight' => 'text',
-        'tension' => 'text',
-        'risk_factor' => 'checkbox',
-        'catched' => 'datetime',
-        'nutrient' => 'select',
-        'main_soreness' => 'select',
-        'ilness_history' => 'checkbox'
+        'patients' => 'hidden',
+        'tensi_sistolik' => 'text',
+        'tensi_diastolik' => 'text',
+        'denyut_jantung' => 'select',
+	'irama_dasar' => 'select',
+        'gelombang_p' => 'select',
+        'interval_pr' => 'select',
+        'qrs_axis' => 'select',
+        'qrs_durasi' => 'select',
+        'qrs_konfigurasi_patologi' => 'select',
+        'qrs_konfigurasi_rs' => 'select',
+        'segment_st_depresi' => 'select',
+        'segment_st_elevasi' => 'select',
+        'gelombang_t' => 'select',
+        'q_interval' => 'select'
     );
     var $fieldsisarray = array(
-        'nutrient', 'main_soreness', 'risk_factor', 'ilness_history'
+        'irama_dasar',
+        'denyut_jantung',
+        'gelombang_p',
+        'interval_pr',
+        'qrs_axis',
+        'qrs_durasi',
+        'qrs_konfigurasi_patologi',
+        'qrs_konfigurasi_rs',
+        'segment_st_depresi' ,
+        'segment_st_elevasi' ,
+        'gelombang_t',
+        'q_interval'
     );
     var $reftable = array(
-        'risk_factor' => array('ref_present_risk_factor', 'risk_factor'),
-        'nutrient' => array('ref_present_nutrient', 'nutrient'),
-        'main_soreness' => array('ref_present_soreness', 'soreness'),
-        'ilness_history' => array('ref_present_illness_history', 'illness_history')
+        'irama_dasar' => array('ref_ekg_irama','irama'),
+        'denyut_jantung' => array('ref_ekg_denyut_jantung', 'denyut_jantung'),
+        'gelombang_p' => array('ref_ekg_gelombangP', 'gelombangP'),
+        'interval_pr' => array('ref_ekg_intervalPR', 'intervalPR'),
+        'qrs_axis' => array('ref_ekgQrs_axis', 'axis'),
+        'qrs_durasi' => array('ref_ekgQrs_durasi', 'durasi'),
+        'qrs_konfigurasi_patologi' => array('ref_ekg_sandapan', 'sandapan'),
+        'qrs_konfigurasi_rs' => array('ref_ekgQrs_RlbS', 'RlbS'),
+        'segment_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
+        'segment_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
+        'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
+        'q_interval' => array('ref_ekg_q_interval', 'q_interval')
     );
 }

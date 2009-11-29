@@ -104,8 +104,10 @@ foreach($data as $key => $value){
                         $result .= '</div>' . "\n";
 //                        break;
                         $result .= '<div>' . "\n";
-                        $result .= '<table width=100% class="table" border="0">' . "\n";
-                        $result .= '<td></td><td width="25%">Type</td>';
+                        $result .= '<table width=100% class="table" border="1 ">' . "\n";
+                        $result .= '<td></td><td width="25%"> Type</td>';
+                        $result .= '<td width="25%"> Kali</td>';
+                        $result .= '<td width="25%"> Waktu</td>';
                         $result .= '<tr>';
 //                        echo $yk;
                         foreach ($value['#fieldtype'] as $tp => $pt) {
@@ -117,12 +119,12 @@ foreach($data as $key => $value){
                                     $result .= '<option value="' . $vl .  '">' . $vl . '</option>' . "\n";
                                 }
                                 $result .= '</select>' . "</td>  \n";
-                                $result .= '<td width="15%"><input type="text" name="' . $tp . '[1]'. '" size="6"> Kali</td>';
-                                $result .= '<td> Waktu <input type="text" name="' . $tp . '[2]'. '" size="6"></td>';
+                                $result .= '<td width="15%"><input type="text" name="' . $tp . '[1]'. '" size="6"></td>';
+                                $result .= '<td><input type="text" name="' . $tp . '[2]'. '" size="6"></td>';
                             } else {
                                 $result .= '<td><input type="text" name="' . $tp . '[0]" size="10"></td>';
-                                $result .= '<td><input type="text" name="' . $tp . '[1]" size="6"> Kali</td>';
-                                $result .= '<td> Waktu <input type="text" name="' . $tp . '[2]" size="6"></td>';
+                                $result .= '<td><input type="text" name="' . $tp . '[1]" size="6"></td>';
+                                $result .= '<td><input type="text" name="' . $tp . '[2]" size="6"></td>';
                             }
                             $result .= '</tr>';
                         }
