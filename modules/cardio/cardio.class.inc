@@ -496,6 +496,12 @@ class cardioModule extends mainModule
             '#action' => '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/form/' . ($this->formhabit == 'readonly' ? 'edit_' . $vcache['id'] : '/form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'cardio' . DS . 'cardio.tpl',
+            '#addmenu' => array(
+                'title' => __t('medical record'),
+                'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                'position' => 'top',
+                'class' => 'button'
+            )
         );
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['kunjungan'] = array(
             '#type' => 'hidden',
