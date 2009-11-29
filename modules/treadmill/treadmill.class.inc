@@ -186,10 +186,6 @@ class treadmillModule extends mainModule
         return $this->__get_search();
     }
 
-    function anak_search(){
-        return $this->__get_search(1);
-    }
-
     function __get_search($teens=0){
         $result = array();
         $result['type'] = 'search';
@@ -240,10 +236,6 @@ class treadmillModule extends mainModule
 
     function view(){
         return $this->__get_view();
-    }
-
-    function anak_view(){
-        return $this->__get_view(1);
     }
 
     function __get_view(){
@@ -328,10 +320,6 @@ class treadmillModule extends mainModule
 
     function _detail_form(){
         return $this->__detail_form();
-    }
-
-    function anak_detail_form(){
-        return $this->__detail_form(1);
     }
 
     function __detail_form($teens=0){
@@ -434,7 +422,7 @@ class treadmillModule extends mainModule
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'treadmill' . DS . 'treadmill.tpl',
         );
-        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['kunjungan'] = array(
+        $form['treadmill']['kunjungan'] = array(
             '#type' => 'hidden',
             '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
         );
@@ -566,20 +554,8 @@ class treadmillModule extends mainModule
 //        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
 //        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
 //        $form['treadmill']['tab_items']['Kesimpulan'] = $this->__loadKesimpulan();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['nose'] = $this->__loadNose();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['headface'] = $this->__loadHeadFace();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['neck'] = $this->__loadNeck();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['mouth'] = $this->__loadMouth();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['thorax'] = $this->__loadThorax();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['space'] = "";
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['paru'] = $this->__loadParu();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['hearth'] = $this->__loadHearth();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['abdomen'] = $this->__loadAbdomen();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['anusrectum'] = $this->__loadAnusrectum();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['punggung'] = $this->__loadPunggung();
-//        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['tab_items']['extermitas'] = $this->__loadExtermitas();
 
-        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['submit'] = array(
+        $form['treadmill']['submit'] = array(
             '#type' => 'submit',
             '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
@@ -658,10 +634,6 @@ class treadmillModule extends mainModule
 
     function _form_submit(){
         return $this->__get_form_submit();
-    }
-
-    function anak_form_submit(){
-        return $this->__get_form_submit(1);
     }
 
     function __get_form_submit($teens=0){

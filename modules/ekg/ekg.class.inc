@@ -89,7 +89,145 @@ class ekgModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['ekg_search'] = array(
+            'title' => __t('search ekg'),
+            'description' => __t("search ekg's patients"),
+            'path' => '/user/ekg/search',
+            'exec' => 'search',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['ekg_search_submit'] = array(
+            'title' => __t('submitted search ekg'),
+            'description' => __t("submitted search ekg's patients"),
+            'path' => '/user/ekg/search_submit',
+            'exec' => 'search_submit',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         return $items;
+    }
+
+    function search_submit(){
+        if(isset($_POST['data'])){
+            $str = $_POST['data'];
+            $dump = $this->__get_patients_search($str);
+        } else {
+            $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+            $str = '';
+            if(trim($dump[3]) != ''){
+                $str = trim($dump[3]);
+                $dump = $this->__get_patients_search($str);
+            } else {
+                $dump = array();
+            }
+        }
+        $result = array();
+        $result['type'] = 'notelist';
+        $result['title'] = __t('hasil pencarian');
+        $result['description'] = __t('hasil pencarian') . ' <strong>"' . $str . '"</strong>';
+        unset($str);
+        if(count($dump) > 0){
+            foreach($dump as $key => $value){
+                foreach($value as $ky => $vl){
+                    $sql = $this->query->getSelect(
+                        array('id', 'inputtime'),
+                        array('ekg'),
+                        array(
+                            array('&&', "patients=" . $vl)
+                        )
+                    );
+                    $this->query->connect();
+                    $getit = $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                    if($getit->_numOfRows > 0){
+                        if(!isset($cnt)){
+                            $cnt = 0;
+                            $result['data'] = array();
+                        }
+                        for($i=0; $i<$getit->_numOfRows; $i++){
+                            if(!isset($dumpid)){$dumpid = array();}
+                            if(!in_array($getit->fields['id'], $dumpid)){
+                                if(count($dumpid) > 0){
+                                    $cnt++;
+                                }
+                                $dumpid[] = $getit->fields['id'];
+                                $result['data'][$cnt]['links'] = '/user/ekg/detail_form/' . $getit->fields['id'];
+                                $result['data'][$cnt]['caption'] = 'Data Tanggal ' . date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                            }
+                            $sql = $this->query->getSelect(
+                                array(),
+                                array('patients'),
+                                array(
+                                    array('&&', "id=" . $vl)
+                                )
+                            );
+                            $this->query->connect();
+                            $getthis = $this->query->conn->Execute($sql); unset($sql);
+                            $this->query->close();
+                            if($getthis->_numOfRows > 0){
+                                foreach($getthis->fields as $yk => $lv){
+                                    if(eregi($key, $lv)){
+                                        $result['data'][$cnt]['string'][$yk] = eregi_replace($key, '<strong>' . $key . '</strong>', $lv);
+                                    }
+                                }
+                                if(!isset($result['data'][$cnt]['string']['nama'])){
+                                    $result['data'][$cnt]['string']['nama'] = $getthis->fields['nama'];
+                                }
+                            } unset($getthis);
+                            $getit->MoveNext();
+                        }
+                    } unset($getit);
+                }
+            }
+        } unset($dump);
+        return $result;
+    }
+
+    function search(){
+        $result = array();
+        $result['type'] = 'search';
+        $result['title'] = __t('Cari data pasien ekg');
+        $result['description'] = __t('Mencari data pasien ekg');
+        $result['dataform']['character'] = array(
+            '#type' => 'character'
+        );
+        $i = 0;
+        foreach($this->config->abjad as $value){
+            $result['dataform']['character']['data'][$i]['show'] = $value;
+            $sql = $this->query->getSelect(
+                array('ekg|id as ekg_id'),
+                array('ekg', 'patients'),
+                array(
+                    array('&&', "ekg|patients=patients|id"),
+                    array('&&', "patients|nama like '" . strtolower($value) . "%'")
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            $result['dataform']['character']['data'][$i]['links'] = $getit->_numOfRows > 0 ? '/user/ekg/search/' . $value : NULL;
+            unset($getit); $i++;
+        } unset($i);
+        $result['dataform']['form'] = array(
+            '#type' => 'form',
+            '#action' => '/user/ekg/search',
+            '#id' => 'ekg_search',
+            '#title' => __t('search'),
+            'data' => array(
+                '#type' => 'text',
+                '#size' => 40
+            ),
+            'submit' => array(
+                '#type' => 'submit',
+                '#value' => __t('search')
+            )
+        );
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($_POST['data']) || isset($dump[3])){
+            $result['result'] = $this->search_submit();
+        } unset($dump);
+        return $result;
     }
 
     function __get_today_lists(){

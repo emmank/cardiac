@@ -25,11 +25,10 @@ $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 $result .= $vl['datafields']['Fase Istirahat']['title'];
 $result .= '<table width=100% class="table" border="0">' . "\n";
 $cnt = 0;
-//echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
-$result .= '<th>&nbsp</th>';
-$result .= '<th>Berbaring</th>';
-$result .= '<th>Berdiri</th>';
-$result .= '<th>Hiperventilasi</th>';
+$result .= '<th>&nbsp</th>' . "\n";
+$result .= '<th>Berbaring</th>' . "\n";
+$result .= '<th>Berdiri</th>' . "\n";
+$result .= '<th>Hiperventilasi</th>' . "\n";
 
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['type'] != 'hidden'){
@@ -37,16 +36,16 @@ foreach($vl['datafields'] as $yk => $lv){
             $result .= '<tr valign="top">' . "\n";
         }
         
-        $result .= '<td>' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
-        $result .= '<td>';
+        $result .= '<td>' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>' . "\n";
+        $result .= '<td>' . "\n";
         if($lv['type'] == 'select'){
             if($lv['readonly'] === true){
                 $result .= $lv['theref'][$lv['value']] . "\n";
             } else {
                 $result .= '<select name="' . $yk . '[0]" size="' . $lv['size']. '">' . "\n";
-                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
+                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
                 if(isset($lv['blankopt'])){
-                    $result .= '<option value=""></option>';
+                    $result .= '<option value=""></option>' . "\n";
                 }
                 foreach($lv['theref'] as $kc => $isi){
                     $result .= '<option value="' . $kc . '"' . (isset($lv['value']) && $lv['value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
@@ -54,19 +53,19 @@ foreach($vl['datafields'] as $yk => $lv){
                 $result .= '</select>' . "\n </td>";
                 //-- Berdiri ---
                 $result .= '<td><select name="' . $yk . '[1]" size="' . $lv['size']. '">' . "\n";
-                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
+                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
                 if(isset($lv['blankopt'])){
-                    $result .= '<option value=""></option>';
+                    $result .= '<option value=""></option>' . "\n";
                 }
                 foreach($lv['theref'] as $kc => $isi){
                     $result .= '<option value="' . $kc . '"' . (isset($lv['value']) && $lv['value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
                 }
-                $result .= '</select>' . "\n </td>";
+                $result .= '</select>' . "\n</td>" . "\n";
                 //--- Hiperventilasi ---
                 $result .= '<td><select name="' . $yk . '[2]" size="' . $lv['size']. '">' . "\n";
-                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
+                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
                 if(isset($lv['blankopt'])){
-                    $result .= '<option value=""></option>';
+                    $result .= '<option value=""></option>' . "\n";
                 }
                 foreach($lv['theref'] as $kc => $isi){
                     $result .= '<option value="' . $kc . '"' . (isset($lv['value']) && $lv['value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
@@ -84,7 +83,7 @@ foreach($vl['datafields'] as $yk => $lv){
             } else {
                 $htg = 0;
                 foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<input type="checkbox" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . (count($lv['value']) > 0 && in_array($kc, $lv['value']) ? ' checked="true"' : '') . '>';
+                    $result .= '<input type="checkbox" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . (count($lv['value']) > 0 && in_array($kc, $lv['value']) ? ' checked="true"' : '') . '>' . "\n";
                     $result .= $isi . "<br />";
                     $htg++;
                 } unset($htg);
@@ -95,7 +94,7 @@ foreach($vl['datafields'] as $yk => $lv){
             } else {
                 $htg = 0;
                 foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<input type="radio" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>';
+                    $result .= '<input type="radio" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>' . "\n";
                     $result .= $isi . "<br />";
                     $htg++;
                 } unset($htg);
@@ -133,9 +132,9 @@ foreach($vl['datafields'] as $yk => $lv){
             if($lv['readonly'] === true){
                 $result .= $lv['value'];
             } else {
-                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '[0]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n </td>";
-                $result .= '<td><input type="' . $lv['type'] . '" name="' . $yk . '[1]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n </td>";
-                $result .= '<td><input type="' . $lv['type'] . '" name="' . $yk . '[2]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
+                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '[0]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n</td>" . "\n";
+                $result .= '<td><input type="' . $lv['type'] . '" name="' . $yk . '[1]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n </td>" . "\n";
+                $result .= '<td><input type="' . $lv['type'] . '" name="' . $yk . '[2]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n" . "\n";
             }
         }
         $result .= '</td>' . "\n";
