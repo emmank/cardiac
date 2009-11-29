@@ -22,7 +22,7 @@
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
-$result .= $vl['datafields']['Fase Istirahat']['title'];
+$result .= $vl['datafields']['istirahathiperventilasi']['title'];
 $result .= '<table width=100% class="table" border="0">' . "\n";
 $cnt = 0;
 //echo '<pre>'; print_r($vl['datafields']); echo '</pre>';

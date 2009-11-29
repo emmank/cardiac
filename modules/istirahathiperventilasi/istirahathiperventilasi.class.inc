@@ -17,16 +17,16 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  istirahatclass.php
+ *  istirahathiperventilasiclass.php
  *  
  *  Created on Oct 3, 2009, 4:35:17 PM
  */
 
-require_once MODULES_DIR . DS . 'istirahat' . DS . 'config.inc';
+require_once MODULES_DIR . DS . 'istirahathiperventilasi' . DS . 'config.inc';
 
-class istirahatModule extends mainModule
+class istirahathiperventilasiModule extends mainModule
 {
-    var $title = 'istirahat module';
+    var $title = 'istirahathiperventilasi module';
     var $description = '';
 
     function __get_refs($fields, $sort=NULL){
@@ -49,14 +49,15 @@ class istirahatModule extends mainModule
 
     function treadmill_menu(){
         $result = array();
-        $result['#title'] = __t('Fase Istirahat Berbaring');
-        $result['#tpl'] = MODULES_DIR . DS . 'istirahat' . DS . 'istirahat.tpl';
-        $datafields = $this->__get_data_fields('istirahat', $this->query);
+//        echo "lagi disini";
+        $result['#title'] = __t('Fase istirahat Hiperventilasi');
+        $result['#tpl'] = MODULES_DIR . DS . 'istirahathiperventilasi' . DS . 'istirahathiperventilasi.tpl';
+        $datafields = $this->__get_data_fields('istirahathiperventilasi', $this->query);
         if (count($this->config->free_val) > 0){
             $vcache = $this->config->free_val;
             $sql = $this->query->getSelect(
                 array(),
-                array('istirahat'),
+                array('istirahathiperventilasi'),
                 array(
                     array('&&', "id=" . $vcache['id'])
                 )
@@ -94,11 +95,12 @@ class istirahatModule extends mainModule
             
             $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
+//        echo '<pre>'; print_r($result['datafields']); echo '</pre>';
         return $result;
     }
 
     function treadmill_submit(){
-        $thefields = $this->__get_data_fields('istirahat', $this->query);
+        $thefields = $this->__get_data_fields('istirahathiperventilasi', $this->query);
         foreach($this->config->free_val as $key => $value){
             if(in_array($key, $thefields)){
                 if($key == 'catched'){
@@ -114,7 +116,7 @@ class istirahatModule extends mainModule
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $sql = $this->query->updateData(
-                'istirahat',
+                'istirahathiperventilasi',
                 $thevalue,
                 array(
                     array('&&', "id=" . $_POST['id'])
@@ -122,7 +124,7 @@ class istirahatModule extends mainModule
             );
         } else {
             $sql = $this->query->saveData(
-                'istirahat',
+                'istirahathiperventilasi',
                 $thevalue
             );
         }

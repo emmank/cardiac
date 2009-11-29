@@ -22,13 +22,13 @@
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
-$result .= $vl['datafields']['Fase Istirahat']['title'];
+$result .= $vl['datafield']['istirahatberdiri']['title'];
 $result .= '<table width=100% class="table" border="0">' . "\n";
 $cnt = 0;
-//echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
+//echo '<pre>'; print_r($vl['datafield']); echo '</pre>';
 
 
-foreach($vl['datafields'] as $yk => $lv){
+foreach($vl['datafield'] as $yk => $lv){
     if($lv['type'] != 'hidden'){
         if($cnt < 1){
             $result .= '<tr valign="top">' . "\n";

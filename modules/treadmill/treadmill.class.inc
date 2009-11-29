@@ -401,7 +401,7 @@ class treadmillModule extends mainModule
         $this->vardump = $this->__write_custom_cache($vcache);
         $this->vardump['readonly'] = $this->formhabit;
         if($teens == 0){
-            $result = $this->_form();
+            $result = $this->form();
         } else {
             $result = $this->anak_form();
         }
@@ -626,7 +626,9 @@ class treadmillModule extends mainModule
             }
         }
 
-        $form['treadmill']['tab_items']['FaseIstirahat'] = $this->__loadFaseIstirahat();
+        $form['treadmill']['tab_items']['istirahat'] = $this->__loadFaseIstirahat();
+        $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
+        $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
 //        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
 //        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
 //        $form['treadmill']['tab_items']['Kesimpulan'] = $this->__loadKesimpulan();
@@ -661,6 +663,34 @@ class treadmillModule extends mainModule
             }
         } else {
             return $this->istirahat_exec->treadmill_menu();
+        }
+    }
+
+    function __loadFaseIstirahatBerdiri($exec=NULL){
+        $this->__include_module('istirahatberdiri');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->FaseIstirahat_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->istirahatberdiri_exec->treadmill_submit();
+            }
+        } else {
+            return $this->istirahatberdiri_exec->treadmill_menu();
+        }
+    }
+    
+    function __loadFaseIstirahatHiperventilasi($exec=NULL){
+        $this->__include_module('istirahathiperventilasi');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->FaseIstirahat_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->istirahathiperventilasi_exec->treadmill_submit();
+            }
+        } else {
+            return $this->istirahathiperventilasi_exec->treadmill_menu();
         }
     }
 
@@ -779,6 +809,7 @@ class treadmillModule extends mainModule
         $this->query->close();
         unset($thevalue);
         $this->__loadFaseIstirahat('submit');
+        $this->__loadFaseIstirahatBerdiri('submit');
         $this->__loadFaseLatihan('submit');
         $this->__loadFaseRecovery('submit');
         $this->__loadKesimpulan('submit');
