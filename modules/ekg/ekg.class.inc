@@ -175,6 +175,12 @@ class ekgModule extends mainModule
             '#action' => '/user/ekg/' . ($this->formhabit == 'readonly' ? 'form/edit_' . $vcache['id'] : 'form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'ekg' . DS . 'ekg.tpl',
+            '#addmenu' => array(
+                'title' => __t('medical record'),
+                'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                'position' => 'top',
+                'class' => 'button'
+            )
         );
         $form['ekg']['kunjungan'] = array(
             '#type' => 'hidden',

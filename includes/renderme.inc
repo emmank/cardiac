@@ -110,7 +110,7 @@ function __create_add_menu($data){
                 $result .= '<td align="' . ($i < 1 ? 'left' : 'right') . '">';
                 $result .= __create_form($valadd);
                 $result .= '</td>';
-                $i++;
+                $i++; unset($valadd);
             }
             $result .= '</tr></table>';
         } else {
