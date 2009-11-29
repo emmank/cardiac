@@ -308,9 +308,7 @@ body {
 #button {
         clear:both;
         display:inline-table;
-/*	border : 1px solid #FF9A9A;*/
 	margin-bottom:2px;
-        /*display:block;*/
 }
 
 #button input[type=submit] {
