@@ -41,14 +41,6 @@ class treadmillModule extends mainModule
             'weight' => '0',
             'user_required' => 'treadmill'
         );
-//        $items['treadmill_anak_form'] = array(
-//            'title' => __t('form treadmillanak'),
-//            'description' => __t('formulir treadmillanak'),
-//            'path' => '/user/treadmill_anak/form',
-//            'exec' => 'anak_form',
-//            'weight' => '0',
-//            'user_required' => 'treadmillanak'
-//        );
         $items['treadmill_form_submit'] = array(
             'title' => __t('form treadmill'),
             'description' => __t('formulir treadmill'),
@@ -57,22 +49,6 @@ class treadmillModule extends mainModule
             'weight' => '0',
             'user_required' => 'treadmill'
         );
-//        $items['treadmill_anak_form_submit'] = array(
-//            'title' => __t('form treadmillanak'),
-//            'description' => __t('formulir treadmillanak'),
-//            'path' => '/user/treadmill_anak/form_submit',
-//            'exec' => 'anak_form_submit',
-//            'weight' => '0',
-//            'user_required' => 'treadmillanak'
-//        );
-//        $items['treadmill_anak_get_lists'] = array(
-//            'title' => __t('list antrian treadmillanak'),
-//            'description' => __t('list antrian treadmillanak'),
-//            'path' => '/user/treadmill_anak/today_treadmill_lists',
-//            'exec' => '__get_today_lists',
-//            'weight' => '0',
-//            'user_required' => 'treadmillanak'
-//        );
         $items['treadmill_get_lists'] = array(
             'title' => __t('list antrian treadmill'),
             'description' => __t('formulir treadmill'),
@@ -89,14 +65,6 @@ class treadmillModule extends mainModule
             'weight' => 5,
             'user_required' => 'treadmill'
         );
-//        $items['treadmill_anak_view'] = array(
-//            'title' => __t('treadmillanak'),
-//            'description' => __t('explore treadmillanak'),
-//            'path' => '/user/treadmill_anak/view',
-//            'exec' => 'anak_view',
-//            'weight' => 5,
-//            'user_required' => 'users'
-//        );
         $items['treadmill_view'] = array(
             'title' => __t('treadmill'),
             'description' => __t('explore treadmill'),
@@ -105,14 +73,6 @@ class treadmillModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
-//        $items['treadmill_anak_detail'] = array(
-//            'title' => __t('detail treadmillanak'),
-//            'description' => __t("detail treadmillanak's patients"),
-//            'path' => '/user/treadmill_anak/detail_form',
-//            'exec' => 'anak_detail_form',
-//            'weight' => '0',
-//            'user_required' => 'users'
-//        );
         $items['treadmill_detail'] = array(
             'title' => __t('detail treadmill'),
             'description' => __t("detail treadmill's patients"),
@@ -129,14 +89,6 @@ class treadmillModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
-//        $items['treadmill_anak_search'] = array(
-//            'title' => __t('search treadmillanak'),
-//            'description' => __t("search treadmillanak's patients"),
-//            'path' => '/user/treadmill_anak/search',
-//            'exec' => 'anak_search',
-//            'weight' => '0',
-//            'user_required' => 'users'
-//        );
         $items['treadmill_search_submit'] = array(
             'title' => __t('submitted search treadmill'),
             'description' => __t("submitted search treadmill's patients"),
@@ -145,23 +97,11 @@ class treadmillModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
-        $items['treadmill_anak_search_submit'] = array(
-            'title' => __t('submitted search treadmillanak'),
-            'description' => __t("submitted search treadmillanak's patients"),
-            'path' => '/user/treadmill_anak/search_submit',
-            'exec' => 'anak_search_submit',
-            'weight' => '0',
-            'user_required' => 'users'
-        );
         return $items;
     }
 
     function _search_submit(){
         return $this->__get_search_submit();
-    }
-
-    function anak_search_submit(){
-        return $this->__get_search_submit(1);
     }
 
     function __get_search_submit($teens=0){
@@ -451,11 +391,7 @@ class treadmillModule extends mainModule
         return $this->__get_form();
     }
 
-    function anak_form(){
-        return $this->__get_form(1);
-    }
-
-    function __get_form($teens=0){
+    function __get_form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
         } else {
@@ -470,7 +406,7 @@ class treadmillModule extends mainModule
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
                 }
             } else {
-                redirect_to('/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/today_treadmill_lists');
+                redirect_to('/user/treadmill/today_treadmill_lists');
             } unset($dump);
         }
         $this->query->connect();
@@ -487,14 +423,14 @@ class treadmillModule extends mainModule
         if(!isset($vcache['patients'])){
             $vcache['patients'] = $query->fields['patients']; unset($query);
         }
-        $form['treadmill' . ($teens == 0 ? '' : 'anak')] = array(
+        $form['treadmill'] = array(
             '#type' => 'special',
-            '#id' => 'treadmill' . ($teens == 0 ? '' : 'anak'),
-            '#title' => __t('treadmill' . ($teens == 0 ? '' : 'anak')),
+            '#id' => 'treadmill',
+            '#title' => __t('treadmill'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/form/' . ($this->formhabit == 'readonly' ? 'edit_' . $vcache['id'] : '/form_submit'),
+            '#action' => '/user/treadmill/form/' . ($this->formhabit == 'readonly' ? 'edit_' . $vcache['id'] : '/form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'treadmill' . DS . 'treadmill.tpl',
         );
@@ -506,7 +442,7 @@ class treadmillModule extends mainModule
         foreach($thefields as $value){
             if(in_array($value, $this->hidden_fields)){
                 if($value == 'id'){
-                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$value] = array(
+                    $form['treadmill'][$value] = array(
                         '#type' => 'hidden',
                         '#value' => isset($vcache['id']) ? $vcache['id'] : ''
                     );
@@ -517,7 +453,7 @@ class treadmillModule extends mainModule
                         $vcache['tgl'] = date('Y-m-d', $this->config->time);
                     }
                 } elseif($value == 'patients'){
-                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$value] = array(
+                    $form['treadmill'][$value] = array(
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
@@ -526,7 +462,7 @@ class treadmillModule extends mainModule
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
                                 $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
-                                $form['treadmill' . ($teens == 0 ? '' : 'anak')]['umur'] = array(
+                                $form['treadmill']['umur'] = array(
                                     '#type' => 'info',
                                     '#value' => $vl . ' tahun',
                                     '#title' => __t('umur'),
@@ -548,18 +484,18 @@ class treadmillModule extends mainModule
                                     } elseif($ky == 'gol_darah'){
                                         $tbpos = 5;
                                     }
-                                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky] = array(
+                                    $form['treadmill'][$ky] = array(
                                         '#type' => $ky == 'alamat' ? 'textarea' : 'info',
                                         '#value' => $vl,
                                         '#title' => __t($ky),
                                         '#tbpos' => $tbpos
                                     );
                                     if($ky == 'alamat'){
-                                        $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky]['#extra'] = 'readonly="true"';
-                                        $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky]['#cols'] = '55';
-                                        $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky]['#rows'] = '3';
+                                        $form['treadmill'][$ky]['#extra'] = 'readonly="true"';
+                                        $form['treadmill'][$ky]['#cols'] = '55';
+                                        $form['treadmill'][$ky]['#rows'] = '3';
                                     } elseif($ky == 'no_registrasi'){
-                                        $form['treadmill' . ($teens == 0 ? '' : 'anak')][$ky]['#link'] = '/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/today_patient_lists';
+                                        $form['treadmill'][$ky]['#link'] = '/user/treadmill/today_patient_lists';
                                     }
                                     unset($tbpos);
                                 }
@@ -584,7 +520,7 @@ class treadmillModule extends mainModule
                             unset($buffer);
                             $getfrek->MoveNext();
                         }
-                        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['kunjungan_ke'] = array(
+                        $form['treadmill']['kunjungan_ke'] = array(
                             '#type' => 'info',
                             '#value' => count($dumpfrek),
                             '#title' => __t('kunjungan_ke'),
@@ -601,7 +537,7 @@ class treadmillModule extends mainModule
                         $this->query->connect();
                         $getsender = $this->query->conn->Execute($sql); unset($sql);
                         $this->query->close();
-                        $form['treadmill' . ($teens == 0 ? '' : 'anak')]['pengirim'] = array(
+                        $form['treadmill']['pengirim'] = array(
                             '#type' => 'info',
                             '#value' => $getsender->fields['nama'],
                             '#title' => __t('pengirim'),
@@ -612,7 +548,7 @@ class treadmillModule extends mainModule
 //                    $this->query->close();
                 }
                 if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
-                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$value] = array(
+                    $form['treadmill'][$value] = array(
                         '#type' => $this->config->fields_form_type[$value],
                         '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                         '#size' => $this->config->fields_form_type[$value] != 'select' && $this->formtype_fields[$value] != 'date' ? 20 : 1,
@@ -621,7 +557,7 @@ class treadmillModule extends mainModule
                     );
                 }
                 if($this->formhabit == 'readonly'){
-                    $form['treadmill' . ($teens == 0 ? '' : 'anak')][$value]['#extra'] = 'readonly="true"';
+                    $form['treadmill'][$value]['#extra'] = 'readonly="true"';
                 }
             }
         }
