@@ -60,9 +60,7 @@ $itemselement = array(
 function __create_form_special($data){
     global $forminput, $formtextarea, $formselect;
     $result = '';
-    echo "<pre>";
-    print_r ($data);
-    echo "</pre>";
+//    echo "<pre>"; print_r ($data); echo "</pre>";
     foreach($data as $key=>$value){
         $formtpl = $value['#formtpl']; break;
     }
