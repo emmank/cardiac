@@ -496,6 +496,12 @@ class cardioModule extends mainModule
             '#action' => '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/form/' . ($this->formhabit == 'readonly' ? 'edit_' . $vcache['id'] : '/form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'cardio' . DS . 'cardio.tpl',
+            '#addmenu' => array(
+                'title' => __t('medical record'),
+                'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                'position' => 'top',
+                'class' => 'button'
+            )
         );
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['kunjungan'] = array(
             '#type' => 'hidden',
@@ -633,8 +639,8 @@ class cardioModule extends mainModule
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['headface'] = $this->__loadHeadFace();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['neck'] = $this->__loadNeck();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['mouth'] = $this->__loadMouth();
-        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['thorax'] = $this->__loadThorax();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['space'] = "";
+        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['thorax'] = $this->__loadThorax();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['paru'] = $this->__loadParu();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['hearth'] = $this->__loadHearth();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['abdomen'] = $this->__loadAbdomen();

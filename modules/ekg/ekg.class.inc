@@ -127,8 +127,8 @@ class ekgModule extends mainModule
         $this->formhabit = 'readonly';
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         $vcache = $this->__get_ekg_data((int)$dump[3]);
-        $this->vardump['readonly'] = $this->formhabit;
         $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
         $result = $this->form();
         return $result;
     }
@@ -136,7 +136,6 @@ class ekgModule extends mainModule
     function form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-//            echo '<pre>'; print_r($vcache); echo '</pre>';
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
@@ -176,6 +175,12 @@ class ekgModule extends mainModule
             '#action' => '/user/ekg/' . ($this->formhabit == 'readonly' ? 'form/edit_' . $vcache['id'] : 'form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'ekg' . DS . 'ekg.tpl',
+            '#addmenu' => array(
+                'title' => __t('medical record'),
+                'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                'position' => 'top',
+                'class' => 'button'
+            )
         );
         $form['ekg']['kunjungan'] = array(
             '#type' => 'hidden',
@@ -395,7 +400,7 @@ class ekgModule extends mainModule
             );
         } else {
             $thevalue['id'] = $this->__get_id_insert_value('ekg', 'id', $this->query);
-            $thevalue['inputer'] = $user['userid'];
+            $thevalue['inputer'] = $user['id'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
             $sql = $this->query->saveData(
                 'ekg',

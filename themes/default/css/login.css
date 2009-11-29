@@ -9,7 +9,8 @@ body {
   padding: 0;
   color: #000;
   font: 0.8em Tahoma, Arial, Helvetica, Sans-serif;
-	background-color: #FFF;
+	/*background-color: #FFF;*/
+        background-color:#FFE2E2;
 }
 
 #container {

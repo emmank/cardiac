@@ -60,6 +60,7 @@ $itemselement = array(
 function __create_form_special($data){
     global $forminput, $formtextarea, $formselect;
     $result = '';
+//    echo "<pre>"; print_r ($data); echo "</pre>";
     foreach($data as $key=>$value){
         $formtpl = $value['#formtpl']; break;
     }
@@ -110,7 +111,7 @@ function __create_add_menu($data){
                 $result .= '<td align="' . ($i < 1 ? 'left' : 'right') . '">';
                 $result .= __create_form($valadd);
                 $result .= '</td>';
-                $i++;
+                $i++; unset($valadd);
             }
             $result .= '</tr></table>';
         } else {
@@ -258,7 +259,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     $result = '';
 //    echo '<pre>'; print_r($data); echo '</pre>';
     foreach($data as $key => $value){
-//        $result .= '<div>';
+        $result .= '<div>';
         if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden'){
             $result .= '<label for="'. $key .'">' . ucwords($value['#title']) . '</label>';
         }
@@ -300,12 +301,12 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                         }
                         $result .= '>';
                         $result .= ' ' . $vl;
-//                        $result .= '</div>' . "\n";
+                        $result .= '</div>' . "\n";
                         $o++;
                         unset($namekey);
                     }
                 }
-//                $result .= '</div>' . "\n";
+                $result .= '</div>' . "\n";
             } else {
                 $result .= '<input type="' . $value['#type'] . '" name="' . $key . '"';
                 if(isset($value['#size'])){
@@ -450,7 +451,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
             $result .= ' ' . $value['#message'];
         }
         $result .= '</br>' . "\n";
-//        $result .= '</div>' . "\n";
+        $result .= '</div>' . "\n";
     }
     return $result;
 }

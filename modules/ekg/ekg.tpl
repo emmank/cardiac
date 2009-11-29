@@ -23,8 +23,10 @@
  *  Created on Oct 26, 2009, 5:28:48 AM
  */
 
-//echo '<pre>'; print_r($data); echo '</pre>';
 foreach($data as $key => $value){
+    if(isset($value['#addmenu'])){
+        $result .= __create_add_menu($value['#addmenu']);
+    }
     $result .= __create_form_open($value, $key);
     $result .= "\n" . '<fieldset>' . "\n";
     $result .= '<legend>' . __t('Identitas Pasien') . '</legend>' . "\n";
