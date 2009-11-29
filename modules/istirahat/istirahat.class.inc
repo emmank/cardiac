@@ -83,7 +83,6 @@ class istirahatModule extends mainModule
             );
             if(in_array($value, $this->config->fieldsisarray)){
                 $result['datafields'][$value]['theref'] = $this->__get_refs($value);
-                $result['datafields'][$value]['blankopt'] = 1;
             } elseif($this->config->typeoffields[$value] == 'datetime'){
                 $result['datafields'][$value]['theref'] = $this->nama_bulan;
                 $result['datafields'][$value]['timenow'] = $this->config->time;
