@@ -46,16 +46,16 @@ class holterConfig extends config
         'the_maximum_HR' => 'text',
         'the_minimum_HR' => 'text',
         'pause' => 'text',
-        'segment_st_depresi' => 'select',        
-        'segment_st_elevasi' => 'select',
+        'segment_st_depresi' => 'select2',
+        'segment_st_elevasi' => 'select2',
         'gelombang_t' => 'radio',
-        'VES' => 'text',
-        'AES' => 'text',
-        'SVT' => 'text',
+        'VES' => 'select',
+        'AES' => 'select',
+        'SVT' => 'select',
         'VT' => 'text',
-        'AF' => 'text',
+        'AF' => 'select',
         'heart_block_1_degree' => 'text',
-        'heart_block_2_degree' => 'text',
+        'heart_block_2_degree' => 'select',
         'heart_block_3_degree' => 'text',
         'inputer' => 'hidden',
         'inputtime' => 'hedden',
@@ -91,20 +91,6 @@ class holterConfig extends config
         'heart_block_2_degree' ,
         'heart_block_3_degree' 
     );
-//    var $fieldtype = array(
-//        'pause' => 'text',
-//        'VES' => 'select',
-//        'AES' => 'select',
-//        'SVT' => 'select',
-//        'VT' => 'text',
-//        'AF' => 'select',
-//        'heart_block_1_degree' => 'text',
-//        'heart_block_2_degree' => 'select',
-//        'heart_block_3_degree' => 'text'
-//    );
-
-
-
     var $reftable = array(
         'segment_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
         'segment_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
@@ -114,5 +100,11 @@ class holterConfig extends config
         'SVT'  => array('ref_holterref_SVT', 'SVT'),
         'AF'  => array('ref_holterref_AF', 'AF'),
         'heart_block_2_degree'  => array('ref_holterref_heartblock', 'heartblock')
+    );
+    var $qrs_complex = array(
+        'qrs_axis', 'qrs_durasi', 'qrs_konfigurasi_patologi', 'qrs_konfigurasi_r_s'
+    );
+    var $segment_st = array(
+        'segment_st_depresi', 'segment_st_elevasi'
     );
 }

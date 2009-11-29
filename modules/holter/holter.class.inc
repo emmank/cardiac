@@ -66,13 +66,21 @@ class holterModule extends mainModule
             'weight' => 5,
             'user_required' => 'holter'
         );
-        $items['holter_anak_message'] = array(
-            'title' => __t('holter message'),
-            'description' => __t('get holter message'),
-            'path' => '/user/holter_anak/message',
-            'exec' => 'message',
-            'weight' => 5,
-            'user_required' => 'holter'
+        $items['holter_view'] = array(
+            'title' => __t('holter'),
+            'description' => __t('explore holter'),
+            'path' => '/user/holter/view',
+            'exec' => 'view',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['holter_detail'] = array(
+            'title' => __t('detail holter'),
+            'description' => __t("detail holter's patients"),
+            'path' => '/user/holter/detail_form',
+            'exec' => 'detail_form',
+            'weight' => '0',
+            'user_required' => 'users'
         );
         return $items;
     }
@@ -91,14 +99,14 @@ class holterModule extends mainModule
 
     function __get_holter_data($id){
         $result = array();
-        $this->query->connect();
-        $this->query->getSelect(
+        $sql = $this->query->getSelect(
             array(),
             array('holter'),
             array(
                 array('&&', "id=" . $id)
             )
         );
+        $this->query->connect();
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($query->_numOfRows > 0){
@@ -109,33 +117,47 @@ class holterModule extends mainModule
         return $result;
     }
 
+    function detail_form(){
+        $this->formhabit = 'readonly';
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $vcache = $this->__get_holter_data((int)trim($dump[3]));
+        $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
+        $result = $this->form();
+        return $result;
+    }
+
     function form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-        } elseif(isset($holter_id) && !is_null($holter_id)){
-            $vcache = $this->__get_holter_data($holter_id);
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
-                $vcache['idkunjungan'] = $dump[3]; unset($dump);
-                $this->query->connect();
-                $sql = $this->query->getSelect(
-                    array('patients', 'inputer'),
-                    array('kunjungan'),
-                    array(
-                        array('&&', "id=" . $vcache['idkunjungan'])
-                    )
-                );
-                $query = $this->query->conn->Execute($sql); unset($sql);
-                $this->query->close();
-                $pengirim = $query->fields['inputer'];
-                $idpatients = $query->fields['patients']; unset($query);
-                $vcache['patients'] = $idpatients;
-                unset($idpatients);
-
+                if(preg_match('/^edit_/', $dump[3])){
+                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
+                    $vcache = $this->__get_holter_data((int)$ekg_id);
+                    $this->vardump = $vcache;
+                    unset($cardio_id);
+                } else {
+                    $vcache['kunjungan'] = $dump[3]; unset($dump);
+                }
             } else {
                 redirect_to('/user/holter/today_holter_lists');
             } unset($dump);
+        }
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array('patients', 'inputer'),
+            array('kunjungan'),
+            array(
+                array('&&', "id=" . $vcache['kunjungan'])
+            )
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $pengirim = $query->fields['inputer'];
+        if(!isset($vcache['patients'])){
+            $vcache['patients'] = $query->fields['patients']; unset($query);
         }
         $form['holter'] = array(
             '#type' => 'special',
@@ -144,16 +166,15 @@ class holterModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/holter/form_submit',
+            '#action' => '/user/holter/' . ($this->formhabit == 'readonly' ? 'form/edit_' . $vcache['id'] : 'form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'holter' . DS . 'holter.tpl',
         );
-        $form['holter']['idkunjungan'] = array(
+        $form['holter']['kunjungan'] = array(
             '#type' => 'hidden',
-            '#value' => isset($vcache['idkunjungan']) ? $vcache['idkunjungan'] : ''
+            '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
         );
         $thefields = $this->__get_data_fields('holter', $this->query);
-//        echo '<pre>'; print_r($thefields); echo '</pre>';
         foreach($thefields as $value){
             if(in_array($value, $this->hidden_fields)){
                 if($value == 'id'){
@@ -253,53 +274,65 @@ class holterModule extends mainModule
                         );
                         unset($getsender);
                     }
-//                    $this->query->close();
                 }
-                // JIka value bukan id,tgl,patient
-                if($value != 'no_registrasi'){
+                if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
                     $form['holter'][$value] = array(
                         '#type' => $this->config->fields_form_type[$value],
                         '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
-                        '#size' => $this->config->fields_form_type[$value] != 'select' && $this->config->fields_form_type[$value] != 'date' ? 20 : 1,
+                        '#size' => $this->config->fields_form_type[$value] != 'select' && $this->config->fields_form_type[$value] != 'date' ? 5 : 1,
                         '#title' => __t($value),
                         '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                     );
-//                    echo '<pre>'; print_r($form); echo '</pre>';
-
                     if(in_array($value, $this->config->fieldsisarray)){
                         $form['holter'][$value]['#theref'] = $this->__get_refs($value);
                     }
-//                    echo '<pre>'; print_r($value); echo '</pre>';
-
+                    if(in_array($value, $this->config->qrs_complex) || in_array($value, $this->config->segment_st) || $value == 'gelombang_t'){
+                        $form['holter'][$value]['#customized']['title'] = in_array($value, $this->config->qrs_complex) ? __t('qrs_complex') : ($value == 'gelombang_t' ? __t('gelombang_t') : __t('segment_st'));
+                        $form['holter'][$value]['#customized']['id'] = in_array($value, $this->config->qrs_complex) ? 'qrs_complex' : ($value == 'gelombang_t' ? 'gelombang_t' : 'segment_st');
+                        if($this->config->fields_form_type[$value] == 'select2'){
+                            $form['holter'][$value]['#customized']['option'] =  array(
+                                '1mm - 2mm' => '1mm - 2mm',
+                                '> 2mm - 3mm' => '> 2mm - 3mm',
+                                '> 3mm' => '> 3mm'
+                            );
+                        } elseif ($this->config->fields_form_type[$value] == 'select3') {
+                            $form['holter'][$value]['#customized']['option'] =  array(
+                                'Q Patologi +' => 'Q Patologi +',
+                                'Q Patologi -' => 'Q Patologi -'
+                            );
+                        } elseif ($value == 'gelombang_t') {
+                            $form['holter'][$value]['#customized']['option'] =  array(
+                                'Normal' => 'Normal',
+                                'Inverted' => 'Inverted'
+                            );
+                        }
+                    }
                     if(in_array($value, $this->config->fieldtype)){
-                        $form['holter']['#fieldtype'][$value]['#type']= $this->config->fieldtype;
-//                        $form['holter']['#fieldtype'][$value]['#fieldtheref'] = $this->__get_refs($value);
+                        $form['holter']['#otherlook'][$value] = array(
+                            '#type' => $this->config->fields_form_type[$value],
+                            '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
+                            '#size' => $this->config->fields_form_type[$value] != 'select' && $this->config->fields_form_type[$value] != 'date' ? 5 : 1,
+                            '#title' => __t($value),
+                            '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
+                        );
+                        if(in_array($value, $this->config->fieldsisarray)){
+                            $form['holter']['#otherlook'][$value]['#theref'] = $this->__get_refs($value);
+                        }
+                        if($this->formhabit == 'readonly'){
+                            $form['holter']['#otherlook'][$value]['#readonly'] = TRUE;
+                        }
                     }
-                    if(in_array($value, $this->config->fieldsisarray2)){
-//                        $form['holter']['#fieldtype'] = $this->config->fieldtype;
-                        $form['holter']['#fieldtype'][$value]['#fieldtheref'] = $this->__get_refs($value);
-                    }
-
-//                    if(in_array($value, $this->config->fieldtype)){
-//                        $form['holter']['#fieldtype']['#fieldtheref'] = $this->__get_refs($value);
-//                    }
+                }
+                if($this->formhabit == 'readonly'){
+                    $form['holter'][$value]['#readonly'] = TRUE;
                 }
             }
         }
-
-//        $fieldtype = $this->config->fieldtype;
-//        foreach ( $fieldtype as $nilai ){
-//            $form['holter']['#fieldtype']= $fieldtype;
-//        }
-//        echo '<pre>'; print_r($value); echo '</pre>';
-//        echo '<pre>'; print_r($form['holter']['#fieldtype']); echo '</pre>';
-
+        $form['holter']['#lookother'] = $this->config->fieldtype;
         $form['holter']['submit'] = array(
             '#type' => 'submit',
-            '#value' => 'submit',
-            '#extra' => ' class="button"'
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
-//        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
     }
 
@@ -321,14 +354,13 @@ class holterModule extends mainModule
         return $result;
     }
 
-    
     function form_submit(){
         $this->vardump = $this->__write_form_cache();
         $sql = $this->query->getSelect(
             array(),
             array('kunjungan'),
             array(
-                array('&&', "id=" . $_POST['idkunjungan'])
+                array('&&', "id=" . $_POST['kunjungan'])
             )
         );
         $this->query->connect();
@@ -343,12 +375,19 @@ class holterModule extends mainModule
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
                 if (is_array($value)){
+                    ksort($value);
+                    if(preg_match('/_HR$/', $key)){
+                        $value[1] = implode(':', $value[1]);
+                    } elseif($key == 'gelombang_t'){
+                        if(!eregi('inverted', $value[0])){
+                            unset($value[1]);
+                        }
+                    }
                     $thevalue[$key] = implode('|', $value);
-                }else {
+                } else {
                     $thevalue[$key] = $value;
                 }
             }
-            echo '<pre>'; print_r($thevalue); echo '</pre>';
         } unset($thefields);
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
@@ -362,7 +401,7 @@ class holterModule extends mainModule
             );
         } else {
             $thevalue['id'] = $this->__get_id_insert_value('holter', 'id', $this->query);
-            $thevalue['inputer'] = $user['userid'];
+            $thevalue['inputer'] = $user['id'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
             $sql = $this->query->saveData(
                 'holter',
@@ -371,6 +410,7 @@ class holterModule extends mainModule
             $this->vardump['id'] = $thevalue['id'];
         }
         $this->query->connect();
+        $this->query->conn->debug=true;
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         unset($thevalue);
@@ -382,38 +422,89 @@ class holterModule extends mainModule
                     'doneby' => '1'
                 ),
                 array(
-                    array('&&', "id=" . $_POST['idkunjungan'])
+                    array('&&', "id=" . $_POST['kunjungan'])
                 )
             );
             $this->query->connect();
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/user/holter/form');
+        redirect_to('/user/holter/view');
     }
 
-    function __include_module($module){
-        require MODULES_DIR . DS . $module . DS . $module . '.module';
-        $this->{$module . '_config'} = ${$module . '_config'};
-        $this->{$module . '_config'}->time = $this->config->time;
-        $this->{$module . '_config'}->timelog_idle = $this->onfig->timelog_idle;
-        $this->{$module . '_config'}->fcache = $this->config->fcache;
-        $this->{$module . '_config'}->flog = $this->config->flog;
-        $funcdb = $module == 'user' || $module == 'auth' || $module == 'group' ? 'dbuser' : 'db' . $module;
-        $this->{$module . '_query'} = ${$module . '_query'};
-        $this->{$module . '_query'}->dbname = $this->{$module . '_config'}->{$funcdb}['name'];
-        $this->{$module . '_query'}->dbprefix = $this->{$module . '_config'}->{$funcdb}['prefix'];
-        $this->{$module . '_query'}->dbsuffix = $this->{$module . '_config'}->{$funcdb}['suffix'];
-        $this->{$module . '_query'}->tbprefix = $this->{$module . '_config'}->{$funcdb}['tbprefix'];
-        $this->{$module . '_query'}->tbsuffix = $this->{$module . '_config'}->{$funcdb}['tbsuffix'];
-        $this->{$module . '_query'}->hostname = $this->{$module . '_config'}->{$funcdb}['host'];
-        $this->{$module . '_query'}->username = $this->{$module . '_config'}->{$funcdb}['user'];
-        $this->{$module . '_query'}->passwd = $this->{$module . '_config'}->{$funcdb}['passwd'];
-        $this->{$module . '_query'}->conn = &ADONewConnection($this->{$module . '_config'}->rdbms);
-        $this->{$module . '_exec'} = ${$module . '_exec'};
-        $this->{$module . '_exec'}->config = $this->{$module . '_config'};
-        $this->{$module . '_exec'}->sysquery = $this->sysquery;
-        $this->{$module . '_exec'}->query = $this->{$module . '_query'};
-   }
+    function view(){
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('daftar beberapa pasien');
+        $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
+        $result['addmenu']['#add'] = array(
+            'title' => __t('add'),
+            'action' => '/user/holter/form',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search'),
+            'action' => '/user/holter/search',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'nama',
+                'caption' => __t('nama'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'tgl_lahir',
+                'caption' => __t('usia'),
+                'width' => '10%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'inputtime',
+                'caption' => __t('tgl periksa'),
+                'width' => '25%',
+                'align' => 'right'
+            )
+        );
+
+        $sql = $this->query->getSelect(
+            array(),
+            array('holter'),
+            NULL,
+            'inputtime desc',
+            '0,10'
+        ); unset($where);
+        $this->query->connect();
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $sql = $this->query->getSelect(
+                    array('id', 'nama', 'tgl_lahir', 'inputtime'),
+                    array('patients'),
+                    array(
+                        array('&&', "id=" . $getit->fields['patients'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['nama'] = $getthis->fields['nama'];
+                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+                $result['data'][$i]['goto'] = '/user/holter/detail_form/' . $getit->fields['id'];
+                $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                $getit->MoveNext();
+            }
+        }
+        return $result;
+    }
 
 }
