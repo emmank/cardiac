@@ -2,9 +2,9 @@
 //============================================================+
 // File name   : tcpdf.php
 // Begin       : 2002-08-03
-// Last Update : 2009-09-07
+// Last Update : 2009-11-27
 // Author      : Nicola Asuni - info@tecnick.com - http://www.tcpdf.org
-// Version     : 4.8.000
+// Version     : 4.8.017
 // License     : GNU LGPL (http://www.gnu.org/copyleft/lesser.html)
 // 	----------------------------------------------------------------------------
 //  Copyright (C) 2002-2009  Nicola Asuni - Tecnick.com S.r.l.
@@ -128,7 +128,7 @@
  * @copyright 2002-2009 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
  * @link http://www.tcpdf.org
  * @license http://www.gnu.org/copyleft/lesser.html LGPL
- * @version 4.8.000
+ * @version 4.8.017
  */
 
 /**
@@ -152,14 +152,14 @@ if (!class_exists('TCPDF', false)) {
 	/**
 	 * define default PDF document producer
 	 */ 
-	define('PDF_PRODUCER', 'TCPDF 4.8.000 (http://www.tcpdf.org)');
+	define('PDF_PRODUCER', 'TCPDF 4.8.017 (http://www.tcpdf.org)');
 	
 	/**
 	* This is a PHP class for generating PDF documents without requiring external extensions.<br>
 	* TCPDF project (http://www.tcpdf.org) has been originally derived in 2002 from the Public Domain FPDF class by Olivier Plathey (http://www.fpdf.org), but now is almost entirely rewritten.<br>
 	* @name TCPDF
 	* @package com.tecnick.tcpdf
-	* @version 4.8.000
+	* @version 4.8.017
 	* @author Nicola Asuni - info@tecnick.com
 	* @link http://www.tcpdf.org
 	* @license http://www.gnu.org/copyleft/lesser.html LGPL
@@ -1084,7 +1084,14 @@ if (!class_exists('TCPDF', false)) {
 		 * @since 4.2.000 (2008-10-29)
 		 */
 		protected $transfmatrix = array();
-		
+
+		/**
+		 * Current key for transformation matrix
+		 * @access protected
+		 * @since 4.8.005 (2009-09-17)
+		 */
+		protected $transfmatrix_key = 0;
+
 		/**
 		 * Booklet mode for double-sided pages
 		 * @access protected
@@ -1212,6 +1219,13 @@ if (!class_exists('TCPDF', false)) {
 		 * @since 4.5.000 (2009-01-02)
 		 */
 		protected $fontkeys = array();
+		
+		/**
+		 * Store the font object IDs.
+		 * @access protected
+		 * @since 4.8.001 (2009-09-09)
+		 */
+		protected $font_obj_ids = array();
 
 		/**
 		 * Store the fage status (true when opened, false when closed).
@@ -1347,14 +1361,21 @@ if (!class_exists('TCPDF', false)) {
 		protected $annots_start_obj_id = 200000;
 		
 		/**
-		 * Current ID of annotation object
+		 * Max ID of annotation object
 		 * @access protected
 		 * @since 4.7.000 (2009-08-29)
 		 */
 		protected $annot_obj_id = 200000;
 		
 		/**
-		 * Array of form annotations IDs
+		 * Current ID of annotation object
+		 * @access protected
+		 * @since 4.8.003 (2009-09-15)
+		 */
+		protected $curr_annot_obj_id = 200000;
+		
+		/**
+		 * List of form annotations IDs
 		 * @access protected
 		 * @since 4.8.000 (2009-09-07)
 		 */
@@ -1408,7 +1429,55 @@ if (!class_exists('TCPDF', false)) {
 		 * @since 4.8.000 (2009-09-07)
 		 */
 		protected $form_mode = 'post';
+
+		/**
+		 * Start ID for appearance streams XObjects
+		 * @access protected
+		 * @since 4.8.001 (2009-09-09)
+		 */
+		protected $apxo_start_obj_id = 400000;
 		
+		/**
+		 * Current ID of appearance streams XObjects
+		 * @access protected
+		 * @since 4.8.001 (2009-09-09)
+		 */
+		protected $apxo_obj_id = 400000;
+		
+		/**
+		 * List of fonts used on form fields (fontname => fontkey).
+		 * @access protected
+		 * @since 4.8.001 (2009-09-09)
+		 */
+		protected $annotation_fonts = array();
+		
+		/**
+		 * List of radio buttons parent objects.
+		 * @access protected
+		 * @since 4.8.001 (2009-09-09)
+		 */
+		protected $radiobutton_groups = array();
+		
+		/**
+		 * List of radio group objects IDs
+		 * @access protected
+		 * @since 4.8.001 (2009-09-09)
+		 */
+		protected $radio_groups = array();
+		
+		/**
+		 * Text indentation value (used for text-indent CSS attribute) 
+		 * @access protected
+		 * @since 4.8.006 (2009-09-23)
+		 */
+		protected $textindent = 0;
+		
+		/**
+		 * Store page number when startTransaction() is called.
+		 * @access protected
+		 * @since 4.8.006 (2009-09-23)
+		 */
+		protected $start_transaction_page = 0;
 		
 		//------------------------------------------------------------
 		// METHODS
@@ -1542,6 +1611,8 @@ if (!class_exists('TCPDF', false)) {
 				$this->re_spaces = '/[\s]/';
 			}
 			$this->annot_obj_id = $this->annots_start_obj_id;
+			$this->curr_annot_obj_id = $this->annots_start_obj_id;
+			$this->apxo_obj_id = $this->apxo_start_obj_id;
 			$this->js_obj_id = $this->js_start_obj_id;
 			$this->default_form_prop = array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 255), 'strokeColor'=>array(128, 128, 128));
 		}
@@ -1764,15 +1835,43 @@ if (!class_exists('TCPDF', false)) {
 		* @since 2.1.000 (2008-01-09)
 		*/
 		public function setTempRTL($mode) {
+			$newmode = false;
 			switch ($mode) {
-				case false:
-				case 'L':
+				case 'ltr':
+				case 'LTR':
+				case 'L': {
+					if ($this->rtl) {
+						$newmode = 'L';
+					}
+					break;
+				}
+				case 'rtl':
+				case 'RTL':
 				case 'R': {
-					$this->tmprtl = $mode;
+					if (!$this->rtl) {
+						$newmode = 'R';
+					}
+					break;
+				}
+				case false:
+				default: {
+					$newmode = false;
+					break;
 				}
 			}
+			$this->tmprtl = $newmode;
 		}
 		
+		/**
+		 * Return the current temporary RTL status
+		 * @return boolean
+		 * @access public
+		 * @since 4.8.014 (2009-11-04)
+		 */
+		public function isRTLTextDir() {
+			return ($this->rtl OR ($this->tmprtl == 'R'));
+		}
+				
 		/**
 		* Set the last cell height.
 		* @param float $h cell height.
@@ -2571,6 +2670,8 @@ if (!class_exists('TCPDF', false)) {
 		 */
 		protected function setHeader() {
 			if ($this->print_header) {
+				$temp_thead = $this->thead;
+    			$temp_theadMargins = $this->theadMargins;
 				$lasth = $this->lasth;
 				$this->_out('q');
 				$this->rMargin = $this->original_rMargin;
@@ -2592,6 +2693,8 @@ if (!class_exists('TCPDF', false)) {
 				}
 				$this->_out('Q');
 				$this->lasth = $lasth;
+				$this->thead = $temp_thead;
+				$this->theadMargins = $temp_theadMargins;
 			}
 		}
 		
@@ -2608,6 +2711,8 @@ if (!class_exists('TCPDF', false)) {
 			$this->footerpos[$this->page] = $this->pagelen[$this->page];
 			$this->_out("\n");
 			if ($this->print_footer) {
+				$temp_thead = $this->thead;
+    			$temp_theadMargins = $this->theadMargins;
 				$lasth = $this->lasth;
 				$this->_out('q');
 				$this->rMargin = $this->original_rMargin;
@@ -2630,6 +2735,8 @@ if (!class_exists('TCPDF', false)) {
 				}
 				$this->_out('Q');
 				$this->lasth = $lasth;
+				$this->thead = $temp_thead;
+				$this->theadMargins = $temp_theadMargins;
 			}
 			// restore graphic settings
 			$this->setGraphicVars($gvars);
@@ -2992,7 +3099,7 @@ if (!class_exists('TCPDF', false)) {
 		}
 		
 		/**
-		* Returns the length of the char in user unit for the current font.<br>
+		* Returns the length of the char in user unit for the current font.
 		* @param int $char The char code whose length is to be returned
 		* @return int char width
 		* @author Nicola Asuni
@@ -3366,41 +3473,43 @@ if (!class_exists('TCPDF', false)) {
 			}
 			// recalculate coordinates to account for graphic transformations
 			if (isset($this->transfmatrix)) {
-				$maxid = count($this->transfmatrix) - 1;
-				for ($i=$maxid; $i >= 0; $i--) {
-					$ctm = $this->transfmatrix[$i];
-					if (isset($ctm['a'])) {
-						$x = $x * $this->k;
-						$y = ($this->h - $y) * $this->k;
-						$w = $w * $this->k;
-						$h = $h * $this->k;
-						// top left
-						$xt = $x;
-						$yt = $y;
-						$x1 = ($ctm['a'] * $xt) + ($ctm['c'] * $yt) + $ctm['e'];
-						$y1 = ($ctm['b'] * $xt) + ($ctm['d'] * $yt) + $ctm['f'];
-						// top right
-						$xt = $x + $w;
-						$yt = $y;
-						$x2 = ($ctm['a'] * $xt) + ($ctm['c'] * $yt) + $ctm['e'];
-						$y2 = ($ctm['b'] * $xt) + ($ctm['d'] * $yt) + $ctm['f'];
-						// bottom left
-						$xt = $x;
-						$yt = $y - $h;
-						$x3 = ($ctm['a'] * $xt) + ($ctm['c'] * $yt) + $ctm['e'];
-						$y3 = ($ctm['b'] * $xt) + ($ctm['d'] * $yt) + $ctm['f'];
-						// bottom right
-						$xt = $x + $w;
-						$yt = $y - $h;
-						$x4 = ($ctm['a'] * $xt) + ($ctm['c'] * $yt) + $ctm['e'];
-						$y4 = ($ctm['b'] * $xt) + ($ctm['d'] * $yt) + $ctm['f'];
-						// new coordinates (rectangle area)
-						$x = min($x1, $x2, $x3, $x4);
-						$y = max($y1, $y2, $y3, $y4);
-						$w = (max($x1, $x2, $x3, $x4) - $x) / $this->k;
-						$h = ($y - min($y1, $y2, $y3, $y4)) / $this->k;
-						$x = $x / $this->k;
-						$y = $this->h - ($y / $this->k);
+				for ($i=$this->transfmatrix_key; $i > 0; --$i) {
+					$maxid = count($this->transfmatrix[$i]) - 1;
+					for ($j=$maxid; $j >= 0; --$j) {
+						$ctm = $this->transfmatrix[$i][$j];
+						if (isset($ctm['a'])) {
+							$x = $x * $this->k;
+							$y = ($this->h - $y) * $this->k;
+							$w = $w * $this->k;
+							$h = $h * $this->k;
+							// top left
+							$xt = $x;
+							$yt = $y;
+							$x1 = ($ctm['a'] * $xt) + ($ctm['c'] * $yt) + $ctm['e'];
+							$y1 = ($ctm['b'] * $xt) + ($ctm['d'] * $yt) + $ctm['f'];
+							// top right
+							$xt = $x + $w;
+							$yt = $y;
+							$x2 = ($ctm['a'] * $xt) + ($ctm['c'] * $yt) + $ctm['e'];
+							$y2 = ($ctm['b'] * $xt) + ($ctm['d'] * $yt) + $ctm['f'];
+							// bottom left
+							$xt = $x;
+							$yt = $y - $h;
+							$x3 = ($ctm['a'] * $xt) + ($ctm['c'] * $yt) + $ctm['e'];
+							$y3 = ($ctm['b'] * $xt) + ($ctm['d'] * $yt) + $ctm['f'];
+							// bottom right
+							$xt = $x + $w;
+							$yt = $y - $h;
+							$x4 = ($ctm['a'] * $xt) + ($ctm['c'] * $yt) + $ctm['e'];
+							$y4 = ($ctm['b'] * $xt) + ($ctm['d'] * $yt) + $ctm['f'];
+							// new coordinates (rectangle area)
+							$x = min($x1, $x2, $x3, $x4);
+							$y = max($y1, $y2, $y3, $y4);
+							$w = (max($x1, $x2, $x3, $x4) - $x) / $this->k;
+							$h = ($y - min($y1, $y2, $y3, $y4)) / $this->k;
+							$x = $x / $this->k;
+							$y = $this->h - ($y / $this->k);
+						}
 					}
 				}
 			}
@@ -3408,6 +3517,9 @@ if (!class_exists('TCPDF', false)) {
 				$page = 1;
 			} else {
 				$page = $this->page;
+			}
+			if (!isset($this->PageAnnots[$page])) {
+				$this->PageAnnots[$page] = array();
 			}
 			$this->PageAnnots[$page][] = array('x' => $x, 'y' => $y, 'w' => $w, 'h' => $h, 'txt' => $text, 'opt' => $opt, 'numspaces' => $spaces);
 			if (($opt['Subtype'] == 'FileAttachment') AND (!$this->empty_string($opt['FS'])) AND file_exists($opt['FS']) AND (!isset($this->embeddedfiles[basename($opt['FS'])]))) {
@@ -3423,6 +3535,7 @@ if (!class_exists('TCPDF', false)) {
 			if (isset($opt['mk']['ix']) AND file_exists($opt['mk']['ix'])) {
 				$this->Image($opt['mk']['ix'], '', '', 0, 0, '', '', '', false, 300, '', false, false, 0, false, true);
 			}
+			++$this->annot_obj_id;
 		}
 
 		/**
@@ -3468,7 +3581,7 @@ if (!class_exists('TCPDF', false)) {
 				// bidirectional algorithm (some chars may be changed affecting the line length)
 				$s = $this->utf8Bidi($this->UTF8StringToArray($txt), $txt, $this->tmprtl);
 				$l = $this->GetArrStringWidth($s);
-				$xr = $this->w - $x - $this->GetArrStringWidth($s);
+				$xr = $this->w - $x - $l;
 			} else {
 				$xr = $x;
 			}
@@ -3632,7 +3745,8 @@ if (!class_exists('TCPDF', false)) {
 					$w = $this->w - $this->rMargin - $this->x;
 				}
 			}
-			$s = '';			
+			$s = '';
+			// fill and borders
 			if (($fill == 1) OR ($border == 1)) {
 				if ($fill == 1) {
 					$op = ($border == 1) ? 'B' : 'f';
@@ -3691,8 +3805,11 @@ if (!class_exists('TCPDF', false)) {
 				// text lenght
 				$width = $this->GetStringWidth($txt);
 				// ratio between cell lenght and text lenght
-				$ratio = ($w - (2 * $this->cMargin)) / $width;
-				
+				if ($width <= 0) {
+					$ratio = 1;
+				} else {
+					$ratio = ($w - (2 * $this->cMargin)) / $width;
+				}
 				// stretch text if required
 				if (($stretch > 0) AND (($ratio < 1) OR (($ratio > 1) AND (($stretch % 2) == 0)))) {
 					if ($stretch > 2) {
@@ -3713,38 +3830,10 @@ if (!class_exists('TCPDF', false)) {
 				} else {
 					$stretch == 0;
 				}
-				if ($align == 'L') {
-					if ($this->rtl) {
-						$dx = $w - $width - $this->cMargin;
-					} else {
-						$dx = $this->cMargin;
-					}
-				} elseif ($align == 'R') {
-					if ($this->rtl) {
-						$dx = $this->cMargin;
-					} else {
-						$dx = $w - $width - $this->cMargin;
-					}
-				} elseif ($align == 'C') {
-					$dx = ($w - $width) / 2;
-				} elseif ($align == 'J') {
-					if ($this->rtl) {
-						$dx = $w - $width - $this->cMargin;
-					} else {
-						$dx = $this->cMargin;
-					}
-				} else {
-					$dx = $this->cMargin;
-				}
 				if ($this->ColorFlag) {
 					$s .= 'q '.$this->TextColor.' ';
 				}
 				$txt2 = $this->_escapetext($txt);
-				if ($this->rtl) {
-					$xdk = ($this->x - $dx - $width) * $k;
-				} else {
-					$xdk = ($this->x + $dx) * $k;
-				}
 				// Justification
 				if ($align == 'J') {
 					// count number of spaces
@@ -3762,22 +3851,49 @@ if (!class_exists('TCPDF', false)) {
 						$spacewidth = (($w - $width - (2 * $this->cMargin)) / ($ns?$ns:1)) * $this->k;
 						$rs .= sprintf('BT %.3F Tw ET ', $spacewidth);
 					}
+					$width = $w - (2 * $this->cMargin);
 				}
+				switch ($align) {
+					case 'C': {
+						$dx = ($w - $width) / 2;
+						break;
+					}
+					case 'R': {
+						if ($this->rtl) {
+							$dx = $this->cMargin;
+						} else {
+							$dx = $w - $width - $this->cMargin;
+						}
+						break;
+					}
+					case 'L':
+					case 'J':
+					default: {
+						if ($this->rtl) {
+							$dx = $w - $width - $this->cMargin;
+						} else {
+							$dx = $this->cMargin;
+						}
+						break;
+					}
+				}
+				if ($this->rtl) {
+					$xdx = $this->x - $dx - $width;
+				} else {
+					$xdx = $this->x + $dx;
+					
+				}
+				$xdk = $xdx * $k;
 				// calculate approximate position of the font base line
 				//$basefonty = $this->y + (($h + $this->FontAscent - $this->FontDescent)/2);
 				$basefonty = $this->y + ($h/2) + ($this->FontSize/3);
 				// print text
 				$s .= sprintf('BT %.2F %.2F Td [(%s)] TJ ET', $xdk, (($this->h - $basefonty) * $k), $txt2);
-				if ($this->rtl) {
-					$xdx = $this->x - $dx - $width;
-				} else {
-					$xdx = $this->x + $dx;
-				}
 				if ($this->underline)  {
-					$s .= ' '.$this->_dounderline($xdx, $basefonty, $txt);
+					$s .= ' '.$this->_dounderlinew($xdx, $basefonty, $width);
 				}
 				if ($this->linethrough) { 
-					$s .= ' '.$this->_dolinethrough($xdx, $basefonty, $txt);
+					$s .= ' '.$this->_dolinethroughw($xdx, $basefonty, $width);
 				}
 				if ($this->ColorFlag) {
 					$s .= ' Q';
@@ -4144,7 +4260,7 @@ if (!class_exists('TCPDF', false)) {
 				$arabic = false;
 			}
 			// check if string contains RTL text
-			if ($arabic OR $this->tmprtl OR preg_match(K_RE_PATTERN_RTL, $txt)) {
+			if ($arabic OR ($this->tmprtl == 'R') OR preg_match(K_RE_PATTERN_RTL, $txt)) {
 				$rtlmode = true;
 			} else {
 				$rtlmode = false;
@@ -4186,6 +4302,7 @@ if (!class_exists('TCPDF', false)) {
 			$l = 0; // current string lenght
 			$nl = 0; //number of lines
 			$linebreak = false;
+			$pc = 0; // previous character
 			// for each character
 			while ($i < $nb) {
 				if (($maxh > 0) AND ($this->y >= $maxy) ) {
@@ -4254,6 +4371,13 @@ if (!class_exists('TCPDF', false)) {
 						// check if is a SHY
 						if ($c == 173) {
 							$shy = true;
+							if ($pc == 45) {
+								$tmp_shy_replacement_width = 0;
+								$tmp_shy_replacement_char = '';
+							} else {
+								$tmp_shy_replacement_width = $shy_replacement_width;
+								$tmp_shy_replacement_char = $shy_replacement_char;
+							}
 						} else {
 							$shy = false;
 						}
@@ -4266,7 +4390,7 @@ if (!class_exists('TCPDF', false)) {
 					} else {
 						$l += $this->GetCharWidth($c);
 					}
-					if (($l > $wmax) OR ($shy AND (($l + $shy_replacement_width) > $wmax)) ) {
+					if (($l > $wmax) OR ($shy AND (($l + $tmp_shy_replacement_width) > $wmax)) ) {
 						// we have reached the end of column
 						if ($sep == -1) {
 							// check if the line was already started
@@ -4318,13 +4442,13 @@ if (!class_exists('TCPDF', false)) {
 							}
 							if ($shy) {
 								// add hypen (minus symbol) at the end of the line
-								$shy_width = $shy_replacement_width;
+								$shy_width = $tmp_shy_replacement_width;
 								if ($this->rtl) {
-									$shy_char_left = $shy_replacement_char;
+									$shy_char_left = $tmp_shy_replacement_char;
 									$shy_char_right = '';
 								} else {
 									$shy_char_left = '';
-									$shy_char_right = $shy_replacement_char;
+									$shy_char_right = $tmp_shy_replacement_char;
 								}
 							} else {
 								$shy_width = 0;
@@ -4379,6 +4503,8 @@ if (!class_exists('TCPDF', false)) {
 						}
 					}
 				}
+				// save last character
+				$pc = $c;
 				++$i;
 			} // end while i < nb
 			// print last substring (if any)
@@ -4542,6 +4668,24 @@ if (!class_exists('TCPDF', false)) {
 		}
 		
 		/**
+		 * Return the image type given the file name and path
+		 * @param string $imgfile image file name
+		 * @return string image type
+		 * @since 4.8.017 (2009-11-27)
+		 */
+		public function getImageFileType($imgfile) {
+			$type = ''; // default type
+			$fileinfo = pathinfo($imgfile);
+			if (isset($fileinfo['extension']) AND (!$this->empty_string($fileinfo['extension']))) {
+				$type = strtolower($fileinfo['extension']);
+			}
+			if ($type == 'jpg') {
+				$type = 'jpeg';
+			}
+			return $type;
+		}
+
+		/**
 		* Puts an image in the page. 
 		* The upper-left corner must be given. 
 		* The dimensions can be specified in different ways:<ul>
@@ -4619,16 +4763,7 @@ if (!class_exists('TCPDF', false)) {
 			if (!in_array($file, $this->imagekeys)) {
 				//First use of image, get info
 				if ($type == '') {
-					$fileinfo = pathinfo($file);
-					if (isset($fileinfo['extension']) AND (!$this->empty_string($fileinfo['extension']))) {
-						$type = $fileinfo['extension'];
-					} else {
-						$this->Error('Image file has no extension and no type was specified: '.$file);
-					}
-				}
-				$type = strtolower($type);
-				if ($type == 'jpg') {
-					$type = 'jpeg';
+					$type = $this->getImageFileType($file);
 				}
 				$mqr = $this->get_mqr();
 				$this->set_mqr(false);
@@ -4692,8 +4827,14 @@ if (!class_exists('TCPDF', false)) {
 				$info = $this->getImageBuffer($file);
 			}
 			// Check whether we need a new page first as this does not fit
+			$prev_x = $this->x;
 			if ($this->checkPageBreak($h, $y)) {
 				$y = $this->GetY() + $this->cMargin;
+				if ($this->rtl) {
+					$x += ($prev_x - $this->x);
+				} else {
+					$x += ($this->x - $prev_x);
+				}
 			}
 			// set bottomcoordinates
 			$this->img_rb_y = $y + $h;
@@ -4780,7 +4921,11 @@ if (!class_exists('TCPDF', false)) {
 		 * @since 4.6.025 (2009-08-17)
 		 */
 		public function set_mqr($mqr) {
-			if (function_exists('set_magic_quotes_runtime')) {
+			if(!defined('PHP_VERSION_ID')) {
+				$version = PHP_VERSION;
+				define('PHP_VERSION_ID', (($version{0} * 10000) + ($version{2} * 100) + $version{4}));
+			}
+			if (PHP_VERSION_ID < 50300) {
 				@set_magic_quotes_runtime($mqr);
 			}
 		}
@@ -4791,7 +4936,11 @@ if (!class_exists('TCPDF', false)) {
 		 * @since 4.6.025 (2009-08-17)
 		 */
 		public function get_mqr() {
-			if (function_exists('get_magic_quotes_runtime')) {
+			if(!defined('PHP_VERSION_ID')) {
+				$version = PHP_VERSION;
+				define('PHP_VERSION_ID', (($version{0} * 10000) + ($version{2} * 100) + $version{4}));
+			}
+			if (PHP_VERSION_ID < 50300) {
 				return @get_magic_quotes_runtime();
 			}
 			return 0;
@@ -5189,6 +5338,7 @@ if (!class_exists('TCPDF', false)) {
 		public function Output($name='doc.pdf', $dest='I') {
 			//Output PDF to some destination
 			//Finish document if necessary
+			$this->lastpage();
 			if ($this->state < 3) {
 				$this->Close();
 			}
@@ -5543,10 +5693,14 @@ if (!class_exists('TCPDF', false)) {
 			}
 			$this->_out('/Annots [');
 			if (isset($this->PageAnnots[$n])) {
-				// set page annotations
-				foreach ($this->PageAnnots[$n] as $id) {
-					++$this->annot_obj_id;
-					$this->_out($this->annot_obj_id.' 0 R');
+				$num_annots = count($this->PageAnnots[$n]);
+				for ($i = 0; $i < $num_annots; ++$i) {
+					++$this->curr_annot_obj_id;
+					if (!in_array($this->curr_annot_obj_id, $this->radio_groups)) {
+						$this->_out($this->curr_annot_obj_id.' 0 R');
+					} else {
+						++$num_annots;
+					}
 				}
 			}
 			if (($n==1) AND $this->sign AND isset($this->signature_data['cert_type'])) {
@@ -5571,6 +5725,35 @@ if (!class_exists('TCPDF', false)) {
 				if (isset($this->PageAnnots[$n])) {
 					// set page annotations
 					foreach ($this->PageAnnots[$n] as $key => $pl) {
+						// create annotation object for grouping radiobuttons
+						if (isset($this->radiobutton_groups[$n][$pl['txt']]) AND is_array($this->radiobutton_groups[$n][$pl['txt']])) {
+							$annots = '<<';
+							$annots .= ' /Type /Annot';
+							$annots .= ' /Subtype /Widget';
+							$annots .= ' /T '.$this->_datastring($pl['txt']);
+							$annots .= ' /FT /Btn';
+							$annots .= ' /Ff 49152';
+							$annots .= ' /Kids [';
+							foreach ($this->radiobutton_groups[$n][$pl['txt']] as $data) {
+								$annots .= ' '.$data['kid'].' 0 R';
+								if ($data['def'] !== 'Off') {
+									$defval = $data['def'];
+								}
+							}
+							$annots .= ' ]';
+							if (isset($defval)) {
+								$annots .= ' /V /'.$defval;
+							}
+							$annots .= ' >>';
+							++$this->annot_obj_id;
+							$this->offsets[$this->annot_obj_id] = $this->bufferlen;
+							$this->_out($this->annot_obj_id.' 0 obj');
+							$this->_out($annots);
+							$this->_out('endobj');
+							$this->form_obj_id[] = $this->annot_obj_id;
+							// store object id to be used on Parent entry of Kids
+							$this->radiobutton_groups[$n][$pl['txt']] = $this->annot_obj_id;
+						}
 						$formfield = false;
 						$pl['opt'] = array_change_key_case($pl['opt'], CASE_LOWER);
 						$a = $pl['x'] * $this->k;
@@ -5649,20 +5832,30 @@ if (!class_exists('TCPDF', false)) {
 						if (isset($pl['opt']['as']) AND is_string($pl['opt']['as'])) {
 							$annots .= ' /AS /'.$pl['opt']['as'];
 						}
-						if (isset($pl['opt']['ap']) AND is_string($pl['opt']['ap'])) {
-							$annots .= ' /AP << '.$pl['opt']['ap'].' >>';
-						} elseif (isset($pl['opt']['ft']) AND in_array($pl['opt']['ft'], $ft)) {
+						if (isset($pl['opt']['ap'])) {
+							// appearance stream
 							$annots .= ' /AP <<';
-							$annots .= ' /N <<';
-							$annots .= ' /Type /XObject';
-							$annots .= ' /Subtype /Form';
-							$annots .= ' /FormType 1';
-							$rect = sprintf('%.2F %.2F', $c, $d);
-							$annots .= ' /BBox [0 0 '.$rect.']';
-							$annots .= ' /Matrix [1 0 0 1 0 0]';
-							$annots .= ' /Resources << /ProcSet [/PDF] >>';
-							$annots .= ' /Length 0';
-							$annots .= ' >>';
+							if (is_array($pl['opt']['ap'])) {
+								foreach ($pl['opt']['ap'] as $apmode => $apdef) {
+									// $apmode can be: n = normal; r = rollover; d = down;
+									$annots .= ' /'.strtoupper($apmode);
+									if (is_array($apdef)) {
+										$annots .= ' <<';
+										foreach ($apdef as $apstate => $stream) {
+											// reference to XObject that define the appearance for this mode-state
+											$apsobjid = $this->_putAPXObject($c, $d, $stream);
+											$annots .= ' /'.$apstate.' '.$apsobjid.' 0 R';
+										}
+										$annots .= ' >>';
+									} else {
+										// reference to XObject that define the appearance for this mode
+										$apsobjid = $this->_putAPXObject($c, $d, $apdef);
+										$annots .= ' '.$apsobjid.' 0 R';
+									}
+								}
+							} else {
+								$annots .= $pl['opt']['ap'];
+							}
 							$annots .= ' >>';
 						}
 						if (isset($pl['opt']['bs']) AND (is_array($pl['opt']['bs']))) {
@@ -5710,7 +5903,7 @@ if (!class_exists('TCPDF', false)) {
 								$annots .= ' /S /S';
 							}
 							if (isset($pl['opt']['be']['i']) AND ($pl['opt']['be']['i'] >= 0) AND ($pl['opt']['be']['i'] <= 2)) {
-								$annots .= ' /I '.sprintf(" %.4F", $pl['opt']['be']['i']);
+								$annots .= ' /I '.sprintf(' %.4F', $pl['opt']['be']['i']);
 							}
 							$annots .= '>>';
 						}
@@ -5719,7 +5912,7 @@ if (!class_exists('TCPDF', false)) {
 							foreach ($pl['opt']['c'] as $col) {
 								$col = intval($col);
 								$color = $col <= 0 ? 0 : ($col >= 255 ? 1 : $col / 255);
-								$annots .= sprintf(" %.4F", $color);
+								$annots .= sprintf(' %.4F', $color);
 							}
 							$annots .= ']';
 						}
@@ -5733,7 +5926,7 @@ if (!class_exists('TCPDF', false)) {
 							}
 							//$annots .= ' /Popup ';
 							if (isset($pl['opt']['ca'])) {
-								$annots .= ' /CA '.sprintf("%.4F", floatval($pl['opt']['ca']));
+								$annots .= ' /CA '.sprintf('%.4F', floatval($pl['opt']['ca']));
 							}
 							if (isset($pl['opt']['rc'])) {
 								$annots .= ' /RC '.$this->_textstring($pl['opt']['rc']);
@@ -5802,7 +5995,9 @@ if (!class_exists('TCPDF', false)) {
 								break;
 							}
 							case 'freetext': {
-								$annots .= ' /DA '.$this->_textstring($pl['txt']);
+								if (isset($pl['opt']['da']) AND !empty($pl['opt']['da'])) {
+									$annots .= ' /DA ('.$pl['opt']['da'].')';
+								}
 								if (isset($pl['opt']['q']) AND ($pl['opt']['q'] >= 0) AND ($pl['opt']['q'] <= 2)) {
 									$annots .= ' /Q '.intval($pl['opt']['q']);
 								}
@@ -5815,7 +6010,7 @@ if (!class_exists('TCPDF', false)) {
 								if (isset($pl['opt']['cl']) AND is_array($pl['opt']['cl'])) {
 									$annots .= ' /CL [';
 									foreach ($pl['opt']['cl'] as $cl) {
-										$annots .= sprintf("%.4F ", $cl * $this->k);
+										$annots .= sprintf('%.4F ', $cl * $this->k);
 									}
 									$annots .= ']';
 								}
@@ -5941,20 +6136,14 @@ if (!class_exists('TCPDF', false)) {
 							 			$annots .= ']';
 							 		}
 							 		if (isset($pl['opt']['mk']['ca'])) {
-							 			$annots .= ' /CA '.$this->_textstring($pl['opt']['mk']['ca']);
-							 		} elseif (isset($pl['opt']['t']) AND is_string($pl['opt']['t'])) {
-							 			$annots .= ' /CA '.$this->_textstring($pl['opt']['t']);
+							 			$annots .= ' /CA '.$pl['opt']['mk']['ca'].'';
 							 		}
 							 		if (isset($pl['opt']['mk']['rc'])) {
-							 			$annots .= ' /RC '.$this->_textstring($pl['opt']['mk']['rc']);
-							 		} elseif (isset($pl['opt']['t']) AND is_string($pl['opt']['t'])) {
-							 			$annots .= ' /RC '.$this->_textstring($pl['opt']['t']);
+							 			$annots .= ' /RC '.$pl['opt']['mk']['ca'].'';
 							 		}
 							 		if (isset($pl['opt']['mk']['ac'])) {
-							 			$annots .= ' /AC '.$this->_textstring($pl['opt']['mk']['ac']);
-							 		} elseif (isset($pl['opt']['t']) AND is_string($pl['opt']['t'])) {
-							 			$annots .= ' /AC '.$this->_textstring($pl['opt']['t']);
-							 		}							 		
+							 			$annots .= ' /AC '.$pl['opt']['mk']['ca'].'';
+							 		}							 								 		
 							 		if (isset($pl['opt']['mk']['i'])) {
 							 			$info = $this->getImageBuffer($pl['opt']['mk']['i']);
 							 			if ($info !== false) {
@@ -5999,8 +6188,10 @@ if (!class_exists('TCPDF', false)) {
 							 		$annots .= '>>';
 							 	} // end MK
 							 	// --- Entries for field dictionaries ---
-							 	// /Parent
-							 	// /Kids
+							 	if (isset($this->radiobutton_groups[$n][$pl['txt']])) {
+							 		// set parent
+							 		$annots .= ' /Parent '.$this->radiobutton_groups[$n][$pl['txt']].' 0 R';
+							 	}
 							 	if (isset($pl['opt']['t']) AND is_string($pl['opt']['t'])) {
 									$annots .= ' /T '.$this->_datastring($pl['opt']['t']);
 								}
@@ -6061,6 +6252,9 @@ if (!class_exists('TCPDF', false)) {
 								if (isset($pl['opt']['aa']) AND !empty($pl['opt']['aa'])) {
 									$annots .= ' /AA << '.$pl['opt']['aa'].' >>';
 								}
+								if (isset($pl['opt']['da']) AND !empty($pl['opt']['da'])) {
+									$annots .= ' /DA ('.$pl['opt']['da'].')';
+								}
 								if (isset($pl['opt']['q']) AND ($pl['opt']['q'] >= 0) AND ($pl['opt']['q'] <= 2)) {
 									$annots .= ' /Q '.intval($pl['opt']['q']);
 								}
@@ -6113,13 +6307,46 @@ if (!class_exists('TCPDF', false)) {
 						$this->_out($this->annot_obj_id.' 0 obj');
 						$this->_out($annots);
 						$this->_out('endobj');
-						if ($formfield) {
+						if ($formfield AND ! isset($this->radiobutton_groups[$n][$pl['txt']])) {
 							// store reference of form object
 							$this->form_obj_id[] = $this->annot_obj_id;
 						}
 					}
 				}
 			} // end for each page
+		}
+
+		/**
+		* Put appearance streams XObject used to define annotation's appearance states
+		* @param int $w annotation width
+		* @param int $h annotation height
+		* @param string $stream appearance stream
+		* @return int object ID
+		* @access protected
+		* @since 4.8.001 (2009-09-09)
+		*/
+		protected function _putAPXObject($w=0, $h=0, $stream='') {
+			$stream = trim($stream);
+			++$this->apxo_obj_id;
+			$this->offsets[$this->apxo_obj_id] = $this->bufferlen;
+			$this->_out($this->apxo_obj_id.' 0 obj');
+			$this->_out('<<');
+			$this->_out('/Type /XObject');
+			$this->_out('/Subtype /Form');
+			$this->_out('/FormType 1');
+			if ($this->compress) {
+				$stream = gzcompress($stream);
+				$this->_out('/Filter /FlateDecode');
+			}
+			$rect = sprintf('%.2F %.2F', $w, $h);
+			$this->_out('/BBox [0 0 '.$rect.']');
+			$this->_out('/Matrix [1 0 0 1 0 0]');
+			$this->_out('/Resources <</ProcSet [/PDF]>>');
+			$this->_out('/Length '.strlen($stream));
+			$this->_out('>>');
+			$this->_putstream($stream);
+			$this->_out('endobj');
+			return $this->apxo_obj_id;
 		}
 
 		/**
@@ -6187,19 +6414,23 @@ if (!class_exists('TCPDF', false)) {
 				$name = $font['name'];
 				if ($type == 'core') {
 					//Standard font
-					$this->_newobj();
+					$obj_id = $this->_newobj();
 					$this->_out('<</Type /Font');
 					$this->_out('/Subtype /Type1');
 					$this->_out('/BaseFont /'.$name);
 					$this->_out('/Name /F'.$font['i']);
-					if (($name != 'symbol') AND ($name != 'zapfdingbats')) {
+					if ((strtolower($name) != 'symbol') AND (strtolower($name) != 'zapfdingbats')) {
 						$this->_out('/Encoding /WinAnsiEncoding');
+					}
+					if (strtolower($name) == 'helvetica') {
+						// add default font for annotations
+						$this->annotation_fonts['helvetica'] = $k;
 					}
 					$this->_out('>>');
 					$this->_out('endobj');
 				} elseif (($type == 'Type1') OR ($type == 'TrueType')) {
 					//Additional Type1 or TrueType font
-					$this->_newobj();
+					$obj_id = $this->_newobj();
 					$this->_out('<</Type /Font');
 					$this->_out('/Subtype /'.$type);
 					$this->_out('/BaseFont /'.$name);
@@ -6228,8 +6459,8 @@ if (!class_exists('TCPDF', false)) {
 					//Descriptor
 					$this->_newobj();
 					$s = '<</Type /FontDescriptor /FontName /'.$name;
-					foreach ($font['desc'] as $k => $v) {
-						$s .= ' /'.$k.' '.$v.'';
+					foreach ($font['desc'] as $fdk => $fdv) {
+						$s .= ' /'.$fdk.' '.$fdv.'';
 					}
 					if (!$this->empty_string($font['file'])) {
 						$s .= ' /FontFile'.($type == 'Type1' ? '' : '2').' '.$this->FontFiles[$font['file']]['n'].' 0 R';
@@ -6242,8 +6473,10 @@ if (!class_exists('TCPDF', false)) {
 					if (!method_exists($this, $mtd)) {
 						$this->Error('Unsupported font type: '.$type);
 					}
-					$this->$mtd($font);
+					$obj_id = $this->$mtd($font);
 				}
+				// store object ID for current font
+				$this->font_obj_ids[$k] = $obj_id;
 			}
 		}
 		
@@ -6349,6 +6582,7 @@ if (!class_exists('TCPDF', false)) {
 		* Adds unicode fonts.<br>
 		* Based on PDF Reference 1.3 (section 5)
 		* @parameter array $font font data
+		* @return int font object ID
 		* @access protected
 		* @author Nicola Asuni
 		* @since 1.52.0.TC005 (2005-01-05)
@@ -6356,7 +6590,7 @@ if (!class_exists('TCPDF', false)) {
 		protected function _puttruetypeunicode($font) {
 			// Type0 Font
 			// A composite font composed of other fonts, organized hierarchically
-			$this->_newobj();
+			$obj_id = $this->_newobj();
 			$this->_out('<</Type /Font');
 			$this->_out('/Subtype /Type0');
 			$this->_out('/BaseFont /'.$font['name'].'');
@@ -6430,18 +6664,23 @@ if (!class_exists('TCPDF', false)) {
 				$this->_putstream(file_get_contents($fontfile));
 			}
 			$this->_out('endobj');
+			return $obj_id;
 		}
 		
 		/**
 		 * Output CID-0 fonts.
 		 * A Type 0 CIDFont contains glyph descriptions based on the Adobe Type 1 font format
 		 * @param array $font font data
+		 * @return int font object ID
 		 * @access protected
 		 * @author Andrew Whitehead, Nicola Asuni, Yukihiro Nakadaira
 		 * @since 3.2.000 (2008-06-23)
 		 */
 		protected function _putcidfont0($font) {
-			$cidoffset = 31;
+			$cidoffset = 0;
+			if (!isset($font['cw'][1])) {
+				$cidoffset = 31;
+			}
 			if (isset($font['cidinfo']['uni2cid'])) {
 				// convert unicode to cid.
 				$uni2cid = $font['cidinfo']['uni2cid'];
@@ -6462,7 +6701,7 @@ if (!class_exists('TCPDF', false)) {
 			} else {
 				$longname = $name;
 			}
-			$this->_newobj();
+			$obj_id = $this->_newobj();
 			$this->_out('<</Type /Font');
 			$this->_out('/Subtype /Type0');
 			$this->_out('/BaseFont /'.$longname);
@@ -6495,6 +6734,7 @@ if (!class_exists('TCPDF', false)) {
 			}
 			$this->_out($s.'>>');
 			$this->_out('endobj');
+			return $obj_id;
 		}
 
 		/**
@@ -6511,7 +6751,7 @@ if (!class_exists('TCPDF', false)) {
 				$this->_out('/Subtype /Image');
 				$this->_out('/Width '.$info['w']);
 				$this->_out('/Height '.$info['h']);
-				if (isset($info['masked'])) {
+				if (array_key_exists('masked', $info)) {
 					$this->_out('/SMask '.($this->n - 1).' 0 R');
 				}
 				if ($info['cs'] == 'Indexed') {
@@ -6655,38 +6895,44 @@ if (!class_exists('TCPDF', false)) {
 		}
 		
 		/**
-		* Adds some Metadata information
-		* (see Chapter 10.2 of PDF Reference)
+		* Adds some Metadata information (Document Information Dictionary)
+		* (see Chapter 14.3.3 Document Information Dictionary of PDF32000_2008.pdf Reference)
 		* @access protected
 		*/
 		protected function _putinfo() {
-			if ($this->empty_string($this->title)) {
-				$this->title = '?';
+			if (!$this->empty_string($this->title)) {
+				// The document's title.
+				$this->_out('/Title '.$this->_textstring($this->title));
 			}
-			$this->_out('/Title '.$this->_textstring($this->title));
-			if ($this->empty_string($this->author)) {
-				$this->author = '?';
+			if (!$this->empty_string($this->author)) {
+				// The name of the person who created the document.
+				$this->_out('/Author '.$this->_textstring($this->author));
 			}
-			$this->_out('/Author '.$this->_textstring($this->author));
-			if ($this->empty_string($this->subject)) {
-				$this->subject = '?';
+			if (!$this->empty_string($this->subject)) {
+				// The subject of the document.
+				$this->_out('/Subject '.$this->_textstring($this->subject));
 			}
-			$this->_out('/Subject '.$this->_textstring($this->subject));
-			if ($this->empty_string($this->keywords)) {
-				$this->keywords = '?';
+			if (!$this->empty_string($this->keywords)) {
+				// Keywords associated with the document.
+				$this->_out('/Keywords '.$this->_textstring($this->keywords));
 			}
-			$this->_out('/Keywords '.$this->_textstring($this->keywords));
-			if ($this->empty_string($this->creator)) {
-				$this->creator = '?';
+			if (!$this->empty_string($this->creator)) {
+				// If the document was converted to PDF from another format, the name of the conforming product that created the original document from which it was converted.
+				$this->_out('/Creator '.$this->_textstring($this->creator));
 			}
-			$this->_out('/Creator '.$this->_textstring($this->creator));
 			if (defined('PDF_PRODUCER')) {
+				// If the document was converted to PDF from another format, the name of the conforming product that converted it to PDF.
 				$this->_out('/Producer '.$this->_textstring(PDF_PRODUCER));
 			} else {
+				// default producer
 				$this->_out('/Producer '.$this->_textstring('TCPDF'));
 			}
+			// The date and time the document was created, in human-readable form
 			$this->_out('/CreationDate '.$this->_datestring());
-			$this->_out('/ModDate '.$this->_datestring());	
+			// The date and time the document was most recently modified, in human-readable form
+			$this->_out('/ModDate '.$this->_datestring());
+			// A name object indicating whether the document has been modified to include trapping information
+			//$this->_out('/Trapped /False');
 		}
 		
 		/**
@@ -6746,8 +6992,16 @@ if (!class_exists('TCPDF', false)) {
 					$this->_out('/SigFlags 3');
 				}
 				//$this->_out('/CO ');
-				//$this->_out('/DR << >>');
-				//$this->_out('/DA ');
+				if (isset($this->annotation_fonts) AND !empty($this->annotation_fonts)) {
+					$this->_out('/DR <<');
+					$this->_out('/Font <<');
+					foreach ($this->annotation_fonts as $font => $fontkey) {
+						$this->_out('/F'.($fontkey + 1).' '.$this->font_obj_ids[$font].' 0 R');
+					}
+					$this->_out('>>');
+					$this->_out('>>');
+				}
+				$this->_out('/DA (/F'.(array_search('helvetica', $this->fontkeys) + 1).' 0 Tf 0 g)');
 				$this->_out('/Q '.(($this->rtl)?'2':'0'));
 				//$this->_out('/XFA ');
 				$this->_out('>>');
@@ -6942,6 +7196,13 @@ if (!class_exists('TCPDF', false)) {
 					$this->_out(sprintf('%010d 00000 n ', $this->offsets[$i]));
 				}
 			}
+			// Appearance streams XObjects
+			if ($this->apxo_obj_id > $this->apxo_start_obj_id) {
+				$this->_out(($this->apxo_start_obj_id + 1).' '.($this->apxo_obj_id - $this->apxo_start_obj_id));
+				for ($i = ($this->apxo_start_obj_id + 1); $i <= $this->apxo_obj_id; ++$i) {
+					$this->_out(sprintf('%010d 00000 n ', $this->offsets[$i]));
+				}
+			}
 			//Trailer
 			$this->_out('trailer');
 			$this->_out('<<');
@@ -7034,10 +7295,8 @@ if (!class_exists('TCPDF', false)) {
 		* @access protected
 		*/
 		protected function _dounderline($x, $y, $txt) {
-			$up = $this->CurrentFont['up'];
-			$ut = $this->CurrentFont['ut'];
 			$w = $this->GetStringWidth($txt);
-			return sprintf('%.2F %.2F %.2F %.2F re f', $x * $this->k, ($this->h - ($y - $up / 1000 * $this->FontSize)) * $this->k, $w * $this->k, -$ut / 1000 * $this->FontSizePt);
+			return $this->_dounderlinew($x, $y, $w);
 		}
 		
 		/**
@@ -7048,9 +7307,35 @@ if (!class_exists('TCPDF', false)) {
 		* @access protected
 		*/
 		protected function _dolinethrough($x, $y, $txt) {
+			$w = $this->GetStringWidth($txt);
+			return $this->_dolinethroughw($x, $y, $w);
+		}
+
+		/**
+		* Underline for rectangular text area.
+		* @param int $x X coordinate
+		* @param int $y Y coordinate
+		* @param int $w width to underline
+		* @access protected
+		* @since 4.8.008 (2009-09-29)
+		*/
+		protected function _dounderlinew($x, $y, $w) {
 			$up = $this->CurrentFont['up'];
 			$ut = $this->CurrentFont['ut'];
-			$w = $this->GetStringWidth($txt);
+			return sprintf('%.2F %.2F %.2F %.2F re f', $x * $this->k, ($this->h - ($y - $up / 1000 * $this->FontSize)) * $this->k, $w * $this->k, -$ut / 1000 * $this->FontSizePt);
+		}
+		
+		/**
+		* Line through for rectangular text area.
+		* @param int $x X coordinate
+		* @param int $y Y coordinate
+		* @param string $txt text to linethrough
+		* @access protected
+		* @since 4.8.008 (2009-09-29)
+		*/
+		protected function _dolinethroughw($x, $y, $w) {
+			$up = $this->CurrentFont['up'];
+			$ut = $this->CurrentFont['ut'];
 			return sprintf('%.2F %.2F %.2F %.2F re f', $x * $this->k, ($this->h - ($y - ($this->FontSize/2) - $up / 1000 * $this->FontSize)) * $this->k, $w * $this->k, -$ut / 1000 * $this->FontSizePt);
 		}
 		
@@ -7756,6 +8041,8 @@ if (!class_exists('TCPDF', false)) {
 		public function StartTransform() {
 			$this->_out('q');
 			$this->transfmrk[$this->page][] = $this->pagelen[$this->page];
+			++$this->transfmatrix_key;
+			$this->transfmatrix[$this->transfmatrix_key] = array();
 		}
 		
 		/**
@@ -7768,8 +8055,9 @@ if (!class_exists('TCPDF', false)) {
 		*/
 		public function StopTransform() {
 			$this->_out('Q');
-			if (isset($this->transfmatrix)) {
-				array_pop($this->transfmatrix);
+			if (isset($this->transfmatrix[$this->transfmatrix_key])) {
+				array_pop($this->transfmatrix[$this->transfmatrix_key]);
+				--$this->transfmatrix_key;
 			}
 			array_pop($this->transfmrk[$this->page]);
 		}
@@ -8047,8 +8335,8 @@ if (!class_exists('TCPDF', false)) {
 		*/
 		protected function Transform($tm) {
 			$this->_out(sprintf('%.3F %.3F %.3F %.3F %.3F %.3F cm', $tm[0], $tm[1], $tm[2], $tm[3], $tm[4], $tm[5]));
-			// store transformation matrix
-			$this->transfmatrix[] = array('a' => $tm[0], 'b' => $tm[1], 'c' => $tm[2], 'd' => $tm[3], 'e' => $tm[4], 'f' => $tm[5]);
+			// add tranformation matrix
+			$this->transfmatrix[$this->transfmatrix_key][] = array('a' => $tm[0], 'b' => $tm[1], 'c' => $tm[2], 'd' => $tm[3], 'e' => $tm[4], 'f' => $tm[5]);
 			// update tranformation mark
 			if (end($this->transfmrk[$this->page]) !== false) {
 				$key = key($this->transfmrk[$this->page]);
@@ -8147,13 +8435,13 @@ if (!class_exists('TCPDF', false)) {
 						if ($i) {
 							$dash_string .= ' ';
 						}
-						$dash_string .= sprintf("%.2F", $v);
+						$dash_string .= sprintf('%.2F', $v);
 					}
 				}
 				if (!isset($phase) OR !$dash) {
 					$phase = 0;
 				}
-				$this->linestyleDash = sprintf("[%s] %.2F d", $dash_string, $phase);
+				$this->linestyleDash = sprintf('[%s] %.2F d', $dash_string, $phase);
 				$this->_out($this->linestyleDash);
 			}
 			if (isset($color)) {
@@ -8172,7 +8460,7 @@ if (!class_exists('TCPDF', false)) {
 			if ($this->rtl) {
 				$x = $this->w - $x;
 			}
-			$this->_out(sprintf("%.2F %.2F m", $x * $this->k, ($this->h - $y) * $this->k));
+			$this->_out(sprintf('%.2F %.2F m', $x * $this->k, ($this->h - $y) * $this->k));
 		}
 		
 		/*
@@ -8186,7 +8474,7 @@ if (!class_exists('TCPDF', false)) {
 			if ($this->rtl) {
 				$x = $this->w - $x;
 			}
-			$this->_out(sprintf("%.2F %.2F l", $x * $this->k, ($this->h - $y) * $this->k));
+			$this->_out(sprintf('%.2F %.2F l', $x * $this->k, ($this->h - $y) * $this->k));
 		}
 		
 		/**
@@ -8203,7 +8491,7 @@ if (!class_exists('TCPDF', false)) {
 			if ($this->rtl) {
 				$x = $this->w - $x - $w;
 			}
-			$this->_out(sprintf('%.2F %.2F %.2F %.2F re %s', $x*$this->k, ($this->h-$y)*$this->k, $w*$this->k, -$h*$this->k, $op));
+			$this->_out(sprintf('%.2F %.2F %.2F %.2F re %s', $x * $this->k, ($this->h - $y) * $this->k, $w * $this->k, -$h * $this->k, $op));
 		}
 		
 		/*
@@ -8224,7 +8512,7 @@ if (!class_exists('TCPDF', false)) {
 				$x2 = $this->w - $x2;
 				$x3 = $this->w - $x3;
 			}
-			$this->_out(sprintf("%.2F %.2F %.2F %.2F %.2F %.2F c", $x1 * $this->k, ($this->h - $y1) * $this->k, $x2 * $this->k, ($this->h - $y2) * $this->k, $x3 * $this->k, ($this->h - $y3) * $this->k));
+			$this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c', $x1 * $this->k, ($this->h - $y1) * $this->k, $x2 * $this->k, ($this->h - $y2) * $this->k, $x3 * $this->k, ($this->h - $y3) * $this->k));
 		}
 		
 		/**
@@ -8599,7 +8887,33 @@ if (!class_exists('TCPDF', false)) {
 		public function Circle($x0, $y0, $r, $astart=0, $afinish=360, $style='', $line_style=array(), $fill_color=array(), $nc=8) {
 			$this->Ellipse($x0, $y0, $r, 0, 0, $astart, $afinish, $style, $line_style, $fill_color, $nc);
 		}
-		
+
+		/**
+		* Draws a polygonal line
+		* @param array $p Points 0 to ($np - 1). Array with values (x0, y0, x1, y1,..., x(np-1), y(np - 1))
+		* @param string $style Style of rendering. Possible values are:
+		* <ul>
+		*	 <li>D or empty string: Draw (default).</li>
+		*	 <li>F: Fill.</li>
+		*	 <li>DF or FD: Draw and fill.</li>
+		*	 <li>CNZ: Clipping mode (using the even-odd rule to determine which regions lie inside the clipping path).</li>
+		*	 <li>CEO: Clipping mode (using the nonzero winding number rule to determine which regions lie inside the clipping path).</li>
+		* </ul>
+		* @param array $line_style Line style of polygon. Array with keys among the following:
+		* <ul>
+		*	 <li>all: Line style of all lines. Array like for {@link SetLineStyle SetLineStyle}.</li>
+		*	 <li>0 to ($np - 1): Line style of each line. Array like for {@link SetLineStyle SetLineStyle}.</li>
+		* </ul>
+		* If a key is not present or is null, not draws the line. Default value is default line style (empty array).
+		* @param array $fill_color Fill color. Format: array(GREY) or array(R,G,B) or array(C,M,Y,K). Default value: default color (empty array).
+		* @param boolean $closed if true the polygon is closes, otherwise will remain open
+		* @access public
+		* @since 4.8.003 (2009-09-15)
+		*/
+		public function PolyLine($p, $style='', $line_style=array(), $fill_color=array()) {
+			$this->Polygon($p, $style, $line_style, $fill_color, false);
+		}
+
 		/**
 		* Draws a polygon.
 		* @param array $p Points 0 to ($np - 1). Array with values (x0, y0, x1, y1,..., x(np-1), y(np - 1))
@@ -8618,21 +8932,24 @@ if (!class_exists('TCPDF', false)) {
 		* </ul>
 		* If a key is not present or is null, not draws the line. Default value is default line style (empty array).
 		* @param array $fill_color Fill color. Format: array(GREY) or array(R,G,B) or array(C,M,Y,K). Default value: default color (empty array).
+		* @param boolean $closed if true the polygon is closes, otherwise will remain open
 		* @access public
 		* @since 2.1.000 (2008-01-08)
 		*/
-		public function Polygon($p, $style='', $line_style=array(), $fill_color=array()) {
+		public function Polygon($p, $style='', $line_style=array(), $fill_color=array(), $closed=true) {
 			$nc = count($p); // number of coordinates
 			$np = $nc / 2; // number of points
-			for ($i = 0; $i < 4; ++$i) {
+			if ($closed) {
 				// close polygon by adding the first 2 points at the end (one line)
-				$p[$nc + $i] = $p[$i];
+				for ($i = 0; $i < 4; ++$i) {
+					$p[$nc + $i] = $p[$i];
+				}
+				// copy style for the last added line
+				if (isset($line_style[0])) {
+					$line_style[$np] = $line_style[0];
+				}			
+				$nc += 4;
 			}
-			// copy style for the last added line
-			if (isset($line_style[0])) {
-				$line_style[$np] = $line_style[0];
-			}			
-			$nc += 4;			
 			if (!(false === strpos($style, 'F')) AND isset($fill_color)) {
 				$this->SetFillColorArray($fill_color);
 			}
@@ -9031,9 +9348,9 @@ if (!class_exists('TCPDF', false)) {
 			$numchars = count($ta);
 			
 			if ($forcertl == 'R') {
-					$pel = 1;
+				$pel = 1;
 			} elseif ($forcertl == 'L') {
-					$pel = 0;
+				$pel = 0;
 			} else {
 				// P2. In each paragraph, find the first character of type L, AL, or R.
 				// P3. If a character is found in P2 and it is of type AL or R, then set the paragraph embedding level to one; otherwise, set it to zero.
@@ -9610,6 +9927,15 @@ if (!class_exists('TCPDF', false)) {
 			if ($nb == 0) {
 				return;
 			}
+			// get sorting columns
+			$outline_p = array();
+			$outline_y = array();			
+			foreach ($this->outlines as $key => $row) {
+				$outline_p[$key]  = $row['p'];
+				$outline_k[$key] = $key;
+			}
+			// sort outlines by page and original position
+			array_multisort($outline_p, SORT_NUMERIC, SORT_ASC, $outline_k, SORT_NUMERIC, SORT_ASC, $this->outlines);
 			$lru = array();
 			$level = 0;
 			foreach ($this->outlines as $i => $o) {
@@ -9659,7 +9985,6 @@ if (!class_exists('TCPDF', false)) {
 			$this->_out('/Last '.($n + $lru[0]).' 0 R>>');
 			$this->_out('endobj');
 		}
-		
 		
 		// --- JAVASCRIPT ------------------------------------------------------
 		
@@ -10222,6 +10547,16 @@ if (!class_exists('TCPDF', false)) {
 			$prop = array_merge($this->getFormDefaultProp(), $prop);
 			// get annotation data
 			$popt = $this->getAnnotOptFromJSProp($prop);
+			// set default appearance stream
+			$font = $this->FontFamily;
+			$fontkey = array_search($font, $this->fontkeys);
+			if (!in_array($fontkey, $this->annotation_fonts)) {
+				$this->annotation_fonts[$font] = $fontkey;
+			}
+			$fontstyle = sprintf('/F%d %.2F Tf %s', ($fontkey + 1), $this->FontSizePt, $this->TextColor);
+			$popt['da'] = $fontstyle;
+			$popt['ap'] = array();
+			$popt['ap']['n'] = 'q BT '.$fontstyle.' ET Q';
 			// merge options
 			$opt = array_merge($popt, $opt);
 			// remove some conflicting options
@@ -10280,6 +10615,7 @@ if (!class_exists('TCPDF', false)) {
 		* @param array $prop javascript field properties. Possible values are described on official Javascript for Acrobat API reference.
 		* @param array $opt annotation parameters. Possible values are described on official PDF32000_2008 reference.
 		* @param string $onvalue value to be returned if selected.
+		* @param boolean $checked define the initial state.
 		* @param float $x Abscissa of the upper-left corner of the rectangle
 		* @param float $y Ordinate of the upper-left corner of the rectangle
 		* @param boolean $js if true put the field using JavaScript (requires Acrobat Writer to be rendered).
@@ -10287,7 +10623,7 @@ if (!class_exists('TCPDF', false)) {
 		* @author Nicola Asuni
 		* @since 4.8.000 (2009-09-07)
 		*/
-		public function RadioButton($name, $w, $prop=array(), $opt=array(), $onvalue='', $x='', $y='', $js=false) {
+		public function RadioButton($name, $w, $prop=array(), $opt=array(), $onvalue='On', $checked=false, $x='', $y='', $js=false) {
 			if ($x === '') {
 				$x = $this->x;
 			}
@@ -10298,20 +10634,60 @@ if (!class_exists('TCPDF', false)) {
 				$this->_addfield('radiobutton', $name, $x, $y, $w, $w, $prop);
 				return;
 			}
+			if ($this->empty_string($onvalue)) {
+				$onvalue = 'On';
+			}
+			if ($checked) {
+				$defval = $onvalue;
+			} else {
+				$defval = 'Off';
+			}
+			// set data for parent group
+			if (!isset($this->radiobutton_groups[$this->page])) {
+				$this->radiobutton_groups[$this->page] = array();
+			}
+			if (!isset($this->radiobutton_groups[$this->page][$name])) {
+				$this->radiobutton_groups[$this->page][$name] = array();
+				++$this->annot_obj_id;
+				$this->radio_groups[] = $this->annot_obj_id;
+			}
+			// save object ID to be added on Kids entry on parent object
+			$this->radiobutton_groups[$this->page][$name][] = array('kid' => ($this->annot_obj_id + 1), 'def' => $defval);
 			// get default style
 			$prop = array_merge($this->getFormDefaultProp(), $prop);
 			$prop['NoToggleToOff'] = 'true';
 			$prop['Radio'] = 'true';
+			$prop['borderStyle'] = 'inset';
 			// get annotation data
 			$popt = $this->getAnnotOptFromJSProp($prop);
+			// set additional default values
+			$font = 'zapfdingbats';
+			$this->AddFont($font);
+			$fontkey = array_search($font, $this->fontkeys);
+			if (!in_array($fontkey, $this->annotation_fonts)) {
+				$this->annotation_fonts[$font] = $fontkey;
+			}
+			$fontstyle = sprintf('/F%d %.2F Tf %s', ($fontkey + 1), $this->FontSizePt, $this->TextColor);
+			$popt['da'] = $fontstyle;
+			$popt['ap'] = array();
+			$popt['ap']['n'] = array();
+			$popt['ap']['n'][$onvalue] = 'q BT '.$fontstyle.' 0 0 Td (8) Tj ET Q';
+			$popt['ap']['n']['Off'] = 'q BT '.$fontstyle.' 0 0 Td (8) Tj ET Q';
+			if (!isset($popt['mk'])) {
+				$popt['mk'] = array();
+			}
+			$popt['mk']['ca'] = '(l)';
 			// merge options
 			$opt = array_merge($popt, $opt);
 			// set remaining annotation data
 			$opt['Subtype'] = 'Widget';
 			$opt['ft'] = 'Btn';
-			$opt['t'] = $name;
-			$opt['as'] = 'Off';
-			$opt['ap'] = '/N << /'.$onvalue.' /null >>';
+			if ($checked) {
+				$opt['v'] = array('/'.$onvalue);
+				$opt['as'] = $onvalue;
+			} else {
+				$opt['as'] = 'Off';
+			}
 			$this->Annotation($x, $y, $w, $w, $name, $opt, 0);
 			if ($this->rtl) {
 				$this->x -= $w;
@@ -10355,6 +10731,16 @@ if (!class_exists('TCPDF', false)) {
 			$prop = array_merge($this->getFormDefaultProp(), $prop);
 			// get annotation data
 			$popt = $this->getAnnotOptFromJSProp($prop);
+			// set additional default values
+			$font = $this->FontFamily;
+			$fontkey = array_search($font, $this->fontkeys);
+			if (!in_array($fontkey, $this->annotation_fonts)) {
+				$this->annotation_fonts[$font] = $fontkey;
+			}
+			$fontstyle = sprintf('/F%d %.2F Tf %s', ($fontkey + 1), $this->FontSizePt, $this->TextColor);
+			$popt['da'] = $fontstyle;
+			$popt['ap'] = array();
+			$popt['ap']['n'] = 'q BT '.$fontstyle.' ET Q';
 			// merge options
 			$opt = array_merge($popt, $opt);
 			// set remaining annotation data
@@ -10406,6 +10792,16 @@ if (!class_exists('TCPDF', false)) {
 			$prop['Combo'] = true;
 			// get annotation data
 			$popt = $this->getAnnotOptFromJSProp($prop);
+			// set additional default options
+			$font = $this->FontFamily;
+			$fontkey = array_search($font, $this->fontkeys);
+			if (!in_array($fontkey, $this->annotation_fonts)) {
+				$this->annotation_fonts[$font] = $fontkey;
+			}
+			$fontstyle = sprintf('/F%d %.2F Tf %s', ($fontkey + 1), $this->FontSizePt, $this->TextColor);
+			$popt['da'] = $fontstyle;
+			$popt['ap'] = array();
+			$popt['ap']['n'] = 'q BT '.$fontstyle.' ET Q';
 			// merge options
 			$opt = array_merge($popt, $opt);
 			// set remaining annotation data
@@ -10425,7 +10821,7 @@ if (!class_exists('TCPDF', false)) {
 		* Creates a CheckBox field
 		* @param string $name field name
 		* @param int $w width
-		* @param boolean $checked define the initial state (default = false).
+		* @param boolean $checked define the initial state.
 		* @param array $prop javascript field properties. Possible values are described on official Javascript for Acrobat API reference.
 		* @param array $opt annotation parameters. Possible values are described on official PDF32000_2008 reference.
 		* @param string $onvalue value to be returned if selected.
@@ -10452,8 +10848,22 @@ if (!class_exists('TCPDF', false)) {
 			}
 			// get default style
 			$prop = array_merge($this->getFormDefaultProp(), $prop);
+			$prop['borderStyle'] = 'inset';
 			// get annotation data
 			$popt = $this->getAnnotOptFromJSProp($prop);
+			// set additional default options
+			$font = 'zapfdingbats';
+			$this->AddFont($font);
+			$fontkey = array_search($font, $this->fontkeys);
+			if (!in_array($fontkey, $this->annotation_fonts)) {
+				$this->annotation_fonts[$font] = $fontkey;
+			}
+			$fontstyle = sprintf('/F%d %.2F Tf %s', ($fontkey + 1), $this->FontSizePt, $this->TextColor);
+			$popt['da'] = $fontstyle;
+			$popt['ap'] = array();
+			$popt['ap']['n'] = array();
+			$popt['ap']['n']['Yes'] = 'q BT '.$fontstyle.' 0 0 Td (8) Tj ET Q';
+			$popt['ap']['n']['Off'] = 'q BT '.$fontstyle.' 0 0 Td (8) Tj ET Q';
 			// merge options
 			$opt = array_merge($popt, $opt);
 			// set remaining annotation data
@@ -10463,9 +10873,11 @@ if (!class_exists('TCPDF', false)) {
 			$opt['opt'] = array($onvalue);
 			if ($checked) {
 				$opt['v'] = array('/0');
+				$opt['as'] = 'Yes';
+			} else {
+				$opt['v'] = array('/Off');
+				$opt['as'] = 'Off';
 			}
-			$opt['as'] = '0';
-			$opt['ap'] = '/N << /0 /On >>';
 			$this->Annotation($x, $y, $w, $w, $name, $opt, 0);
 			if ($this->rtl) {
 				$this->x -= $w;
@@ -10512,6 +10924,22 @@ if (!class_exists('TCPDF', false)) {
 			$prop['display'] = 'display.noPrint';
 			// get annotation data
 			$popt = $this->getAnnotOptFromJSProp($prop);
+			// set additional default options
+			if (!isset($popt['mk'])) {
+				$popt['mk'] = array();
+			}
+			$popt['mk']['ca'] = $this->_textstring($caption);
+			$popt['mk']['rc'] = $this->_textstring($caption);
+			$popt['mk']['ac'] = $this->_textstring($caption);
+			$font = $this->FontFamily;
+			$fontkey = array_search($font, $this->fontkeys);
+			if (!in_array($fontkey, $this->annotation_fonts)) {
+				$this->annotation_fonts[$font] = $fontkey;
+			}
+			$fontstyle = sprintf('/F%d %.2F Tf %s', ($fontkey + 1), $this->FontSizePt, $this->TextColor);
+			$popt['da'] = $fontstyle;
+			$popt['ap'] = array();
+			$popt['ap']['n'] = 'q BT '.$fontstyle.' ET Q';
 			// merge options
 			$opt = array_merge($popt, $opt);
 			// set remaining annotation data
@@ -11489,8 +11917,14 @@ if (!class_exists('TCPDF', false)) {
 				}
 			}
 			// Check whether we need a new page first as this does not fit
+			$prev_x = $this->x;
 			if ($this->checkPageBreak($h, $y)) {
 				$y = $this->GetY() + $this->cMargin;
+				if ($this->rtl) {
+					$x += ($prev_x - $this->x);
+				} else {
+					$x += ($this->x - $prev_x);
+				}
 			}
 			// set bottomcoordinates
 			$this->img_rb_y = $y + $h;
@@ -11780,8 +12214,14 @@ if (!class_exists('TCPDF', false)) {
 			if ($this->empty_string($h) OR ($h <= 0)) {
 				$h = 10 + $extraspace;
 			}
-			if ($this->checkPageBreak($h)) {
-				$y = $this->y;
+			$prev_x = $this->x;
+			if ($this->checkPageBreak($h, $y)) {
+				$y = $this->GetY() + $this->cMargin;
+				if ($this->rtl) {
+					$x += ($prev_x - $this->x);
+				} else {
+					$x += ($this->x - $prev_x);
+				}
 			}
 			// maximum bar heigth
 			$barh = $h - $extraspace;
@@ -12006,8 +12446,14 @@ if (!class_exists('TCPDF', false)) {
 				// 2d barcodes are square by default
 				$h = $w;
 			}
-			if ($this->checkPageBreak($h)) {
-				$y = $this->y;
+			$prev_x = $this->x;
+			if ($this->checkPageBreak($h, $y)) {
+				$y = $this->GetY() + $this->cMargin;
+				if ($this->rtl) {
+					$x += ($prev_x - $this->x);
+				} else {
+					$x += ($this->x - $prev_x);
+				}
 			}
 			// calculate barcode size (excluding padding)
 			$bw = $w - (2 * $style['padding']);
@@ -12265,7 +12711,7 @@ if (!class_exists('TCPDF', false)) {
 			$html = preg_replace('/<\/(td|th)>/', '<marker style="font-size:0"/></\\1>', $html);
 			$html = preg_replace('/<\/table>([\s]*)<marker style="font-size:0"\/>/', '</table>', $html);
 			$html = preg_replace('/<img/', ' <img', $html);
-			$html = preg_replace('/<img([^\>]*)>/xi', '<img\\1><span></span>', $html);
+			$html = preg_replace('/<img([^\>]*)>/xi', '<img\\1><span><marker style="font-size:0"/></span>', $html);
 			$html = preg_replace('/<xre/', '<pre', $html); // restore pre tag
 			$html = preg_replace('/<textarea([^\>]*)>/xi', '<textarea\\1 value="', $html);
 			$html = preg_replace('/<\/textarea>/', '" />', $html);
@@ -12294,6 +12740,7 @@ if (!class_exists('TCPDF', false)) {
 			$dom[$key]['fgcolor'] = $this->fgcolor;
 			$dom[$key]['align'] = '';
 			$dom[$key]['listtype'] = '';
+			$dom[$key]['text-indent'] = 0;
 			$thead = false; // true when we are inside the THEAD tag
 			++$key;
 			$level = array();
@@ -12346,7 +12793,7 @@ if (!class_exists('TCPDF', false)) {
 							$key = $i;
 						}
 						// store header rows on a new table
-						if (($dom[$key]['value'] == 'tr') AND ($dom[($dom[$key]['parent'])]['thead'] == true)) {
+						if (($dom[$key]['value'] == 'tr') AND ($dom[($dom[$key]['parent'])]['thead'] === true)) {
 							if ($this->empty_string($dom[($dom[($dom[$key]['parent'])]['parent'])]['thead'])) {
 								$dom[($dom[($dom[$key]['parent'])]['parent'])]['thead'] = $a[$dom[($dom[($dom[$key]['parent'])]['parent'])]['elkey']];
 							}
@@ -12379,6 +12826,7 @@ if (!class_exists('TCPDF', false)) {
 							$dom[$key]['fgcolor'] = $dom[$parentkey]['fgcolor'];
 							$dom[$key]['align'] = $dom[$parentkey]['align'];
 							$dom[$key]['listtype'] = $dom[$parentkey]['listtype'];
+							$dom[$key]['text-indent'] = $dom[$parentkey]['text-indent'];
 						}
 						// get attributes
 						preg_match_all('/([^=\s]*)=["]?([^"]*)["]?/', $element, $attr_array, PREG_PATTERN_ORDER);
@@ -12413,6 +12861,13 @@ if (!class_exists('TCPDF', false)) {
 								$dom[$key]['listtype'] = trim(strtolower($dom[$key]['style']['list-style-type']));
 								if ($dom[$key]['listtype'] == 'inherit') {
 									$dom[$key]['listtype'] = $dom[$parentkey]['listtype'];
+								}
+							}
+							// text-indent
+							if (isset($dom[$key]['style']['text-indent'])) {
+								$dom[$key]['text-indent'] = $this->getHTMLUnitToUnits($dom[$key]['style']['text-indent']);
+								if ($dom[$key]['text-indent'] == 'inherit') {
+									$dom[$key]['text-indent'] = $dom[$parentkey]['text-indent'];
 								}
 							}
 							// font size
@@ -12506,6 +12961,30 @@ if (!class_exists('TCPDF', false)) {
 							// check for border attribute
 							if (isset($dom[$key]['style']['border'])) {
 								$dom[$key]['attribute']['border'] = $dom[$key]['style']['border'];
+							}
+							// page-break-inside
+							if (isset($dom[$key]['style']['page-break-inside']) AND ($dom[$key]['style']['page-break-inside'] == 'avoid')) {
+								$dom[$key]['attribute']['nobr'] = 'true';
+							}
+							// page-break-before
+							if (isset($dom[$key]['style']['page-break-before'])) {
+								if ($dom[$key]['style']['page-break-before'] == 'always') {
+									$dom[$key]['attribute']['pagebreak'] = 'true';
+								} elseif ($dom[$key]['style']['page-break-before'] == 'left') {
+									$dom[$key]['attribute']['pagebreak'] = 'left';
+								} elseif ($dom[$key]['style']['page-break-before'] == 'right') {
+									$dom[$key]['attribute']['pagebreak'] = 'right';
+								}
+							}
+							// page-break-after
+							if (isset($dom[$key]['style']['page-break-after'])) {
+								if ($dom[$key]['style']['page-break-after'] == 'always') {
+									$dom[$key]['attribute']['pagebreakafter'] = 'true';
+								} elseif ($dom[$key]['style']['page-break-after'] == 'left') {
+									$dom[$key]['attribute']['pagebreakafter'] = 'left';
+								} elseif ($dom[$key]['style']['page-break-after'] == 'right') {
+									$dom[$key]['attribute']['pagebreakafter'] = 'right';
+								}
 							}
 						}
 						// check for font tag
@@ -12649,12 +13128,16 @@ if (!class_exists('TCPDF', false)) {
 			$curfontstyle = $this->FontStyle;
 			$curfontsize = $this->FontSizePt;	
 			$this->newline = true;
-			$minstartliney = $this->y;
-			$yshift = 0;
 			$startlinepage = $this->page;
+			$minstartliney = $this->y;
+			$startlinex = $this->x;
+			$startliney = $this->y;
+			$yshift = 0;
 			$newline = true;
 			$loop = 0;
 			$curpos = 0;
+			$this_method_vars = array();
+			$undo = false;
 			$blocktags = array('blockquote','br','dd','div','dt','h1','h2','h3','h4','h5','h6','hr','li','ol','p','ul','tcpdf');
 			$this->premode = false;
 			if (isset($this->PageAnnots[$this->page])) {
@@ -12688,7 +13171,15 @@ if (!class_exists('TCPDF', false)) {
 			} else {
 				$this->listindent = $this->GetStringWidth('0000');
 			}
+			// save previous states
+			$prev_listnum = $this->listnum;
+			$prev_listordered = $this->listordered;
+			$prev_listcount = $this->listcount;
+			$prev_lispacer = $this->lispacer;
 			$this->listnum = 0;
+			$this->listordered = array();
+			$this->listcount = array();
+			$this->lispacer = '';
 			if (($this->empty_string($this->lasth)) OR ($reseth)) {
 				//set row height
 				$this->lasth = $this->FontSize * $this->cell_height_ratio; 
@@ -12697,6 +13188,57 @@ if (!class_exists('TCPDF', false)) {
 			$maxel = count($dom);
 			$key = 0;
 			while ($key < $maxel) {
+				if ($dom[$key]['tag'] AND isset($dom[$key]['attribute']['pagebreak'])) {
+					// check for pagebreak 
+					if (($dom[$key]['attribute']['pagebreak'] == 'true') OR ($dom[$key]['attribute']['pagebreak'] == 'left') OR ($dom[$key]['attribute']['pagebreak'] == 'right')) {
+						$this->AddPage();
+					}
+					if ((($dom[$key]['attribute']['pagebreak'] == 'left') AND (((!$this->rtl) AND (($this->page % 2) == 0)) OR (($this->rtl) AND (($this->page % 2) != 0))))
+						OR (($dom[$key]['attribute']['pagebreak'] == 'right') AND (((!$this->rtl) AND (($this->page % 2) != 0)) OR (($this->rtl) AND (($this->page % 2) == 0))))) {
+						$this->AddPage();
+					}
+				}
+				if ($dom[$key]['tag'] AND $dom[$key]['opening'] AND isset($dom[$key]['attribute']['nobr']) AND ($dom[$key]['attribute']['nobr'] == 'true')) {
+					if (isset($dom[($dom[$key]['parent'])]['attribute']['nobr']) AND ($dom[($dom[$key]['parent'])]['attribute']['nobr'] == 'true')) {
+						$dom[$key]['attribute']['nobr'] = false;
+					} else {
+						// store current object
+						$this->startTransaction();
+						// save this method vars
+						$this_method_vars['html'] = $html;
+						$this_method_vars['ln'] = $ln;
+						$this_method_vars['fill'] = $fill;
+						$this_method_vars['reseth'] = $reseth;
+						$this_method_vars['cell'] = $cell;
+						$this_method_vars['align'] = $align;
+						$this_method_vars['gvars'] = $gvars;
+						$this_method_vars['prevPage'] = $prevPage;
+						$this_method_vars['prevlMargin'] = $prevlMargin;
+						$this_method_vars['prevrMargin'] = $prevrMargin;
+						$this_method_vars['curfontname'] = $curfontname;
+						$this_method_vars['curfontstyle'] = $curfontstyle;
+						$this_method_vars['curfontsize'] = $curfontsize;
+						$this_method_vars['minstartliney'] = $minstartliney;
+						$this_method_vars['yshift'] = $yshift;
+						$this_method_vars['startlinepage'] = $startlinepage;
+						$this_method_vars['startlinepos'] = $startlinepos;
+						$this_method_vars['startlinex'] = $startlinex;
+						$this_method_vars['startliney'] = $startliney;
+						$this_method_vars['newline'] = $newline;
+						$this_method_vars['loop'] = $loop;
+						$this_method_vars['curpos'] = $curpos;
+						$this_method_vars['pask'] = $pask;
+						$this_method_vars['lalign'] = $lalign;
+						$this_method_vars['plalign'] = $plalign;
+						$this_method_vars['w'] = $w;
+						$this_method_vars['prev_listnum'] = $prev_listnum;
+						$this_method_vars['prev_listordered'] = $prev_listordered;
+						$this_method_vars['prev_listcount'] = $prev_listcount;
+						$this_method_vars['prev_lispacer'] = $prev_lispacer;
+						$this_method_vars['key'] = $key;
+						$this_method_vars['dom'] = $dom;
+					}
+				}
 				if ($dom[$key]['tag'] OR ($key == 0)) {
 					if ((($dom[$key]['value'] == 'table') OR ($dom[$key]['value'] == 'tr')) AND (isset($dom[$key]['align']))) {
 						$dom[$key]['align'] = ($this->rtl) ? 'R' : 'L';
@@ -12895,11 +13437,12 @@ if (!class_exists('TCPDF', false)) {
 								$t_x = -$mdiff;
 							} elseif (($plalign == 'J') AND ($plalign == $lalign)) {
 								// Justification
-								if ($this->rtl OR $this->tmprtl) {
+								if ($this->isRTLTextDir()) {
 									$t_x = $this->lMargin - $this->endlinex;
 								}
-								$no = 0;
-								$ns = 0;
+								$one_space_width = $this->GetStringWidth(chr(32));
+								$no = 0; // spaces without trim
+								$ns = 0; // spaces with trim
 								$pmidtemp = $pmid;
 								// escape special characters
 								$pmidtemp = preg_replace('/[\\\][\(]/x', '\\#!#OP#!#', $pmidtemp);
@@ -12912,7 +13455,7 @@ if (!class_exists('TCPDF', false)) {
 										$lnstring[1][$kk] = str_replace('#!#OP#!#', '(', $lnstring[1][$kk]);
 										$lnstring[1][$kk] = str_replace('#!#CP#!#', ')', $lnstring[1][$kk]);
 										if ($kk == $maxkk) {
-											if ($this->rtl OR $this->tmprtl) {
+											if ($this->isRTLTextDir()) {
 												$tvalue = ltrim($lnstring[1][$kk]);
 											} else {
 												$tvalue = rtrim($lnstring[1][$kk]);
@@ -12920,23 +13463,32 @@ if (!class_exists('TCPDF', false)) {
 										} else {
 											$tvalue = $lnstring[1][$kk];
 										}
-										// count spaces on line
-										$no += substr_count($lnstring[1][$kk], chr(32));
-										$ns += substr_count($tvalue, chr(32));
+										// store number of spaces on the strings
+										$lnstring[2][$kk] = substr_count($lnstring[1][$kk], chr(32));
+										$lnstring[3][$kk] = substr_count($tvalue, chr(32));
+										// count total spaces on line
+										$no += $lnstring[2][$kk];
+										$ns += $lnstring[3][$kk];
+										$lnstring[4][$kk] = $no;
+										$lnstring[5][$kk] = $ns;
 									}
-									if ($this->rtl OR $this->tmprtl) {
-										$t_x = $this->lMargin - $this->endlinex - (($no - $ns - 1) * $this->GetStringWidth(chr(32)));
+									if ($this->isRTLTextDir()) {
+										$t_x = $this->lMargin - $this->endlinex - (($no - $ns - 1) * $one_space_width);
 									}
 									// calculate additional space to add to each space
-									$spacelen = $this->GetStringWidth(chr(32));
-									$spacewidth = (($tw - $linew + (($no - $ns) * $spacelen)) / ($ns?$ns:1)) * $this->k;
-									$spacewidthu = -1000 * ($tw - $linew + ($no * $spacelen)) / ($ns?$ns:1) / $this->FontSize;
+									$spacelen = $one_space_width;
+									$spacewidth = ((($tw - $linew) + (($no - $ns) * $spacelen)) / ($ns?$ns:1)) * $this->k;
+									$spacewidthu = -1000 * (($tw - $linew) + ($ns * $spacelen)) / ($ns?$ns:1) / $this->FontSize;
 									$nsmax = $ns;
 									$ns = 0;
 									reset($lnstring);
 									$offset = 0;
 									$strcount = 0;
 									$prev_epsposbeg = 0;
+									$textpos = 0;
+									if ($this->isRTLTextDir()) {
+										$textpos = $this->wPt;
+									}
 									global $spacew;
 									while (preg_match('/([0-9\.\+\-]*)[\s](Td|cm|m|l|c|re)[\s]/x', $pmid, $strpiece, PREG_OFFSET_CAPTURE, $offset) == 1) {
 										// check if we are inside a string section '[( ... )]'
@@ -12952,7 +13504,7 @@ if (!class_exists('TCPDF', false)) {
 											}
 											continue;
 										}
-										if ($this->rtl OR $this->tmprtl) {
+										if ($this->isRTLTextDir()) {
 											$spacew = ($spacewidth * ($nsmax - $ns));
 										} else {
 											$spacew = ($spacewidth * $ns);
@@ -12983,9 +13535,10 @@ if (!class_exists('TCPDF', false)) {
 												// get current X position
 												preg_match('/([0-9\.\+\-]*)[\s]('.$strpiece[1][0].')[\s]('.$strpiece[2][0].')([\s]*)/x', $pmid, $xmatches);
 												$currentxpos = $xmatches[1];
+												$textpos = $currentxpos;
 												if (($strcount <= $maxkk) AND ($strpiece[2][0] == 'Td')) {
 													if ($strcount == $maxkk) {
-														if ($this->rtl OR $this->tmprtl) {
+														if ($this->isRTLTextDir()) {
 															$tvalue = $lnstring[1][$strcount];
 														} else {
 															$tvalue = rtrim($lnstring[1][$strcount]);
@@ -12996,7 +13549,7 @@ if (!class_exists('TCPDF', false)) {
 													$ns += substr_count($tvalue, chr(32));
 													++$strcount;
 												}
-												if ($this->rtl OR $this->tmprtl) {
+												if ($this->isRTLTextDir()) {
 													$spacew = ($spacewidth * ($nsmax - $ns));
 												}
 												// justify block
@@ -13007,22 +13560,49 @@ if (!class_exists('TCPDF', false)) {
 												break;
 											}
 											case 're': {
-												// get current X position
-												preg_match('/([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]('.$strpiece[1][0].')[\s]('.$strpiece[2][0].')([\s]*)/x', $pmid, $xmatches);
-												$currentxpos = $xmatches[1];
 												// justify block
-												$pmid = preg_replace_callback('/([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]('.$strpiece[1][0].')[\s]('.$strpiece[2][0].')([\s]*)/x',
-													create_function('$matches', 'global $spacew;
-													$newx = sprintf("%.2F",(floatval($matches[1]) + $spacew));
-													return "".$newx." ".$matches[2]." ".$matches[3]." ".$matches[4]." x*#!#*x".$matches[5].$matches[6];'), $pmid, 1);
+												preg_match('/([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]('.$strpiece[1][0].')[\s](re)([\s]*)/x', $pmid, $xmatches);
+												$currentxpos = $xmatches[1];
+												$x_diff = 0;
+												$w_diff = 0;
+												if ($this->isRTLTextDir()) { // RTL
+													if ($currentxpos < $textpos) {
+														$x_diff = ($spacewidth * ($nsmax - $lnstring[5][$strcount]));
+														$w_diff = ($spacewidth * $lnstring[3][$strcount]);
+													} else {
+														if ($strcount > 0) {
+															$x_diff = ($spacewidth * ($nsmax - $lnstring[5][($strcount - 1)]));
+															$w_diff = ($spacewidth * $lnstring[3][($strcount - 1)]);
+														}
+													}
+												} else { // LTR
+													if ($currentxpos > $textpos) {
+														if ($strcount > 0) {
+															$x_diff = ($spacewidth * $lnstring[4][($strcount - 1)]);
+														}
+														$w_diff = ($spacewidth * $lnstring[3][$strcount]);
+													} else {
+														if ($strcount > 1) {
+															$x_diff = ($spacewidth * $lnstring[4][($strcount - 2)]);
+														}
+														if ($strcount > 0) {
+															$w_diff = ($spacewidth * $lnstring[3][($strcount - 1)]);
+														}
+													}
+												}
+												$pmid = preg_replace_callback('/('.$xmatches[1].')[\s]('.$xmatches[2].')[\s]('.$xmatches[3].')[\s]('.$strpiece[1][0].')[\s](re)([\s]*)/x',
+													create_function('$matches', '
+													$newx = sprintf("%.2F",(floatval($matches[1]) + '.$x_diff.'));
+													$neww = sprintf("%.2F",(floatval($matches[3]) + '.$w_diff.'));
+													return "".$newx." ".$matches[2]." ".$neww." ".$matches[4]." x*#!#*x".$matches[5].$matches[6];'), $pmid, 1);										
 												break;
 											}
 											case 'c': {
 												// get current X position
-												preg_match('/([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]('.$strpiece[1][0].')[\s]('.$strpiece[2][0].')([\s]*)/x', $pmid, $xmatches);
+												preg_match('/([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]('.$strpiece[1][0].')[\s](c)([\s]*)/x', $pmid, $xmatches);
 												$currentxpos = $xmatches[1];
 												// justify block
-												$pmid = preg_replace_callback('/([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]([0-9\.\+\-]*)[\s]('.$strpiece[1][0].')[\s]('.$strpiece[2][0].')([\s]*)/x',
+												$pmid = preg_replace_callback('/('.$xmatches[1].')[\s]('.$xmatches[2].')[\s]('.$xmatches[3].')[\s]('.$xmatches[4].')[\s]('.$xmatches[5].')[\s]('.$strpiece[1][0].')[\s](c)([\s]*)/x',
 													create_function('$matches', 'global $spacew;
 													$newx1 = sprintf("%.3F",(floatval($matches[1]) + $spacew));
 													$newx2 = sprintf("%.3F",(floatval($matches[3]) + $spacew));
@@ -13060,7 +13640,7 @@ if (!class_exists('TCPDF', false)) {
 										$endlinepos = strlen($pstart."\n".$pmid."\n");
 									} else {
 										// non-unicode (single-byte characters)
-										$rs = sprintf("%.3F Tw", $spacewidth);
+										$rs = sprintf('%.3F Tw', $spacewidth);
 										$pmid = preg_replace("/\[\(/x", $rs.' [(', $pmid);
 										$this->setPageBuffer($startlinepage, $pstart."\n".$pmid."\nBT 0 Tw ET\n".$pend);
 										$endlinepos = strlen($pstart."\n".$pmid."\nBT 0 Tw ET\n");
@@ -13118,6 +13698,10 @@ if (!class_exists('TCPDF', false)) {
 				}
 				if ($dom[$key]['tag']) {
 					if ($dom[$key]['opening']) {
+						// get text indentation (if any)
+						if (isset($dom[$key]['text-indent']) AND in_array($dom[$key]['value'], array('blockquote','dd','div','dt','h1','h2','h3','h4','h5','h6','li','ol','p','ul','table','tr','td'))) {
+							$this->textindent = $dom[$key]['text-indent'];
+						}
 						if ($dom[$key]['value'] == 'table') {
 							if ($this->rtl) {
 								$wtmp = $this->x - $this->lMargin;
@@ -13338,7 +13922,7 @@ if (!class_exists('TCPDF', false)) {
 					}
 					// text
 					$this->htmlvspace = 0;
-					if ((!$this->premode) AND ($this->rtl OR $this->tmprtl)) {
+					if ((!$this->premode) AND $this->isRTLTextDir()) {
 						// reverse spaces order
 						$len1 = strlen($dom[$key]['value']);
 						$lsp = $len1 - strlen(ltrim($dom[$key]['value']));
@@ -13355,7 +13939,7 @@ if (!class_exists('TCPDF', false)) {
 					}
 					if ($newline) {
 						if (!$this->premode) {
-							if (($this->rtl OR $this->tmprtl)) {
+							if ($this->isRTLTextDir()) {
 								$dom[$key]['value'] = rtrim($dom[$key]['value']);
 							} else {
 								$dom[$key]['value'] = ltrim($dom[$key]['value']);
@@ -13373,8 +13957,14 @@ if (!class_exists('TCPDF', false)) {
 					} else {
 						$ctmpmargin = $this->cMargin;
 						$this->cMargin = 0;
+						if ($this->rtl) {
+							$this->x -= $this->textindent;
+						} else {
+							$this->x += $this->textindent;
+						}
 						// ****** write only until the end of the line and get the rest ******
 						$strrest = $this->Write($this->lasth, $dom[$key]['value'], '', $wfill, '', false, 0, true, $firstblock);
+						$this->textindent = 0;
 						$this->cMargin = $ctmpmargin;
 					}
 					if (strlen($strrest) > 0) {
@@ -13402,6 +13992,21 @@ if (!class_exists('TCPDF', false)) {
 					}
 				}
 				++$key;
+				if (isset($dom[$key]['tag']) AND $dom[$key]['tag'] AND (!isset($dom[$key]['opening']) OR !$dom[$key]['opening']) AND isset($dom[($dom[$key]['parent'])]['attribute']['nobr']) AND ($dom[($dom[$key]['parent'])]['attribute']['nobr'] == 'true')) {
+					if ((!$undo) AND ($this->start_transaction_page == ($this->numpages - 1))) {
+						// restore previous object
+						$this->rollbackTransaction(true);
+						// restore previous values
+						foreach ($this_method_vars as $vkey => $vval) {
+							$$vkey = $vval;
+						}
+						// add a page
+						$this->AddPage();
+						$undo = true; // avoid infinite loop
+					} else {
+						$undo = false;
+					}
+				}
 			} // end for each $key
 			// align the last line
 			if (isset($startlinex)) {
@@ -13482,6 +14087,11 @@ if (!class_exists('TCPDF', false)) {
 				$this->lMargin = $this->pagedim[$this->page]['olm'];
 				$this->rMargin = $this->pagedim[$this->page]['orm'];
 			}
+			// restore previous list state
+			$this->listnum = $prev_listnum;
+			$this->listordered = $prev_listordered;
+			$this->listcount = $prev_listcount;
+			$this->lispacer = $prev_lispacer;
 			unset($dom);
 		}
 		
@@ -13498,7 +14108,7 @@ if (!class_exists('TCPDF', false)) {
 			$firstorlast = ($key == 1);
 			// check for text direction attribute
 			if (isset($tag['attribute']['dir'])) {
-				$this->tmprtl = $tag['attribute']['dir'] == 'rtl' ? 'R' : 'L';
+				$this->setTempRTL($tag['attribute']['dir']);
 			} else {
 				$this->tmprtl = false;
 			}
@@ -13586,7 +14196,7 @@ if (!class_exists('TCPDF', false)) {
 				case 'img': {
 					if (isset($tag['attribute']['src'])) {
 						// replace relative path with real server path
-						if ($tag['attribute']['src'][0] == '/') {
+						if (($tag['attribute']['src'][0] == '/') AND ($_SERVER['DOCUMENT_ROOT'] != '/')) {
 							$tag['attribute']['src'] = $_SERVER['DOCUMENT_ROOT'].$tag['attribute']['src'];
 						}
 						$tag['attribute']['src'] = urldecode($tag['attribute']['src']);
@@ -13620,10 +14230,7 @@ if (!class_exists('TCPDF', false)) {
 								break;
 							}
 						}
-						$fileinfo = pathinfo($tag['attribute']['src']);
-						if (isset($fileinfo['extension']) AND (!$this->empty_string($fileinfo['extension']))) {
-							$type = strtolower($fileinfo['extension']);
-						}
+						$type = $this->getImageFileType($tag['attribute']['src']);
 						$prevy = $this->y;
 						$xpos = $this->GetX();
 						if (isset($dom[($key - 1)]) AND ($dom[($key - 1)]['value'] == ' ')) {
@@ -13859,7 +14466,7 @@ if (!class_exists('TCPDF', false)) {
 							break;
 						}
 						case 'radio': {
-							$this->RadioButton($name, $w, $prop, $opt, $value, '', '', false);
+							$this->RadioButton($name, $w, $prop, $opt, $value, $checked, '', '', false);
 							break;
 						}
 						case 'submit': {
@@ -13981,9 +14588,9 @@ if (!class_exists('TCPDF', false)) {
 						$values = array();
 						foreach ($options as $val) {
 							if (strpos($val, "\t") !== false) {
-								$opt = explode("\t", $val);
-								$values[] = $opt;
-								$w = max($w, $this->GetStringWidth($opt[1]));
+								$opts = explode("\t", $val);
+								$values[] = $opts;
+								$w = max($w, $this->GetStringWidth($opts[1]));
 							} else {
 								$values[] = $val;
 								$w = max($w, $this->GetStringWidth($val));
@@ -14018,6 +14625,17 @@ if (!class_exists('TCPDF', false)) {
 				}
 				default: {
 					break;
+				}
+			}
+			if ($dom[$key]['self'] AND isset($dom[$key]['attribute']['pagebreakafter'])) {
+				$pba = $dom[$key]['attribute']['pagebreakafter'];
+				// check for pagebreak 
+				if (($pba == 'true') OR ($pba == 'left') OR ($pba == 'right')) {
+					$this->AddPage();
+				}
+				if ((($pba == 'left') AND (((!$this->rtl) AND (($this->page % 2) == 0)) OR (($this->rtl) AND (($this->page % 2) != 0))))
+					OR (($pba == 'right') AND (((!$this->rtl) AND (($this->page % 2) != 0)) OR (($this->rtl) AND (($this->page % 2) == 0))))) {
+					$this->AddPage();
 				}
 			}
 		}
@@ -14087,7 +14705,7 @@ if (!class_exists('TCPDF', false)) {
 					// account for booklet mode
 					if ($this->page > $parent['startpage']) {
 						if (($this->rtl) AND ($this->pagedim[$this->page]['orm'] != $this->pagedim[$parent['startpage']]['orm'])) {
-							$this->x += ($this->pagedim[$this->page]['orm'] - $this->pagedim[$parent['startpage']]['orm']);
+							$this->x -= ($this->pagedim[$this->page]['orm'] - $this->pagedim[$parent['startpage']]['orm']);
 						} elseif ((!$this->rtl) AND ($this->pagedim[$this->page]['olm'] != $this->pagedim[$parent['startpage']]['olm'])) {
 							$this->x += ($this->pagedim[$this->page]['olm'] - $this->pagedim[$parent['startpage']]['olm']);
 						}
@@ -14098,8 +14716,8 @@ if (!class_exists('TCPDF', false)) {
 					// closing tag used for the thead part
 					$in_table_head = true;
 				case 'table': {
-					// draw borders
 					$table_el = $parent;
+					// draw borders
 					if ((isset($table_el['attribute']['border']) AND ($table_el['attribute']['border'] > 0)) 
 						OR (isset($table_el['style']['border']) AND ($table_el['style']['border'] > 0))) {
 							$border = 1;
@@ -14246,6 +14864,10 @@ if (!class_exists('TCPDF', false)) {
 						}
 						$this->lasth = $this->FontSize * $this->cell_height_ratio;
 						if (isset($this->theadMargins['top'])) {
+							if (($this->theadMargins['top'] == $this->tMargin) AND ($this->page == ($this->numpages - 1))) {
+								// remove last page containing only THEAD
+								$this->deletePage($this->numpages);
+							}
 							// restore top margin
 							$this->tMargin = $this->theadMargins['top'];
 							$this->pagedim[$this->page]['tm'] = $this->tMargin;
@@ -14351,6 +14973,17 @@ if (!class_exists('TCPDF', false)) {
 				}
 				default : {
 					break;
+				}
+			}
+			if (isset($dom[($dom[$key]['parent'])]['attribute']['pagebreakafter'])) {
+				$pba = $dom[($dom[$key]['parent'])]['attribute']['pagebreakafter'];
+				// check for pagebreak 
+				if (($pba == 'true') OR ($pba == 'left') OR ($pba == 'right')) {
+					$this->AddPage();
+				}
+				if ((($pba == 'left') AND (((!$this->rtl) AND (($this->page % 2) == 0)) OR (($this->rtl) AND (($this->page % 2) != 0))))
+					OR (($pba == 'right') AND (((!$this->rtl) AND (($this->page % 2) != 0)) OR (($this->rtl) AND (($this->page % 2) == 0))))) {
+					$this->AddPage();
 				}
 			}
 			$this->tmprtl = false;
@@ -14717,7 +15350,7 @@ if (!class_exists('TCPDF', false)) {
 					break;
 				}
 				case 'decimal-leading-zero': {
-					$textitem = sprintf("%02d", $this->listcount[$this->listnum]);
+					$textitem = sprintf('%02d', $this->listcount[$this->listnum]);
 					break;
 				}
 				case 'i':
@@ -15384,11 +16017,12 @@ if (!class_exists('TCPDF', false)) {
 		* @param int $page page number where this TOC should be inserted (leave empty for current page).
 		* @param string $numbersfont set the font for page numbers (please use monospaced font for better alignment).
 		* @param string $filler string used to fill the space between text and page number.
+		* @param string $toc_name name to use for TOC bookmark.
 		* @access public
 		* @author Nicola Asuni
 		* @since 4.5.000 (2009-01-02)
 		*/
-		public function addTOC($page='', $numbersfont='', $filler='.') {
+		public function addTOC($page='', $numbersfont='', $filler='.', $toc_name='TOC') {
 			$fontsize = $this->FontSizePt;
 			$fontfamily = $this->FontFamily;
 			$fontstyle = $this->FontStyle;
@@ -15463,7 +16097,6 @@ if (!class_exists('TCPDF', false)) {
 					$pagenum = ' '.$rowfill.$gap.$pagenum;
 				}
 				// write the number
-				//$this->SetX($x_start);
 				$this->Cell($tw, 0, $pagenum, 0, 1, $alignnum, 0, $link, 0);
 				$this->SetX($x_start);
 				$this->lMargin = $lmargin;
@@ -15520,6 +16153,7 @@ if (!class_exists('TCPDF', false)) {
 				}
 				// move pages
 				for ($i = 0; $i < $numpages; ++$i) {
+					$this->Bookmark($toc_name, 0, 0, $page_last);
 					$this->movePage($page_last, $page);
 				}
 			}
@@ -15536,6 +16170,8 @@ if (!class_exists('TCPDF', false)) {
 				// remove previous copy
 				$this->commitTransaction();
 			}
+			// record current page number
+			$this->start_transaction_page = $this->page;
 			// clone current object
 			$this->objcopy = $this->objclone($this);
 		}
@@ -15554,11 +16190,12 @@ if (!class_exists('TCPDF', false)) {
 
 		/**
 		* This method allows to undo the latest transaction by returning the latest saved TCPDF object with startTransaction().
+		* @param boolean $self if true restores current class object to previous state without the need of reassignment via the returned value.
 		* @return TCPDF object.
 		* @access public
 		* @since 4.5.029 (2009-03-19)
 		*/
-		public function rollbackTransaction() {
+		public function rollbackTransaction($self=false) {
 			if (isset($this->objcopy)) {
 				if (isset($this->objcopy->diskcache) AND $this->objcopy->diskcache) {
 					// truncate files to previous values
@@ -15569,6 +16206,12 @@ if (!class_exists('TCPDF', false)) {
 					}
 				}
 				$this->_destroy(true, true);
+				if ($self) {
+					$objvars = get_object_vars($this->objcopy);
+					foreach ($objvars as $key => $value) {
+						$this->$key = $value;
+					}
+				}
 				return $this->objcopy;
 			}
 			return $this;
