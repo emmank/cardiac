@@ -23,7 +23,7 @@
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 $result .= $vl['datafields']['Fase Latihan']['title'];
-$result .= '<table width=100% class="table" border="0">' . "\n";
+$result .= '<table width=100% class="table" border="1">' . "\n";
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['type'] != 'hidden'){
         if($cnt < 1){

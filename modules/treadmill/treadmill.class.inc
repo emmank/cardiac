@@ -553,7 +553,7 @@ class treadmillModule extends mainModule
         $form['treadmill']['tab_items']['istirahat'] = $this->__loadFaseIstirahat();
         $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
         $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
-//        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
+        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
 //        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
 //        $form['treadmill']['tab_items']['Kesimpulan'] = $this->__loadKesimpulan();
 
@@ -613,10 +613,10 @@ class treadmillModule extends mainModule
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
-                return $this->FaseLatihan_exec->treadmill_submit();
+                return $this->latihan_exec->treadmill_submit();
             }
         } else {
-            return $this->FaseLatihan_exec->treadmill_menu();
+            return $this->latihan_exec->treadmill_menu();
         }
     }
 
