@@ -245,7 +245,7 @@ body {
         clear:left;
 }
 
-#users label {
+#form label {
 	width:150px;
 	display:inline;
 	float:left;
@@ -254,12 +254,12 @@ body {
         clear:left;
 }
 
-#users #block {
+#form #block {
 	/*width:150px;*/
 	display:block;
 	float:left;
 	/*text-align:right;*/
-	/*line-height:170%;*/
+	line-height:170%;
         clear:left;
         border:1px none #000;
 }
@@ -439,7 +439,8 @@ table tr.menu_selected td
 
 .error
 {
-    color:red;
+    /*color:red;*/
+    clear:both;
 }
 
 .button-drop

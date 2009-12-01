@@ -174,7 +174,7 @@ function __get_vars_of_active_user(){
 function __create_items_detail($value){
     global $forminput, $formtextarea, $formselect;
     $user = __get_vars_of_active_user();
-    $result = '';
+    $result = '<div id=form>';
     if(isset($value['title']) && $value['title'] != 'hidden'){
 //        $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
         $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
@@ -219,7 +219,7 @@ function __create_items_detail($value){
         elseif(__get_group_permission($value['update_access']) !== FALSE){$ok = 1;}
         if(isset($ok)){
             unset($ok);
-            $result .= '<div class="error" style="text-align:center;right:20%">';
+            $result .= '<div class="error" style="margin-left:160px">';
             $valdrop[$value['id']] = array(
                 '#type' => 'fieldset',
                 '#title' => 'hidden',
@@ -231,11 +231,11 @@ function __create_items_detail($value){
                 'submit' => array(
                     '#type' => 'submit',
                     '#value' => __t('drop'),
-                    '#style' => 'background:red;color:white'
+                    '#style' => ''
                 )
             );
             $result .= __create_form($valdrop);
-            $result .= '</div>';
+            $result .= '</div></div>';
         }
     }
     return $result;
