@@ -1301,14 +1301,28 @@ class patientModule extends mainModule
             )
         );
 
-
+        $where = array(
+            array('&&', "patients=" . $id),
+            array('&&', "doneby is not null")
+        );
+        if(isset($_POST['bagian'])){
+            $sql = $this->query->getSelect(
+                array('bagian'),
+                array('bagian'),
+                array(
+                    array('&&', "id=" . $_POST['bagian'])
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            $where[] = array('&&', "bagian=" . $getit->fields['bagian']);
+            unset($getit);
+        }
         $sql = $this->query->getSelect(
             array('id', 'bagian', 'pukul', 'doneby'),
             array('kunjungan'),
-            array(
-                array('&&', "patients=" . $id),
-                array('&&', "doneby is not null")
-            ),
+            $where,
             'pukul desc'
         );
         $this->query->connect();

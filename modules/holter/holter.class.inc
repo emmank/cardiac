@@ -296,6 +296,28 @@ class holterModule extends mainModule
         if(!isset($vcache['patients'])){
             $vcache['patients'] = $query->fields['patients']; unset($query);
         }
+        $addmenuopts = array(
+            '' => __t('-- medical record --'),
+            'all' => __t('semua')
+        );
+        $dump_addmenus = $this->__get_bagian_lists();
+        foreach($dump_addmenus as $key => $value){
+            $sql = $this->query->getSelect(
+                array('id'),
+                array('kunjungan'),
+                array(
+                    array('&&', "patients=" . $vcache['patients']),
+                    array('&&', "bagian=" . $value),
+                    array('&&', "doneby is not null")
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $addmenuopts[$key] = $value;
+            } unset($getit);
+        } unset($dump_addmenus);
         $form['holter'] = array(
             '#type' => 'special',
             '#id' => 'holter',
@@ -310,9 +332,12 @@ class holterModule extends mainModule
                 'title' => __t('medical record'),
                 'action' => '/user/patient/medical_record/' . $vcache['patients'],
                 'position' => 'top',
-                'class' => 'button'
+                'class' => 'button',
+                'methode' => 'choose',
+                'options' => $addmenuopts,
+                'filter' => 'bagian'
             )
-        );
+        ); unset($addmenuopts);
         $form['holter']['kunjungan'] = array(
             '#type' => 'hidden',
             '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
