@@ -26,7 +26,9 @@
 ?>
 <div id="header-info">
 <?php 
-//print_r($menu_info);
+//echo "<pre>";
+//print_r($content);
+//echo "</pre>";
 if ($menu_info['id'] != "login") {
     echo '<div class="title">'. ucwords($menu_info['title']).'</div>'. ucfirst ($menu_info['description']);
 }
@@ -42,6 +44,7 @@ if ($menu_info['id'] != "login") {
 <?php }?>
 
 <?php if(isset($content['output']['form'])){?>
+
     <?php foreach($content['output']['form'] as $key => $value){?>
         <?php foreach($value as $ke => $val){
             $formtype = $val['#type'];
@@ -59,6 +62,9 @@ if ($menu_info['id'] != "login") {
             echo __create_form_special($value);
             ?>
         <?php } elseif($formtype == 'module') {?>
+            <?php //echo "pret";
+            echo __create_form($value);
+            ?>
             <?php
             require_once $tplform; unset($tplform);
             ?>

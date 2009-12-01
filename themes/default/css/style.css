@@ -244,6 +244,26 @@ body {
 	line-height:150%;
         clear:left;
 }
+
+#form label {
+	width:150px;
+	display:inline;
+	float:left;
+	text-align:right;
+	/*line-height:170%;*/
+        clear:left;
+}
+
+#form #block {
+	/*width:150px;*/
+	display:block;
+	float:left;
+	/*text-align:right;*/
+	/*line-height:170%;*/
+        clear:left;
+        border:1px none #000;
+}
+
 /*
 #main-info input[readonly=true] {
 	background-color:#E7E7E7;
