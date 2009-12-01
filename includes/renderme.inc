@@ -189,12 +189,12 @@ function __create_items_detail($value){
     }
     $result .= '<div id="form">' . "\n";
     foreach($value['data'] as $key => $val){
-        if ($val['hide'] != '1'){
+            if ($val['hide'] != '1'){
             if(!isset($value['update_access'])){$ok = 1;}
             elseif($value['update_access'] == $user['groups'] || $user['groups'] == 'admin'){$ok = 1;}
             elseif(__get_group_permission($value['update_access']) !== FALSE){$ok = 1;}
-            $result .= '<label for="' . $key . '" style="font-weight:bold">' . ucwords($val['key']) . ' :</label>' . "\n";
-            $result .= '<div>';
+            $result .= '<div id=block>';
+            $result .= '<label for="' . $key . '" style="font-weight:bold">' . ucwords($val['key']) . ' :</label>';
             if(isset($val['form'])){
                 if(isset($ok)){
                     $result .= __create_form($val['form']);
