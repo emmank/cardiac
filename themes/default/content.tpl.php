@@ -67,7 +67,7 @@ if ($menu_info['id'] != "login") {
             require_once $tplform; unset($tplform);
             ?>
         <?php } else {?>
-
+            <?php echo __create_form($value);?>
         <?php }?>
         <?php if ($formname == "login") {?>
         </div>
