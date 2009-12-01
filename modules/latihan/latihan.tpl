@@ -22,7 +22,7 @@
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
-$result .= $vl['datafields']['Fase Istirahat']['title'];
+$result .= $vl['datafields']['Fase Latihan']['title'];
 $result .= '<table width=100% class="table" border="0">' . "\n";
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['type'] != 'hidden'){
@@ -30,7 +30,7 @@ foreach($vl['datafields'] as $yk => $lv){
             $result .= '<tr valign="top">' . "\n";
         }
         
-        $result .= '<td>' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
+        $result .= '<td width="25%">' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
         $result .= '<td>';
 
         if($lv['type'] == 'select'){
@@ -89,7 +89,7 @@ foreach($vl['datafields'] as $yk => $lv){
                 foreach($lv['theref'] as $kc => $isi){
                     $result .= '<input type="radio" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>' . "\n";
                     $result .= $isi . "<br />";
-                    $htg++;
+//                    $htg++;
                 } unset($htg);
             }
         } elseif($lv['type'] == 'datetime'){
@@ -125,8 +125,11 @@ foreach($vl['datafields'] as $yk => $lv){
             if($lv['readonly'] === true){
                 $result .= $lv['value'];
             } else {
-                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '[0]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
-                
+                if (preg_match('/protokol/',$yk)){
+                    $result .= 'Bruce stage, Lamanya <input type="' . $lv['type'] . '" name="' . $yk . '[0]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> Menit' . "\n";
+                } else {
+                    $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '[0]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> mmHg' . "\n";
+                }
                 
                 
             }

@@ -18,74 +18,82 @@
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
 
- *  ekg.tpl
+ *  recovery.tpl
  *  
  *  Created on Oct 26, 2009, 5:28:48 AM
  */
+$result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
+$result .= $vl['datafields']['FaseRecovery']['title'];
+//$result .= '<table width=100% class="table" border="1">' . "\n";
 
-foreach($data as $key => $value){
-    if(isset($value['#addmenu'])){
-        $result .= __create_add_menu($value['#addmenu']);
-    }
-    $result .= __create_form_open($value, $key);
-    $result .= "\n" . '<fieldset>' . "\n";
-    $result .= '<legend>' . __t('Identitas Pasien') . '</legend>' . "\n";
-    foreach($value as $ky => $vl){
-        if(!eregi('#', $ky)){
-            if($vl['#type'] == 'hidden'){
-                $result .= '<input type="hidden" name="' . $ky . '" value="' . $vl['#value'] . '">' . "\n";
-            }
-        }
-    }
-    $gettbpos = array();
-    foreach($value as $ky => $vl){
-        if(!eregi('#', $ky)){
-            if($ky != 'tab_items'){
-                if(isset($vl['#tbpos'])){
-                    $gettbpos[$vl['#tbpos']] = $vl;
-                    $gettbpos[$vl['#tbpos']]['#key'] = $ky;
-                }
-            }
-        }
-    }
-    ksort($gettbpos);
-    foreach($gettbpos as $ky => $vl){
-        if((int)$ky < 1 || (int)$ky % 5 == 0){
-            $result .= '<div id="kolom">' . "\n";
-            $setdiv = 1;
-        }
-        $result .= '<label>' . ucwords($vl['#title']) . '</label>';
-        if($vl['#type'] != 'textarea'){
-            $result .= '<input type="text" value="' . $vl['#value'] .'" readonly="true"> <br />' . "\n";
-        } else {
-            $result .= '<textarea  readonly="true">' . $vl['#value'] .'</textarea> <br />' . "\n";
-        }
-        if((int)$ky > 3 && ((int)$ky + 1) % 5 == 0){
-            unset($setdiv);
-            $result .= '</div>' . "\n";
-        }
-    } unset($gettbpos);
-    if(isset($setdiv)){
-        $result .= '</div>' . "\n";
-        unset($setdiv);
-    }
-    $result .= '</fieldset>' . "\n";
+foreach($vl as $key => $value){
+//    if(isset($value['#addmenu'])){
+//        $result .= __create_add_menu($value['#addmenu']);
+//    }
+//    $result .= __create_form_open($value, $key);
+//    $result .= "\n" . '<fieldset>' . "\n";
+//    $result .= '<legend>' . __t('Identitas Pasien') . '</legend>' . "\n";
+//    foreach($value as $ky => $vl){
+//        if(!eregi('#', $ky)){
+//            if($vl['#type'] == 'hidden'){
+//                $result .= '<input type="hidden" name="' . $ky . '" value="' . $vl['#value'] . '">' . "\n";
+//            }
+//        }
+//    }
+//    $gettbpos = array();
+//    foreach($value as $ky => $vl){
+//        if(!eregi('#', $ky)){
+//            if($ky != 'tab_items'){
+//                if(isset($vl['#tbpos'])){
+//                    $gettbpos[$vl['#tbpos']] = $vl;
+//                    $gettbpos[$vl['#tbpos']]['#key'] = $ky;
+//                }
+//            }
+//        }
+//    }
+//    ksort($gettbpos);
+//    foreach($gettbpos as $ky => $vl){
+//        if((int)$ky < 1 || (int)$ky % 5 == 0){
+//            $result .= '<div id="kolom">' . "\n";
+//            $setdiv = 1;
+//        }
+//        $result .= '<label>' . ucwords($vl['#title']) . '</label>';
+//        if($vl['#type'] != 'textarea'){
+//            $result .= '<input type="text" value="' . $vl['#value'] .'" readonly="true"> <br />' . "\n";
+//        } else {
+//            $result .= '<textarea  readonly="true">' . $vl['#value'] .'</textarea> <br />' . "\n";
+//        }
+//        if((int)$ky > 3 && ((int)$ky + 1) % 5 == 0){
+//            unset($setdiv);
+//            $result .= '</div>' . "\n";
+//        }
+//    } unset($gettbpos);
+//    if(isset($setdiv)){
+//        $result .= '</div>' . "\n";
+//        unset($setdiv);
+//    }
+//    $result .= '</fieldset>' . "\n";
     
     $result .= '<div>' . "\n";
+//    $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
     $result .= '<table width=100% class="table" border="0">' . "\n";
+    
     foreach($value as $yk => $lv){
-        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
+//        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
             if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
                 if(isset($lv['#customized'])){
                     if(!isset($rowspan[$lv['#customized']['id']])){$rowspan[$lv['#customized']['id']] = array();}
                     $rowspan[$lv['#customized']['id']][] = $yk;
                 }
             }
-        }
+//        }
     }
     $cnt = 0;
+//    echo "<pre>"; print_r($value['datafields']); "</pre>";
     foreach($value as $yk => $lv){
-        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
+//    foreach($vl['datafields'] as $yk => $lv){
+//        echo "<pre>"; print_r($lv); "</pre>";
+//        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
             if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
                 $result .= '<tr valign="top">' . "\n";
                 if(!isset($lv['#customized'])){
@@ -201,17 +209,17 @@ foreach($data as $key => $value){
                 $result .= '</tr>' . "\n";
                 $cnt++;
             }
-        }
+//        }
     } unset($dumpt, $cnt, $rowspan);
     $result .= '</table>' . "\n";
     $result .= '</div>' . "\n";
 
-    if(isset($value['submit'])){
-        $result .= '<div>' . "\n";
-        $result .= '<input type="submit" value="' . $value['submit']['#value'] . '"' . (isset($value['submit']['#extra']) ? ' ' . $value['submit']['#extra'] : '') . '>';
-        $result .= '</div>' . "\n";
-    }
-    $result .= __create_form_close();
+//    if(isset($value['submit'])){
+//        $result .= '<div>' . "\n";
+//        $result .= '<input type="submit" value="' . $value['submit']['#value'] . '"' . (isset($value['submit']['#extra']) ? ' ' . $value['submit']['#extra'] : '') . '>';
+//        $result .= '</div>' . "\n";
+//    }
+//    $result .= __create_form_close();
 //    $result .= '<script type="text/javascript">' . "\n";
 //    $result .= 'var tabs=new ddtabcontent("fisistabs")' . "\n";
 //    $result .= 'tabs.setpersist(true)' . "\n";

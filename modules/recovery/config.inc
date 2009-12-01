@@ -19,14 +19,13 @@
  *  
  *  config.php
  *  
- *  Created on Oct 3, 2009, 4:31:28 PM
+ *  Created on Oct 1, 2009, 1:10:09 PM
  */
 
-class istirahatConfig extends config
-
+class recoveryConfig extends config
 {
     var $rdbms = 'mysql';
-    var $dbistirahat = array(
+    var $dbrecovery = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',
@@ -37,26 +36,29 @@ class istirahatConfig extends config
         'passwd' => 'emmank'
     );
     var $hiddenfields = array(
-        'id'
+        'id', 'id_pasien'
     );
-    var $typeoffields = array(
+    var $fields_form_type = array(
         'id' => 'hidden',
         'patients' => 'hidden',
-        'tensi_sistolik' => 'text',
-        'tensi_diastolik' => 'text',
+        'tgl' => 'hidden',
+        'irama_dasar' => 'select',
         'denyut_jantung' => 'select',
-	'irama_dasar' => 'select',
         'gelombang_p' => 'select',
         'interval_pr' => 'select',
         'qrs_axis' => 'select',
         'qrs_durasi' => 'select',
-        'qrs_konfigurasi_patologi' => 'select',
-        'qrs_konfigurasi_rs' => 'select',
-        'segment_st_depresi' => 'select',
-        'segment_st_elevasi' => 'select',
-        'gelombang_t' => 'select',
-        'q_interval' => 'select'
+        'qrs_konfigurasi_patologi' => 'select3',
+        'qrs_konfigurasi_r_s' => 'select',
+        'segmen_st_depresi' => 'select2',
+        'segmen_st_elevasi' => 'select2',
+        'gelombang_t' => 'radio',
+        'q_interval' => 'select',
+        'inputer' => 'hidden',
+        'inputtime' => 'hedden',
+        'updated' => 'hedden'
     );
+
     var $fieldsisarray = array(
         'irama_dasar',
         'denyut_jantung',
@@ -65,12 +67,13 @@ class istirahatConfig extends config
         'qrs_axis',
         'qrs_durasi',
         'qrs_konfigurasi_patologi',
-        'qrs_konfigurasi_rs',
-        'segment_st_depresi' ,
-        'segment_st_elevasi' ,
+        'qrs_konfigurasi_r_s',
+        'segmen_st_depresi' ,
+        'segmen_st_elevasi' ,
         'gelombang_t',
         'q_interval'
     );
+
     var $reftable = array(
         'irama_dasar' => array('ref_ekg_irama','irama'),
         'denyut_jantung' => array('ref_ekg_denyut_jantung', 'denyut_jantung'),
@@ -79,9 +82,9 @@ class istirahatConfig extends config
         'qrs_axis' => array('ref_ekgQrs_axis', 'axis'),
         'qrs_durasi' => array('ref_ekgQrs_durasi', 'durasi'),
         'qrs_konfigurasi_patologi' => array('ref_ekg_sandapan', 'sandapan'),
-        'qrs_konfigurasi_rs' => array('ref_ekgQrs_RlbS', 'RlbS'),
-        'segment_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
-        'segment_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
+        'qrs_konfigurasi_r_s' => array('ref_ekgQrs_RlbS', 'RlbS'),
+        'segmen_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
+        'segmen_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
         'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
         'q_interval' => array('ref_ekg_q_interval', 'q_interval')
     );

@@ -17,16 +17,16 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  istirahatclass.php
+ *  kesimpulanclass.php
  *  
  *  Created on Oct 3, 2009, 4:35:17 PM
  */
 
-require_once MODULES_DIR . DS . 'istirahat' . DS . 'config.inc';
+require_once MODULES_DIR . DS . 'kesimpulan' . DS . 'config.inc';
 
-class istirahatModule extends mainModule
+class kesimpulanModule extends mainModule
 {
-    var $title = 'istirahat module';
+    var $title = 'kesimpulan module';
     var $description = '';
 
     function __get_refs($fields, $sort=NULL){
@@ -49,14 +49,14 @@ class istirahatModule extends mainModule
 
     function treadmill_menu(){
         $result = array();
-        $result['#title'] = __t('Fase Istirahat Berbaring');
-        $result['#tpl'] = MODULES_DIR . DS . 'istirahat' . DS . 'istirahat.tpl';
-        $datafields = $this->__get_data_fields('istirahat', $this->query);
+        $result['#title'] = __t('Fase kesimpulan');
+        $result['#tpl'] = MODULES_DIR . DS . 'kesimpulan' . DS . 'kesimpulan.tpl';
+        $datafields = $this->__get_data_fields('kesimpulan', $this->query);
         if (count($this->config->free_val) > 0){
             $vcache = $this->config->free_val;
             $sql = $this->query->getSelect(
                 array(),
-                array('istirahat'),
+                array('kesimpulan'),
                 array(
                     array('&&', "id=" . $vcache['id'])
                 )
@@ -93,11 +93,12 @@ class istirahatModule extends mainModule
             
             $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
     function treadmill_submit(){
-        $thefields = $this->__get_data_fields('istirahat', $this->query);
+        $thefields = $this->__get_data_fields('kesimpulan', $this->query);
         foreach($this->config->free_val as $key => $value){
             if(in_array($key, $thefields)){
                 if($key == 'catched'){
@@ -113,7 +114,7 @@ class istirahatModule extends mainModule
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $sql = $this->query->updateData(
-                'istirahat',
+                'kesimpulan',
                 $thevalue,
                 array(
                     array('&&', "id=" . $_POST['id'])
@@ -121,7 +122,7 @@ class istirahatModule extends mainModule
             );
         } else {
             $sql = $this->query->saveData(
-                'istirahat',
+                'kesimpulan',
                 $thevalue
             );
         }

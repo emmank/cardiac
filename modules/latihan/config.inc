@@ -22,11 +22,11 @@
  *  Created on Oct 3, 2009, 4:31:28 PM
  */
 
-class istirahatConfig extends config
+class latihanConfig extends config
 
 {
     var $rdbms = 'mysql';
-    var $dbistirahat = array(
+    var $dblatihan = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',
@@ -42,47 +42,58 @@ class istirahatConfig extends config
     var $typeoffields = array(
         'id' => 'hidden',
         'patients' => 'hidden',
+        'protokol' => 'text',
         'tensi_sistolik' => 'text',
         'tensi_diastolik' => 'text',
-        'denyut_jantung' => 'select',
+        'respon_denyut_jantung' => 'select',
+        'puncak_denyut_jantung' => 'select',
 	'irama_dasar' => 'select',
         'gelombang_p' => 'select',
-        'interval_pr' => 'select',
-        'qrs_axis' => 'select',
-        'qrs_durasi' => 'select',
-        'qrs_konfigurasi_patologi' => 'select',
+        'segment_st_konfigurasi' => 'select',
         'qrs_konfigurasi_rs' => 'select',
         'segment_st_depresi' => 'select',
         'segment_st_elevasi' => 'select',
+        'perubahan_gelombang_r' => 'select',
+        'dihentikan_karena' => 'select',
         'gelombang_t' => 'select',
+        'tekanan_darah' => 'radio',
+        'tekanan_darah_puncak' => 'text',
         'q_interval' => 'select'
     );
     var $fieldsisarray = array(
         'irama_dasar',
-        'denyut_jantung',
+        'respon_denyut_jantung',
+        'puncak_denyut_jantung',
         'gelombang_p',
         'interval_pr',
         'qrs_axis',
         'qrs_durasi',
-        'qrs_konfigurasi_patologi',
+        'segment_st_konfigurasi',
         'qrs_konfigurasi_rs',
         'segment_st_depresi' ,
         'segment_st_elevasi' ,
+        'perubahan_gelombang_r' ,
+        'dihentikan_karena' ,
         'gelombang_t',
+        'tekanan_darah',
         'q_interval'
     );
     var $reftable = array(
         'irama_dasar' => array('ref_ekg_irama','irama'),
-        'denyut_jantung' => array('ref_ekg_denyut_jantung', 'denyut_jantung'),
+        'respon_denyut_jantung' => array('ref_faseLatihan_respon_jantung', 'respon_jantung'),
+        'puncak_denyut_jantung' => array('ref_ekg_denyut_jantung', 'denyut_jantung'),
         'gelombang_p' => array('ref_ekg_gelombangP', 'gelombangP'),
         'interval_pr' => array('ref_ekg_intervalPR', 'intervalPR'),
         'qrs_axis' => array('ref_ekgQrs_axis', 'axis'),
         'qrs_durasi' => array('ref_ekgQrs_durasi', 'durasi'),
-        'qrs_konfigurasi_patologi' => array('ref_ekg_sandapan', 'sandapan'),
+        'segment_st_konfigurasi' => array('ref_ekg_sandapan', 'sandapan'),
         'qrs_konfigurasi_rs' => array('ref_ekgQrs_RlbS', 'RlbS'),
         'segment_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
         'segment_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
+        'perubahan_gelombang_r' => array('ref_faseLatihan_perubahan_gelombang', 'perubahan_gelombang'),
+        'dihentikan_karena' => array('ref_faseLatihan_dihentikan', 'dihentikan'),
         'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
+        'tekanan_darah' => array('ref_threadKesimpulanSaran_tekananDarah', 'tekananDarah'),
         'q_interval' => array('ref_ekg_q_interval', 'q_interval')
     );
     var $qrs_complex = array(

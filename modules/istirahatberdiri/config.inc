@@ -22,11 +22,11 @@
  *  Created on Oct 3, 2009, 4:31:28 PM
  */
 
-class istirahatConfig extends config
+class istirahatberdiriConfig extends config
 
 {
     var $rdbms = 'mysql';
-    var $dbistirahat = array(
+    var $dbistirahatberdiri = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',

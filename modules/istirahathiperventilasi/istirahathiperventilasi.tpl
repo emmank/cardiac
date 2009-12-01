@@ -22,8 +22,12 @@
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
-$result .= $vl['datafields']['Fase Istirahat']['title'];
+$result .= $vl['datafields']['istirahathiperventilasi']['title'];
 $result .= '<table width=100% class="table" border="0">' . "\n";
+$cnt = 0;
+//echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
+
+
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['type'] != 'hidden'){
         if($cnt < 1){
@@ -56,15 +60,11 @@ foreach($vl['datafields'] as $yk => $lv){
                 } unset($koma);
             } else {
                 $htg = 0;
-                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
-                if(isset($lv['blankopt'])){
-                    $result .= '<option value=""></option>' . "\n";
-                }
                 foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<option value="' . $kc . '"' . (isset($lv['value']) && $lv['value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
-                }
-                $result .= '</select>' . "\n";
-                
+                    $result .= '<input type="checkbox" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . (count($lv['value']) > 0 && in_array($kc, $lv['value']) ? ' checked="true"' : '') . '>';
+                    $result .= $isi . "<br />";
+                    $htg++;
+                } unset($htg);
             }
         } elseif($lv['type'] == 'checkbox'){
             $lv['value'] = explode(',', $lv['value']);
@@ -76,7 +76,7 @@ foreach($vl['datafields'] as $yk => $lv){
             } else {
                 $htg = 0;
                 foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<input type="checkbox" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . (count($lv['value']) > 0 && in_array($kc, $lv['value']) ? ' checked="true"' : '') . '>' . "\n";
+                    $result .= '<input type="checkbox" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . (count($lv['value']) > 0 && in_array($kc, $lv['value']) ? ' checked="true"' : '') . '>';
                     $result .= $isi . "<br />";
                     $htg++;
                 } unset($htg);
@@ -87,7 +87,7 @@ foreach($vl['datafields'] as $yk => $lv){
             } else {
                 $htg = 0;
                 foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<input type="radio" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>' . "\n";
+                    $result .= '<input type="radio" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>';
                     $result .= $isi . "<br />";
                     $htg++;
                 } unset($htg);
@@ -126,8 +126,6 @@ foreach($vl['datafields'] as $yk => $lv){
                 $result .= $lv['value'];
             } else {
                 $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '[0]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
-                
-                
                 
             }
         }
