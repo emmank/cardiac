@@ -33,13 +33,14 @@ foreach($vl['datafields'] as $yk => $lv){
         
         $result .= '<td width="25%">' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
         $result .= '<td>';
-        echo '<pre>'; print_r($lv); echo '</pre>';
+//        echo '<pre>'; print_r($lv); echo '</pre>';
         if($lv['type'] == 'select'){
-            echo "disini";
+//            echo "disini";
             if($lv['readonly'] === true){
                 $result .= $lv['theref'][$lv['value']] . "\n";
-//                echo "disini";
+//                echo "disana";
             } else {
+//                echo "disini";
                 $result .= '<select name="' . $yk . '[0]" size="' . $lv['size']. '">' . "\n";
                 $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
 //                if(isset($lv['blankopt'])){

@@ -56,6 +56,8 @@ class latihanConfig extends config
         'perubahan_gelombang_r' => 'select',
         'dihentikan_karena' => 'select',
         'gelombang_t' => 'select',
+        'tekanan_darah' => 'radio',
+        'tekanan_darah_puncak' => 'text',
         'q_interval' => 'select'
     );
     var $fieldsisarray = array(
@@ -73,6 +75,7 @@ class latihanConfig extends config
         'perubahan_gelombang_r' ,
         'dihentikan_karena' ,
         'gelombang_t',
+        'tekanan_darah',
         'q_interval'
     );
     var $reftable = array(
@@ -90,6 +93,7 @@ class latihanConfig extends config
         'perubahan_gelombang_r' => array('ref_faseLatihan_perubahan_gelombang', 'perubahan_gelombang'),
         'dihentikan_karena' => array('ref_faseLatihan_dihentikan', 'dihentikan'),
         'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
+        'tekanan_darah' => array('ref_threadKesimpulanSaran_tekananDarah', 'tekananDarah'),
         'q_interval' => array('ref_ekg_q_interval', 'q_interval')
     );
     var $qrs_complex = array(

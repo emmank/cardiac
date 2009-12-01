@@ -554,8 +554,8 @@ class treadmillModule extends mainModule
         $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
         $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
         $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
-//        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
-//        $form['treadmill']['tab_items']['Kesimpulan'] = $this->__loadKesimpulan();
+        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
+        $form['treadmill']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
 
         $form['treadmill']['submit'] = array(
             '#type' => 'submit',
@@ -620,20 +620,6 @@ class treadmillModule extends mainModule
         }
     }
 
-//    function __loadHeadFace($exec=NULL){
-//        $this->__include_module('headface');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->headface_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->headface_exec->treadmill_submit();
-//            }
-//        } else {
-//            return $this->headface_exec->treadmill_menu();
-//        }
-//    }
-
     function __loadFaseRecovery($exec=NULL){
         $this->__include_module('recovery');
         if(isset($this->vardump) && count($this->vardump) > 0){
@@ -641,24 +627,28 @@ class treadmillModule extends mainModule
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
-                return $this->FaseRecovery_exec->treadmill_submit();
+                return $this->recovery_exec->treadmill_submit();
             }
         } else {
-            return $this->FaseRecovery_exec->treadmill_menu();
+//            echo "disini";
+            return $this->recovery_exec->treadmill_menu();
         }
     }
 
     function __loadKesimpulan($exec=NULL){
-        $this->__include_module('ear');
+        $this->__include_module('kesimpulan');
+//        echo "disini";
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->ear_config->free_val = $this->vardump;
+            $this->kesimpulan_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
-                return $this->ear_exec->treadmill_submit();
+                return $this->kesimpulan_exec->treadmill_submit();
             }
         } else {
-            return $this->ear_exec->treadmill_menu();
+//            echo "disini";
+            return $this->kesimpulan_exec->treadmill_menu();
+            
         }
     }
 
