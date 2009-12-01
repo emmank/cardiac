@@ -187,7 +187,7 @@ function __create_items_detail($value){
             }
         }
     }
-    $result .= '<div id="form">' . "\n";
+    $result .= '<div>' . "\n";
     foreach($value['data'] as $key => $val){
             if ($val['hide'] != '1'){
             if(!isset($value['update_access'])){$ok = 1;}

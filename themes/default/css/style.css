@@ -245,7 +245,7 @@ body {
         clear:left;
 }
 
-#form label {
+#users label {
 	width:150px;
 	display:inline;
 	float:left;
@@ -254,7 +254,7 @@ body {
         clear:left;
 }
 
-#form #block {
+#users #block {
 	/*width:150px;*/
 	display:block;
 	float:left;
