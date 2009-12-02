@@ -578,7 +578,7 @@ class holterModule extends mainModule
             $this->vardump['id'] = $thevalue['id'];
         }
         $this->query->connect();
-        $this->query->conn->debug=true;
+//        $this->query->conn->debug=true;
         $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         unset($thevalue);
