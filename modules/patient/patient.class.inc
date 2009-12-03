@@ -150,7 +150,7 @@ class patientModule extends mainModule
             'path' => '/user/patient/search',
             'exec' => 'search',
             'weight' => 5,
-            'user_required' => 'patient'
+            'user_required' => 'users'
         );
         $items['patient_detail'] = array(
             'title' => __t('patient detail'),
@@ -158,7 +158,7 @@ class patientModule extends mainModule
             'path' => '/user/patient/detail',
             'exec' => 'detail_form',
             'weight' => '0',
-            'user_required' => 'patient'
+            'user_required' => 'users'
         );
         $items['patient_update'] = array(
             'title' => __t('patient update'),
@@ -182,7 +182,7 @@ class patientModule extends mainModule
             'path' => '/user/patient/medical_record',
             'exec' => 'medical_record',
             'weight' => '0',
-            'user_required' => 'patient'
+            'user_required' => 'users'
         );
         return $items;
     }
