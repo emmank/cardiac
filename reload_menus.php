@@ -25,34 +25,6 @@
 require 'includes' . DIRECTORY_SEPARATOR . 'constant.inc';
 require INCLUDES_DIR . DS . 'defaultvars.inc';
 
-//function __get_menu_sights(){
-//    global $configs;
-//    $result = array();
-//    foreach($configs->menu_sights as $key => $value){
-//        $result[$key] = $value;
-//    }
-//    return $result;
-//}
-//
-//function get_active_modules(){
-//    global $systemquery, $configs;
-//    $result = array();
-//    $sql = $systemquery->getSelect(
-//        array(),
-//        array('modules'),
-//        NULL,
-//        'module'
-//    );
-//    $systemquery->connect();
-//    $query = $systemquery->conn->Execute($sql); unset($sql);
-//    $systemquery->close();
-//    for($i=0; $i<$query->_numOfRows; $i++){
-//        $result[] = $query->fields['module'];
-//        $query->MoveNext();
-//    } unset($query);
-//    return $result;
-//}
-
 $sql = $systemquery->getDescribe('menus');
 $systemquery->connect();
 $getit = $systemquery->conn->Execute($sql); unset($sql);
@@ -103,55 +75,15 @@ $systemquery->connect();
 $systemquery->conn->Execute($sql); unset($sql);
 $systemquery->close();
 foreach ($allelements as $key => $value){
-//    $sql = $systemquery->getSelect(
-//        array('id'),
-//        array('menus'),
-//        array(
-//            array('&&', "id=" . $key)
-//        )
-//    );
-//    $systemquery->connect();
-//    $getexist = $systemquery->conn->Execute($sql); unset($sql);
-//    $systemquery->close();
-//    if($getexist->_numOfRows < 1){
         $value['id'] = $key;
         $sql = $systemquery->saveData(
             'menus',
             $value
         ); unset($value['id']);
-//    } else {
-//        $sql = $systemquery->updateData(
-//            'menus',
-//            $value,
-//            array(
-//                array('&&', "id=" . $key)
-//            )
-//        );
-//    } unset($getexist);
     $systemquery->connect();
     $systemquery->conn->Execute($sql); unset($sql);
     $systemquery->close();
 }
-
-//echo "done\n";
-//$sql = $systemquery->getSelect(
-//    array('id'),
-//    array('registry'),
-//    array(
-//        array('&&', "id=default")
-//    )
-//);
-//$systemquery->connect();
-//$getit = $systemquery->conn->Execute($sql); unset($sql);
-//$systemquery->close();
-//if($getit->_numOfRows < 1){
-//    $sql = $systemquery->saveData(
-//        'registry',
-//        array(
-//            'id' => 'default'
-//        )
-//    );
-//}
 
 header('Location:/regload');
 ?>

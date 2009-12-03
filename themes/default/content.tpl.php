@@ -62,7 +62,9 @@ if ($menu_info['id'] != "login") {
             echo __create_form_special($value);
             ?>
         <?php } elseif($formtype == 'module') {?>
-            <?php echo "pret"; echo __create_form($value);?>
+            <?php //echo "pret";
+            echo __create_form($value);
+            ?>
             <?php
             require_once $tplform; unset($tplform);
             ?>

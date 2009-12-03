@@ -1082,6 +1082,7 @@ class patientModule extends mainModule
             '#value' => __t('submit'),
             '#extra' => ' class="button"'
         );
+//        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
     }
 
@@ -1316,7 +1317,9 @@ class patientModule extends mainModule
             $this->query->connect();
             $getit = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
-            $where[] = array('&&', "bagian=" . $getit->fields['bagian']);
+            if($getit->_numOfRows > 0){
+                $where[] = array('&&', "bagian=" . $getit->fields['bagian']);
+            }
             unset($getit);
         }
         $sql = $this->query->getSelect(
@@ -1370,7 +1373,6 @@ class patientModule extends mainModule
                 $getit->MoveNext();
             }
         } unset($getit);
-//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 

@@ -197,7 +197,11 @@ function __create_items_detail($value){
             $result .= '<label for="' . $key . '" style="font-weight:bold">' . ucwords($val['key']) . ' :</label>';
             if(isset($val['form'])){
                 if(isset($ok)){
+                    $result .= '<table align="left" cellspacing="0" cellpadding="0">' . "\n";
+                    $result .= '<tr valign="top"><td align="left">' . "\n";
                     $result .= __create_form($val['form']);
+                    $result .= '</td></tr>' . "\n";
+                    $result .= '</table>' . "\n";
                 }
             } else {
                 if (isset($val['link']) && isset($ok)){
@@ -219,7 +223,6 @@ function __create_items_detail($value){
         elseif(__get_group_permission($value['update_access']) !== FALSE){$ok = 1;}
         if(isset($ok)){
             unset($ok);
-            $result .= '<div class="error" style="margin-left:160px">';
             $valdrop[$value['id']] = array(
                 '#type' => 'fieldset',
                 '#title' => 'hidden',
@@ -234,8 +237,13 @@ function __create_items_detail($value){
                     '#style' => ''
                 )
             );
+            $result .= '<div class="error" style="text-align:center;right:20%;clear:both">';
+            $result .= '<table align="left">' . "\n";
+            $result .= '<tr valign="top"><td align="left">' . "\n";
             $result .= __create_form($valdrop);
-            $result .= '</div></div>';
+            $result .= '</td></tr>' . "\n";
+            $result .= '</table>' . "\n";
+            $result .= '</div>';
         }
     }
     return $result;
@@ -278,12 +286,12 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
 //    echo '<pre>'; print_r($data); echo '</pre>';
     foreach($data as $key => $value){
         $result .= '<div>' . "\n";
-        if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden'){
+        if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden' && trim($value['#title']) != '' && !is_null($value['#title']) && $value['#type'] != 'submit'){
             $result .= '<label for="'. $key .'">' . ucwords($value['#title']) . '</label>' . "\n";
         }
         if(in_array($value['#type'], $forminput)){
             if($value['#type'] == 'checkbox' || $value['#type'] == 'radio'){
-                $result .= '<div>' . "\n"; $o = 0;
+//                $result .= '<div>' . "\n"; $o = 0;
                 if(isset($value['#readonly']) && $value['readonly'] !== FALSE){
                     $dumpit = array();
                     $value['#value'] = explode(',', $value['#value']);
@@ -296,14 +304,14 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                     foreach($value['#option'] as $ky => $vl){
                         $namekey = $value['#type'] == 'checkbox' ? $key . '[' . $o . ']' : $key;
                         if($o > 0){
-                            $result .= '<label for="'. $namekey .'">&nbsp;</label>';
+//                            $result .= '<label for="'. $namekey .'">&nbsp;</label>';
                         }
-//                        $result .= '<div>';
+                        $result .= '<div style="clear:both">' . "\n";
                         $result .= '<input type="' . $value['#type'] . '" name="' . $namekey . '" value="' . $ky . '"';
     //                    echo '<pre>'; print_r($value); echo '</pre>';
                         if(in_array($ky, $value['#value'])){
                             $result .= ' checked="true"';
-                            echo "test";
+//                            echo "test";
                         }
                         if(isset($value['#style'])){
                             $result .= ' style="' . $value['#style'] . '"';
@@ -324,8 +332,9 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                         unset($namekey);
                     }
                 }
-                $result .= '</div>' . "\n";
+//                $result .= '</div>' . "\n";
             } else {
+                if($value['#type'] == 'submit' && !isset($value['#title'])){$result .= '<div style="clear:both">' . "\n";}
                 $result .= '<input type="' . $value['#type'] . '" name="' . $key . '"';
                 if(isset($value['#size'])){
                     $result .= ' size="' . $value['#size'] . '"';
@@ -352,6 +361,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                     $result .= ' class="button"';
                 }
                 $result .= '>' . "\n";
+                if($value['#type'] == 'submit' && !isset($value['#title'])){$result .= '</div>' . "\n";}
             }
         } elseif(in_array($value['#type'], $formtextarea)){
             $result .= '<textarea name="' . $key . '" cols="' . (isset($value['#cols']) ? $value['#cols'] : '40') . '" rows="' . (isset($value['#rows']) ? $value['#rows'] : '3') . '"';

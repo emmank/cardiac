@@ -100,24 +100,6 @@ class userModule extends mainModule
         'groups'
     );
 
-    function __get_staf_options($field){
-        $result = array();
-        $this->query->connect();
-        $sql = $this->query->getSelect(
-            array($field),
-            array('stafs'),
-            NULL,
-            'nama'
-        );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        for($i=0; $i<$query->_numOfRows; $i++){
-            $result[] = $query->fields[$field];
-            $query->MoveNext();
-        }
-        return $result;
-    }
-
     function menu(){
         $items['user_view'] = array(
             'title' => __t('user'),
@@ -141,8 +123,7 @@ class userModule extends mainModule
             'path' => '/admin/user/edit',
             'exec' => 'edit',
             'weight' => '0',
-            'user_required' => 'admin',
-            'hidden' => TRUE
+            'user_required' => 'admin'
         );
         $items['user_drop'] = array(
             'title' => __t('delete user'),
@@ -150,8 +131,7 @@ class userModule extends mainModule
             'path' => '/admin/user/drop',
             'exec' => 'delete',
             'weight' => '0',
-            'user_required' => 'admin',
-            'hidden' => TRUE
+            'user_required' => 'admin'
         );
         $items['user_add'] = array(
             'title' => __t('add user'),
@@ -202,6 +182,24 @@ class userModule extends mainModule
             'user_required' => 'users',
         );
         return $items;
+    }
+
+    function __get_staf_options($field){
+        $result = array();
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('stafs'),
+            NULL,
+            'nama'
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        for($i=0; $i<$query->_numOfRows; $i++){
+            $result[$query->fields['id']] = $query->fields[$field];
+            $query->MoveNext();
+        }
+        return $result;
     }
 
     function password_form_submit(){
@@ -403,6 +401,7 @@ class userModule extends mainModule
             '#title' => '&nbsp;',
             '#value' => __t('input')
         );
+//        echo '<pre>'; print_r($form); echo '</pre>'; exit();
         return $form;
     }
 
