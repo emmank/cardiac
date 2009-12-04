@@ -93,9 +93,10 @@ body {
 
 #main-content .button {
 	border:1px solid #A80003;
+	/*border:1px none #FFF;*/
 	background-color:#FFE2E2;
-	color:#B60003;
-	margin-left:140px;
+	/*color:#B60003;*/
+	margin-left:160px;
 }
 
 #main-content .radio {
@@ -510,4 +511,5 @@ A:hover {
     border-top:1px solid #FFd1d1;
     border-bottom:1px solid #FFd1d1;
     margin-bottom : 10px;
+    background-color:#FFF;
 }

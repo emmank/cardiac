@@ -259,6 +259,7 @@ function __create_table($value){
     if(isset($value['addmenu'])){
         $result .= __create_add_menu($value['addmenu']);
     }
+
     $result .= "<!--div style=\"font-wieght:bold;font-size:1em\">" . strtoupper($value['title']) . "</div-->\n";
     $result .= '<div>' . strtoupper($value['title']) . '</div>' . "\n";
     $result .= '<table width="100%" class="tbl">' . "\n";
@@ -281,6 +282,12 @@ function __create_table($value){
         }
     }
     $result .= '</table>';
+
+    if(isset($value['add_patient'])){
+        $result .= "<br /><div id=search><font class=judul>Pendaftaran</font>";
+        $result .= __create_form($value['add_patient']);
+        $result .= "</div>";
+    }
     
     if (isset($value['search'])) {
 //        echo "disini";
@@ -488,7 +495,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
         if(isset($value['#message'])){
             $result .= ' ' . $value['#message'];
         }
-        $result .= '</br>' . "\n";
+//        $result .= '</br>' . "\n";
         $result .= '</div>' . "\n";
     }
     return $result;
