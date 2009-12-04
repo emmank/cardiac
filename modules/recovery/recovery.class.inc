@@ -26,7 +26,7 @@ require_once MODULES_DIR . DS . 'recovery' . DS . 'config.inc';
 
 class recoveryModule extends mainModule
 {
-    var $title = 'recovery module';
+    var $title = 'recovery';
     var $description = '';
     var $hidden_fields = array(
         'id', 'id_pasien', 'inputer','updated', 'inputtime','tgl'
@@ -130,6 +130,7 @@ class recoveryModule extends mainModule
 //    }
 
     function treadmill_menu(){
+//        $this->sync_scheme('recovery', $this->query);
         $result = array();
         $result['#title'] = __t('FaseRecovery');
         $result['#tpl'] = MODULES_DIR . DS . 'recovery' . DS . 'recovery.tpl';

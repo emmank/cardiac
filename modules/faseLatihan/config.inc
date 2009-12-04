@@ -52,11 +52,134 @@ class faseLatihanConfig extends config
         )
     );
  
-
-//    var $typeoffields = array(
-//        'id' => 'hidden',
-//        'inspections' => 'checkbox'
-//
-//    );
-
+    var $table_scheme = array(
+        'latihan' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'protokol' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'rekaman_ekg' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'rekaman_st_depresi' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'rekaman_st_elevasi' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'rekaman_st_konfigurasi' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'aritmia' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'perubahan_gelombang_r' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'lain_lain' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'dihentikan_karena' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'respon_denyut_jantung' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'puncak_denyut_jantung' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'lainlain_denyut_jantung' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'respon_tekanan_darah' => array(
+                'type' => 'tinyint(1)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'respon_hipertensi' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'respon_hipertensip' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'respon_menetap' => array(
+                'type' => 'tinyint(1)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tekanan_darah_puncak' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

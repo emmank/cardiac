@@ -174,6 +174,8 @@ class authModule extends mainModule
     function login_form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
+        } else {
+            $this->sync_scheme('logtrack', $this->sysquery);
         }
         $form['login'] = array(
             '#type' => 'fieldset',

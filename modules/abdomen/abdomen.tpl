@@ -75,7 +75,7 @@ foreach($vl['datafields'] as $yk => $lv){
             } else {
                 $htg = 0;
                 foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<input type="radio" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>';
+                    $result .= '<input type="radio" name="' . $yk . '" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>';
                     $result .= $isi . "<br />";
                     $htg++;
                 } unset($htg);
