@@ -45,10 +45,16 @@ class dbset
         $this->conn->Close();
         }
 
-        function alterTableColumn($table, $colname = array(), $operation='drop', $type='int', $notnull=FALSE, $default=''){
+        function showTables(){
+            $result = '';
+            $result .= 'SHOW TABLES()';
+            return $result;
+        }
+
+        function alterTableColumn($table, $colname = array(), $operation='drop', $type='int', $notnull=FALSE, $default='', $extra=NULL){
             $result = '';
             if(count($colname) > 0){
-                $result .= 'ALTER TABLE ' . $this->getTblName($table) . ' ' . $operation . ' COLUMN ' . $colname[0];
+                $result .= 'ALTER TABLE ' . $this->getTblName($table) . ' ' . strtoupper($operation) . ' COLUMN ' . $colname[0];
                 if($operation == "change"){
                     $result .=  ' ' . $colname[1];
                 }
@@ -59,6 +65,9 @@ class dbset
                     }
                     if(trim($default) != ''){
                         $result .= ' DEFAULT ' . $default;
+                    }
+                    if(!is_null($extra)){
+                        $result .= ' ' . $extra;
                     }
                 }
             }
@@ -117,7 +126,7 @@ class dbset
 
 	function saveData($table, $thevalue){
 		if (!is_array($thevalue)){$sql = "error";} else {
-		$sql = "insert into ".$this->getTblName($table)." ("; $first = 1;
+		$sql = "INSERT INTO ".$this->getTblName($table)." ("; $first = 1;
 			foreach($thevalue as $key=>$value){
 				if (!isset($first)){$sql .= ", ";} else {unset($first);}
 			$sql .= $key;
