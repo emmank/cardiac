@@ -188,16 +188,21 @@ class patientModule extends mainModule
     }
 
     function register(){
+//        echo "<pre> item search";
+//        print_r ($this->items['patient_search']);
+//        echo "</pre>";
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('daftar pasien yang mendaftar hari ini');
         $result['description'] = __t('antrian pasien yang mendaftar pada hari ini');
-        $result['addmenu'] = array(
+/*        $result['addmenu'] = array(
             'title' => __t('search patient'),
             'action' => '/user/patient/search',
             'position' => 'top',
             'user_required' => 'patient'
         );
+ */
+        $result['search'] = $this->search();
         $result['header'] = array(
             array(
                 'field' => 'nourut',
@@ -249,7 +254,7 @@ class patientModule extends mainModule
                 $getit->MoveNext();
             }
         }
-//        echo '<pre>'; print_r($result); echo '</pre>';
+//        echo '<pre> tst'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -949,12 +954,14 @@ class patientModule extends mainModule
             'position' => 'top',
             'class' => 'button'
         );
-        $result['addmenu']['#search'] = array(
+        /*$result['addmenu']['#search'] = array(
             'title' => __t('search patient'),
             'action' => '/node/patient/search',
             'position' => 'top',
             'class' => 'button'
         );
+         */
+        $result['search'] = $this->search();
         $result['header'] = array(
             array(
                 'field' => 'nourut',

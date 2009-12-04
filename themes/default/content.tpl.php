@@ -87,6 +87,11 @@ if ($menu_info['id'] != "login") {
         if (count ($content['output']) > 0) {;
     ?>
     <?php foreach($content['output'] as $value){?>
+    <?php
+//    echo "<pre>";
+//    print_r ($content['output']);
+//    echo "</pre>";
+    ?>
             <?php if ($value['type'] == 'table'){?>
                 <?php echo __create_table($value);?>
             <?php } elseif($value['type'] == 'items_detail') {?>

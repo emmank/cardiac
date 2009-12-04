@@ -250,8 +250,12 @@ function __create_items_detail($value){
 }
 
 function __create_table($value){
+//    echo "<pre>";
+//    print_r ($value);
+//    echo "</pre>";
+
     $user = __get_vars_of_active_user();
-    $result = '';
+    $result .= '';
     if(isset($value['addmenu'])){
         $result .= __create_add_menu($value['addmenu']);
     }
@@ -277,6 +281,12 @@ function __create_table($value){
         }
     }
     $result .= '</table>';
+    
+    if (isset($value['search'])) {
+//        echo "disini";
+        $result .= "<br /><br />";
+        $result .= __create_search($value["search"]);
+    }
     return $result;
 }
 
@@ -569,35 +579,41 @@ function __create_info($value){
 }
 
 function __create_search($value){
-//    echo '<pre>'; print_r($value); echo '</pre>'; exit();
-    $result = "\n";
+//    echo '<pre>'; print_r($value); echo '</pre>';
+//    $result .= "<br />Search\n <hr>";
+    $result .= "<div id=search>";
+    $result .= "<font class=judul>Search</font>";
     if(is_array($value)){
         foreach($value as $yk => $lv){
+//    echo '<pre>'; print_r($value); echo '</pre>';
             if($yk == 'dataform'){
                 foreach($lv as $key => $val){
                     if(isset($next)){
-                        $result .= "\n" . "<hr>\n";
+//                        $result .= "\n" . "<hr>\n";
                     }
                     if($val['#type'] == 'character'){
+                        $result .= "<div id=by_letter>Pencarian dengan huruf awalan : &nbsp;";
                         foreach($val['data'] as $ky => $vl){
                             if(isset($koma)){$result .= ', ';}
-                            $result .= !is_null($vl['links']) ? '<a href="' . $vl['links'] . '">' : '';
+                            $result .= !is_null($vl['links']) ? '<a href="' . $vl['links'] . '"><strong>' : '';
                             $result .= $vl['show'];
-                            $result .= !is_null($vl['links']) ? '</a>' : '';
+                            $result .= !is_null($vl['links']) ? '</strong></a>' : '';
                             $koma = 0;
                         } unset($koma);
+                    $result .= "</div>";
                     } elseif($val['#type'] == 'form'){
                         $getform[] = $val;
                         $result .= __create_form($getform);
                         unset($getform);
                     } $next = 0;
-                    $result .= "<br />\n";
+//                    $result .= "\n";
                 } unset($next);
             } elseif($yk == 'result'){
                 $result .= __create_notelist($lv);
             }
         }
     }
+    $result .= "</div>";
     return $result;
 }
 
