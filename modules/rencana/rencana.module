@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  rencana.php
+ *  
+ *  Created on Oct 3, 2009, 4:34:16 PM
+ */
+
+require_once MODULES_DIR . DS . 'rencana' . DS . 'rencana.class.inc';
+
+if(!isset($rencana_config)){
+    $rencana_config = new rencanaConfig();
+} elseif(!$rencana_config instanceof rencanaConfig) {
+    $rencana_config = new rencanaConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $rencana_config->rdbms . DS . 'dbquery.php';
+if(!isset($rencana_query)){
+    $rencana_query = new dbset();
+} elseif(!$rencana_query instanceof dbset) {
+    $rencana_query = new dbset();
+}
+
+if(!isset($rencana_exec)){
+    $rencana_exec = new rencanaModule();
+} elseif(!$rencana_exec instanceof rencanaModule) {
+    $rencana_exec = new rencanaModule();
+}
