@@ -515,7 +515,7 @@ class cardioModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/form/' . ($this->formhabit == 'readonly' ? 'edit_' . $vcache['id'] : '/form_submit'),
+            '#action' => '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/form' . ($this->formhabit == 'readonly' ? '/edit_' . $vcache['id'] : '_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'cardio' . DS . 'cardio.tpl',
             '#addmenu' => array(
@@ -927,27 +927,24 @@ class cardioModule extends mainModule
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
             $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->updateData(
-                'cardio',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
             $thevalue['id'] = $this->__get_id_insert_value('cardio', 'id', $this->query);
             $thevalue['inputer'] = $user['userid'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->saveData(
-                'cardio',
-                $thevalue
-            );
             $this->vardump['id'] = $thevalue['id'];
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        unset($thevalue);
+        $this->__exec_db_ops(
+            $this->query,
+            'cardio',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($thevalue, $opr, $strid);
         $this->__loadPresentStatus('submit');
         $this->__loadVitalSign('submit');
         $this->__loadEye('submit');
