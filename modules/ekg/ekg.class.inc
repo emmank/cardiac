@@ -277,11 +277,12 @@ class ekgModule extends mainModule
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
-                if(preg_match('/^edit_/', $dump[3])){
-                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
-                    $vcache = $this->__get_ekg_data((int)$ekg_id);
-                    $this->vardump = $vcache;
-                    unset($cardio_id);
+                if(preg_match('/^back_/', $dump[3])){
+//                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
+//                    $vcache = $this->__get_ekg_data((int)$ekg_id);
+//                    $this->vardump = $vcache;
+//                    unset($cardio_id);
+                    redirect_to('/user/ekg/view');
                 } else {
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
                 }
@@ -499,7 +500,7 @@ class ekgModule extends mainModule
 
         $form['ekg']['submit'] = array(
             '#type' => 'submit',
-            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
+            '#value' => ($this->formhabit == 'readonly' ? __t('back') : __t('submit'))
         );
         return $form;
     }

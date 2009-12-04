@@ -211,11 +211,11 @@ foreach($data as $key => $value){
     $result .= '</div>' . "\n";
 
     $result .= '<div>' . "\n";
-    $result .= '<table width=100% class="table" border="0">' . "\n";
+    $result .= '<table width=100% class="table" border="1">' . "\n";
     $result .= '<th></th>' . "\n";
     $result .= '<th width="20%">' . __t('type') . '</th>' . "\n";
-    $result .= '<th width="25%"></th>' . "\n";
-    $result .= '<th width="25%"></th>' . "\n";
+    $result .= '<th width="25%">' . __t('kali') . '</th>' . "\n";
+    $result .= '<th width="25%">' . __t('waktu') . '</th>' . "\n";
     foreach($value['#otherlook'] as $yk => $lv){
         $result .= '<tr><td align="left">' . ucwords($lv['#title']) . '</td>' . "\n";
         $result .= '<td align="left">' . "\n";
@@ -245,14 +245,14 @@ foreach($data as $key => $value){
         if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
             $result .= $lv['#value'][1] . "\n";
         } else {
-            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '[1]" size="' . (isset($lv['#size']) && $lv['#type'] != 'select' ? $lv['#size']: '5') . '"' . (is_array($lv['#value']) && isset($lv['#value'][1]) ? ' value="' . $lv['#value'][1] . '"' : '') . '>' . "\n";
+            $result .= '<input type="text" name="' . $yk . '[1]" size="' . (isset($lv['#size']) && $lv['#type'] != 'select' ? $lv['#size']: '5') . '"' . (is_array($lv['#value']) && isset($lv['#value'][1]) ? ' value="' . $lv['#value'][1] . '"' : '') . '>' . "\n";
         }
-        $result .= ' kali</td>' . "\n";
-        $result .= '<td align="left">Waktu' . "\n";
+        $result .= ' </td>' . "\n";
+        $result .= '<td align="left">' . "\n";
         if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
             $result .= $lv['#value'][2] . "\n";
         } else {
-            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '[2]" size="' . (isset($lv['#size']) && $lv['#type'] != 'select' ? $lv['#size']: '5') . '"' . (is_array($lv['#value']) && isset($lv['#value'][2]) ? ' value="' . $lv['#value'][2] . '"' : '') . '>' . "\n";
+            $result .= '<input type="text" name="' . $yk . '[2]" size="' . (isset($lv['#size']) && $lv['#type'] != 'select' ? $lv['#size']: '5') . '"' . (is_array($lv['#value']) && isset($lv['#value'][2]) ? ' value="' . $lv['#value'][2] . '"' : '') . '>' . "\n";
         }
         $result .= '</td></tr>' . "\n";
     }
