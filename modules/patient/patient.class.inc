@@ -768,25 +768,21 @@ class patientModule extends mainModule
             $thevalue['id'] = $dump['id'];
             $thevalue['inputer'] = $_COOKIE[$this->config->cookieid];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
-//            echo '<pre>'; print_r($thevalue); echo '</pre>';
-            $sql = $this->query->saveData(
-                'patients',
-                $thevalue
-            );
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         } else {
             $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->updateData(
-                'patients',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $dump['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $dump['id']);
         }
-        $this->query->connect();
-//        $this->query->conn->debug=true;
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        $this->__exec_db_ops(
+            $this->query,
+            'patients',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($opr, $strid);
         $this->__update_isearch($thevalue);
         unset($thevalue);
         $this->query->connect();
@@ -880,17 +876,14 @@ class patientModule extends mainModule
             }
         }
         $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
-        $sql = $this->query->updateData(
+        $this->__exec_db_ops(
+            $this->query,
             'patients',
-            $thevalue,
-            array(
-                array('&&', "id=" . $dump['id'])
-            )
+            'update',
+            array('id', $dump['id']),
+            $thevalue
         );
-        $this->query->connect();
-//        $this->query->conn->debug=true;
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        unset($opr, $strid);
         $thevalue['id'] = $dump['id'];
         $this->__update_isearch($thevalue);
         unset($thevalue);
