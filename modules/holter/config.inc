@@ -107,4 +107,162 @@ class holterConfig extends config
     var $segment_st = array(
         'segment_st_depresi', 'segment_st_elevasi'
     );
+    var $table_scheme = array(
+        'holter' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'patients' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'kunjungan' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tgl' => array(
+                'type' => 'date',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'the_average_HR' => array(
+                'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => '',
+                'default' => '0',
+                'extra' => ''
+            ),
+            'the_minimum_HR' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'the_maximum_HR' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'segment_st_depresi' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'segment_st_elevasi' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'gelombang_t' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'pause' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'VES' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'AES' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'SVT' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'VT' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'AF' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'heart_block_1_degree' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'heart_block_2_degree' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'heart_block_3_degree' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputtime' => array(
+                'type' => 'datetime',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputer' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'updated' => array(
+                'type' => 'varchar(50)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }
