@@ -1166,6 +1166,7 @@ class presentStatusModule extends mainModule
 
     function cardio_submit(){
         $thefields = $this->__get_data_fields('present_status', $this->query);
+        $patientsdata = array();
         foreach($this->config->free_val as $key => $value){
             if(in_array($key, $thefields)){
                 if($key == 'catched'){
@@ -1176,8 +1177,15 @@ class presentStatusModule extends mainModule
                     }
                 }
                 $thevalue[$key] = $value;
+                if($key != 'id'){
+                    foreach($this->config->patient_fields as $ky => $vl){
+                        if($ky == $key){
+                            $patientsdata[$vl] = $value;
+                        }
+                    }
+                }
             }
-        } unset($thefields);
+        } unset($thefields, $patient_fields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $opr = 'update';
@@ -1194,6 +1202,14 @@ class presentStatusModule extends mainModule
             $thevalue
         );
         unset($opr, $strid, $thevalue);
+        $this->__exec_db_ops(
+            $this->query,
+            'patients',
+            'update',
+            array('id', $this->config->free_val['patients']),
+            $patientsdata
+        );
+        unset($patientsdata);
     }
 
 }

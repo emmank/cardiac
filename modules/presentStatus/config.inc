@@ -58,6 +58,11 @@ class presentStatusConfig extends config
         'main_soreness' => array('ref_present_soreness', 'soreness'),
         'ilness_history' => array('ref_present_illness_history', 'illness_history')
     );
+    var $patient_fields = array(
+        'tall' => 'tinggi',
+        'weight' => 'berat',
+        'tension' => 'tekanan_darah'
+    );
     var $table_scheme = array(
         'present_status' => array(
             'id' => array(
