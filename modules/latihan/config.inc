@@ -112,42 +112,35 @@ class latihanConfig extends config
                 'extra' => ''
             ),
             'protokol' => array(
-                'type' => 'varchar(255)',
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'rekaman_ekg' => array(
-                'type' => 'varchar(255)',
+            'segmen_st_depresi' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'rekaman_st_depresi' => array(
-                'type' => 'varchar(200)',
+            'segmen_st_elevasi' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'rekaman_st_elevasi' => array(
-                'type' => 'varchar(200)',
+            'segmen_st_konfigurasi' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'rekaman_st_konfigurasi' => array(
-                'type' => 'varchar(200)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'aritmia' => array(
-                'type' => 'varchar(200)',
+            'irama_dasar' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
@@ -188,15 +181,15 @@ class latihanConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'respon_tekanan_darah' => array(
-                'type' => 'varchar(200)',
+            'tekanan_darah' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
             'tekanan_darah_puncak' => array(
-                'type' => 'varchar(200)',
+                'type' => 'varchar(20)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,

@@ -23,7 +23,6 @@
  */
 
 class istirahatConfig extends config
-
 {
     var $rdbms = 'mysql';
     var $dbistirahat = array(
@@ -41,7 +40,6 @@ class istirahatConfig extends config
     );
     var $typeoffields = array(
         'id' => 'hidden',
-        'patients' => 'hidden',
         'tensi_sistolik' => 'text',
         'tensi_diastolik' => 'text',
         'denyut_jantung' => 'select',
@@ -52,8 +50,8 @@ class istirahatConfig extends config
         'qrs_durasi' => 'select',
         'qrs_konfigurasi_patologi' => 'select',
         'qrs_konfigurasi_rs' => 'select',
-        'segment_st_depresi' => 'select',
-        'segment_st_elevasi' => 'select',
+        'segmen_st_depresi' => 'select',
+        'segmen_st_elevasi' => 'select',
         'gelombang_t' => 'select',
         'q_interval' => 'select'
     );
@@ -66,8 +64,8 @@ class istirahatConfig extends config
         'qrs_durasi',
         'qrs_konfigurasi_patologi',
         'qrs_konfigurasi_rs',
-        'segment_st_depresi' ,
-        'segment_st_elevasi' ,
+        'segmen_st_depresi' ,
+        'segmen_st_elevasi' ,
         'gelombang_t',
         'q_interval'
     );
@@ -80,8 +78,8 @@ class istirahatConfig extends config
         'qrs_durasi' => array('ref_ekgQrs_durasi', 'durasi'),
         'qrs_konfigurasi_patologi' => array('ref_ekg_sandapan', 'sandapan'),
         'qrs_konfigurasi_rs' => array('ref_ekgQrs_RlbS', 'RlbS'),
-        'segment_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
-        'segment_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
+        'segmen_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
+        'segmen_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
         'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
         'q_interval' => array('ref_ekg_q_interval', 'q_interval')
     );
@@ -101,14 +99,21 @@ class istirahatConfig extends config
                 'extra' => ''
             ),
             'tensi_sistolik' => array(
-                'type' => 'varchar(255)',
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
             'tensi_diastolik' => array(
-                'type' => 'varchar(255)',
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'irama_dasar' => array(
+                'type' => 'int(11)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
@@ -121,8 +126,71 @@ class istirahatConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'ekg' => array(
-                'type' => 'varchar(200)',
+            'gelombang_p' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'interval_pr' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_axis' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_durasi' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_konfigurasi_patologi' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_konfigurasi_r_s' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'segmen_st_depresi' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'segmen_st_elevasi' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'gelombang_t' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'q_interval' => array(
+                'type' => 'int(11)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,

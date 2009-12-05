@@ -312,15 +312,22 @@ class mainModule
         return $result;
     }
 
-    function __get_user_info(){
+    function __get_user_info($cookietype = NULL){
         $result = array();
+        if(is_null($cookietype)){
+            $where = array(
+                array('&&', $this->config->auth_use_table[4] . "=" . $_COOKIE[$this->config->cookieid])
+            );
+        } else {
+            $where = array(
+                array('&&', $this->config->auth_use_table[3] . "=" . $_COOKIE[$this->config->cookiesession])
+            );
+        }
         $this->sysquery->connect();
         $sql = $this->sysquery->getSelect(
             array(),
             array($this->config->auth_use_table[0]),
-            array(
-                array('&&', $this->config->auth_use_table[4] . "=" . $_COOKIE[$this->config->cookieid])
-            )
+            $where
         );
         $query = $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();

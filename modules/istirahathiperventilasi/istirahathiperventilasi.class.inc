@@ -26,7 +26,7 @@ require_once MODULES_DIR . DS . 'istirahathiperventilasi' . DS . 'config.inc';
 
 class istirahathiperventilasiModule extends mainModule
 {
-    var $title = 'istirahathiperventilasi module';
+    var $title = 'istirahathiperventilasi';
     var $description = '';
 
     function __get_refs($fields, $sort=NULL){
@@ -48,8 +48,8 @@ class istirahathiperventilasiModule extends mainModule
     }
 
     function treadmill_menu(){
+        $this->sync_scheme('istirahathiperventilasi', $this->query);
         $result = array();
-//        echo "lagi disini";
         $result['#title'] = __t('Fase istirahat Hiperventilasi');
         $result['#tpl'] = MODULES_DIR . DS . 'istirahathiperventilasi' . DS . 'istirahathiperventilasi.tpl';
         $datafields = $this->__get_data_fields('istirahathiperventilasi', $this->query);

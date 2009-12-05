@@ -48,8 +48,8 @@ class istirahatberdiriModule extends mainModule
     }
 
     function treadmill_menu(){
+        $this->sync_scheme('istirahatberdiri', $this->query);
         $result = array();
-//        echo "lagi disini";
         $result['#title'] = __t('Fase istirahat Berdiri');
         $result['#tpl'] = MODULES_DIR . DS . 'istirahatberdiri' . DS . 'istirahatberdiri.tpl';
         $datafield = $this->__get_data_fields('istirahatberdiri', $this->query);

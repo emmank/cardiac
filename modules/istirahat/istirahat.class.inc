@@ -48,7 +48,7 @@ class istirahatModule extends mainModule
     }
 
     function treadmill_menu(){
-//        $this->sync_scheme('istirahat', $this->query);
+        $this->sync_scheme('istirahat', $this->query);
         $result = array();
         $result['#title'] = __t('Fase Istirahat');
         $result['#tpl'] = MODULES_DIR . DS . 'istirahat' . DS . 'istirahat.tpl';

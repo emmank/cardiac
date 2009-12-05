@@ -49,9 +49,9 @@ foreach($data as $key => $value){
         }
     }
     ksort($gettbpos);
-    //echo '<pre>'; print_r($gettbpos); echo '</pre>';
+//    echo '<pre>'; print_r($gettbpos); echo '</pre>';
     foreach($gettbpos as $ky => $vl){
-        if((int)$ky < 1 || (int)$ky % 5 == 0){
+        if((int)$ky < 1 || (int)$ky % 8 == 0){
             $result .= '<div id="kolom">' . "\n";
             $setdiv = 1;
         }
@@ -61,7 +61,7 @@ foreach($data as $key => $value){
         } else {
             $result .= '<textarea  readonly="true">' . $vl['#value'] .'</textarea> <br />' . "\n";
         }
-        if((int)$ky > 3 && ((int)$ky + 1) % 5 == 0){
+        if((int)$ky > 3 && ((int)$ky + 1) % 8 == 0){
             unset($setdiv);
             $result .= '</div>' . "\n";
         }
