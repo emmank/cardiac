@@ -22,10 +22,10 @@
  *  Created on Oct 3, 2009, 4:31:28 PM
  */
 
-class tindakanConfig extends config
+class perkembanganConfig extends config
 {
     var $rdbms = 'mysql';
-    var $dbtindakan = array(
+    var $dbperkembangan = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',
@@ -40,9 +40,15 @@ class tindakanConfig extends config
     );
     var $typeoffields = array(
         'id' => 'hidden',
-        'tgl_tindakan' => 'datetime',
-        'tindakan' => 'text',
-        'jenis_tindakan' => 'text'
+        'tgl_subyektif' => 'datetime',
+        'subyektif' => 'text',
+        'tgl_obyektif' => 'datetime',
+        'obyektif' => 'text',
+        'tgl_analisa' => 'datetime',
+        'analisa' => 'text',
+        'tgl_planning' => 'datetime',
+        'planning' => 'text',
+        'weight' => 'text'
 //        ,
 //        'tension' => 'text',
 //        'risk_factor' => 'checkbox',

@@ -31,7 +31,7 @@ foreach($vl['datafields'] as $yk => $lv){
         if($cnt < 1){
             $result .= '<tr valign="top">' . "\n";
         }
-        $result .= '<td>' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
+        $result .= '<td align="right" width="15%">' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
         $result .= '<td>';
         if($lv['type'] == 'select'){
             if($lv['readonly'] === true){
@@ -105,11 +105,11 @@ foreach($vl['datafields'] as $yk => $lv){
             if($lv['readonly'] === true){
                 $result .= $lv['value'];
             } else {
-                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
+                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="20"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
             }
         }
         $result .= '</td>' . "\n";
-        $cnt++;
+//        $cnt++;
         if($cnt > 1){
             $cnt = 0;
             $result .= '</tr>' . "\n";
