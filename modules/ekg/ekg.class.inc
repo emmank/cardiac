@@ -555,29 +555,24 @@ class ekgModule extends mainModule
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
             $thevalue['updated'] = $user['userid'] . '|' . date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->updateData(
-                'ekg',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
             $thevalue['id'] = $this->__get_id_insert_value('ekg', 'id', $this->query);
             $thevalue['inputer'] = $user['id'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->saveData(
-                'ekg',
-                $thevalue
-            );
             $this->vardump['id'] = $thevalue['id'];
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-        $this->query->connect();
-//        $this->query->conn->debug=true;
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-//        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
-        unset($thevalue);
+        $this->__exec_db_ops(
+            $this->query,
+            'ekg',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($thevalue, $opr, $strid);
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',
@@ -597,6 +592,7 @@ class ekgModule extends mainModule
     }
 
     function view(){
+        $this->sync_scheme('ekg', $this->query);
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('daftar beberapa pasien');
