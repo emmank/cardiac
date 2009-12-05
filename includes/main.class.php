@@ -70,6 +70,213 @@ class mainModule
         'cerai'
     );
     var $string_to_shuffle = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+
+    function __get_module_table_lists(){
+        $result = array();
+        foreach($this->config->table_scheme as $key => $value){
+            $result[] = $key;
+        }
+        return $result;
+    }
+
+    function __get_field_lists($tablename){
+        $result =array();
+        foreach($this->config->table_scheme[$tablename] as $key => $value){
+            $result[] = $key;
+        }
+        return $result;
+    }
+
+    function __check_field_exist($tablename, $fieldname){
+        $lists = $this->__get_field_lists($tablename);
+        if(in_array($fieldname, $lists)){
+            unset($lists);
+            return TRUE;
+        } else {
+            unset($lists);
+            return FALSE;
+        }
+    }
+
+    function __drop_field($tablename, $fieldname, $interpreter){
+        $thefields = $this->__get_data_fields($tablename, $interpreter);
+        if(in_array($fieldname, $thefields)){
+            $sql = $interpreter->alterTableColumn(
+                $tablename,
+                array($fieldname)
+            );
+            $interpreter->connect();
+            $interpreter->conn->Execute($sql); unset($sql);
+            $interpreter->close();
+        }
+    }
+
+    function __get_db_table_lists($interpreter){
+        $result = array();
+        $sql = $interpreter->showTables();
+        $interpreter->connect();
+        $getit = $interpreter->conn->Execute($sql); unset($sql);
+        $interpreter->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $getit->_numOfRows; $i++){
+                $result[] = $getit->fields['Tables_in_' . $interpreter->getDbName];
+                $getit->MoveNext();
+            }
+        }
+        return $result;
+    }
+
+    function sync_scheme($tablename, $interpreter){
+        $lists = $this->__get_db_table_lists($interpreter);
+        if(in_array($tablename, $lists)){
+            unset($lists);
+            $lists = $this->__get_field_lists($tablename);
+            $thefields = $this->__get_data_fields($tablename, $interpreter);
+            $dbfieldlists = $this->__get_data_fields($tablename, $interpreter, 1);
+            foreach($thefields as $value){
+                if(!in_array($value, $lists)){
+                    $this->__drop_field($tablename, $value, $interpreter);
+                }
+            }
+            foreach($lists as $value){
+                if(!in_array($value, $thefields)){
+                    $sql = $interpreter->alterTableColumn(
+                        $tablename,
+                        array($value),
+                        'add',
+                        $this->config->table_scheme[$tablename][$value]['type'],
+                        ($this->config->table_scheme[$tablename][$value]['null'] > 0 ? FALSE : TRUE),
+                        $this->config->table_scheme[$tablename][$value]['default'],
+                        (trim($this->config->table_scheme[$tablename][$value]['extra']) != '' ? $this->config->table_scheme[$tablename][$value]['extra'] : NULL)
+                    );
+                } else {
+                    if($dbfieldlists[$value]['Type'] != $this->config->table_scheme[$tablename][$value]['type'] ||
+                        $dbfieldlists[$value]['Null'] != $this->config->table_scheme[$tablename][$value]['null'] ||
+                        $dbfieldlists[$value]['Default'] != $this->config->table_scheme[$tablename][$value]['default'] ||
+                        $dbfieldlists[$value]['extra'] != $this->config->table_scheme[$tablename][$value]['extra']){
+                        $fieldsarray = array($value, $value);
+                    }
+                    if(isset($fieldsarray)){
+                        $sql = $interpreter->alterTableColumn(
+                            $tablename,
+                            $fieldsarray,
+                            'change',
+                            $this->config->table_scheme[$tablename][$value]['type'],
+                            ($this->config->table_scheme[$tablename][$value]['null'] > 0 ? FALSE : TRUE),
+                            $this->config->table_scheme[$tablename][$value]['default'],
+                            (trim($this->config->table_scheme[$tablename][$value]['extra']) != '' ? $this->config->table_scheme[$tablename][$value]['extra'] : NULL)
+                        );
+                        unset($fieldsarray);
+                    }
+                }
+                if(isset($sql)){
+                    $interpreter->connect();
+                    $interpreter->conn->Execute($sql); unset($sql);
+                    $interpreter->close();
+                }
+            } unset($thefields);
+        } else {
+            if(isset($this->config->table_scheme[$tablename])){
+                $elements = array();
+                foreach($this->config->table_scheme[$tablename] as $key => $value){
+                    $elements[$key] = $value['type'] . ($value['null'] < 1 ? ' not null' : '') . (!is_null($value['default']) ? ' DEFAULT ' . $value['default'] : '') . (trim($value['extra']) != '' ? ' ' . $value['extra'] : '');
+                    if(trim($value['key']) != '' && eregi('pri', $value['key'])){
+                        $primarykey = $key;
+                    }
+                }
+                $sql = $interpreter->createTable(
+                    $tablename,
+                    $elements,
+                    (isset($primarykey) ? $primarykey : NULL)
+                );
+                $interpreter->connect();
+                $interpreter->conn->Execute($sql); unset($sql);
+                $interpreter->close();
+            }
+        }
+    }
+
+    function __exec_db_ops($interpreter, $tbname, $opr, $id, $arrayval=NULL){
+        if(eregi('delete', $opr) || eregi('insert', $opr) || eregi('update', $opr)){
+            $thevalue['dbname'] = $interpreter->dbname;
+            $thevalue['tbname'] = $tbname;
+            $thevalue['operation'] = $opr;
+            $thevalue['inputer'] = isset($arrayval['inputer']) ? $arrayval['inputer'] : $_COOKIE[$this->config->cookieid];
+            $thevalue['inputtime'] = isset($arrayval['inputtime']) ? $arrayval['inputtime'] : date('Y-m-d H:i:s', $this->config->time);
+            $thevalue['iddata'] = $id[1];
+            $dumpval = '';
+            if(eregi('delete', $opr)){
+                $sql = $interpreter->getSelect(
+                    array(),
+                    array($tbname),
+                    array(
+                        array('&&', $id[0] . "=" . $id[1])
+                    )
+                );
+                $interpreter->connect();
+                $getit = $interpreter->conn->Execute($sql); unset($sql);
+                $interpreter->close();
+                if($getit->_numOfRows > 0){
+                    foreach($getit->fields as $key => $value){
+                        if(isset($koma)){
+                            $dumpval .= '][';
+                        }
+                        $dumpval .= $key . '=>' . $value;
+                        $koma = 0;
+                    } unset($koma);
+                }
+                $sql = $interpreter->setDelete(
+                    $tbname,
+                    array(
+                        array('&&', $id[0] . "=" . $id[1])
+                    )
+                );
+                $interpreter->connect();
+                $interpreter->conn->Execute($sql); unset($sql);
+                $interpreter->close();
+            } else {
+                if(eregi('insert', $opr)){
+                    $sql = $interpreter->saveData(
+                        $tbname,
+                        $arrayval
+                    );
+                    $interpreter->connect();
+                    $interpreter->conn->Execute($sql); unset($sql);
+                    $interpreter->close();
+                } else {
+                    $sql = $interpreter->updateData(
+                        $tbname,
+                        $arrayval,
+                        array(
+                            array('&&', $id[0] . "=" . $id[1])
+                        )
+                    );
+                    $interpreter->connect();
+                    $interpreter->conn->Execute($sql); unset($sql);
+                    $interpreter->close();
+                }
+                foreach($arrayval as $key => $value){
+                    if(isset($koma)){
+                        $dumpval .= '][';
+                    }
+                    $dumpval .= $key . '=>' . $value;
+                    $koma = 0;
+                } unset($koma);
+            }
+            if(trim($dumpval) != ''){
+                $thevalue['volume'] = $dumpval;
+                unset($dumpval);
+            }
+            $sql = $this->sysquery->saveData(
+                'logtrack',
+                $thevalue
+            );
+            $this->sysquery->connect();
+            $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
+            unset($thevalue);
+        }
+    }
     
     function __get_id_insert_value($table, $id, $interpreter){
         $result = 1;
@@ -487,7 +694,7 @@ class mainModule
         return $result;
     }
 
-    function __get_data_fields($table, $interpreter){
+    function __get_data_fields($table, $interpreter, $elements=NULL){
         $result = array();
         $interpreter->connect();
         $sql = $interpreter->getDescribe($table);
@@ -495,7 +702,11 @@ class mainModule
         $query = $interpreter->conn->Execute($sql); unset($sql);
         $interpreter->close();
         for($i=0; $i<$query->_numOfRows; $i++){
-            $result[] = $query->fields['Field'];
+            if(!is_null($elements)){
+                $result[$query->fields['Field']] = $query->fields;
+            } else {
+                $result[] = $query->fields['Field'];
+            }
             $query->MoveNext();
         } unset($query);
         return $result;

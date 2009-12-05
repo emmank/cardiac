@@ -1377,6 +1377,7 @@ class faseLatihanModule extends mainModule
     }
 
     function treadmill_menu(){
+//        $this->sync_scheme('latihan', $this->query);
         $result = array();
         $result['#title'] = __t('Fase Latihan');
         $result['#tpl'] = MODULES_DIR . DS . 'faseLatihan' . DS . 'faseLatihan.tpl';

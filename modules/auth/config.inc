@@ -25,4 +25,64 @@
 class authConfig extends config
 {
     var $rdbms = 'mysql';
+    var $table_scheme = array(
+        'logtrack' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => 'auto_increment'
+            ),
+            'dbname' => array(
+                'type' => 'varchar(100)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tbname' => array(
+                'type' => 'varchar(100)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'iddata' => array(
+                'type' => 'varchar(100)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'volume' => array(
+                'type' => 'text',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'operation' => array(
+                'type' => 'varchar(100)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputer' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputtime' => array(
+                'type' => 'datetime',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

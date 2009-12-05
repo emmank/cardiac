@@ -235,12 +235,12 @@ class treadmillModule extends mainModule
     }
 
     function view(){
+//        $this->sync_scheme('treadmill', $this->query);
         return $this->__get_view();
     }
 
     function __get_view(){
         $result = array();
-//        echo "adaka disini";
         $result['type'] = 'table';
         $result['title'] = __t('daftar beberapa pasien');
         $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
@@ -285,14 +285,11 @@ class treadmillModule extends mainModule
         $sql = $this->query->getSelect(
             array(),
             array('treadmill'),
-            array(
-                //array('&&', "teens=" . ($teens != 0 ? $teens : 0))
-            ),
+            NULL,
             'inputtime desc',
             '0,10'
         ); unset($where);
         $this->query->connect();
-//        $this->query->conn->debug=true;
         $getit = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($getit->_numOfRows > 0){
@@ -314,7 +311,6 @@ class treadmillModule extends mainModule
                 $getit->MoveNext();
             }
         }
-//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -551,8 +547,8 @@ class treadmillModule extends mainModule
         }
 
         $form['treadmill']['tab_items']['istirahat'] = $this->__loadFaseIstirahat();
-        $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
-        $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
+//        $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
+//        $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
         $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
         $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
         $form['treadmill']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
@@ -578,33 +574,33 @@ class treadmillModule extends mainModule
         }
     }
 
-    function __loadFaseIstirahatBerdiri($exec=NULL){
-        $this->__include_module('istirahatberdiri');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->FaseIstirahat_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->istirahatberdiri_exec->treadmill_submit();
-            }
-        } else {
-            return $this->istirahatberdiri_exec->treadmill_menu();
-        }
-    }
-    
-    function __loadFaseIstirahatHiperventilasi($exec=NULL){
-        $this->__include_module('istirahathiperventilasi');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->FaseIstirahat_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->istirahathiperventilasi_exec->treadmill_submit();
-            }
-        } else {
-            return $this->istirahathiperventilasi_exec->treadmill_menu();
-        }
-    }
+//    function __loadFaseIstirahatBerdiri($exec=NULL){
+//        $this->__include_module('istirahatberdiri');
+//        if(isset($this->vardump) && count($this->vardump) > 0){
+//            $this->FaseIstirahat_config->free_val = $this->vardump;
+//        }
+//        if(!is_null($exec)){
+//            if($exec == 'submit'){
+//                return $this->istirahatberdiri_exec->treadmill_submit();
+//            }
+//        } else {
+//            return $this->istirahatberdiri_exec->treadmill_menu();
+//        }
+//    }
+//
+//    function __loadFaseIstirahatHiperventilasi($exec=NULL){
+//        $this->__include_module('istirahathiperventilasi');
+//        if(isset($this->vardump) && count($this->vardump) > 0){
+//            $this->FaseIstirahat_config->free_val = $this->vardump;
+//        }
+//        if(!is_null($exec)){
+//            if($exec == 'submit'){
+//                return $this->istirahathiperventilasi_exec->treadmill_submit();
+//            }
+//        } else {
+//            return $this->istirahathiperventilasi_exec->treadmill_menu();
+//        }
+//    }
 
     function __loadFaseLatihan($exec=NULL){
         $this->__include_module('latihan');

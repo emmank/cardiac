@@ -26,7 +26,7 @@ require_once MODULES_DIR . DS . 'latihan' . DS . 'config.inc';
 
 class latihanModule extends mainModule
 {
-    var $title = 'latihan module';
+    var $title = 'latihan';
     var $description = '';
 
     function __get_refs($fields, $sort=NULL){
@@ -48,6 +48,7 @@ class latihanModule extends mainModule
     }
 
     function treadmill_menu(){
+        $this->sync_scheme('latihan', $this->query);
         $result = array();
         $result['#title'] = __t('Fase latihan');
         $result['#tpl'] = MODULES_DIR . DS . 'latihan' . DS . 'latihan.tpl';

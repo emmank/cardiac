@@ -48,5 +48,99 @@ class treadmillConfig extends config
         'inputtime' => 'hidden',
         'updated' => 'hidden'
     );
-    var $teenlimit = 12;
+    var $table_scheme = array(
+        'treadmill' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'patients' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'kunjungan' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputtime' => array(
+                'type' => 'datetime',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputer' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'updated' => array(
+                'type' => 'varchar(50)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tinggi' => array(
+                'type' => 'varchar(20)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'berat' => array(
+                'type' => 'varchar(20)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tekanan_darah' => array(
+                'type' => 'varchar(20)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'indikasi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'obat_obatan' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'denyut_jantung_max' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'target_denyut_jantung_max' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

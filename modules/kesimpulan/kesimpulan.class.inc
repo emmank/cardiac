@@ -48,6 +48,7 @@ class kesimpulanModule extends mainModule
     }
 
     function treadmill_menu(){
+//        $this->sync_scheme('kesimpulan', $this->query);
         $result = array();
         $result['#title'] = __t('Fase kesimpulan');
         $result['#tpl'] = MODULES_DIR . DS . 'kesimpulan' . DS . 'kesimpulan.tpl';

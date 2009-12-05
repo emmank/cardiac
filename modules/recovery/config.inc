@@ -94,4 +94,36 @@ class recoveryConfig extends config
     var $segment_st = array(
         'segmen_st_depresi', 'segmen_st_elevasi'
     );
+    var $table_scheme = array(
+        'recovery' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'segmen_st_depresi' => array(
+                'type' => 'varchar(50)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'segmen_st_elevasi' => array(
+                'type' => 'varchar(50)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'recovery_lainlain' => array(
+                'type' => 'varchar(200)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }
