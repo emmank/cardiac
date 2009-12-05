@@ -47,7 +47,7 @@ class dbset
 
         function showTables(){
             $result = '';
-            $result .= 'SHOW TABLES()';
+            $result .= 'SHOW TABLES';
             return $result;
         }
 

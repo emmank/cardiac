@@ -81,8 +81,10 @@ class mainModule
 
     function __get_field_lists($tablename){
         $result =array();
-        foreach($this->config->table_scheme[$tablename] as $key => $value){
-            $result[] = $key;
+        if($this->config->table_scheme[$tablename]){
+            foreach($this->config->table_scheme[$tablename] as $key => $value){
+                $result[] = $key;
+            }
         }
         return $result;
     }
@@ -118,8 +120,8 @@ class mainModule
         $getit = $interpreter->conn->Execute($sql); unset($sql);
         $interpreter->close();
         if($getit->_numOfRows > 0){
-            for($i=0; $getit->_numOfRows; $i++){
-                $result[] = $getit->fields['Tables_in_' . $interpreter->getDbName];
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $result[] = $getit->fields['Tables_in_' . $interpreter->getDbName()];
                 $getit->MoveNext();
             }
         }
@@ -128,6 +130,7 @@ class mainModule
 
     function sync_scheme($tablename, $interpreter){
         $lists = $this->__get_db_table_lists($interpreter);
+//        echo '<pre>'; print_r($lists); echo '</pre>';
         if(in_array($tablename, $lists)){
             unset($lists);
             $lists = $this->__get_field_lists($tablename);
