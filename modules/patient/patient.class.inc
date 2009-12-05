@@ -935,6 +935,7 @@ class patientModule extends mainModule
     }
 
     function view(){
+        $this->sync_scheme('patients', $this->query);
         $this->__clean_queue();
         $result = array();
         $result['type'] = 'table';

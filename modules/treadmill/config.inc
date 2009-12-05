@@ -91,55 +91,6 @@ class treadmillConfig extends config
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
-            ),
-            'tinggi' => array(
-                'type' => 'varchar(20)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'berat' => array(
-                'type' => 'varchar(20)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'tekanan_darah' => array(
-                'type' => 'varchar(20)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'indikasi' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'obat_obatan' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'denyut_jantung_max' => array(
-                'type' => 'int(11)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'target_denyut_jantung_max' => array(
-                'type' => 'int(11)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
             )
         )
     );

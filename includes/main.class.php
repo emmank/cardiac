@@ -148,12 +148,14 @@ class mainModule
                         array($value),
                         'add',
                         $this->config->table_scheme[$tablename][$value]['type'],
+                        $this->config->table_scheme[$tablename][$value]['key'],
                         ($this->config->table_scheme[$tablename][$value]['null'] > 0 ? FALSE : TRUE),
                         $this->config->table_scheme[$tablename][$value]['default'],
                         (trim($this->config->table_scheme[$tablename][$value]['extra']) != '' ? $this->config->table_scheme[$tablename][$value]['extra'] : NULL)
                     );
                 } else {
                     if($dbfieldlists[$value]['Type'] != $this->config->table_scheme[$tablename][$value]['type'] ||
+                        (trim($this->config->table_scheme[$tablename][$value]['key']) != '' && !eregi($dbfieldlists[$value]['Key'], $this->config->table_scheme[$tablename][$value]['key'])) ||
                         $dbfieldlists[$value]['Null'] != $this->config->table_scheme[$tablename][$value]['null'] ||
                         $dbfieldlists[$value]['Default'] != $this->config->table_scheme[$tablename][$value]['default'] ||
                         $dbfieldlists[$value]['extra'] != $this->config->table_scheme[$tablename][$value]['extra']){
@@ -165,6 +167,7 @@ class mainModule
                             $fieldsarray,
                             'change',
                             $this->config->table_scheme[$tablename][$value]['type'],
+                            $this->config->table_scheme[$tablename][$value]['key'],
                             ($this->config->table_scheme[$tablename][$value]['null'] > 0 ? FALSE : TRUE),
                             $this->config->table_scheme[$tablename][$value]['default'],
                             (trim($this->config->table_scheme[$tablename][$value]['extra']) != '' ? $this->config->table_scheme[$tablename][$value]['extra'] : NULL)
@@ -182,7 +185,7 @@ class mainModule
             if(isset($this->config->table_scheme[$tablename])){
                 $elements = array();
                 foreach($this->config->table_scheme[$tablename] as $key => $value){
-                    $elements[$key] = $value['type'] . ($value['null'] < 1 ? ' not null' : '') . (!is_null($value['default']) ? ' DEFAULT ' . $value['default'] : '') . (trim($value['extra']) != '' ? ' ' . $value['extra'] : '');
+                    $elements[$key] = $value['type'] . (trim($value['key']) != '' && eregi('uni', $value['key']) ? ' UNIQUE' : '') . ($value['null'] < 1 ? ' NOT NULL' : '') . (!is_null($value['default']) ? ' DEFAULT ' . $value['default'] : '') . (trim($value['extra']) != '' ? ' ' . $value['extra'] : '');
                     if(trim($value['key']) != '' && eregi('pri', $value['key'])){
                         $primarykey = $key;
                     }

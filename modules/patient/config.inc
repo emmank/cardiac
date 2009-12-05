@@ -36,4 +36,274 @@ class patientConfig extends config
         'passwd' => 'emmank'
     );
     var $digit_of_number = 5;
+    var $table_scheme = array(
+        'patients' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'nomor' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'nama' => array(
+                'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => '',
+                'default' => '',
+                'extra' => ''
+            ),
+            'kelamin' => array(
+                'type' => 'tinyint(1)',
+                'null' => 0,
+                'key' => '',
+                'default' => 1,
+                'extra' => ''
+            ),
+            'tp_lahir' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tgl_lahir' => array(
+                'type' => 'date',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'gol_darah' => array(
+                'type' => 'char(2)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'alamat' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'kota' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'propinsi' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'no_identitas' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'sandi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'status' => array(
+                'type' => 'varchar(20)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'nama_suami_istri' => array(
+                'type' => 'varchar(35)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'pekerjaan_suami_istri' => array(
+                'type' => 'varchar(35)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'foto' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'pekerjaan' => array(
+                'type' => 'varchar(20)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'pendidikan' => array(
+                'type' => 'varchar(50)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'kode_pos' => array(
+                'type' => 'varchar(10)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'no_tlp' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'no_hp' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'agama' => array(
+                'type' => 'varchar(15)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'suku' => array(
+                'type' => 'varchar(20)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'nama_ayah' => array(
+                'type' => 'varchar(50)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'pekerjaan_ayah' => array(
+                'type' => 'varchar(50)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'nama_ibu' => array(
+                'type' => 'varchar(50)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'pekerjaan_ibu' => array(
+                'type' => 'varchar(50)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'strnum' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => 'unique',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'sesi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'timelog' => array(
+                'type' => 'datetime',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'groups' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tinggi' => array(
+                'type' => 'varchar(20)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'berat' => array(
+                'type' => 'varchar(20)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tekanan_darah' => array(
+                'type' => 'varchar(20)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'indikasi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputer' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputtime' => array(
+                'type' => 'datetime',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'updated' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }
