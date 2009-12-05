@@ -847,6 +847,7 @@ class headfaceModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('head_n_face', $this->query);
         $result = array();
         $result['#title'] = __t('Kepala dan Muka');
         $result['#tpl'] = MODULES_DIR . DS . 'headface' . DS . 'headface.tpl';

@@ -307,6 +307,7 @@ class cardioModule extends mainModule
     }
 
     function __get_view($teens=0){
+        $this->sync_scheme('cardio', $this->query);
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('daftar beberapa pasien');

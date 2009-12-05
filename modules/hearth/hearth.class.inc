@@ -3238,6 +3238,7 @@ class hearthModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('hearth', $this->query);
         $result = array();
         $result['#title'] = __t('Jantung');
         $result['#tpl'] = MODULES_DIR . DS . 'hearth' . DS . 'hearth.tpl';

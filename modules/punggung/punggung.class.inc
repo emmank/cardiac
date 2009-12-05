@@ -1382,6 +1382,7 @@ class punggungModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('punggung', $this->query);
         $result = array();
         $result['#title'] = __t('Punggung');
         $result['#tpl'] = MODULES_DIR . DS . 'punggung' . DS . 'punggung.tpl';

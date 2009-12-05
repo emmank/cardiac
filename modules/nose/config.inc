@@ -52,4 +52,22 @@ class noseConfig extends config
         //'ilness_history' => array('ref_present_illness_history', 'illness_history')
     );
 
+    var $table_scheme = array(
+        'nose' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inspections' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

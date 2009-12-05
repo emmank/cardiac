@@ -2180,6 +2180,7 @@ class paruModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('paru', $this->query);
         $result = array();
         $result['#title'] = __t('Paru');
         $result['#tpl'] = MODULES_DIR . DS . 'paru' . DS . 'paru.tpl';

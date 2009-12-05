@@ -1648,6 +1648,7 @@ class eyeModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('eye', $this->query);
         $result = array();
         $result['#title'] = __t('Mata');
         $result['#tpl'] = MODULES_DIR . DS . 'eye' . DS . 'eye.tpl';
