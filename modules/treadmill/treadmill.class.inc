@@ -441,7 +441,24 @@ class treadmillModule extends mainModule
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
-                    $query = $this->__get_patient_data($vcache['patients'], array('strnum', 'nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah'));
+                    $query = $this->__get_patient_data(
+                        $vcache['patients'],
+                        array(
+                            'strnum',
+                            'nama',
+                            'tgl_lahir',
+                            'alamat',
+                            'kota',
+                            'propinsi',
+                            'nomor',
+                            'kelamin',
+                            'gol_darah',
+                            'tinggi',
+                            'berat',
+                            'tekanan_darah',
+                            'indikasi'
+                        )
+                    );
                     if(count($query) > 0){
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
@@ -452,6 +469,7 @@ class treadmillModule extends mainModule
                                     '#title' => __t('umur'),
                                     '#tbpos' => 2
                                 );
+                                $usiapatient = floor($vl);
                             } else {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
@@ -467,6 +485,14 @@ class treadmillModule extends mainModule
                                         $tbpos = 9;
                                     } elseif($ky == 'gol_darah'){
                                         $tbpos = 5;
+                                    } elseif($ky == 'tinggi'){
+                                        $tbpos = 10;
+                                    } elseif ($ky == 'berat'){
+                                        $tbpos = 11;
+                                    } elseif ($ky == 'indikasi'){
+                                        $tbpos = 4;
+                                    } elseif ($ky == 'tekanan_darah'){
+                                        $tbpos = 12;
                                     }
                                     $form['treadmill'][$ky] = array(
                                         '#type' => $ky == 'alamat' ? 'textarea' : 'info',
@@ -549,38 +575,50 @@ class treadmillModule extends mainModule
                             '#readonly' => true
                         );
                         unset($getsender);
+                        $sql = $this->query->getSelect(
+                            array(),
+                            array('nadi_latihan'),
+                            array(
+                                array('&&', "umur=" . $usiapatient)
+                            )
+                        );
+                        $this->query->connect();
+                        $getthis = $this->query->conn->Execute($sql); unset($sql);
+                        $this->query->close();
+                        $form['treadmill']['denyut_jantung_max'] = array(
+                            '#type' => 'info',
+                            '#value' => $getthis->fields['nadi'],
+                            '#title' => __t('denyut_jantung_max'),
+                            '#tbpos' => 7,
+                            '#readonly' => true
+                        ); unset($getthis);
+                        $sql = $this->query->getSelect(
+                            array(),
+                            array('thr'),
+                            array(
+                                array('&&', "umur=" . $usiapatient)
+                            )
+                        );
+                        $this->query->connect();
+                        $getthis = $this->query->conn->Execute($sql); unset($sql);
+                        $this->query->close();
+                        $form['treadmill']['target_denyut_jantung_max'] = array(
+                            '#type' => 'info',
+                            '#value' => $getthis->fields['nadi_85'],
+                            '#title' => __t('target_denyut_jantung_max'),
+                            '#tbpos' => 14,
+                            '#readonly' => true
+                        ); unset($getthis);
                     }
                 }
                 if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
-                    if($value != 'tinggi' && $value != 'berat' && $value != 'tekanan_darah' && $value != 'denyut_jantung_max' && $value != 'target_denyut_jantung_max'){
-                        $type = $this->config->fields_form_type[$value];
-                    } else {
-                        $type = 'info';
-                    }
                     $form['treadmill'][$value] = array(
-                        '#type' => $type,
+                        '#type' => $this->config->fields_form_type[$value],
                         '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                         '#size' => $this->config->fields_form_type[$value] != 'select' && $this->formtype_fields[$value] != 'date' ? 20 : 1,
                         '#title' => __t($value),
                         '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                     );
-                    if($value == 'tinggi' || $value == 'berat' || $value == 'tekanan_darah' || $value == 'denyut_jantung_max' || $value == 'target_denyut_jantung_max'){
-                        if($value == 'tinggi'){
-                            $tbpos = 10;
-                        } elseif ($value == 'berat'){
-                            $tbpos = 11;
-                        } elseif ($value == 'indikasi'){
-                            $tbpos = 4;
-                        } elseif ($value == 'tekanan_darah'){
-                            $tbpos = 12;
-                        } elseif ($value == 'denyut_jantung_max'){
-                            $tbpos = 7;
-                        } elseif ($value == 'target_denyut_jantung_max'){
-                            $tbpos = 14;
-                        }
-                        $form['treadmill'][$value]['#tbpos'] = $tbpos;
-                        unset($tbpos);
-                    }
                 }
                 if($this->formhabit == 'readonly'){
                     $form['treadmill'][$value]['#extra'] = 'readonly="true"';
@@ -599,11 +637,11 @@ class treadmillModule extends mainModule
         );
 
         $form['treadmill']['tab_items']['istirahat'] = $this->__loadFaseIstirahat();
-        $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
-        $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
-        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
-        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
-        $form['treadmill']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
+//        $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
+//        $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
+//        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
+//        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
+//        $form['treadmill']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
 
         $form['treadmill']['submit'] = array(
             '#type' => 'submit',

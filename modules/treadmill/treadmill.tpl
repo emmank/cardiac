@@ -88,7 +88,7 @@ foreach($data as $key => $value){
         $ke = 1;
         foreach($value['tab_items'] as $ky => $vl){
             if(isset($vl['#tpl'])  ){
-//                require_once $vl['#tpl'];
+                require_once $vl['#tpl'];
                 $ke++;
             }
         } unset($ke);
