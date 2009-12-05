@@ -51,4 +51,22 @@ class extermitasConfig extends config
     var $reftable = array(
         'inspections' => array('ref_extermitas_inspections','inspections')
     );
+    var $table_scheme = array(
+        'extermitas' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inspections' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

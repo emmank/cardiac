@@ -584,6 +584,7 @@ class thoraxModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('thorax', $this->query);
         $result = array();
         $result['#title'] = __t('Thorax');
         $result['#tpl'] = MODULES_DIR . DS . 'thorax' . DS . 'thorax.tpl';

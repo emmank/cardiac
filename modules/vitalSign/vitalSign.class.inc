@@ -850,6 +850,7 @@ class vitalSignModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('vital_sign', $this->query);
         $result = array();
         $result['#title'] = __t('Tanda Vital');
         $result['#tpl'] = MODULES_DIR . DS . 'vitalSign' . DS . 'vitalSign.tpl';

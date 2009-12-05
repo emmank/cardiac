@@ -318,6 +318,7 @@ class earModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('ear', $this->query);
         $result = array();
         $result['#title'] = __t('Telinga');
         $result['#tpl'] = MODULES_DIR . DS . 'ear' . DS . 'ear.tpl';

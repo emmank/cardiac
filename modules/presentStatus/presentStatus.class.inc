@@ -1116,6 +1116,7 @@ class presentStatusModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('present_status', $this->query);
         $result = array();
         $result['#title'] = __t('Status Present');
         $result['#tpl'] = MODULES_DIR . DS . 'presentStatus' . DS . 'presentStatus.tpl';

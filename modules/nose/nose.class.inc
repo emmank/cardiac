@@ -318,6 +318,7 @@ class noseModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('nose', $this->query);
         $result = array();
         $result['#title'] = __t('Hidung');
         $result['#tpl'] = MODULES_DIR . DS . 'nose' . DS . 'nose.tpl';

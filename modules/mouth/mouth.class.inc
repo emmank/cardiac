@@ -1116,6 +1116,7 @@ class mouthModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('mouth', $this->query);
         $result = array();
         $result['#title'] = __t('Mulut');
         $result['#tpl'] = MODULES_DIR . DS . 'mouth' . DS . 'mouth.tpl';

@@ -318,6 +318,7 @@ class neckModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('neck', $this->query);
         $result = array();
         $result['#title'] = __t('Leher');
         $result['#tpl'] = MODULES_DIR . DS . 'neck' . DS . 'neck.tpl';
