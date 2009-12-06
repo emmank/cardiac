@@ -70,6 +70,7 @@ foreach($data as $key => $value){
         unset($setdiv);
     }
     $result .= '</fieldset>' . "\n";
+//    echo "<pre>"; print_r($value);echo "</pre>";
     if(isset($value['tab_items']) && count($value['tab_items']) > 0){
         $result .= '<ul id="fisistabs" class="shadetabs">' . "\n";
         $ke = 1;

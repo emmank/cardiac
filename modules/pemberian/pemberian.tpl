@@ -23,7 +23,7 @@
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 $result .= $vl['datafields']['pemberian']['title'];
-$result .= '<table width=100% class="table">' . "\n";
+$result .= '<table width=100% class="table" border="0">' . "\n";
 $cnt = 0;
 //echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
 foreach($vl['datafields'] as $yk => $lv){
@@ -31,7 +31,7 @@ foreach($vl['datafields'] as $yk => $lv){
         if($cnt < 1){
             $result .= '<tr valign="top">' . "\n";
         }
-        $result .= '<td>' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
+        $result .= '<td align="right" width="24%">' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
         $result .= '<td>';
         if($lv['type'] == 'select'){
             if($lv['readonly'] === true){
@@ -105,11 +105,15 @@ foreach($vl['datafields'] as $yk => $lv){
             if($lv['readonly'] === true){
                 $result .= $lv['value'];
             } else {
-                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
+                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="20"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
             }
         }
         $result .= '</td>' . "\n";
-        $cnt++;
+//        $cnt++;
+//        if (preg_match('/pelaksana/',$yk)){
+//            $cnt = 0;
+//            $result .= '</tr>' . "\n";
+//        }
         if($cnt > 1){
             $cnt = 0;
             $result .= '</tr>' . "\n";

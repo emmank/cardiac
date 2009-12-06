@@ -17,16 +17,16 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  pemberianclass.php
+ *  perkembanganclass.php
  *  
  *  Created on Oct 3, 2009, 4:35:17 PM
  */
 
-require_once MODULES_DIR . DS . 'pemberian' . DS . 'config.inc';
+require_once MODULES_DIR . DS . 'perkembangan' . DS . 'config.inc';
 
-class pemberianModule extends mainModule
+class perkembanganModule extends mainModule
 {
-    var $title = 'pemberian module';
+    var $title = 'perkembangan module';
     var $description = '';
 
     function menu(){
@@ -1117,14 +1117,14 @@ class pemberianModule extends mainModule
 
     function perawatan_menu(){
         $result = array();
-        $result['#title'] = __t('pemberian obat, cairan dan diet');
-        $result['#tpl'] = MODULES_DIR . DS . 'pemberian' . DS . 'pemberian.tpl';
-        $datafields = $this->__get_data_fields('pemberian', $this->query);
+        $result['#title'] = __t('perkembangan');
+        $result['#tpl'] = MODULES_DIR . DS . 'perkembangan' . DS . 'perkembangan.tpl';
+        $datafields = $this->__get_data_fields('perkembangan', $this->query);
         if (count($this->config->free_val) > 0){
             $vcache = $this->config->free_val;
             $sql = $this->query->getSelect(
                 array(),
-                array('pemberian'),
+                array('perkembangan'),
                 array(
                     array('&&', "id=" . $vcache['id'])
                 )
@@ -1164,7 +1164,7 @@ class pemberianModule extends mainModule
     }
 
     function cardio_submit(){
-        $thefields = $this->__get_data_fields('pemberian', $this->query);
+        $thefields = $this->__get_data_fields('perkembangan', $this->query);
         foreach($this->config->free_val as $key => $value){
             if(in_array($key, $thefields)){
                 if($key == 'catched'){
@@ -1180,7 +1180,7 @@ class pemberianModule extends mainModule
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $sql = $this->query->updateData(
-                'pemberian',
+                'perkembangan',
                 $thevalue,
                 array(
                     array('&&', "id=" . $_POST['id'])
@@ -1188,7 +1188,7 @@ class pemberianModule extends mainModule
             );
         } else {
             $sql = $this->query->saveData(
-                'pemberian',
+                'perkembangan',
                 $thevalue
             );
         }

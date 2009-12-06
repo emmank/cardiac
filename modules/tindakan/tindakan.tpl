@@ -22,7 +22,7 @@
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
-$result .= $vl['datafields']['tindakan']['title'];
+$result .= $vl['datafields']['Tindakan']['title'];
 $result .= '<table width=100% class="table">' . "\n";
 $cnt = 0;
 //echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
@@ -105,12 +105,12 @@ foreach($vl['datafields'] as $yk => $lv){
             if($lv['readonly'] === true){
                 $result .= $lv['value'];
             } else {
-                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
+                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="10"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
             }
         }
         $result .= '</td>' . "\n";
         $cnt++;
-        if($cnt > 1){
+        if($cnt > 2){
             $cnt = 0;
             $result .= '</tr>' . "\n";
         }

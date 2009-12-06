@@ -17,21 +17,21 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  pemeriksaan.php
+ *  perkembangan.php
  *  
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
-$result .= $vl['datafields']['pemeriksaan']['title'];
-$result .= '<table width=100% class="table" border="1">' . "\n";
+$result .= $vl['datafields']['perkembangan']['title'];
+$result .= '<table width=100% class="table" border="0">' . "\n";
 $cnt = 0;
-//echo '<pre>'; print_r($vl); echo '</pre>';
+//echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['type'] != 'hidden'){
         if($cnt < 1){
             $result .= '<tr valign="top">' . "\n";
         }
-        $result .= '<td valign="top">' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
+        $result .= '<td align="right" width="15%">' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
         $result .= '<td>';
         if($lv['type'] == 'select'){
             if($lv['readonly'] === true){
@@ -105,56 +105,16 @@ foreach($vl['datafields'] as $yk => $lv){
             if($lv['readonly'] === true){
                 $result .= $lv['value'];
             } else {
-                if (preg_match('/pemasukan/',$yk)){
-                    $result .= 'Oral <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc <br />' . "\n";
-                    $result .= 'NGT <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc <br />' . "\n";
-                    $result .= 'Paratera <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc' . "\n";
-                } else {
-                    $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
-                }
+                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="20"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
             }
         }
         $result .= '</td>' . "\n";
         $cnt++;
-        if($cnt > 2){
+        if($cnt > 1){
             $cnt = 0;
             $result .= '</tr>' . "\n";
         }
     }
-} unset($cnt,$yk,$lv);
-$result .= '</table>' . "\n";
-//$result .= '</div>' . "\n";
-//$result .= '<div>' . "\n";
-$result .= '<table width=100% class="table">' . "\n";
-//$result .= '<th>' . "\n";
-$cnt = 0;
-
-foreach($vl['data'] as $yk=>$lv ){
-//    if($lv['type'] != 'hidden'){
-//    echo '<pre>'; print_r($lv); echo '</pre>';
-    foreach ($lv as $hd => $dh) {
-//        echo '<pre>'; print_r($lv); echo '</pre>';
-        if (is_array($dh)){
-            $result .= '<th>' . $dh['caption'] .'</th>';;
-        }
-    }
-    $result .= '<tr>';
-    $result .= '<td>' . $lv['id'] .'</td>';
-    $result .= '<td>' . $lv['tgl_periksa'] .'</td>';
-    $result .= '<td>' . $lv['tensi_sistolik'] .'</td>';
-    $result .= '<td>' . $lv['tensi_diastolik'] .'</td>';
-    $result .= '<td>' . $lv['nps'] .'</td>';
-    $result .= '<td>' . $lv['kesadaran'] .'</td>';
-    $result .= '<td>' . $lv['penivien'] .'</td>';
-    $result .= '<td>' . $lv['pemasukan'] .'</td>';
-    $result .= '<td>' . $lv['pengeluaran'] .'</td>';
-    $result .= '<tr>';
-//        if ($cnt<1){
-//            $result .= '<th>' . $lv[''] .'</th>';
-//        }
-//        $result .= '';
-
-//    }
-}
+} unset($cnt);
 $result .= '</table>' . "\n";
 $result .= '</div>' . "\n";

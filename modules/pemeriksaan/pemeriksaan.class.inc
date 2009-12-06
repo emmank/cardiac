@@ -1138,6 +1138,7 @@ class pemeriksaanModule extends mainModule
                 }
             }
         }
+        
         foreach($datafields as $key => $value){
             if($value == 'catched'){
                 if(!isset($vcache['catched']) || $vcache['catched'] == ''){
@@ -1159,6 +1160,72 @@ class pemeriksaanModule extends mainModule
                 $result['datafields'][$value]['size'] = 6;
             }
             $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
+        }
+        // add by emk
+        $result['data']['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'tgl_periksa',
+                'caption' => __t('Tgl periksa'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'tensi_sistolik',
+                'caption' => __t('Tensi Sistolik'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'tensi_diastolik',
+                'caption' => __t('Tensi__diastolik'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'nps',
+                'caption' => __t('NPS'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'kesadaran',
+                'caption' => __t('Kesadaran'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'penivien',
+                'caption' => __t('penivien'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'pemasukan',
+                'caption' => __t('Pemasukan'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'pengeluaran',
+                'caption' => __t('Pengeluaran'),
+                'align' => 'left'
+            )
+        );
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('pemeriksaan'),
+            NULL,
+            'tgl_periksa'
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows > 0){
+            for($i=0; $i<$query->_numOfRows; $i++){
+                $result['data'][$i] = $query->fields;
+                $result['data'][$i]['tgl_periksa'] = ucwords($query->fields['tgl_periksa']);
+                $result['data'][$i]['goto'] = '/reference/tgl_periksa/detail/' . $query->fields['id'];
+                $query->MoveNext();
+            }
         }
         return $result;
     }
