@@ -65,6 +65,7 @@ class patientModule extends mainModule
         'tinggi' => 'text',
         'berat' => 'text',
         'tekanan_darah' => 'text',
+        'indikasi' => 'textarea',
         'inputtime' => 'hidden',
         'sesi' => 'hidden',
         'timelog' => 'hidden',
@@ -523,11 +524,12 @@ class patientModule extends mainModule
                 foreach($datafields as $value){
                     if(!in_array($value, $this->hidden_fields)){
                         $form['patient'][$value] = array(
-                            '#type' => ($value != 'kota' && $value != 'propinsi' ? $this->formtype_fields[$value] : 'text'),
+//                            '#type' => ($value != 'kota' && $value != 'propinsi' ? $this->formtype_fields[$value] : 'text'),
+//                            '#type' => (($value != 'kota' || $value != 'propinsi') ? $this->formtype_fields[$value] : 'text'),
+                            '#type' =>  $this->formtype_fields[$value],
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
-                            '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0,
-                            
+                            '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
                     } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
@@ -537,8 +539,16 @@ class patientModule extends mainModule
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
                     }
+//echo "<pre>"                    ;
+//print_r($this->formtype_fields[$value]);
+//echo "</pre>";
+                    if ($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date')
+                    {
+//                        echo $this->formtype_fields[$value];
 
-                    if($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
+//                        echo $value . "<br />";
+
+
                         if($value == 'kelamin') {
                             $options = $this->__get_kelamin_options();
                         } elseif($this->formtype_fields[$value] == 'date'){
@@ -546,34 +556,46 @@ class patientModule extends mainModule
                         } elseif($value == 'status'){
                             $options = $this->__get_statusm_options();
                         } elseif($value == 'kota'){
-                            $form['patient'][$value]['#extra'] = "onchange='showKec()'";
-                            $options = $this->__get_kabupaten_options('kabupaten');
+//                            echo $value;
+//                            $form['patient'][$value]['#extra'] = "onchange='showKec()'";
+                            $id="kota";
+//                            $options = $this->__get_kabupaten_options('kabupaten');
                         } elseif($value == 'propinsi'){
+                            $id = "propinsi";
+                            $extra = "onchange=\"showKab()\"";
                             $options = $this->__get_propinsi_options('nama_propinsi');
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
-                        }
-
-//                        $form['patient'][$value]['#extra'] = $extra;
-                        $form['patient'][$value]['#option'] = $options;
-//                    } elseif($value == 'strnum'){
-//                        $form['patient'][$value]['#extra'] = 'readonly="true"';
-                    }
-                    // ------ Add by emmank -------
-                    if($this->formtype_fields[$value] == 'select'){
-                        if($value == 'gol_darah') {
+                        } elseif ($value == 'gol_darah') {
                             $options = $this->__get_goldarah_options();
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
                         }
+
+
                         $form['patient'][$value]['#option'] = $options;
+                        $form['patient'][$value]['#extra'] = $extra;
+                        $form['patient'][$value]['#id'] = $id;
+//                        $form['patient'][$value]['#option'] = $options;
+//                    } elseif($value == 'strnum'){
+//                        $form['patient'][$value]['#extra'] = 'readonly="true"';
+                    }
+                    // ------ Add by emmank -------
+//                    if($this->formtype_fields[$value] == 'select'){
+//                        if($value == 'gol_darah') {
+//                            $options = $this->__get_goldarah_options();
+//                        } elseif($this->formtype_fields[$value] == 'date'){
+//                            $options = $this->nama_bulan;
+//                        }
+//                        $form['patient'][$value]['#option'] = $options;
   //                  } elseif($value == 'strnum'){
   //                      $form['patient'][$value]['#extra'] = 'readonly="true"';
-                    }
+//                    }
                     if(!is_null($readonly)){
                         $form['patient'][$value]['#readonly'] = true;
+                }
+                unset($options,$id,$extra);
                     }
-                } unset($options);
 //                echo '<pre>'; print_r($vcache); echo '</pre>';
                 $form['patient']['submit'] = array(
                     '#type' => 'submit',
@@ -581,8 +603,10 @@ class patientModule extends mainModule
     //                '#title' => __t('&nbsp;'),
                     '#extra' => ' class="button"'
                );
+//            echo '<pre>'; print_r($form); echo '</pre>'; //exit();
+//            echo '<pre>'; var_dump(); echo '</pre>'; //exit();
+
             }
-//            echo '<pre>'; print_r($form); echo '</pre>'; exit();
             return $form;
     }
 

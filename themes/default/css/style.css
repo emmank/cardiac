@@ -500,10 +500,12 @@ A:hover {
 }
 
 #search {
-    display:block;
+    /*display:block;*/
+    display:inline-table;
     border:1px solid #FFd1d1;
     background-color:#FFF2F0;
     padding:5px 10px 10px 10px;
+    width:97%;
 }
 
 #by_letter {

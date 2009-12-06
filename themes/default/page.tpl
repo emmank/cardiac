@@ -58,7 +58,9 @@
 
 <?php
 //    print_r($path);
-    if ($path['menu']== "patient" && $path['vars']=="form") {
+    if (($path['menu']== "patient" && $path['vars']=="form") ||
+        ($path['menu']== "patient" && $path['vars']=="update")
+        ) {
         include_once "themes/".$theme."/js/pilihkota_head_js.php";
     }
 ?>
@@ -113,7 +115,7 @@
     <?php }?>
     </div>
 </div>
-
+</div>
 <div id="footer">
 <?php
 echo str_replace(",","<br />",$configs->identity_message);

@@ -299,10 +299,11 @@ function __create_table($value){
 
 function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     global $forminput, $formtextarea, $formselect;
-    $result = '';
+    $result = '<div id=form>';
+//    $result = '<div>';
 //    echo '<pre>'; print_r($data); echo '</pre>';
     foreach($data as $key => $value){
-        $result .= '<div>' . "\n";
+        $result .= '<div id=block>' . "\n";
         if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden' && trim($value['#title']) != '' && !is_null($value['#title']) && $value['#type'] != 'submit'){
             $result .= '<label for="'. $key .'">' . ucwords($value['#title']) . '</label>' . "\n";
         }
@@ -405,7 +406,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
         } elseif(in_array($value['#type'], $formselect)){
 
 //            echo "<pre>";
-//            print($value['#id']);
+//            print($value);
 //            echo "</pre>";
 
             if(isset($value['#readonly']) && $value['#readonly'] !== FALSE){
@@ -506,7 +507,9 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
         }
 //        $result .= '</br>' . "\n";
         $result .= '</div>' . "\n";
+//        $result .= '</div>' . "\n";
     }
+    $result .= '</div>' . "\n";
     return $result;
 }
 
@@ -633,6 +636,7 @@ function __create_search($value){
 //                    $result .= "\n";
                 } unset($next);
             } elseif($yk == 'result'){
+                $result .= "</div>";
                 $result .= __create_notelist($lv);
             }
         }
@@ -642,8 +646,8 @@ function __create_search($value){
 }
 
 function __create_notelist($value){
-//    echo '<pre>'; print_r($value); echo '</pre>';
-    $result = "\n";
+//   echo '<pre>'; print_r($value); echo '</pre>';
+    $result = "<br /><br />\n";
     $result .= '<div>' . "\n";
     $result .= '<div>' . $value['description'] . '</div>' . "\n";
     if(count($value['data']) > 0){

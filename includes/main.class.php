@@ -723,6 +723,7 @@ class mainModule
             }
             $query->MoveNext();
         } unset($query);
+//       print_r ($result);
         return $result;
     }
 
