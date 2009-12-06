@@ -1,0 +1,123 @@
+<script language="JavaScript" type="text/JavaScript">
+ function showKab()
+ {
+     <?php
+    // membaca semua propinsi
+
+    global $systemquery;
+    $result = array();
+    $systemquery->connect();
+    $sql = $systemquery->getSelect(
+        array('kode_bps','nama_propinsi'),
+        array('propinsi')
+    );
+//    $sql = $systemquery->showTables();
+    $query = $systemquery->conn->Execute($sql); unset($sql);
+    for($i=0; $i<$query->_numOfRows; $i++){
+//        $result[] = $query->fields;
+          $id_prop = $query->fields['kode_bps'];
+//          echo $query->fields[0];
+           echo "if (document.patient.propinsi.value == \"".$id_prop."\")";
+           echo "{";
+
+           $kota = $systemquery->getSelect (
+               array('id_kab','kabupaten'),
+               array('kabupaten'),
+               array(
+                    array('&&',"kode_bps=".$id_prop)
+                    )
+           );
+//           echo $kota;
+//           $systemquery->connect();
+           $query_kota = $systemquery->conn->Execute($kota); unset($kota);
+           $contentnya = "document.getElementById('kota').innerHTML = \"";
+           for ($j=0; $j<$query_kota->_numOfRows; $j++) {
+               $contentnya .= "<option value='".$query_kota->fields['id_kab']."'>".$query_kota->fields['kabupaten']."</option>";
+               $query_kota->MoveNext();
+           }
+           unset ($query_kota);
+           $contentnya .= "\"";
+           echo $contentnya;
+           echo "}\n";
+
+        $query->MoveNext();
+    } unset($query);
+    $systemquery->close();
+ ?>
+ }
+ 
+</script>
+
+<!--
+<script language="JavaScript" type="text/JavaScript">
+ function showKec()
+ {
+ <?php
+/*
+ // membaca semua kabupaten
+ $query = "SELECT id_kab, kabupaten FROM kabupaten";
+ $hasil = mysql_query($query);
+
+global $systemquery;
+
+$sql_kota = $systemquery->getSelect (
+    array('id_kab','kabupaten'),
+    array('kabupaten')
+);
+
+$systemquery->connect();
+$query_kota = $systemquery->conn->Execute($sql_kota); unset($sql_kota);
+for ($i=0; $i<$query_kota->_numOfRows;$i++) {
+    $id_kab = $query_kota->fields['id_kab'];
+    echo "if (document.patient.kota.value == \"".$id_kab."\")";
+    echo "{";
+
+    $sql_kecamatan = $systemquery->getSelect (
+        array('id_kec','nama_kecamatan'),
+        array('kecamatan'),
+        array(
+            array('&&',"id_kab=".$id_kab)
+        )
+    );
+    $query_kec = $systemquery->conn->Execute($sql_kecamatan); unset ($sql_kecamatan);
+    $kecamatannya = "document.getElementById('kecamatan').innerHTML = \"";
+    for ($j=0; $j < $query_kec->_numOfRows;$j++) {
+       $kecamatannya .= "<option value='".$query_kec->fields['id_kec']."'>".$query_kec->fields['nama_kecamatan']."</option>";
+       $query_kec->MoveNext();
+    }
+    $kecamatannya .= "\"";
+    echo $kecamatannya;
+    echo "}\n";
+
+$query_kota->MoveNext();
+} unset($query);
+$systemquery->close();
+
+
+
+// // membuat if untuk masing-masing pilihan kabupaten beserta isi option untuk combobox kedua
+// while ($data = mysql_fetch_array($hasil))
+// {
+//   $idProp = $data['id_kab'];
+//
+//   // membuat IF untuk masing-masing kabupaten
+//   echo "if (document.daftar.kab.value == \"".$idProp."\")";
+//   echo "{";
+//
+//   // membuat option kabupaten untuk masing-masing propinsi
+//   $query2 = "SELECT id_kec, nama_kecamatan FROM kecamatan WHERE id_kab = $idProp";
+//   $hasil2 = mysql_query($query2);
+//   $content = "document.getElementById('kecamatan').innerHTML = \"";
+//   while ($data2 = mysql_fetch_array($hasil2))
+//   {
+//       $content .= "<option value='".$data2['id_kec']."'>".$data2['nama_kecamatan']."</option>";
+//   }
+//   $content .= "\"";
+//   echo $content;
+//   echo "}\n";
+// }
+*/
+ ?>
+ }
+</script>
+-->
