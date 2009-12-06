@@ -235,7 +235,7 @@ class treadmillModule extends mainModule
     }
 
     function view(){
-//        $this->sync_scheme('treadmill', $this->query);
+        $this->sync_scheme('treadmill', $this->query);
         return $this->__get_view();
     }
 
@@ -441,7 +441,24 @@ class treadmillModule extends mainModule
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
-                    $query = $this->__get_patient_data($vcache['patients'], array('nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah'));
+                    $query = $this->__get_patient_data(
+                        $vcache['patients'],
+                        array(
+                            'strnum',
+                            'nama',
+                            'tgl_lahir',
+                            'alamat',
+                            'kota',
+                            'propinsi',
+                            'nomor',
+                            'kelamin',
+                            'gol_darah',
+                            'tinggi',
+                            'berat',
+                            'tekanan_darah',
+                            'indikasi'
+                        )
+                    );
                     if(count($query) > 0){
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
@@ -450,29 +467,39 @@ class treadmillModule extends mainModule
                                     '#type' => 'info',
                                     '#value' => $vl . ' tahun',
                                     '#title' => __t('umur'),
-                                    '#tbpos' => 3
+                                    '#tbpos' => 2
                                 );
+                                $usiapatient = floor($vl);
                             } else {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
                                         $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
-                                        $tbpos = 4;
-                                    } elseif($ky == 'nomor'){
+                                        $tbpos = 3;
+                                    } elseif($ky == 'strnum'){
                                         $ky = 'no_registrasi';
                                         $tbpos = 0;
                                     } elseif($ky == 'nama'){
                                         $tbpos = 1;
                                     } elseif($ky == 'kelamin'){
                                         $vl = $this->kelamin[$vl];
-                                        $tbpos = 2;
+                                        $tbpos = 9;
                                     } elseif($ky == 'gol_darah'){
                                         $tbpos = 5;
+                                    } elseif($ky == 'tinggi'){
+                                        $tbpos = 10;
+                                    } elseif ($ky == 'berat'){
+                                        $tbpos = 11;
+                                    } elseif ($ky == 'indikasi'){
+                                        $tbpos = 4;
+                                    } elseif ($ky == 'tekanan_darah'){
+                                        $tbpos = 12;
                                     }
                                     $form['treadmill'][$ky] = array(
                                         '#type' => $ky == 'alamat' ? 'textarea' : 'info',
                                         '#value' => $vl,
                                         '#title' => __t($ky),
-                                        '#tbpos' => $tbpos
+                                        '#tbpos' => $tbpos,
+                                        '#readonly' => true
                                     );
                                     if($ky == 'alamat'){
                                         $form['treadmill'][$ky]['#extra'] = 'readonly="true"';
@@ -485,6 +512,24 @@ class treadmillModule extends mainModule
                                 }
                             }
                         }
+                        $druser = $this->__get_user_info(1);
+                        $sql = $this->query->getSelect(
+                            array('nama'),
+                            array('stafs'),
+                            array(
+                                array('&&', "id=" . $druser['id'])
+                            )
+                        ); unset($druser);
+                        $this->query->connect();
+                        $getstaf = $this->query->conn->Execute($sql); unset($sql);
+                        $this->query->close();
+                        $form['treadmill']['handleby'] = array(
+                            '#type' => 'info',
+                            '#value' => $getstaf->fields['nama'],
+                            '#title' => __t('dr yg kerjakan'),
+                            '#tbpos' => 13,
+                            '#readonly' => true
+                        ); unset($getstaf);
                         $sql = $this->query->getSelect(
                             array('pukul'),
                             array('kunjungan'),
@@ -508,7 +553,8 @@ class treadmillModule extends mainModule
                             '#type' => 'info',
                             '#value' => count($dumpfrek),
                             '#title' => __t('kunjungan_ke'),
-                            '#tbpos' => 6
+                            '#tbpos' => 6,
+                            '#readonly' => true
                         );
                         unset($dumpfrek, $getfrek);
                         $sql = $this->query->getSelect(
@@ -525,11 +571,45 @@ class treadmillModule extends mainModule
                             '#type' => 'info',
                             '#value' => $getsender->fields['nama'],
                             '#title' => __t('pengirim'),
-                            '#tbpos' => 7
+                            '#tbpos' => 5,
+                            '#readonly' => true
                         );
                         unset($getsender);
+                        $sql = $this->query->getSelect(
+                            array(),
+                            array('nadi_latihan'),
+                            array(
+                                array('&&', "umur=" . $usiapatient)
+                            )
+                        );
+                        $this->query->connect();
+                        $getthis = $this->query->conn->Execute($sql); unset($sql);
+                        $this->query->close();
+                        $form['treadmill']['denyut_jantung_max'] = array(
+                            '#type' => 'info',
+                            '#value' => $getthis->fields['nadi'],
+                            '#title' => __t('denyut_jantung_max'),
+                            '#tbpos' => 7,
+                            '#readonly' => true
+                        ); unset($getthis);
+                        $sql = $this->query->getSelect(
+                            array(),
+                            array('thr'),
+                            array(
+                                array('&&', "umur=" . $usiapatient)
+                            )
+                        );
+                        $this->query->connect();
+                        $getthis = $this->query->conn->Execute($sql); unset($sql);
+                        $this->query->close();
+                        $form['treadmill']['target_denyut_jantung_max'] = array(
+                            '#type' => 'info',
+                            '#value' => $getthis->fields['nadi_85'],
+                            '#title' => __t('target_denyut_jantung_max'),
+                            '#tbpos' => 14,
+                            '#readonly' => true
+                        ); unset($getthis);
                     }
-//                    $this->query->close();
                 }
                 if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
                     $form['treadmill'][$value] = array(
@@ -545,13 +625,23 @@ class treadmillModule extends mainModule
                 }
             }
         }
+        if(!isset($vcache['inputtime']) || $vcache['inputtime'] == '0000-00-00 00:00:00' || is_null($vcache['inputtime'] || trim($vcache['inputtime']) == '')){
+            $vcache['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
+        }
+        $form['treadmill']['tanggal'] = array(
+            '#type' => 'info',
+            '#value' => date('j-n-Y', strtotime($vcache['inputtime'])),
+            '#title' => __t('tanggal'),
+            '#tbpos' => 8,
+            '#readonly' => true
+        );
 
         $form['treadmill']['tab_items']['istirahat'] = $this->__loadFaseIstirahat();
-//        $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
-//        $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
-        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
-        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
-        $form['treadmill']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
+        $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
+        $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
+//        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
+//        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
+//        $form['treadmill']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
 
         $form['treadmill']['submit'] = array(
             '#type' => 'submit',
@@ -574,33 +664,33 @@ class treadmillModule extends mainModule
         }
     }
 
-//    function __loadFaseIstirahatBerdiri($exec=NULL){
-//        $this->__include_module('istirahatberdiri');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->FaseIstirahat_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->istirahatberdiri_exec->treadmill_submit();
-//            }
-//        } else {
-//            return $this->istirahatberdiri_exec->treadmill_menu();
-//        }
-//    }
-//
-//    function __loadFaseIstirahatHiperventilasi($exec=NULL){
-//        $this->__include_module('istirahathiperventilasi');
-//        if(isset($this->vardump) && count($this->vardump) > 0){
-//            $this->FaseIstirahat_config->free_val = $this->vardump;
-//        }
-//        if(!is_null($exec)){
-//            if($exec == 'submit'){
-//                return $this->istirahathiperventilasi_exec->treadmill_submit();
-//            }
-//        } else {
-//            return $this->istirahathiperventilasi_exec->treadmill_menu();
-//        }
-//    }
+    function __loadFaseIstirahatBerdiri($exec=NULL){
+        $this->__include_module('istirahatberdiri');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->FaseIstirahat_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->istirahatberdiri_exec->treadmill_submit();
+            }
+        } else {
+            return $this->istirahatberdiri_exec->treadmill_menu();
+        }
+    }
+
+    function __loadFaseIstirahatHiperventilasi($exec=NULL){
+        $this->__include_module('istirahathiperventilasi');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->FaseIstirahat_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->istirahathiperventilasi_exec->treadmill_submit();
+            }
+        } else {
+            return $this->istirahathiperventilasi_exec->treadmill_menu();
+        }
+    }
 
     function __loadFaseLatihan($exec=NULL){
         $this->__include_module('latihan');
@@ -707,17 +797,6 @@ class treadmillModule extends mainModule
         $this->__loadFaseLatihan('submit');
         $this->__loadFaseRecovery('submit');
         $this->__loadKesimpulan('submit');
-        $this->__loadNose('submit');
-        $this->__loadHeadFace('submit');
-        $this->__loadNeck('submit');
-        $this->__loadMouth('submit');
-        $this->__loadThorax('submit');
-        $this->__loadParu('submit');
-        $this->__loadHearth('submit');
-        $this->__loadAbdomen('submit');
-        $this->__loadAnusrectum('submit');
-        $this->__loadPunggung('submit');
-        $this->__loadExtermitas('submit');
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',
