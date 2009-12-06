@@ -70,7 +70,7 @@ body {
 
 
 #main-content input[type=text], select, textarea {
-	border : 1px solid #FF9A9A;
+	border : 1px solid #A80003;
 	margin-bottom:2px
 }
 
@@ -337,11 +337,11 @@ body {
     background-color:#FFE2E2;
 }
 
-
+/*
 input[type=submit],select,textarea {
     border:1px solid #A80003;
 }
-
+*/
 
 
 #footer {

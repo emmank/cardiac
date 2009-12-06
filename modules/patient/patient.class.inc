@@ -43,8 +43,8 @@ class patientModule extends mainModule
         'tgl_lahir' => 'date',
         'gol_darah' => 'select',
         'alamat' => 'textarea',
-        'kota' => 'select',
         'propinsi' => 'select',
+        'kota' => 'select',
         'kode_pos' => 'text',
         'no_tlp' => 'text',
         'no_hp' => 'text',
@@ -62,6 +62,9 @@ class patientModule extends mainModule
         'pekerjaan_ayah' => 'text',
         'nama_ibu' => 'text',
         'pekerjaan_ibu' => 'text',
+        'tinggi' => 'text',
+        'berat' => 'text',
+        'tekanan_darah' => 'text',
         'inputtime' => 'hidden',
         'sesi' => 'hidden',
         'timelog' => 'hidden',
@@ -515,6 +518,7 @@ class patientModule extends mainModule
             }
 
             $datafields = $this->__get_data_fields('patients', $this->query);
+
             if(count($datafields) > 0){
                 foreach($datafields as $value){
                     if(!in_array($value, $this->hidden_fields)){
@@ -523,6 +527,7 @@ class patientModule extends mainModule
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0,
+                            
                         );
                     } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
@@ -541,12 +546,15 @@ class patientModule extends mainModule
                         } elseif($value == 'status'){
                             $options = $this->__get_statusm_options();
                         } elseif($value == 'kota'){
+                            $form['patient'][$value]['#extra'] = "onchange='showKec()'";
                             $options = $this->__get_kabupaten_options('kabupaten');
                         } elseif($value == 'propinsi'){
                             $options = $this->__get_propinsi_options('nama_propinsi');
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
                         }
+
+//                        $form['patient'][$value]['#extra'] = $extra;
                         $form['patient'][$value]['#option'] = $options;
 //                    } elseif($value == 'strnum'){
 //                        $form['patient'][$value]['#extra'] = 'readonly="true"';
@@ -1153,13 +1161,23 @@ class patientModule extends mainModule
                         } elseif($value == 'status'){
                             $options = $this->__get_statusm_options();
                         } elseif($value == 'kota'){
-                            $options = $this->__get_kabupaten_options('kabupaten');
+//                            $extra = "onchange=showKec()";
+                            $id = "kota";
+//                            $options = $this->__get_kabupaten_options('kabupaten');
+                            $options = "";
                         } elseif($value == 'propinsi'){
+                            $id = "propinsi";
+                            $extra = "onchange=\"showKab()\"";
                             $options = $this->__get_propinsi_options('nama_propinsi');
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
                         }
+
+                        $form['patient'][$value]['#id'] = $id;
+                        $form['patient'][$value]['#extra'] = $extra;
                         $form['patient'][$value]['#option'] = $options;
+
+//                        unset ($extra,$id);
                     } elseif($value == 'strnum'){
                         $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }

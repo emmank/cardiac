@@ -403,6 +403,11 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
             }
             $result .= '</textarea>' . "\n";
         } elseif(in_array($value['#type'], $formselect)){
+
+//            echo "<pre>";
+//            print($value['#id']);
+//            echo "</pre>";
+
             if(isset($value['#readonly']) && $value['#readonly'] !== FALSE){
                 $result .= $value['#option'][$value['#value']] . "\n";
             } else {
@@ -416,6 +421,10 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                 if(isset($iditem) && !is_null($iditem)){
                     $result .= ' id="' . $iditem . '"';
                 }
+                if(isset($value['#id'])){
+                    $result .= ' id="' . $value['#id'] . '"';
+                }
+
                 if(isset($classitem) && !is_null($classitem)){
                     $result .= ' class="' . $classitem . '"';
                 }
@@ -502,6 +511,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
 }
 
 function __create_form_open($data, $name, $idform=NULL, $classform=NULL){
+//    echo "Id form :" . $data['#id'];
     $result = '';
     if(isset($data['#focused_item'])){
         $result .= '<body onload="javascript:document.' . $name . '.' . $data['#focused_item'] . '.focus()">';
@@ -510,9 +520,16 @@ function __create_form_open($data, $name, $idform=NULL, $classform=NULL){
         $result .= '<div class="error">' . $data['#error'] . '</div><br /><br />' . "\n";
     }
     $result .= '<form action="' . $data['#action'] . '" method="POST" name="' . $name . '"';
+
     if(isset($idform) && !is_null($idform)){
         $result .= ' id="' . $idform . '"';
     }
+
+    if (isset($data['#id'])) {
+        $result .= ' id="' . $data['#id'] . '"';
+    }
+
+    
     if(isset($classform) && !is_null($classform)){
         $result .= ' class="' . $classform . '"';
     }
