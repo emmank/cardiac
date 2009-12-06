@@ -94,4 +94,141 @@ class ekgConfig extends config
     var $segment_st = array(
         'segmen_st_depresi', 'segmen_st_elevasi'
     );
+    var $table_scheme = array(
+        'ekg' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'patients' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'kunjungan' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tgl' => array(
+                'type' => 'date',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'irama_dasar' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => '0',
+                'extra' => ''
+            ),
+            'denyut_jantung' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'gelombang_p' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'interval_pr' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_axis' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_durasi' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_konfigurasi_patologi' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_konfigurasi_r_s' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'segmen_st_depresi' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'segmen_st_elevasi' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'gelombang_t' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'q_interval' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputtime' => array(
+                'type' => 'datetime',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputer' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'updated' => array(
+                'type' => 'varchar(50)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

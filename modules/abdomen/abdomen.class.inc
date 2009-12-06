@@ -3247,6 +3247,7 @@ class abdomenModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('abdomen', $this->query);
         $result = array();
         $result['#title'] = __t('Abdomen');
         $result['#tpl'] = MODULES_DIR . DS . 'abdomen' . DS . 'abdomen.tpl';

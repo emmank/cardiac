@@ -51,4 +51,22 @@ class neckConfig extends config
     var $reftable = array(
         'inspections' => array('ref_neck_inspections','inspections')
     );
+    var $table_scheme = array(
+        'neck' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inspections' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

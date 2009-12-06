@@ -584,6 +584,7 @@ class anusrectumModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('anus_rectum', $this->query);
         $result = array();
         $result['#title'] = __t('Anus rectum');
         $result['#tpl'] = MODULES_DIR . DS . 'anusrectum' . DS . 'anusrectum.tpl';

@@ -59,4 +59,50 @@ class punggungConfig extends config
         'bunyi_tambahan' => array('ref_punggung_bunyi_tambahan','bunyi_tambahan'),
         'others' => array('ref_punggung_others','others')
     );
+    var $table_scheme = array(
+        'punggung' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inspections' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpations' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'bunyi_pernafasan' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'bunyi_tambahan' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'others' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

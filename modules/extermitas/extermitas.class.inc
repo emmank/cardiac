@@ -318,6 +318,7 @@ class extermitasModule extends mainModule
     }
 
     function cardio_menu(){
+        $this->sync_scheme('extermitas', $this->query);
         $result = array();
         $result['#title'] = __t('Ekstermitas');
         $result['#tpl'] = MODULES_DIR . DS . 'extermitas' . DS . 'extermitas.tpl';

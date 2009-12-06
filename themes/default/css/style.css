@@ -93,9 +93,10 @@ body {
 
 #main-content .button {
 	border:1px solid #A80003;
+	/*border:1px none #FFF;*/
 	background-color:#FFE2E2;
-	color:#B60003;
-	margin-left:140px;
+	/*color:#B60003;*/
+	margin-left:160px;
 }
 
 #main-content .radio {
@@ -187,9 +188,9 @@ body {
     text-align: left;
     display:block;
     clear:right;
-    margin-bottom:20px;
+/*    margin-bottom:20px;
     margin-top:10px;
-}
+*/}
 
 #antrian {
     padding:20px 10px 20px 10px;
@@ -259,7 +260,7 @@ body {
 	display:block;
 	float:left;
 	/*text-align:right;*/
-	/*line-height:170%;*/
+	line-height:170%;
         clear:left;
         border:1px none #000;
 }
@@ -439,7 +440,8 @@ table tr.menu_selected td
 
 .error
 {
-    color:red;
+    /*color:red;*/
+    clear:both;
 }
 
 .button-drop
@@ -478,17 +480,17 @@ table tr.menu_selected td
 }
 
 A:link {
-	color: #08245b;
+	color: #660000;/*#08245b;*/
 	text-decoration: none;
 }
 
 A:visited {
-	color: #08245b;
+	color: #660000;
 	text-decoration: none;
 }
 
 A:active {
-	color: red;
+	color: #660000;
 	text-decoration: none;
 }
 
@@ -497,3 +499,17 @@ A:hover {
 	text-decoration: underline;
 }
 
+#search {
+    display:block;
+    border:1px solid #FFd1d1;
+    background-color:#FFF2F0;
+    padding:5px 10px 10px 10px;
+}
+
+#by_letter {
+    display:block;
+    border-top:1px solid #FFd1d1;
+    border-bottom:1px solid #FFd1d1;
+    margin-bottom : 10px;
+    background-color:#FFF;
+}

@@ -174,7 +174,7 @@ function __get_vars_of_active_user(){
 function __create_items_detail($value){
     global $forminput, $formtextarea, $formselect;
     $user = __get_vars_of_active_user();
-    $result = '';
+    $result = '<div id=form>';
     if(isset($value['title']) && $value['title'] != 'hidden'){
 //        $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
         $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
@@ -187,7 +187,7 @@ function __create_items_detail($value){
             }
         }
     }
-    $result .= '<div id="form">' . "\n";
+    $result .= '<div>' . "\n";
     foreach($value['data'] as $key => $val){
             if ($val['hide'] != '1'){
             if(!isset($value['update_access'])){$ok = 1;}
@@ -234,7 +234,7 @@ function __create_items_detail($value){
                 'submit' => array(
                     '#type' => 'submit',
                     '#value' => __t('drop'),
-                    '#style' => 'background:red;color:white'
+                    '#style' => ''
                 )
             );
             $result .= '<div class="error" style="text-align:center;right:20%;clear:both">';
@@ -250,11 +250,16 @@ function __create_items_detail($value){
 }
 
 function __create_table($value){
+//    echo "<pre>";
+//    print_r ($value);
+//    echo "</pre>";
+
     $user = __get_vars_of_active_user();
-    $result = '';
+    $result .= '';
     if(isset($value['addmenu'])){
         $result .= __create_add_menu($value['addmenu']);
     }
+
     $result .= "<!--div style=\"font-wieght:bold;font-size:1em\">" . strtoupper($value['title']) . "</div-->\n";
     $result .= '<div>' . strtoupper($value['title']) . '</div>' . "\n";
     $result .= '<table width="100%" class="tbl">' . "\n";
@@ -277,6 +282,18 @@ function __create_table($value){
         }
     }
     $result .= '</table>';
+
+    if(isset($value['add_patient'])){
+        $result .= "<br /><div id=search><font class=judul>Pendaftaran</font>";
+        $result .= __create_form($value['add_patient']);
+        $result .= "</div>";
+    }
+    
+    if (isset($value['search'])) {
+//        echo "disini";
+        $result .= "<br /><br />";
+        $result .= __create_search($value["search"]);
+    }
     return $result;
 }
 
@@ -478,7 +495,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
         if(isset($value['#message'])){
             $result .= ' ' . $value['#message'];
         }
-        $result .= '</br>' . "\n";
+//        $result .= '</br>' . "\n";
         $result .= '</div>' . "\n";
     }
     return $result;
@@ -569,35 +586,41 @@ function __create_info($value){
 }
 
 function __create_search($value){
-//    echo '<pre>'; print_r($value); echo '</pre>'; exit();
-    $result = "\n";
+//    echo '<pre>'; print_r($value); echo '</pre>';
+//    $result .= "<br />Search\n <hr>";
+    $result .= "<div id=search>";
+    $result .= "<font class=judul>Search</font>";
     if(is_array($value)){
         foreach($value as $yk => $lv){
+//    echo '<pre>'; print_r($value); echo '</pre>';
             if($yk == 'dataform'){
                 foreach($lv as $key => $val){
                     if(isset($next)){
-                        $result .= "\n" . "<hr>\n";
+//                        $result .= "\n" . "<hr>\n";
                     }
                     if($val['#type'] == 'character'){
+                        $result .= "<div id=by_letter>Pencarian dengan huruf awalan : &nbsp;";
                         foreach($val['data'] as $ky => $vl){
                             if(isset($koma)){$result .= ', ';}
-                            $result .= !is_null($vl['links']) ? '<a href="' . $vl['links'] . '">' : '';
+                            $result .= !is_null($vl['links']) ? '<a href="' . $vl['links'] . '"><strong>' : '';
                             $result .= $vl['show'];
-                            $result .= !is_null($vl['links']) ? '</a>' : '';
+                            $result .= !is_null($vl['links']) ? '</strong></a>' : '';
                             $koma = 0;
                         } unset($koma);
+                    $result .= "</div>";
                     } elseif($val['#type'] == 'form'){
                         $getform[] = $val;
                         $result .= __create_form($getform);
                         unset($getform);
                     } $next = 0;
-                    $result .= "<br />\n";
+//                    $result .= "\n";
                 } unset($next);
             } elseif($yk == 'result'){
                 $result .= __create_notelist($lv);
             }
         }
     }
+    $result .= "</div>";
     return $result;
 }
 

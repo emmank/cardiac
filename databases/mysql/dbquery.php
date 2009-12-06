@@ -47,11 +47,11 @@ class dbset
 
         function showTables(){
             $result = '';
-            $result .= 'SHOW TABLES()';
+            $result .= 'SHOW TABLES';
             return $result;
         }
 
-        function alterTableColumn($table, $colname = array(), $operation='drop', $type='int', $notnull=FALSE, $default='', $extra=NULL){
+        function alterTableColumn($table, $colname = array(), $operation='drop', $type='int', $thekey='', $notnull=FALSE, $default='', $extra=NULL){
             $result = '';
             if(count($colname) > 0){
                 $result .= 'ALTER TABLE ' . $this->getTblName($table) . ' ' . strtoupper($operation) . ' COLUMN ' . $colname[0];
@@ -60,6 +60,11 @@ class dbset
                 }
                 if(!eregi('drop', $operation)){
                     $result .= ' ' . $type;
+                    if(trim($thekey) != '' && !eregi('pri', $thekey)){
+                        if(eregi('uni', $thekey)){
+                            $result .= ' UNIQUE';
+                        }
+                    }
                     if($notnull !== FALSE){
                         $result .= ' NOT NULL';
                     }

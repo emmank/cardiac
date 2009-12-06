@@ -192,12 +192,9 @@ class patientModule extends mainModule
         $result['type'] = 'table';
         $result['title'] = __t('daftar pasien yang mendaftar hari ini');
         $result['description'] = __t('antrian pasien yang mendaftar pada hari ini');
-        $result['addmenu'] = array(
-            'title' => __t('search patient'),
-            'action' => '/user/patient/search',
-            'position' => 'top',
-            'user_required' => 'patient'
-        );
+        /* tambahan item search */
+        $result['search'] = $this->search();
+        
         $result['header'] = array(
             array(
                 'field' => 'nourut',
@@ -249,7 +246,7 @@ class patientModule extends mainModule
                 $getit->MoveNext();
             }
         }
-//        echo '<pre>'; print_r($result); echo '</pre>';
+//        echo '<pre> tst'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -771,25 +768,21 @@ class patientModule extends mainModule
             $thevalue['id'] = $dump['id'];
             $thevalue['inputer'] = $_COOKIE[$this->config->cookieid];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
-//            echo '<pre>'; print_r($thevalue); echo '</pre>';
-            $sql = $this->query->saveData(
-                'patients',
-                $thevalue
-            );
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         } else {
             $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->updateData(
-                'patients',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $dump['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $dump['id']);
         }
-        $this->query->connect();
-//        $this->query->conn->debug=true;
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        $this->__exec_db_ops(
+            $this->query,
+            'patients',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($opr, $strid);
         $this->__update_isearch($thevalue);
         unset($thevalue);
         $this->query->connect();
@@ -883,17 +876,14 @@ class patientModule extends mainModule
             }
         }
         $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
-        $sql = $this->query->updateData(
+        $this->__exec_db_ops(
+            $this->query,
             'patients',
-            $thevalue,
-            array(
-                array('&&', "id=" . $dump['id'])
-            )
+            'update',
+            array('id', $dump['id']),
+            $thevalue
         );
-        $this->query->connect();
-//        $this->query->conn->debug=true;
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        unset($opr, $strid);
         $thevalue['id'] = $dump['id'];
         $this->__update_isearch($thevalue);
         unset($thevalue);
@@ -938,23 +928,29 @@ class patientModule extends mainModule
     }
 
     function view(){
+        $this->sync_scheme('patients', $this->query);
         $this->__clean_queue();
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('daftar pasien yang mendaftar hari ini');
         $result['description'] = __t('antrian pasien yang mendaftar pada hari ini');
+/*
         $result['addmenu']['#add'] = array(
             'title' => __t('add patient'),
             'action' => '/node/patient/form',
             'position' => 'top',
             'class' => 'button'
         );
-        $result['addmenu']['#search'] = array(
+ */
+        /*$result['addmenu']['#search'] = array(
             'title' => __t('search patient'),
             'action' => '/node/patient/search',
             'position' => 'top',
             'class' => 'button'
         );
+         */
+        $result['add_patient'] = $this->strnum_form();
+        $result['search'] = $this->search();
         $result['header'] = array(
             array(
                 'field' => 'nourut',
@@ -1068,8 +1064,8 @@ class patientModule extends mainModule
             '#collapsed' => FALSE,
             '#weight' => -3,
             '#action' => '/node/patient/setstrnum',
-            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
-            '#focused_item' => 'strnum'
+            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
+//            '#focused_item' => 'strnum'
         );
         $form['patient']['strnum'] = array(
             '#type' => 'text',

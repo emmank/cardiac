@@ -53,4 +53,29 @@ class thoraxConfig extends config
         'inspections' => array('ref_thorax_inspections','inspections'),
         'relief' => array('ref_thorax_relief','relief')
     );
+    var $table_scheme = array(
+        'thorax' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inspections' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'relief' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

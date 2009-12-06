@@ -105,4 +105,162 @@ class abdomenConfig extends config
         'auscultation' => array('ref_abdomen_auscultation', 'auscultation'),
         'peristaltik_usus' => array('ref_abdomen_peistaltik_usus', 'peristaltik_usus')
     );
+    var $table_scheme = array(
+        'abdomen' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'relief' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'center' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inspeksi_kulit' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'gerakan_dinding_perut' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_hepar' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_hepar_derajat_pembesaran' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_hepar_konsistensi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_hepar_permukaan' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_hepar_tepi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_hepar_nyeri_tekan' => array(
+                'type' => 'tinyint(1)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_liver' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_liver_derajat_pembesaran' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_liver_konsistensi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_liver_permukaan' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_liver_tepi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_liver_nyeri_tekan' => array(
+                'type' => 'tinyint(1)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'palpasi_ginjal' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inspeksi_ginjal' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'perkusi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'auscultation' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'peristaltik_usus' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
+    );
 }

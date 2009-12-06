@@ -103,22 +103,85 @@ class recoveryConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
+            'irama_dasar' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'denyut_jantung' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'gelombang_p' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'interval_pr' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_axis' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_durasi' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_konfigurasi_patologi' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'qrs_konfigurasi_r_s' => array(
+                'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
             'segmen_st_depresi' => array(
-                'type' => 'varchar(50)',
+                'type' => 'varchar(150)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
             'segmen_st_elevasi' => array(
-                'type' => 'varchar(50)',
+                'type' => 'varchar(150)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'recovery_lainlain' => array(
-                'type' => 'varchar(200)',
+            'gelombang_t' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'q_interval' => array(
+                'type' => 'int(11)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
