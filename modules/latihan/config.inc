@@ -23,7 +23,6 @@
  */
 
 class latihanConfig extends config
-
 {
     var $rdbms = 'mysql';
     var $dblatihan = array(

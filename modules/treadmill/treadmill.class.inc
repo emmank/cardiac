@@ -637,8 +637,8 @@ class treadmillModule extends mainModule
         );
 
         $form['treadmill']['tab_items']['istirahat'] = $this->__loadFaseIstirahat();
-//        $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
-//        $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
+        $form['treadmill']['tab_items']['istirahatberdiri'] = $this->__loadFaseIstirahatBerdiri();
+        $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
 //        $form['treadmill']['tab_items']['FaseLatihan'] = $this->__loadFaseLatihan();
 //        $form['treadmill']['tab_items']['FaseRecovery'] = $this->__loadFaseRecovery();
 //        $form['treadmill']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();

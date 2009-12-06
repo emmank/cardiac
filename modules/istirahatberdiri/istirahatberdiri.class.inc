@@ -50,7 +50,7 @@ class istirahatberdiriModule extends mainModule
     function treadmill_menu(){
         $this->sync_scheme('istirahatberdiri', $this->query);
         $result = array();
-        $result['#title'] = __t('Fase istirahat Berdiri');
+        $result['#title'] = __t('Fase Istirahat Berdiri');
         $result['#tpl'] = MODULES_DIR . DS . 'istirahatberdiri' . DS . 'istirahatberdiri.tpl';
         $datafield = $this->__get_data_fields('istirahatberdiri', $this->query);
         if (count($this->config->free_val) > 0){
@@ -71,31 +71,51 @@ class istirahatberdiriModule extends mainModule
                 }
             }
         }
+        rsort($datafield);
         foreach($datafield as $key => $value){
             if($value == 'catched'){
                 if(!isset($vcache['catched']) || $vcache['catched'] == ''){
                     $vcache['catched'] = date('Y-m-d H:i:s', $this->config->time);
                 }
             }
-            $result['datafield'][$value] = array(
-                'title' => __t($value),
-                'type' => $this->config->typeoffields[$value],
-                'value' => isset($vcache[$value]) ? $vcache[$value] : ''
+            $result['datafields'][$value] = array(
+                '#title' => __t($value),
+                '#type' => $this->config->fields_form_type[$value],
+                '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
+                '#size' => $this->config->fields_form_type[$value] != 'select' && $this->config->fields_form_type[$value] != 'date' ? 20 : 1,
+                '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
             );
             if(in_array($value, $this->config->fieldsisarray)){
-                $result['datafield'][$value]['theref'] = $this->__get_refs($value);
-                $result['datafield'][$value]['blankopt'] = 1;
+                $result['datafields'][$value]['#theref'] = $this->__get_refs($value);
             } elseif($this->config->typeoffields[$value] == 'datetime'){
-                $result['datafield'][$value]['theref'] = $this->nama_bulan;
-                $result['datafield'][$value]['timenow'] = $this->config->time;
-            } else {
-                $result['datafield'][$value]['size'] = 6;
+                $result['datafields'][$value]['#theref'] = $this->nama_bulan;
+                $result['datafields'][$value]['#timenow'] = $this->config->time;
+//            } else {
+//                $result['datafields'][$value]['#size'] = 6;
             }
-
-            
-            $result['datafield'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
+            if(in_array($value, $this->config->qrs_complex) || in_array($value, $this->config->segment_st) || $value == 'gelombang_t'){
+                $result['datafields'][$value]['#customized']['title'] = in_array($value, $this->config->qrs_complex) ? __t('qrs_complex') : ($value == 'gelombang_t' ? __t('gelombang_t') : __t('segment_st'));
+                $result['datafields'][$value]['#customized']['id'] = in_array($value, $this->config->qrs_complex) ? 'qrs_complex' : ($value == 'gelombang_t' ? 'gelombang_t' : 'segment_st');
+                if($this->config->fields_form_type[$value] == 'select2'){
+                    $result['datafields'][$value]['#customized']['option'] =  array(
+                        '1mm - 2mm' => '1mm - 2mm',
+                        '> 2mm - 3mm' => '> 2mm - 3mm',
+                        '> 3mm' => '> 3mm'
+                    );
+                } elseif ($this->config->fields_form_type[$value] == 'select3') {
+                    $result['datafields'][$value]['#customized']['option'] =  array(
+                        'Q Patologi +' => 'Q Patologi +',
+                        'Q Patologi -' => 'Q Patologi -'
+                    );
+                } elseif ($value == 'gelombang_t') {
+                    $result['datafields'][$value]['#customized']['option'] =  array(
+                        'Normal' => 'Normal',
+                        'Inverted' => 'Inverted'
+                    );
+                }
+            }
+            $result['datafields'][$value]['#readonly'] = isset($this->config->free_val['readonly']) ? TRUE : FALSE;
         }
-//        echo '<pre>'; print_r($result['datafield']); echo '</pre>';
         return $result;
     }
 

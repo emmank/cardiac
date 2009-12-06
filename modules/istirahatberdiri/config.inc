@@ -39,23 +39,24 @@ class istirahatberdiriConfig extends config
     var $hiddenfields = array(
         'id'
     );
-    var $typeoffields = array(
+    var $fields_form_type = array(
         'id' => 'hidden',
         'tensi_sistolik' => 'text',
         'tensi_diastolik' => 'text',
+        'irama_dasar' => 'select',
         'denyut_jantung' => 'select',
-	'irama_dasar' => 'select',
         'gelombang_p' => 'select',
         'interval_pr' => 'select',
         'qrs_axis' => 'select',
         'qrs_durasi' => 'select',
-        'qrs_konfigurasi_patologi' => 'select',
-        'qrs_konfigurasi_rs' => 'select',
-        'segmen_st_depresi' => 'select',
-        'segmen_st_elevasi' => 'select',
-        'gelombang_t' => 'select',
+        'qrs_konfigurasi_patologi' => 'select3',
+        'qrs_konfigurasi_r_s' => 'select',
+        'segmen_st_depresi' => 'select2',
+        'segmen_st_elevasi' => 'select2',
+        'gelombang_t' => 'radio',
         'q_interval' => 'select'
     );
+
     var $fieldsisarray = array(
         'irama_dasar',
         'denyut_jantung',
@@ -64,12 +65,13 @@ class istirahatberdiriConfig extends config
         'qrs_axis',
         'qrs_durasi',
         'qrs_konfigurasi_patologi',
-        'qrs_konfigurasi_rs',
+        'qrs_konfigurasi_r_s',
         'segmen_st_depresi' ,
         'segmen_st_elevasi' ,
         'gelombang_t',
         'q_interval'
     );
+
     var $reftable = array(
         'irama_dasar' => array('ref_ekg_irama','irama'),
         'denyut_jantung' => array('ref_ekg_denyut_jantung', 'denyut_jantung'),
@@ -78,7 +80,7 @@ class istirahatberdiriConfig extends config
         'qrs_axis' => array('ref_ekgQrs_axis', 'axis'),
         'qrs_durasi' => array('ref_ekgQrs_durasi', 'durasi'),
         'qrs_konfigurasi_patologi' => array('ref_ekg_sandapan', 'sandapan'),
-        'qrs_konfigurasi_rs' => array('ref_ekgQrs_RlbS', 'RlbS'),
+        'qrs_konfigurasi_r_s' => array('ref_ekgQrs_RlbS', 'RlbS'),
         'segmen_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
         'segmen_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
         'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
