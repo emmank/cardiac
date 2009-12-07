@@ -22,6 +22,23 @@
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
+
+$result .= '<div id="menu_parent">Main Menu</div>';
+$result .= '<div id="menu_child">';
+$result .= '<a href="#" rel="menu1">Item 1</a>';
+$result .= '<a href="#" rel="menu2">Item 2</a>';
+$result .= '<a href="#" rel="menu3">Item 3</a>';
+$result .= '</div>';
+
+
+$result .= '<div id="menu1" class="tabcontent">';
+$result .= 'Tab content 1 here<br />Tab content 1 here<br />';
+$result .= '</div>';
+
+$result .= '<script type="text/javascript">';
+$result .= 'at_attach("menu_parent", "menu_child", "hover", "y", "pointer")';
+$result .= '</script>';
+
 $result .= $vl['datafields']['pengkajian']['title'];
 $result .= '<table width=100% class="table">' . "\n";
 $cnt = 0;

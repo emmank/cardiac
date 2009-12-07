@@ -49,6 +49,10 @@
 ***********************************************/
 
 </script>
+<script type="text/javascript" src="/themes/<?php echo $theme;?>/js/dropdown.js">
+
+</script>
+
 </head>
 <body<?php if (isset($body_login)){echo " onLoad=\"".$body_login. "\"";}?>>
 
