@@ -1163,6 +1163,7 @@ class patientModule extends mainModule
                 foreach($datafields as $value){
                     if(!in_array($value, $this->hidden_fields)){
                         $form['patient'][$value] = array(
+//                            '#type' => ($value != 'kota' && $value != 'propinsi' ? $this->formtype_fields[$value] : 'text'),
                             '#type' => $this->formtype_fields[$value],
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
@@ -1187,7 +1188,7 @@ class patientModule extends mainModule
 //                            $extra = "onchange=showKec()";
                             $id = "kota";
                             $options = $this->__get_kabupaten_options('kabupaten');
-                            $options = "";
+//                            $options = "";
                         } elseif($value == 'propinsi'){
                             $id = "propinsi";
                             $extra = "onchange=\"showKab()\"";
