@@ -23,7 +23,7 @@
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 $result .= $vl['datafields']['pemeriksaan']['title'];
-$result .= '<table width=100% class="table" border="1">' . "\n";
+$result .= '<table width=100% class="table" border="0">' . "\n";
 $cnt = 0;
 //echo '<pre>'; print_r($vl); echo '</pre>';
 foreach($vl['datafields'] as $yk => $lv){
@@ -109,6 +109,12 @@ foreach($vl['datafields'] as $yk => $lv){
                     $result .= 'Oral <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc <br />' . "\n";
                     $result .= 'NGT <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc <br />' . "\n";
                     $result .= 'Paratera <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc' . "\n";
+                } elseif (preg_match('/pengeluaran/',$yk)) {
+                    $result .= 'Muntah <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc <br />' . "\n";
+                    $result .= 'NGT <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc <br />' . "\n";
+                    $result .= 'BAK <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc <br />' . "\n";
+                    $result .= 'WSD <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc <br />' . "\n";
+                    $result .= 'Drain <input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> cc' . "\n";
                 } else {
                     $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
                 }
