@@ -559,7 +559,7 @@ class patientModule extends mainModule
 //                            echo $value;
 //                            $form['patient'][$value]['#extra'] = "onchange='showKec()'";
                             $id="kota";
-//                            $options = $this->__get_kabupaten_options('kabupaten');
+                            $options = $this->__get_kabupaten_options('kabupaten');
                         } elseif($value == 'propinsi'){
                             $id = "propinsi";
                             $extra = "onchange=\"showKab()\"";
@@ -571,7 +571,6 @@ class patientModule extends mainModule
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
                         }
-
 
                         $form['patient'][$value]['#option'] = $options;
                         $form['patient'][$value]['#extra'] = $extra;
@@ -1187,7 +1186,7 @@ class patientModule extends mainModule
                         } elseif($value == 'kota'){
 //                            $extra = "onchange=showKec()";
                             $id = "kota";
-//                            $options = $this->__get_kabupaten_options('kabupaten');
+                            $options = $this->__get_kabupaten_options('kabupaten');
                             $options = "";
                         } elseif($value == 'propinsi'){
                             $id = "propinsi";

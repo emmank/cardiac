@@ -515,3 +515,8 @@ A:hover {
     margin-bottom : 10px;
     background-color:#FFF;
 }
+
+input, select, textarea {
+	border : 1px solid #A80003;
+	margin-bottom:2px
+}

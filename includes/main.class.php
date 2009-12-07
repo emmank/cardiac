@@ -431,7 +431,7 @@ class mainModule
         );
         $query = $this->query->conn->Execute($sql); unset($sql);
         for($i=0; $i<$query->_numOfRows; $i++){
-            $result[$query->fields[$field]] = ucwords(__t($query->fields[$field]));
+            $result[$query->fields['id_kab']] = ucwords(__t($query->fields[$field]));
             $query->MoveNext();
         } unset($query);
         $this->query->close();
