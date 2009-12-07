@@ -49,15 +49,22 @@
 ***********************************************/
 
 </script>
-<script type="text/javascript" src="/themes/<?php echo $theme;?>/js/dropdown.js">
 
-</script>
 
 </head>
 <body<?php if (isset($body_login)){echo " onLoad=\"".$body_login. "\"";}?>>
 
 <div id="container">
-    
+
+<?php
+//    print_r($path);
+    if (($path['menu']== "patient" && $path['vars']=="form") ||
+        ($path['menu']== "patient" && $path['vars']=="update")
+        ) {
+        include_once "themes/".$theme."/js/pilihkota_head_js.php";
+    }
+?>
+
 <?php if(!isset($body_login)){?>
 <div id="header">
 <a href="/regload"><IMG src="/themes/<?php echo $theme;?>/images/cardiac_logo.png" border="0" align="left"></a>
@@ -108,7 +115,7 @@
     <?php }?>
     </div>
 </div>
-
+</div>
 <div id="footer">
 <?php
 echo str_replace(",","<br />",$configs->identity_message);
