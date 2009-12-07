@@ -525,8 +525,8 @@ class patientModule extends mainModule
                     if(!in_array($value, $this->hidden_fields)){
                         $form['patient'][$value] = array(
 //                            '#type' => ($value != 'kota' && $value != 'propinsi' ? $this->formtype_fields[$value] : 'text'),
-//                            '#type' => (($value != 'kota' || $value != 'propinsi') ? $this->formtype_fields[$value] : 'text'),
-                            '#type' =>  $this->formtype_fields[$value],
+                            '#type' => (($value != 'kota' || $value != 'propinsi') ? $this->formtype_fields[$value] : 'text'),
+//                            '#type' =>  $this->formtype_fields[$value],
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
