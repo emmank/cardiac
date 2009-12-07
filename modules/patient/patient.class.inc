@@ -1115,6 +1115,9 @@ class patientModule extends mainModule
 
     function setstrnum(){
         $dump = $this->__write_form_cache();
+        while (strlen($dump['strnum']) < 5 ) {
+            $dump['strnum'] = "0".$dump['strnum'];
+        }
         $sql = $this->query->getSelect(
             array(),
             array('patients'),
