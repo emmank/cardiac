@@ -437,13 +437,13 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                 if(isset($value['#option_blank']) && $value['#option_blank'] == '1'){
                     $result .= '<option value=""></option>' . "\n";
                 }
-                if(isset($value['#option']) && is_array($value['#option']) && count($value['#option']) > 0){
-                    foreach($value['#option'] as $yk => $lv){
-                        $result .= '<option value="' . $yk . '"';
-                        if($yk == $value['#value']){
-                            $result .= ' selected';
-                        }
-                        $result .= '>' . $lv . '</option>' . "\n";
+                if (!empty ($value['#option'])) {
+                foreach($value['#option'] as $yk => $lv){
+                    $result .= '<option value="' . $yk . '"';
+                    if($yk == $value['#value']){
+                        $result .= ' selected';
+                    }
+                    $result .= '>' . $lv . '</option>' . "\n";
                     }
                 }
                 $result .= '</select>' . "\n";
