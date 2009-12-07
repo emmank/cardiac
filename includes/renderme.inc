@@ -179,41 +179,45 @@ function __create_items_detail($value){
 //        $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
         $result .= '<div>'. ucwords($value['title']) .'</div>' . "\n";
     }
-    foreach($value['data'] as $key => $val){
-        if(isset($val['form'])){
-            if(in_array($val['form']['detail'][$key]['#type'], $forminput) || in_array($val['form']['detail'][$key]['#type'], $forminput)){
-                $result .= '<body onload="javascript:document.detail.' . $key . '.focus()">';
-                break;
+    if(isset($value['data']) && is_array($value['data']) && count($value['data']) > 0){
+        foreach($value['data'] as $key => $val){
+            if(isset($val['form'])){
+                if(in_array($val['form']['detail'][$key]['#type'], $forminput) || in_array($val['form']['detail'][$key]['#type'], $forminput)){
+                    $result .= '<body onload="javascript:document.detail.' . $key . '.focus()">';
+                    break;
+                }
             }
         }
     }
     $result .= '<div>' . "\n";
-    foreach($value['data'] as $key => $val){
-            if ($val['hide'] != '1'){
-            if(!isset($value['update_access'])){$ok = 1;}
-            elseif($value['update_access'] == $user['groups'] || $user['groups'] == 'admin'){$ok = 1;}
-            elseif(__get_group_permission($value['update_access']) !== FALSE){$ok = 1;}
-            $result .= '<div id=block>';
-            $result .= '<label for="' . $key . '" style="font-weight:bold">' . ucwords($val['key']) . ' :</label>';
-            if(isset($val['form'])){
-                if(isset($ok)){
-                    $result .= '<table align="left" cellspacing="0" cellpadding="0">' . "\n";
-                    $result .= '<tr valign="top"><td align="left">' . "\n";
-                    $result .= __create_form($val['form']);
-                    $result .= '</td></tr>' . "\n";
-                    $result .= '</table>' . "\n";
+    if(isset($value['data']) && is_array($value['data']) && count($value['data']) > 0){
+        foreach($value['data'] as $key => $val){
+                if ($val['hide'] != '1'){
+                if(!isset($value['update_access'])){$ok = 1;}
+                elseif($value['update_access'] == $user['groups'] || $user['groups'] == 'admin'){$ok = 1;}
+                elseif(__get_group_permission($value['update_access']) !== FALSE){$ok = 1;}
+                $result .= '<div id=block>';
+                $result .= '<label for="' . $key . '" style="font-weight:bold">' . ucwords($val['key']) . ' :</label>';
+                if(isset($val['form'])){
+                    if(isset($ok)){
+                        $result .= '<table align="left" cellspacing="0" cellpadding="0">' . "\n";
+                        $result .= '<tr valign="top"><td align="left">' . "\n";
+                        $result .= __create_form($val['form']);
+                        $result .= '</td></tr>' . "\n";
+                        $result .= '</table>' . "\n";
+                    }
+                } else {
+                    if (isset($val['link']) && isset($ok)){
+                        $result .= '<a href="' . $val['link'] . '">';
+                    }
+                    $result .= $val['value']!='' ? ucwords($val['value']) : ' &nbsp;&nbsp;&nbsp; ';
+                    if(isset($val['link']) && isset($ok)){
+                        $result .= '</a>';
+                    }
                 }
-            } else {
-                if (isset($val['link']) && isset($ok)){
-                    $result .= '<a href="' . $val['link'] . '">';
-                }
-                $result .= $val['value']!='' ? ucwords($val['value']) : ' &nbsp;&nbsp;&nbsp; ';
-                if(isset($val['link']) && isset($ok)){
-                    $result .= '</a>';
-                }
+                $result .= '</div>' . "\n";
+                unset($ok);
             }
-            $result .= '</div>' . "\n";
-            unset($ok);
         }
     }
     $result .= '</div>'. "\n";
@@ -433,12 +437,14 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                 if(isset($value['#option_blank']) && $value['#option_blank'] == '1'){
                     $result .= '<option value=""></option>' . "\n";
                 }
-                foreach($value['#option'] as $yk => $lv){
-                    $result .= '<option value="' . $yk . '"';
-                    if($yk == $value['#value']){
-                        $result .= ' selected';
+                if(isset($value['#option']) && is_array($value['#option']) && count($value['#option']) > 0){
+                    foreach($value['#option'] as $yk => $lv){
+                        $result .= '<option value="' . $yk . '"';
+                        if($yk == $value['#value']){
+                            $result .= ' selected';
+                        }
+                        $result .= '>' . $lv . '</option>' . "\n";
                     }
-                    $result .= '>' . $lv . '</option>' . "\n";
                 }
                 $result .= '</select>' . "\n";
             }

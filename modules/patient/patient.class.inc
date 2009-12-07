@@ -518,7 +518,11 @@ class patientModule extends mainModule
                 );
             }
 
-            $datafields = $this->__get_data_fields('patients', $this->query);
+//            $datafields = $this->__get_data_fields('patients', $this->query);
+            $datafields = array();
+            foreach($this->formtype_fields as $key => $value){
+                $datafields[] = $key;
+            }
 
             if(count($datafields) > 0){
                 foreach($datafields as $value){
@@ -667,7 +671,11 @@ class patientModule extends mainModule
                 '#focused_item' => 'nama'
             );
             
-            $datafields = $this->__get_data_fields('patients', $this->query);
+//            $datafields = $this->__get_data_fields('patients', $this->query);
+            $datafields = array();
+            foreach($this->formtype_fields as $key => $value){
+                $datafields[] = $key;
+            }
             if(count($datafields) > 0){
                 foreach($datafields as $value){
                     if(!in_array($value, $this->hidden_fields)){
@@ -1158,7 +1166,11 @@ class patientModule extends mainModule
                 '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
                 '#focused_item' => 'nama'
             );
-            $datafields = $this->__get_data_fields('patients', $this->query);
+//            $datafields = $this->__get_data_fields('patients', $this->query);
+            $datafields = array();
+            foreach($this->formtype_fields as $key => $value){
+                $datafields[] = $key;
+            }
             if(count($datafields) > 0){
                 foreach($datafields as $value){
                     if(!in_array($value, $this->hidden_fields)){
