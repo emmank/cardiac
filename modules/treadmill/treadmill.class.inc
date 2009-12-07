@@ -104,7 +104,7 @@ class treadmillModule extends mainModule
         return $this->__get_search_submit();
     }
 
-    function __get_search_submit($teens=0){
+    function __get_search_submit(){
         if(isset($_POST['data'])){
             $str = $_POST['data'];
             $dump = $this->__get_patients_search($str);
@@ -130,8 +130,7 @@ class treadmillModule extends mainModule
                         array('id', 'inputtime'),
                         array('treadmill'),
                         array(
-                            array('&&', "patients=" . $vl),
-                            array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
+                            array('&&', "patients=" . $vl)
                         )
                     );
                     $this->query->connect();
@@ -149,7 +148,7 @@ class treadmillModule extends mainModule
                                     $cnt++;
                                 }
                                 $dumpid[] = $getit->fields['id'];
-                                $result['data'][$cnt]['links'] = '/user/treadmill' . ($teens != 0 ? 'anak' : '') . '/detail_form/' . $getit->fields['id'];
+                                $result['data'][$cnt]['links'] = '/user/treadmill/detail_form/' . $getit->fields['id'];
                                 $result['data'][$cnt]['caption'] = 'Data Tanggal ' . date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
                             }
                             $sql = $this->query->getSelect(
@@ -178,7 +177,6 @@ class treadmillModule extends mainModule
                 }
             }
         } unset($dump);
-//        echo '<pre>'; print_r($result); echo '</pre>'; exit();
         return $result;
     }
 
@@ -186,7 +184,7 @@ class treadmillModule extends mainModule
         return $this->__get_search();
     }
 
-    function __get_search($teens=0){
+    function __get_search(){
         $result = array();
         $result['type'] = 'search';
         $result['title'] = __t('Cari data pasien treadmill');
@@ -202,19 +200,18 @@ class treadmillModule extends mainModule
                 array('treadmill', 'patients'),
                 array(
                     array('&&', "treadmill|patients=patients|id"),
-                    array('&&', "patients|nama like '" . strtolower($value) . "%'"),
-                    array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
+                    array('&&', "patients|nama like '" . strtolower($value) . "%'")
                 )
             );
             $this->query->connect();
             $getit = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
-            $result['dataform']['character']['data'][$i]['links'] = $getit->_numOfRows > 0 ? '/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/search/' . $value : NULL;
+            $result['dataform']['character']['data'][$i]['links'] = $getit->_numOfRows > 0 ? '/user/treadmill/search/' . $value : NULL;
             unset($getit); $i++;
         } unset($i);
         $result['dataform']['form'] = array(
             '#type' => 'form',
-            '#action' => '/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/search',
+            '#action' => '/user/treadmill/search',
             '#id' => 'treadmill_search',
             '#title' => __t('search'),
             'data' => array(
@@ -230,7 +227,6 @@ class treadmillModule extends mainModule
         if(isset($_POST['data']) || isset($dump[3])){
             $result['result'] = $this->__get_search_submit($teens);
         } unset($dump);
-//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -306,7 +302,7 @@ class treadmillModule extends mainModule
                 $this->query->close();
                 $result['data'][$i]['nama'] = $getthis->fields['nama'];
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
-                $result['data'][$i]['goto'] = '/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/detail_form/' . $getit->fields['id'];
+                $result['data'][$i]['goto'] = '/user/treadmill/detail_form/' . $getit->fields['id'];
                 $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
                 $getit->MoveNext();
             }
@@ -318,17 +314,13 @@ class treadmillModule extends mainModule
         return $this->__detail_form();
     }
 
-    function __detail_form($teens=0){
+    function __detail_form(){
         $this->formhabit = 'readonly';
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         $vcache = $this->__get_treadmill_data((int)$dump[3]);
         $this->vardump = $this->__write_custom_cache($vcache);
         $this->vardump['readonly'] = $this->formhabit;
-        if($teens == 0){
-            $result = $this->form();
-        } else {
-            $result = $this->anak_form();
-        }
+        $result = $this->form();
         return $result;
     }
 
@@ -407,6 +399,28 @@ class treadmillModule extends mainModule
         if(!isset($vcache['patients'])){
             $vcache['patients'] = $query->fields['patients']; unset($query);
         }
+        $addmenuopts = array(
+            '' => __t('-- medical record --'),
+            'all' => __t('semua')
+        );
+        $dump_addmenus = $this->__get_bagian_lists();
+        foreach($dump_addmenus as $key => $value){
+            $sql = $this->query->getSelect(
+                array('id'),
+                array('kunjungan'),
+                array(
+                    array('&&', "patients=" . $vcache['patients']),
+                    array('&&', "bagian=" . $value),
+                    array('&&', "doneby is not null")
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $addmenuopts[$key] = $value;
+            } unset($getit);
+        } unset($dump_addmenus);
         $form['treadmill'] = array(
             '#type' => 'special',
             '#id' => 'treadmill',
@@ -414,10 +428,19 @@ class treadmillModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/treadmill/form/' . ($this->formhabit == 'readonly' ? 'edit_' . $vcache['id'] : '/form_submit'),
+            '#action' => '/user/treadmill/form' . ($this->formhabit == 'readonly' ? '/edit_' . $vcache['id'] : '_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'treadmill' . DS . 'treadmill.tpl',
-        );
+            '#addmenu' => array(
+                'title' => __t('medical record'),
+                'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                'position' => 'top',
+                'class' => 'button',
+                'methode' => 'choose',
+                'options' => $addmenuopts,
+                'filter' => 'bagian'
+            )
+        ); unset($addmenuopts);
         $form['treadmill']['kunjungan'] = array(
             '#type' => 'hidden',
             '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
@@ -716,14 +739,12 @@ class treadmillModule extends mainModule
                 return $this->recovery_exec->treadmill_submit();
             }
         } else {
-//            echo "disini";
             return $this->recovery_exec->treadmill_menu();
         }
     }
 
     function __loadKesimpulan($exec=NULL){
         $this->__include_module('kesimpulan');
-//        echo "disini";
         if(isset($this->vardump) && count($this->vardump) > 0){
             $this->kesimpulan_config->free_val = $this->vardump;
         }
@@ -732,7 +753,6 @@ class treadmillModule extends mainModule
                 return $this->kesimpulan_exec->treadmill_submit();
             }
         } else {
-//            echo "disini";
             return $this->kesimpulan_exec->treadmill_menu();
             
         }
@@ -742,7 +762,7 @@ class treadmillModule extends mainModule
         return $this->__get_form_submit();
     }
 
-    function __get_form_submit($teens=0){
+    function __get_form_submit(){
         $this->vardump = $this->__write_form_cache();
         $sql = $this->query->getSelect(
             array(),
@@ -765,35 +785,30 @@ class treadmillModule extends mainModule
                 $thevalue[$key] = $value;
             }
         } unset($thefields);
-        if($teens != 0 && $teens != '0'){
-            $thevalue['teens'] = 1;
-        }
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
             $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->updateData(
-                'treadmill',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
             $thevalue['id'] = $this->__get_id_insert_value('treadmill', 'id', $this->query);
             $thevalue['inputer'] = $user['userid'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->saveData(
-                'treadmill',
-                $thevalue
-            );
             $this->vardump['id'] = $thevalue['id'];
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        unset($thevalue);
+        $this->__exec_db_ops(
+            $this->query,
+            'treadmill',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($thevalue, $opr, $strid);
         $this->__loadFaseIstirahat('submit');
         $this->__loadFaseIstirahatBerdiri('submit');
+        $this->__loadFaseIstirahatHiperventilasi('submit');
         $this->__loadFaseLatihan('submit');
         $this->__loadFaseRecovery('submit');
         $this->__loadKesimpulan('submit');
@@ -811,7 +826,7 @@ class treadmillModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/user/treadmill' . ($teens == 0 ? '' : 'anak') . '/view');
+        redirect_to('/user/treadmill/view');
     }
 
 }

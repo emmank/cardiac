@@ -127,58 +127,47 @@ class latihanModule extends mainModule
                 }
             }
         }
-//        foreach($datafields as $key => $value){
-//            if($value == 'catched'){
-//                if(!isset($vcache['catched']) || $vcache['catched'] == ''){
-//                    $vcache['catched'] = date('Y-m-d H:i:s', $this->config->time);
-//                }
-//            }
-//            $result['datafields'][$value] = array(
-//                'title' => __t($value),
-//                'type' => $this->config->typeoffields[$value],
-//                'value' => isset($vcache[$value]) ? $vcache[$value] : ''
-//            );
-//
-//
-//        }
-//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
     function treadmill_submit(){
         $thefields = $this->__get_data_fields('latihan', $this->query);
         foreach($this->config->free_val as $key => $value){
-            if(in_array($key, $thefields)){
-                if($key == 'catched'){
-                    $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
-                } elseif($key == 'risk_factor' || $key == 'ilness_history'){
-                    if(count($value) > 0){
-                        $value = implode(',', $value);
+             if(preg_match('/^latihan_/', $key)){
+                $key = trim(preg_replace('/^latihan_/', '', $key));
+                if(in_array($key, $thefields)){
+                    if($key == 'tekanan_darah'){
+                        if($value[0] != '2' && $value[0] != '3'){
+                            unset($value[1], $value[2], $value[3], $value[4]);
+                        } elseif($value[0] == '2'){
+                            unset($value[3], $value[4]);
+                        } else {
+                            unset($value[1], $value[2]);
+                        }
                     }
+                    if(count($value) > 0){
+                        $value = implode('|', $value);
+                    }
+                    $thevalue[$key] = $value;
                 }
-                $thevalue[$key] = $value;
             }
-        } unset($thefields);
+       } unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
-            $sql = $this->query->updateData(
-                'latihan',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
-            $sql = $this->query->saveData(
-                'latihan',
-                $thevalue
-            );
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-//        echo '<pre>'; print_r($thevalue); echo '</pre>';
-        unset($thevalue);
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        $this->__exec_db_ops(
+            $this->query,
+            'latihan',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($opr, $strid, $thevalue);
     }
 
 }
