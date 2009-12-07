@@ -50,7 +50,7 @@ class latihanModule extends mainModule
     function treadmill_menu(){
         $this->sync_scheme('latihan', $this->query);
         $result = array();
-        $result['#title'] = __t('Fase latihan');
+        $result['#title'] = __t('Latihan');
         $result['#tpl'] = MODULES_DIR . DS . 'latihan' . DS . 'latihan.tpl';
         $datafields = $this->__get_data_fields('latihan', $this->query);
         if (count($this->config->free_val) > 0){

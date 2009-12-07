@@ -26,7 +26,7 @@ require_once MODULES_DIR . DS . 'istirahatberdiri' . DS . 'config.inc';
 
 class istirahatberdiriModule extends mainModule
 {
-    var $title = 'istirahatberdiri module';
+    var $title = 'istirahatberdiri';
     var $description = '';
 
     function __get_refs($fields, $sort=NULL){
@@ -50,7 +50,7 @@ class istirahatberdiriModule extends mainModule
     function treadmill_menu(){
         $this->sync_scheme('istirahatberdiri', $this->query);
         $result = array();
-        $result['#title'] = __t('Fase Istirahat Berdiri');
+        $result['#title'] = __t('Istirahat Berdiri');
         $result['#tpl'] = MODULES_DIR . DS . 'istirahatberdiri' . DS . 'istirahatberdiri.tpl';
         $datafield = $this->__get_data_fields('istirahatberdiri', $this->query);
         if (count($this->config->free_val) > 0){

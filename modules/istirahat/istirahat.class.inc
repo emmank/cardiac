@@ -50,7 +50,7 @@ class istirahatModule extends mainModule
     function treadmill_menu(){
         $this->sync_scheme('istirahat', $this->query);
         $result = array();
-        $result['#title'] = __t('Fase Istirahat Berbaring');
+        $result['#title'] = __t('Istirahat Berbaring');
         $result['#tpl'] = MODULES_DIR . DS . 'istirahat' . DS . 'istirahat.tpl';
         $datafields = $this->__get_data_fields('istirahat', $this->query);
         if (count($this->config->free_val) > 0){

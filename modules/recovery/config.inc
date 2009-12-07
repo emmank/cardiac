@@ -40,8 +40,6 @@ class recoveryConfig extends config
     );
     var $fields_form_type = array(
         'id' => 'hidden',
-        'patients' => 'hidden',
-        'tgl' => 'hidden',
         'irama_dasar' => 'select',
         'denyut_jantung' => 'select',
         'gelombang_p' => 'select',
@@ -53,10 +51,7 @@ class recoveryConfig extends config
         'segmen_st_depresi' => 'select2',
         'segmen_st_elevasi' => 'select2',
         'gelombang_t' => 'radio',
-        'q_interval' => 'select',
-        'inputer' => 'hidden',
-        'inputtime' => 'hedden',
-        'updated' => 'hedden'
+        'q_interval' => 'select'
     );
 
     var $fieldsisarray = array(
