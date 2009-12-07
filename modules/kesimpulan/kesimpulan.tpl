@@ -41,7 +41,7 @@ foreach($vl['datafields'] as $yk => $lv){
 //                echo "disana";
             } else {
 //                echo "disini";
-                $result .= '<select name="' . $yk . '[0]" size="' . $lv['size']. '">' . "\n";
+                $result .= '<select name="' . $ky . '_' . $yk . '[0]" size="' . $lv['size']. '">' . "\n";
                 $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
 //                if(isset($lv['blankopt'])){
 //                    $result .= '<option value=""></option>';
@@ -80,7 +80,7 @@ foreach($vl['datafields'] as $yk => $lv){
             } else {
                 $htg = 0;
                 foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<input type="checkbox" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . (count($lv['value']) > 0 && in_array($kc, $lv['value']) ? ' checked="true"' : '') . '>' . "\n";
+                    $result .= '<input type="checkbox" name="' . $ky . '_' . $yk . '[' . $htg . ']" value="' . $kc . '"' . (count($lv['value']) > 0 && in_array($kc, $lv['value']) ? ' checked="true"' : '') . '>' . "\n";
                     $result .= $isi . "<br />";
                     $htg++;
                 } unset($htg);
@@ -91,7 +91,7 @@ foreach($vl['datafields'] as $yk => $lv){
             } else {
                 $htg = 0;
                 foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<input type="radio" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>' . "\n";
+                    $result .= '<input type="radio" name="' . $ky . '_' . $yk . '[' . $htg . ']" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>' . "\n";
                     $result .= $isi . "<br />";
 //                    $htg++;
                 } unset($htg);
@@ -114,16 +114,16 @@ foreach($vl['datafields'] as $yk => $lv){
                 $result .= $dumptime[1] . ":";
                 $result .= $dumptime[2];
             } else {
-                $result .= '<input type="text" name="' . $yk . '[2]" size="2" maxlength="2" value="' . $dumptgl[2] . '">' . "&nbsp";
-                $result .= '<select name="' . $yk . '[1]" size="1">' . "\n";
+                $result .= '<input type="text" name="' . $ky . '_' . $yk . '[2]" size="2" maxlength="2" value="' . $dumptgl[2] . '">' . "&nbsp";
+                $result .= '<select name="' . $ky . '_' . $yk . '[1]" size="1">' . "\n";
                 foreach($lv['theref'] as $kc => $isi){
                     $result .= '<option value="' . $kc . '"' . ($dumptgl[1] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
                 }
                 $result .= '</select>' . "&nbsp;";
-                $result .= '<input type="text" name="' . $yk . '[0]" size="4" maxlength="4" value="' . $dumptgl[0] . '">' . "<br />\n";
-                $result .= '<input type="text" name="' . $yk . '[3]" size="2" maxlength="2" value="' . $dumptime[0] . '">' . ":";
-                $result .= '<input type="text" name="' . $yk . '[4]" size="2" maxlength="2" value="' . $dumptime[1] . '">' . ":";
-                $result .= '<input type="text" name="' . $yk . '[5]" size="2" maxlength="2" value="' . $dumptime[2] . '">' . "\n";
+                $result .= '<input type="text" name="' . $ky . '_' . $yk . '[0]" size="4" maxlength="4" value="' . $dumptgl[0] . '">' . "<br />\n";
+                $result .= '<input type="text" name="' . $ky . '_' . $yk . '[3]" size="2" maxlength="2" value="' . $dumptime[0] . '">' . ":";
+                $result .= '<input type="text" name="' . $ky . '_' . $yk . '[4]" size="2" maxlength="2" value="' . $dumptime[1] . '">' . ":";
+                $result .= '<input type="text" name="' . $ky . '_' . $yk . '[5]" size="2" maxlength="2" value="' . $dumptime[2] . '">' . "\n";
             }
         } else {
             if($lv['readonly'] === true){
@@ -132,7 +132,7 @@ foreach($vl['datafields'] as $yk => $lv){
 //                if (preg_match('/protokol/',$yk)){
 //                    $result .= 'Bruce stage, Lamanya <input type="' . $lv['type'] . '" name="' . $yk . '[0]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> Menit' . "\n";
 //                } else {
-                    $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '[0]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> mmHg' . "\n";
+                    $result .= '<input type="' . $lv['type'] . '" name="' . $ky . '_' . $yk . '[0]"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : 20) . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '> ' . (eregi('aerobik', $yk) ? 'Metz' : '') . "\n";
 //                }
                 
                 

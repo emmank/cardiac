@@ -41,34 +41,24 @@ class kesimpulanConfig extends config
     );
     var $typeoffields = array(
         'id' => 'hidden',
-        'patients' => 'hidden',
-        'hasil_treadmill' => 'select',
-        'respon_tekanan_darah' => 'select',
+        'uljb_jantung_koroner' => 'select',
+        'respons_tekanan_darah' => 'select',
         'tingkat_kesegaran_jasmani' => 'select',
         'klasifikasi_fungsional' => 'select',
-        'kapasitas_aerobik' => 'text'
-
+        'kapasitas_aerobik' => 'text',
+        'kesimpulan_lainlain' => 'text'
     );
     var $fieldsisarray = array(
-        'hasil_treadmill',
-        'respon_tekanan_darah',
+        'uljb_jantung_koroner',
+        'respons_tekanan_darah',
         'tingkat_kesegaran_jasmani',
-        'klasifikasi_fungsional',
-        'kapasitas_aerobik'
+        'klasifikasi_fungsional'
     );
     var $reftable = array(
-        'hasil_treadmill' => array('ref_ekg_irama','irama'),
-        'respon_tekanan_darah' => array('ref_fasekesimpulan_respon_jantung', 'respon_jantung'),
-        'tingkat_kesegaran_jasmani' => array('ref_ekg_denyut_jantung', 'denyut_jantung'),
-        'klasifikasi_fungsional' => array('ref_ekg_gelombangP', 'gelombangP'),
-        'kapasitas_aerobik' => array('ref_ekg_intervalPR', 'intervalPR')
-    );
-    
-    var $qrs_complex = array(
-        'qrs_axis', 'qrs_durasi', 'qrs_konfigurasi_patologi', 'qrs_konfigurasi_r_s'
-    );
-    var $segment_st = array(
-        'segmen_st_depresi', 'segmen_st_elevasi'
+        'uljb_jantung_koroner' => array('ref_threadKesimpulanSaran_Ulib','Ulib'),
+        'respons_tekanan_darah' => array('ref_threadKesimpulanSaran_tekananDarah', 'tekananDarah'),
+        'tingkat_kesegaran_jasmani' => array('ref_threadKesimpulanSaran_kesegaran', 'kesegaran'),
+        'klasifikasi_fungsional' => array('ref_threadKesimpulanSaran_fungsional', 'fungsional')
     );
     var $table_scheme = array(
         'kesimpulan' => array(

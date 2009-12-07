@@ -641,7 +641,7 @@ class treadmillModule extends mainModule
         $form['treadmill']['tab_items']['istirahathiperventilasi'] = $this->__loadFaseIstirahatHiperventilasi();
         $form['treadmill']['tab_items']['latihan'] = $this->__loadFaseLatihan();
         $form['treadmill']['tab_items']['recovery'] = $this->__loadFaseRecovery();
-//        $form['treadmill']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
+        $form['treadmill']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
 
         $form['treadmill']['submit'] = array(
             '#type' => 'submit',
