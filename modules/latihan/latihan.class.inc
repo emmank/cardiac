@@ -71,29 +71,77 @@ class latihanModule extends mainModule
                 }
             }
         }
-        foreach($datafields as $key => $value){
-            if($value == 'catched'){
-                if(!isset($vcache['catched']) || $vcache['catched'] == ''){
-                    $vcache['catched'] = date('Y-m-d H:i:s', $this->config->time);
+        foreach($this->config->urutanform as $key => $value){
+            foreach($value as $ky => $vl){
+                if(is_array($vl)){
+                    foreach($vl as $yk => $lv){
+                        if(is_array($lv)){
+                            foreach($lv as $kk => $vv){
+                                $result['datafields'][$key][$ky][$yk][$vv] = array(
+                                    'title' => __t($vv),
+                                    'type' => $this->config->typeoffields[$vv],
+                                    'value' => isset($vcache[$vv]) ? $vcache[$vv] : ''
+                                );
+                                if(in_array($vv, $this->config->fieldsisarray)){
+                                    $result['datafields'][$key][$ky][$yk][$vv]['theref'] = $this->__get_refs($vv);
+                                } elseif($this->config->typeoffields[$vv] == 'datetime'){
+                                    $result['datafields'][$key][$ky][$yk][$vv]['theref'] = $this->nama_bulan;
+                                    $result['datafields'][$key][$ky][$yk][$vv]['timenow'] = $this->config->time;
+                                } else {
+                                    $result['datafields'][$key][$ky][$yk][$vv]['size'] = 6;
+                                }
+                                $result['datafields'][$key][$ky][$yk][$vv]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
+                            }
+                        } else {
+                            $result['datafields'][$key][$ky][$lv] = array(
+                                'title' => __t($lv),
+                                'type' => $this->config->typeoffields[$lv],
+                                'value' => isset($vcache[$lv]) ? $vcache[$lv] : ''
+                            );
+                            if(in_array($lv, $this->config->fieldsisarray)){
+                                $result['datafields'][$key][$ky][$lv]['theref'] = $this->__get_refs($lv);
+                            } elseif($this->config->typeoffields[$lv] == 'datetime'){
+                                $result['datafields'][$key][$ky][$lv]['theref'] = $this->nama_bulan;
+                                $result['datafields'][$key][$ky][$lv]['timenow'] = $this->config->time;
+                            } else {
+                                $result['datafields'][$key][$ky][$lv]['size'] = 6;
+                            }
+                            $result['datafields'][$key][$ky][$lv]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
+                        }
+                    }
+                } else {
+                    $result['datafields'][$key][$vl] = array(
+                        'title' => __t($vl),
+                        'type' => $this->config->typeoffields[$vl],
+                        'value' => isset($vcache[$vl]) ? $vcache[$vl] : ''
+                    );
+                    if(in_array($vl, $this->config->fieldsisarray)){
+                        $result['datafields'][$key][$vl]['theref'] = $this->__get_refs($vl);
+                    } elseif($this->config->typeoffields[$vl] == 'datetime'){
+                        $result['datafields'][$key][$vl]['theref'] = $this->nama_bulan;
+                        $result['datafields'][$key][$vl]['timenow'] = $this->config->time;
+                    } else {
+                        $result['datafields'][$key][$vl]['size'] = 6;
+                    }
+                    $result['datafields'][$key][$vl]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
                 }
             }
-            $result['datafields'][$value] = array(
-                'title' => __t($value),
-                'type' => $this->config->typeoffields[$value],
-                'value' => isset($vcache[$value]) ? $vcache[$value] : ''
-            );
-            if(in_array($value, $this->config->fieldsisarray)){
-                $result['datafields'][$value]['theref'] = $this->__get_refs($value);
-            } elseif($this->config->typeoffields[$value] == 'datetime'){
-                $result['datafields'][$value]['theref'] = $this->nama_bulan;
-                $result['datafields'][$value]['timenow'] = $this->config->time;
-            } else {
-                $result['datafields'][$value]['size'] = 6;
-            }
-
-            
-            $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
+//        foreach($datafields as $key => $value){
+//            if($value == 'catched'){
+//                if(!isset($vcache['catched']) || $vcache['catched'] == ''){
+//                    $vcache['catched'] = date('Y-m-d H:i:s', $this->config->time);
+//                }
+//            }
+//            $result['datafields'][$value] = array(
+//                'title' => __t($value),
+//                'type' => $this->config->typeoffields[$value],
+//                'value' => isset($vcache[$value]) ? $vcache[$value] : ''
+//            );
+//
+//
+//        }
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
