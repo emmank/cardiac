@@ -658,17 +658,70 @@ class mainModule
             $sql = $this->sysquery->setDelete(
                 'caches'
             );
+            $this->sysquery->connect();
+            $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
         } else {
-            $sql = $this->sysquery->setDelete(
-                'caches',
-                array(
-                    array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
-                )
-            );
+            $this->__delete_cache($_COOKIE[$this->config->cookiesession]);
         }
+    }
+
+    function __delete_cache($id){
+        $sql = $this->sysquery->setDelete(
+            'caches',
+            array(
+                array('&&', "id=" . $id)
+            )
+        );
         $this->sysquery->connect();
         $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();
+    }
+
+    function __get_cache_lists(){
+        $result = array();
+        $sql = $this->sysquery->getSelect(
+            array('id'),
+            array('caches')
+        );
+        $this->sysquery->connect();
+        $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
+        if($getit->_numOfRows > 0){
+            for ($i=0; $i<$getit->_numOfRows; $i++){
+                $result[] = $getit->fields['id'];
+                $getit->MoveNext();
+            }
+        }
+        return $result;
+    }
+
+    function __cache_inspects(){
+        $sql = $this->sysquery->getSelect(
+            array('sesi'),
+            array('users'),
+            array(
+                array('&&', "sesi is not null")
+            )
+        );
+        $this->sysquery->connect();
+        $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
+        if($getit->_numOfRows > 0){
+            $lists = array();
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $lists[] = $getit->fields['sesi'];
+                $getit->MoveNext();
+            }
+            $cachelists = $this->__get_cache_lists();
+            foreach($cachelists as $value){
+                if(!in_array($value, $lists)){
+                    $this->__delete_cache($value);
+                }
+            } unset($cachelists, $lists);
+        } else {
+            $this->__flush_caches(1);
+        }
     }
 
     function agecount_in_month($birthdate){

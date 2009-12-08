@@ -26,7 +26,7 @@ require_once MODULES_DIR . DS . 'istirahathiperventilasi' . DS . 'config.inc';
 
 class istirahathiperventilasiModule extends mainModule
 {
-    var $title = 'istirahathiperventilasi';
+    var $title = 'istirahat hiperventilasi';
     var $description = '';
 
     function __get_refs($fields, $sort=NULL){
@@ -50,7 +50,7 @@ class istirahathiperventilasiModule extends mainModule
     function treadmill_menu(){
         $this->sync_scheme('istirahathiperventilasi', $this->query);
         $result = array();
-        $result['#title'] = __t('Fase istirahat Hiperventilasi');
+        $result['#title'] = __t('Istirahat Hiperventilasi');
         $result['#tpl'] = MODULES_DIR . DS . 'istirahathiperventilasi' . DS . 'istirahathiperventilasi.tpl';
         $datafields = $this->__get_data_fields('istirahathiperventilasi', $this->query);
         if (count($this->config->free_val) > 0){
@@ -121,37 +121,37 @@ class istirahathiperventilasiModule extends mainModule
     function treadmill_submit(){
         $thefields = $this->__get_data_fields('istirahathiperventilasi', $this->query);
         foreach($this->config->free_val as $key => $value){
-            if(in_array($key, $thefields)){
-                if($key == 'catched'){
-                    $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
-                } elseif($key == 'risk_factor' || $key == 'ilness_history'){
-                    if(count($value) > 0){
-                        $value = implode(',', $value);
+             if(preg_match('/^istirahathiperventilasi_/', $key)){
+                $key = trim(preg_replace('/^istirahathiperventilasi_/', '', $key));
+                if(in_array($key, $thefields)){
+                    if($key == 'gelombang_t'){
+                        if($value != 'Inverted'){
+                            unset($value[1]);
+                        }
                     }
+                    if(count($value) > 0){
+                        $value = implode('|', $value);
+                    }
+                    $thevalue[$key] = $value;
                 }
-                $thevalue[$key] = $value;
             }
-        } unset($thefields);
+       } unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
-            $sql = $this->query->updateData(
-                'istirahathiperventilasi',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
-            $sql = $this->query->saveData(
-                'istirahathiperventilasi',
-                $thevalue
-            );
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-//        echo '<pre>'; print_r($thevalue); echo '</pre>';
-        unset($thevalue);
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        $this->__exec_db_ops(
+            $this->query,
+            'istirahathiperventilasi',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($opr, $strid, $thevalue);
     }
 
 }

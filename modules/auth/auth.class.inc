@@ -215,7 +215,6 @@ class authModule extends mainModule
 
     function login_submit(){
         $this->__write_form_cache();
-//        echo '<pre>'; print_r($_POST); echo '</pre>'; exit();
         $this->sysquery->connect();
         $sql = $this->sysquery->getSelect(
             array(),
@@ -226,11 +225,9 @@ class authModule extends mainModule
         );
         $getdata = $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();
-//        echo '<pre>'; print_r($getdata); echo '</pre>'; exit();
         if($getdata->_numOfRows > 0){
             $salt = substr($getdata->fields[$this->config->auth_use_table[2]], 0, $this->config->salt[0]);
             $passwd = substr_replace(sha1($_POST[$this->config->auth_use_table[2]]), $salt, 0, $this->config->salt[1]);
-//            echo $salt . '<br />' . $passwd . '<br />' . $getdata->fields[$this->config->auth_use_table[2]]; exit();
             if($passwd == $getdata->fields[$this->config->auth_use_table[2]]){
                 $this->sysquery->connect();
                 $sql = $this->sysquery->updateData(
@@ -266,8 +263,8 @@ class authModule extends mainModule
                 $this->sysquery->connect();
                 $this->sysquery->conn->Execute($sql); unset($sql);
                 $this->sysquery->close();
-//                echo '<pre>'; print_r($user); echo '</pre>'; exit();
-//                __write_registry();
+                $this->__cache_inspects();
+                $this->__flush_caches();
                 redirect_to('/');
             } else {
                 $strvar = array("error" => __t("Your passcode doesn't match !"));
@@ -281,11 +278,24 @@ class authModule extends mainModule
         }
     }
 
-    function __flush_registry(){
+    function __flush_registry($force=NULL){
+        if(!is_null($force)){
+            $sql = $this->sysquery->setDelete(
+                'registry'
+            );
+            $this->sysquery->connect();
+            $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
+        } else {
+            $this->__delete_registry($_COOKIE[$this->config->cookiesession]);
+        }
+    }
+
+    function __delete_registry($id){
         $sql = $this->sysquery->setDelete(
             'registry',
             array(
-                array('&&', "id=" . $_COOKIE[$this->config->cookiesession])
+                array('&&', "id=" . $id)
             )
         );
         $this->sysquery->connect();
@@ -298,6 +308,7 @@ class authModule extends mainModule
         if(!is_null($this->config->use_time_limit) && $this->config->use_time_limit != '' && $this->config->use_time_limit != '0'){
             $this->__set_time_session($_COOKIE[$this->config->cookieid]);
         }
+        $this->__cache_inspects();
         setcookie($this->config->cookieid,"");
         session_destroy();
         redirect_to('/');

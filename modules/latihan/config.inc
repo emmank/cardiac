@@ -40,66 +40,71 @@ class latihanConfig extends config
     );
     var $typeoffields = array(
         'id' => 'hidden',
-        'patients' => 'hidden',
         'protokol' => 'text',
-        'tensi_sistolik' => 'text',
-        'tensi_diastolik' => 'text',
-        'respon_denyut_jantung' => 'select',
-        'puncak_denyut_jantung' => 'select',
 	'irama_dasar' => 'select',
-        'gelombang_p' => 'select',
-        'segment_st_konfigurasi' => 'select',
-        'qrs_konfigurasi_rs' => 'select',
-        'segment_st_depresi' => 'select',
-        'segment_st_elevasi' => 'select',
         'perubahan_gelombang_r' => 'select',
         'dihentikan_karena' => 'select',
-        'gelombang_t' => 'select',
+        'respon_denyut_jantung' => 'select',
+        'puncak_denyut_jantung' => 'select',
         'tekanan_darah' => 'radio',
         'tekanan_darah_puncak' => 'text',
-        'q_interval' => 'select'
+        'segmen_st_depresi' => 'text',
+        'segmen_st_elevasi' => 'text',
+        'segmen_st_konfigurasi' => 'text',
+        'denyut_jantung_lainlain' => 'text',
+        'rekaman_ekg_lainlain' => 'text'
     );
     var $fieldsisarray = array(
         'irama_dasar',
-        'respon_denyut_jantung',
-        'puncak_denyut_jantung',
-        'gelombang_p',
-        'interval_pr',
-        'qrs_axis',
-        'qrs_durasi',
-        'segment_st_konfigurasi',
-        'qrs_konfigurasi_rs',
-        'segment_st_depresi' ,
-        'segment_st_elevasi' ,
         'perubahan_gelombang_r' ,
         'dihentikan_karena' ,
-        'gelombang_t',
+        'respon_denyut_jantung',
+        'puncak_denyut_jantung',
         'tekanan_darah',
-        'q_interval'
+//        'segmen_st_depresi',
+//        'segmen_st_elevasi',
+//        'segmen_st_konfigurasi'
     );
     var $reftable = array(
         'irama_dasar' => array('ref_ekg_irama','irama'),
-        'respon_denyut_jantung' => array('ref_faseLatihan_respon_jantung', 'respon_jantung'),
-        'puncak_denyut_jantung' => array('ref_ekg_denyut_jantung', 'denyut_jantung'),
-        'gelombang_p' => array('ref_ekg_gelombangP', 'gelombangP'),
-        'interval_pr' => array('ref_ekg_intervalPR', 'intervalPR'),
-        'qrs_axis' => array('ref_ekgQrs_axis', 'axis'),
-        'qrs_durasi' => array('ref_ekgQrs_durasi', 'durasi'),
-        'segment_st_konfigurasi' => array('ref_ekg_sandapan', 'sandapan'),
-        'qrs_konfigurasi_rs' => array('ref_ekgQrs_RlbS', 'RlbS'),
-        'segment_st_depresi' => array('ref_ekg_sandapan', 'sandapan'),
-        'segment_st_elevasi' => array('ref_ekg_sandapan', 'sandapan'),
         'perubahan_gelombang_r' => array('ref_faseLatihan_perubahan_gelombang', 'perubahan_gelombang'),
         'dihentikan_karena' => array('ref_faseLatihan_dihentikan', 'dihentikan'),
-        'gelombang_t' => array('ref_ekg_sandapan', 'sandapan'),
+        'respon_denyut_jantung' => array('ref_faseLatihan_respon_jantung', 'respon_jantung'),
+        'puncak_denyut_jantung' => array('ref_ekg_denyut_jantung', 'denyut_jantung'),
         'tekanan_darah' => array('ref_threadKesimpulanSaran_tekananDarah', 'tekananDarah'),
-        'q_interval' => array('ref_ekg_q_interval', 'q_interval')
     );
-    var $qrs_complex = array(
-        'qrs_axis', 'qrs_durasi', 'qrs_konfigurasi_patologi', 'qrs_konfigurasi_r_s'
-    );
-    var $segment_st = array(
-        'segmen_st_depresi', 'segmen_st_elevasi'
+    var $urutanform = array(
+        'A' => array(
+            'protokol' => 'protokol'
+        ),
+        'B' => array(
+            'rekaman_ekg' => array(
+                'rekaman_st' => array(
+                    'segmen_st_depresi',
+                    'segmen_st_elevasi',
+                    'segmen_st_konfigurasi'
+                ),
+                'irama_dasar',
+                'perubahan_gelombang_r',
+                'rekaman_ekg_lainlain'
+            )
+        ),
+        'C' => array(
+            'dihentikan_karena' => 'dihentikan_karena'
+        ),
+        'D' => array(
+            'perubahan_hemodinamik' => array(
+                'denyut_jantung' => array(
+                    'respon_denyut_jantung',
+                    'puncak_denyut_jantung',
+                    'denyut_jantung_lainlain'
+                ),
+                'tekanan_darah' => array(
+                    'tekanan_darah',
+                    'tekanan_darah_puncak'
+                )
+            )
+        )
     );
     var $table_scheme = array(
         'latihan' => array(
@@ -152,6 +157,13 @@ class latihanConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
+            'rekaman_ekg_lainlain' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
             'dihentikan_karena' => array(
                 'type' => 'int(11)',
                 'null' => 1,
@@ -167,14 +179,14 @@ class latihanConfig extends config
                 'extra' => ''
             ),
             'puncak_denyut_jantung' => array(
-                'type' => 'int(11)',
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
             'denyut_jantung_lainlain' => array(
-                'type' => 'int(11)',
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,

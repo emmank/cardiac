@@ -111,7 +111,7 @@ class recoveryModule extends mainModule
     function treadmill_menu(){
         $this->sync_scheme('recovery', $this->query);
         $result = array();
-        $result['#title'] = __t('FaseRecovery');
+        $result['#title'] = __t('Recovery');
         $result['#tpl'] = MODULES_DIR . DS . 'recovery' . DS . 'recovery.tpl';
         $datafields = $this->__get_data_fields('recovery', $this->query);
         if (count($this->config->free_val) > 0){
@@ -132,200 +132,88 @@ class recoveryModule extends mainModule
                 }
             }
         }
-        $result['recovery']['kunjungan'] = array(
-            '#type' => 'hidden',
-            '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
-        );
-        $thefields = $this->__get_data_fields('recovery', $this->query);
-        foreach($thefields as $value){
-            if(in_array($value, $this->hidden_fields)){
-                if($value == 'id'){
-                    $result['recovery'][$value] = array(
-                        '#type' => 'hidden',
-                        '#value' => isset($vcache['id']) ? $vcache['id'] : ''
-                    );
-                }
-            } else {
-                if($value == 'tgl'){
-                    if(!isset($vcache['tgl']) || $vcache['tgl'] == ''){
-                        $vcache['tgl'] = date('Y-m-d', $this->config->time);
-                    }
-                } elseif($value == 'patients'){
-                    $result['recovery'][$value] = array(
-                        '#type' => 'hidden',
-                        '#value' => $vcache['patients']
-                    );
-                    $query = $this->__get_patient_data($vcache['patients'], array('nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah'));
-                    if(count($query) > 0){
-                        foreach($query as $ky => $vl){
-                            if($ky == 'tgl_lahir'){
-//                                $vl = $this->agecount_in_month(strtotime($vl));
-//                                $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
-//                                $result['recovery']['umur'] = array(
-//                                    '#type' => 'info',
-//                                    '#value' => $vl . ' tahun',
-//                                    '#title' => __t('umur'),
-//                                    '#tbpos' => 3
-//                                );
-                            } else {
-                                if($ky != 'kota' && $ky != 'propinsi'){
-                                    if($ky == 'alamat'){
-                                        $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
-                                        $tbpos = 4;
-                                    } elseif($ky == 'nomor'){
-                                        $ky = 'no_registrasi';
-                                        $tbpos = 0;
-                                    } elseif($ky == 'nama'){
-                                        $tbpos = 1;
-                                    } elseif($ky == 'kelamin'){
-                                        $vl = $this->kelamin[$vl];
-                                        $tbpos = 2;
-                                    } elseif($ky == 'gol_darah'){
-                                        $tbpos = 5;
-                                    }
-                                    $result['recovery'][$ky] = array(
-                                        '#type' => $ky == 'alamat' ? 'textarea' : 'info',
-                                        '#value' => $vl,
-                                        '#title' => __t($ky),
-                                        '#tbpos' => $tbpos
-                                    );
-                                    if($ky == 'alamat'){
-                                        $result['recovery'][$ky]['#extra'] = 'readonly="true"';
-                                        $result['recovery'][$ky]['#cols'] = '55';
-                                        $result['recovery'][$ky]['#rows'] = '3';
-                                    } elseif($ky == 'no_registrasi'){
-                                        $result['recovery'][$ky]['#link'] = '/user/recovery/today_patient_lists';
-                                    }
-                                    unset($tbpos);
-                                }
-                            }
-                        }
-                        $sql = $this->query->getSelect(
-                            array('pukul'),
-                            array('kunjungan'),
-                            array(
-                                array('&&', "patients=" . $vcache['patients'])
-                            )
-                        );
-                        $this->query->connect();
-                        $getfrek = $this->query->conn->Execute($sql); unset($sql);
-                        $this->query->close();
-                        $dumpfrek = array();
-                        for($i=0; $i<$getfrek->_numOfRows; $i++){
-                            $buffer = date('Y-m-d', strtotime($getfrek->fields['pukul']));
-                            if(!in_array($buffer, $dumpfrek)){
-                                $dumpfrek[] = $buffer;
-                            }
-                            unset($buffer);
-                            $getfrek->MoveNext();
-                        }
-                        $result['recovery']['kunjungan_ke'] = array(
-                            '#type' => 'info',
-                            '#value' => count($dumpfrek),
-                            '#title' => __t('kunjungan_ke'),
-                            '#tbpos' => 6
-                        );
-                        unset($dumpfrek, $getfrek);
-                        $sql = $this->query->getSelect(
-                            array('nama'),
-                            array('stafs'),
-                            array(
-                                array('&&', "id=" . $pengirim)
-                            )
-                        );
-                        $this->query->connect();
-                        $getsender = $this->query->conn->Execute($sql); unset($sql);
-                        $this->query->close();
-                        $result['recovery']['pengirim'] = array(
-                            '#type' => 'info',
-                            '#value' => $getsender->fields['nama'],
-                            '#title' => __t('pengirim'),
-                            '#tbpos' => 7
-                        );
-                        unset($getsender);
-                    }
-                }
-                if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
-                    $result['recovery'][$value] = array(
-                        '#type' => $this->config->fields_form_type[$value],
-                        '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
-                        '#size' => $this->config->fields_form_type[$value] != 'select' && $this->config->fields_form_type[$value] != 'date' ? 20 : 1,
-                        '#title' => __t($value),
-                        '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
-                    );
-                    if(in_array($value, $this->config->fieldsisarray)){
-                        $result['recovery'][$value]['#theref'] = $this->__get_refs($value);
-                    }
-                    if(in_array($value, $this->config->qrs_complex) || in_array($value, $this->config->segment_st) || $value == 'gelombang_t'){
-                        $result['recovery'][$value]['#customized']['title'] = in_array($value, $this->config->qrs_complex) ? __t('qrs_complex') : ($value == 'gelombang_t' ? __t('gelombang_t') : __t('segment_st'));
-                        $result['recovery'][$value]['#customized']['id'] = in_array($value, $this->config->qrs_complex) ? 'qrs_complex' : ($value == 'gelombang_t' ? 'gelombang_t' : 'segment_st');
-                        if($this->config->fields_form_type[$value] == 'select2'){
-                            $result['recovery'][$value]['#customized']['option'] =  array(
-                                '1mm - 2mm' => '1mm - 2mm',
-                                '> 2mm - 3mm' => '> 2mm - 3mm',
-                                '> 3mm' => '> 3mm'
-                            );
-                        } elseif ($this->config->fields_form_type[$value] == 'select3') {
-                            $result['recovery'][$value]['#customized']['option'] =  array(
-                                'Q Patologi +' => 'Q Patologi +',
-                                'Q Patologi -' => 'Q Patologi -'
-                            );
-                        } elseif ($value == 'gelombang_t') {
-                            $result['recovery'][$value]['#customized']['option'] =  array(
-                                'Normal' => 'Normal',
-                                'Inverted' => 'Inverted'
-                            );
-                        }
-                    }
-                }
-                if($this->formhabit == 'readonly'){
-                    $result['recovery'][$value]['#readonly'] = TRUE;
+        rsort($datafields);
+        foreach($datafields as $key => $value){
+            if($value == 'catched'){
+                if(!isset($vcache['catched']) || $vcache['catched'] == ''){
+                    $vcache['catched'] = date('Y-m-d H:i:s', $this->config->time);
                 }
             }
+            $result['datafields'][$value] = array(
+                '#title' => __t($value),
+                '#type' => $this->config->fields_form_type[$value],
+                '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
+                '#size' => $this->config->fields_form_type[$value] != 'select' && $this->config->fields_form_type[$value] != 'date' ? 20 : 1,
+                '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
+            );
+            if(in_array($value, $this->config->fieldsisarray)){
+                $result['datafields'][$value]['#theref'] = $this->__get_refs($value);
+            } elseif($this->config->typeoffields[$value] == 'datetime'){
+                $result['datafields'][$value]['#theref'] = $this->nama_bulan;
+                $result['datafields'][$value]['#timenow'] = $this->config->time;
+//            } else {
+//                $result['datafields'][$value]['#size'] = 6;
+            }
+            if(in_array($value, $this->config->qrs_complex) || in_array($value, $this->config->segment_st) || $value == 'gelombang_t'){
+                $result['datafields'][$value]['#customized']['title'] = in_array($value, $this->config->qrs_complex) ? __t('qrs_complex') : ($value == 'gelombang_t' ? __t('gelombang_t') : __t('segment_st'));
+                $result['datafields'][$value]['#customized']['id'] = in_array($value, $this->config->qrs_complex) ? 'qrs_complex' : ($value == 'gelombang_t' ? 'gelombang_t' : 'segment_st');
+                if($this->config->fields_form_type[$value] == 'select2'){
+                    $result['datafields'][$value]['#customized']['option'] =  array(
+                        '1mm - 2mm' => '1mm - 2mm',
+                        '> 2mm - 3mm' => '> 2mm - 3mm',
+                        '> 3mm' => '> 3mm'
+                    );
+                } elseif ($this->config->fields_form_type[$value] == 'select3') {
+                    $result['datafields'][$value]['#customized']['option'] =  array(
+                        'Q Patologi +' => 'Q Patologi +',
+                        'Q Patologi -' => 'Q Patologi -'
+                    );
+                } elseif ($value == 'gelombang_t') {
+                    $result['datafields'][$value]['#customized']['option'] =  array(
+                        'Normal' => 'Normal',
+                        'Inverted' => 'Inverted'
+                    );
+                }
+            }
+            $result['datafields'][$value]['#readonly'] = isset($this->config->free_val['readonly']) ? TRUE : FALSE;
         }
-
-        $result['recovery']['submit'] = array(
-            '#type' => 'submit',
-            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
-        );
-//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
     function treadmill_submit(){
         $thefields = $this->__get_data_fields('recovery', $this->query);
         foreach($this->config->free_val as $key => $value){
-            if(in_array($key, $thefields)){
-                if($key == 'catched'){
-                    $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
-                } elseif($key == 'risk_factor' || $key == 'ilness_history'){
-                    if(count($value) > 0){
-                        $value = implode(',', $value);
+            if(preg_match('/^recovery_/', $key)){
+                $key = trim(preg_replace('/^recovery_/', '', $key));
+                if(in_array($key, $thefields)){
+                    if($key == 'gelombang_t'){
+                        if($value != 'Inverted'){
+                            unset($value[1]);
+                        }
                     }
+                    if(count($value) > 0){
+                        $value = implode('|', $value);
+                    }
+                    $thevalue[$key] = $value;
                 }
-                $thevalue[$key] = $value;
             }
         } unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
-            $sql = $this->query->updateData(
-                'recovery',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
-            $sql = $this->query->saveData(
-                'recovery',
-                $thevalue
-            );
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-//        echo '<pre>'; print_r($thevalue); echo '</pre>';
-        unset($thevalue);
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        $this->__exec_db_ops(
+            $this->query,
+            'recovery',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($opr, $strid, $thevalue);
     }
 
     function __get_recovery_data($id){

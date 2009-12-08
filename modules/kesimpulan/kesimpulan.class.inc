@@ -94,44 +94,35 @@ class kesimpulanModule extends mainModule
             
             $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
-//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
     function treadmill_submit(){
         $thefields = $this->__get_data_fields('kesimpulan', $this->query);
         foreach($this->config->free_val as $key => $value){
-            if(in_array($key, $thefields)){
-                if($key == 'catched'){
-                    $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
-                } elseif($key == 'risk_factor' || $key == 'ilness_history'){
-                    if(count($value) > 0){
-                        $value = implode(',', $value);
-                    }
+            if(preg_match('/^kesimpulan_/', $key)){
+                $key = trim(preg_replace('/^kesimpulan_/', '', $key));
+                if(in_array($key, $thefields)){
+                    $thevalue[$key] = $value;
                 }
-                $thevalue[$key] = $value;
             }
         } unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
-            $sql = $this->query->updateData(
-                'kesimpulan',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
-            $sql = $this->query->saveData(
-                'kesimpulan',
-                $thevalue
-            );
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-//        echo '<pre>'; print_r($thevalue); echo '</pre>';
-        unset($thevalue);
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        $this->__exec_db_ops(
+            $this->query,
+            'kesimpulan',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($opr, $strid, $thevalue);
     }
 
 }

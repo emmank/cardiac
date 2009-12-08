@@ -50,7 +50,7 @@ class latihanModule extends mainModule
     function treadmill_menu(){
         $this->sync_scheme('latihan', $this->query);
         $result = array();
-        $result['#title'] = __t('Fase latihan');
+        $result['#title'] = __t('Latihan');
         $result['#tpl'] = MODULES_DIR . DS . 'latihan' . DS . 'latihan.tpl';
         $datafields = $this->__get_data_fields('latihan', $this->query);
         if (count($this->config->free_val) > 0){
@@ -71,28 +71,61 @@ class latihanModule extends mainModule
                 }
             }
         }
-        foreach($datafields as $key => $value){
-            if($value == 'catched'){
-                if(!isset($vcache['catched']) || $vcache['catched'] == ''){
-                    $vcache['catched'] = date('Y-m-d H:i:s', $this->config->time);
+        foreach($this->config->urutanform as $key => $value){
+            foreach($value as $ky => $vl){
+                if(is_array($vl)){
+                    foreach($vl as $yk => $lv){
+                        if(is_array($lv)){
+                            foreach($lv as $kk => $vv){
+                                $result['datafields'][$key][$ky][$yk][$vv] = array(
+                                    'title' => __t($vv),
+                                    'type' => $this->config->typeoffields[$vv],
+                                    'value' => isset($vcache[$vv]) ? $vcache[$vv] : ''
+                                );
+                                if(in_array($vv, $this->config->fieldsisarray)){
+                                    $result['datafields'][$key][$ky][$yk][$vv]['theref'] = $this->__get_refs($vv);
+                                } elseif($this->config->typeoffields[$vv] == 'datetime'){
+                                    $result['datafields'][$key][$ky][$yk][$vv]['theref'] = $this->nama_bulan;
+                                    $result['datafields'][$key][$ky][$yk][$vv]['timenow'] = $this->config->time;
+                                } else {
+                                    $result['datafields'][$key][$ky][$yk][$vv]['size'] = 6;
+                                }
+                                $result['datafields'][$key][$ky][$yk][$vv]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
+                            }
+                        } else {
+                            $result['datafields'][$key][$ky][$lv] = array(
+                                'title' => __t($lv),
+                                'type' => $this->config->typeoffields[$lv],
+                                'value' => isset($vcache[$lv]) ? $vcache[$lv] : ''
+                            );
+                            if(in_array($lv, $this->config->fieldsisarray)){
+                                $result['datafields'][$key][$ky][$lv]['theref'] = $this->__get_refs($lv);
+                            } elseif($this->config->typeoffields[$lv] == 'datetime'){
+                                $result['datafields'][$key][$ky][$lv]['theref'] = $this->nama_bulan;
+                                $result['datafields'][$key][$ky][$lv]['timenow'] = $this->config->time;
+                            } else {
+                                $result['datafields'][$key][$ky][$lv]['size'] = 6;
+                            }
+                            $result['datafields'][$key][$ky][$lv]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
+                        }
+                    }
+                } else {
+                    $result['datafields'][$key][$vl] = array(
+                        'title' => __t($vl),
+                        'type' => $this->config->typeoffields[$vl],
+                        'value' => isset($vcache[$vl]) ? $vcache[$vl] : ''
+                    );
+                    if(in_array($vl, $this->config->fieldsisarray)){
+                        $result['datafields'][$key][$vl]['theref'] = $this->__get_refs($vl);
+                    } elseif($this->config->typeoffields[$vl] == 'datetime'){
+                        $result['datafields'][$key][$vl]['theref'] = $this->nama_bulan;
+                        $result['datafields'][$key][$vl]['timenow'] = $this->config->time;
+                    } else {
+                        $result['datafields'][$key][$vl]['size'] = 6;
+                    }
+                    $result['datafields'][$key][$vl]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
                 }
             }
-            $result['datafields'][$value] = array(
-                'title' => __t($value),
-                'type' => $this->config->typeoffields[$value],
-                'value' => isset($vcache[$value]) ? $vcache[$value] : ''
-            );
-            if(in_array($value, $this->config->fieldsisarray)){
-                $result['datafields'][$value]['theref'] = $this->__get_refs($value);
-            } elseif($this->config->typeoffields[$value] == 'datetime'){
-                $result['datafields'][$value]['theref'] = $this->nama_bulan;
-                $result['datafields'][$value]['timenow'] = $this->config->time;
-            } else {
-                $result['datafields'][$value]['size'] = 6;
-            }
-
-            
-            $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
         return $result;
     }
@@ -100,37 +133,41 @@ class latihanModule extends mainModule
     function treadmill_submit(){
         $thefields = $this->__get_data_fields('latihan', $this->query);
         foreach($this->config->free_val as $key => $value){
-            if(in_array($key, $thefields)){
-                if($key == 'catched'){
-                    $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
-                } elseif($key == 'risk_factor' || $key == 'ilness_history'){
-                    if(count($value) > 0){
-                        $value = implode(',', $value);
+             if(preg_match('/^latihan_/', $key)){
+                $key = trim(preg_replace('/^latihan_/', '', $key));
+                if(in_array($key, $thefields)){
+                    if($key == 'tekanan_darah'){
+                        if($value[0] != '2' && $value[0] != '3'){
+                            unset($value[1], $value[2], $value[3], $value[4]);
+                        } elseif($value[0] == '2'){
+                            unset($value[3], $value[4]);
+                        } else {
+                            unset($value[1], $value[2]);
+                        }
                     }
+                    if(count($value) > 0){
+                        $value = implode('|', $value);
+                    }
+                    $thevalue[$key] = $value;
                 }
-                $thevalue[$key] = $value;
             }
-        } unset($thefields);
+       } unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
-            $sql = $this->query->updateData(
-                'latihan',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
-            $sql = $this->query->saveData(
-                'latihan',
-                $thevalue
-            );
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-//        echo '<pre>'; print_r($thevalue); echo '</pre>';
-        unset($thevalue);
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        $this->__exec_db_ops(
+            $this->query,
+            'latihan',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        unset($opr, $strid, $thevalue);
     }
 
 }
