@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  cardio.php
+ *  
+ *  Created on Oct 1, 2009, 1:11:20 PM
+ */
+
+require_once MODULES_DIR . DS . 'kateterisasi' . DS . 'kateterisasi.class.inc';
+
+if(!isset($kateterisasi_config)){
+    $kateterisasi_config = new kateterisasiConfig();
+} elseif(!$kateterisasi_config instanceof kateterisasiConfig) {
+    $kateterisasi_config = new kateterisasiConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $kateterisasi_config->rdbms . DS . 'dbquery.php';
+if(!isset($kateterisasi_query)){
+    $kateterisasi_query = new dbset();
+} elseif(!$kateterisasi_query instanceof dbset) {
+    $kateterisasi_query = new dbset();
+}
+
+if(!isset($kateterisasi_exec)){
+    $kateterisasi_exec = new kateterisasiModule();
+} elseif(!$kateterisasi_exec instanceof kateterisasiModule) {
+    $kateterisasi_exec = new kateterisasiModule();
+}
