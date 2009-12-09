@@ -1216,7 +1216,7 @@ class patientModule extends mainModule
                         $form['patient'][$value]['#extra'] = $extra;
                         $form['patient'][$value]['#option'] = $options;
 
-//                        unset ($extra,$id);
+                        unset ($extra,$id);
                     } elseif($value == 'strnum'){
                         $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
@@ -1232,7 +1232,7 @@ class patientModule extends mainModule
                         $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
 
-                } unset($options);
+                } unset($options, $extra, $id);
                 $form['patient']['keluhan'] = array(
                     '#type' => 'textarea',
                     '#value' => isset($vcache['keluhan']) ? $vcache['keluhan'] : '',
