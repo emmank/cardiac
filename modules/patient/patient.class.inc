@@ -29,7 +29,7 @@ class patientModule extends mainModule
     var $title = 'patient';
     var $description = 'Pengelola data pasien mulai dari pendaftaran s.d. registrasi';
     var $hidden_fields = array(
-        'id', 'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'strnum', 'foto'
+        'id', 'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'strnum', 'foto', 'tinggi', 'berat', 'berat', 'tekanan_darah', 'indikasi'
     );
     var $system_job = array(
         'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'foto'
@@ -1017,7 +1017,7 @@ class patientModule extends mainModule
         );
 
         $sql = $this->query->getSelect(
-            array('id', 'nama', 'tgl_lahir', 'alamat', 'nourut'),
+            array('id', 'nama', 'tgl_lahir', 'alamat', 'kota', 'nourut'),
             array('antrian'),
             array(
                 array('&&', "year(pukul)=" . date('Y', $this->config->time)),
@@ -1036,6 +1036,18 @@ class patientModule extends mainModule
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getit->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
                 $result['data'][$i]['goto'] = '/node/patient/showme/' . $getit->fields['id'];
                 $result['data'][$i]['nourut'] = $getit->fields['nourut'];
+                $sql = $this->query->getSelect(
+                    array('kabupaten'),
+                    array('kabupaten'),
+                    array(
+                        array('&&', "id_kab=" . $getit->fields['kota'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['alamat'] = $getit->fields['alamat'] . ' ' . $getthis->fields['kabupaten'];
+                unset($getthis);
                 $getit->MoveNext();
             }
         }
@@ -1079,6 +1091,14 @@ class patientModule extends mainModule
                     unset($usia);
                 } elseif($key == 'bagian'){
                     $options = $this->__get_bagian_lists();
+                    $value = $options[$value];
+                    unset($options);
+                } elseif($key == 'propinsi'){
+                    $options = $this->__get_propinsi_options('nama_propinsi');
+                    $value = $options[$value];
+                    unset($options);
+                } elseif($key == 'kota'){
+                    $options = $this->__get_kabupaten_options('kabupaten');
                     $value = $options[$value];
                     unset($options);
                 }
@@ -1150,7 +1170,6 @@ class patientModule extends mainModule
     function form(){
         if($this->__check_caches() === true){
             $vcache = $this->__read_form_cache();
-//            unlink($this->config->fcache);
         }
         if(!isset($vcache['strnum'])){
             redirect_to('/node/patient/strnumform'); exit;
@@ -1262,30 +1281,33 @@ class patientModule extends mainModule
     function form_submit(){
         $dump = $this->__write_form_cache();
         $thevalue = array();
+        $thefields = $this->__get_data_fields('antrian', $this->query);
         foreach($dump as $key => $value){
             if($key == 'nama' || $key == 'alamat' || $key == 'kota'){
                 if($value == ''){
-                    $this->__write_custom_cache(array('error=>' . __t('Kolom nama, alamat, dan kota tidak boleh kosong !')), 1);
-                    //redirect_to('/node/patient/form'); break;
+                    $this->__write_custom_cache(array('error' => __t('Kolom nama, alamat, dan kota tidak boleh kosong !')), 1);
+                    redirect_to('/node/patient/form'); break;
                 }
             } elseif ($key == 'date'){
                 $tgldump = explode('-', $value);
                 foreach($tgldump as $ky => $vl){
                     if($vl == ''){
-                        $this->__write_custom_cache('error=>' . __t('Kolom tanggal tidak boleh kosong !'), 1);
+                        $this->__write_custom_cache(array('error' => __t('Kolom tanggal tidak boleh kosong !')), 1);
                         redirect_to('/node/patient/form'); break; exit;
                     } elseif(!ctype_digit($vl)){
-                        $this->__write_custom_cache('error=>' . __t('Kolom tanggal harus numeric !'), 1);
+                        $this->__write_custom_cache(array('error' => __t('Kolom tanggal harus numeric !')), 1);
                         redirect_to('/node/patient/form'); break; exit;
                     }
                 }
                 if(checkdate($tgldump[1], $tgldump[2], $tgldump[0]) === false){
-                    $this->__write_custom_cache('error=>' . __t('Format tanggal salah !'), 1);
+                    $this->__write_custom_cache(array('error' => __t('Format tanggal salah !')), 1);
                     redirect_to('/node/patient/form'); break; exit;
                 } unset($tgldump);
             }
             if($key != 'submit' && $key != 'blank'){
-                $thevalue[$key] = $value;
+                if(in_array($key, $thefields)){
+                    $thevalue[$key] = $value;
+                }
             }
         }
         $thevalue['strnum'] = $dump['strnum'] == '' ? substr(str_shuffle($this->string_to_shuffle), 7, 4) : $dump['strnum'];
