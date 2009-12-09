@@ -112,6 +112,13 @@ class config
             'user_required' => 'users',
             'path' => '/reference',
             'exec' => 'core_show_node_menus'
+        ),
+        'care' => array(
+            'title' => 'perawatan',
+            'description' => 'Segala kegiatan dalam layanan rawat inap pasien',
+            'user_required' => 'users',
+            'path' => '/care',
+            'exec' => 'core_show_care_menus'
         )
     );
 
