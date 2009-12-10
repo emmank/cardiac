@@ -1,4 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/home/herman/Documents/cardiac/modules/latihan/latihan.class.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/perawatan/config.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/perawatan/perawatan.class.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/perawatan/perawatan.module</file>
+        <file>file:/home/herman/Documents/cardiac/modules/perawatan/perawatan.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pengkajian/config.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pengkajian/pengkajian.class.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pengkajian/pengkajian.module</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pengkajian/pengkajian.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/rencana/rencana.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pemeriksaan/pemeriksaan.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pemeriksaan/config.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/tindakan/config.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/tindakan/tindakan.class.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/tindakan/tindakan.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/perkembangan/perkembangan.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pemberian/pemberian.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/holter/holter.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/latihan/latihan.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pemberian/config.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pemberian/pemberian.class.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/cardio/cardio.class.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/cardio/cardio.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/pemeriksaan/pemeriksaan.class.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/patient/patient.class.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/kateterisasi/config.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/kateterisasi/kateterisasi.class.inc</file>
+        <file>file:/home/herman/Documents/cardiac/modules/kateterisasi/kateterisasi.module</file>
+        <file>file:/home/herman/Documents/cardiac/modules/kateterisasi/kateterisasi.tpl</file>
+        <file>file:/home/herman/Documents/cardiac/modules/kateterisasi/kateterisasi.info</file>
+        <file>file:/home/herman/Documents/cardiac/index.php</file>
+        <file>file:/home/herman/Documents/cardiac/modules/patient/config.inc</file>
+        <file>file:/home/herman/Documents/cardiac/includes/main.class.php</file>
+    </open-files>
 </project-private>

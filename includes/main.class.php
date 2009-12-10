@@ -38,7 +38,8 @@ class mainModule
         'A',
         'B',
         'AB',
-        'O'
+        'O',
+        ''
     );
 
 

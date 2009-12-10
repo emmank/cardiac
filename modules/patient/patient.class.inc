@@ -85,16 +85,16 @@ class patientModule extends mainModule
             'user_required' => FALSE
         );
         $items['patient_form'] = array(
-            'title' => __t('patient form'),
-            'description' => __t('patient check form'),
+            'title' => __t('Formulir Pendaftaran Pasien'),
+            'description' => __t(''),
             'path' => '/node/patient/form',
             'exec' => 'form',
             'weight' => 5,
             'user_required' => FALSE
         );
         $items['patient_form_submit'] = array(
-            'title' => __t('patient form'),
-            'description' => __t('patient check form'),
+            'title' => __t('Formulir Pendaftaran Pasien'),
+            'description' => __t(''),
             'path' => '/node/patient/form_submit',
             'exec' => 'form_submit',
             'weight' => 5,
@@ -715,6 +715,10 @@ class patientModule extends mainModule
                     // ------ Add by emmank -------
                     if($this->formtype_fields[$value] == 'select'){
                         if($value == 'gol_darah') {
+//                            $form['patient']['gol_darah'] = array(
+//                                '#message' => __t('&laquo; kosongkan bila Anda adalah pasien baru, kemudian klik submit')
+//                            );
+                            $form['patient']['gol_darah']['#message'] = __t('&laquo; kosongkan bila Anda adalah pasien baru, kemudian klik submit');
                             $options = $this->__get_goldarah_options();
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
