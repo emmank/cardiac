@@ -308,8 +308,12 @@ class ekgModule extends mainModule
             '' => __t('-- medical record --'),
             'all' => __t('semua')
         );
+        $rujukanopts = array(
+            '' => __t('-- dirujuk ke --')
+        );
         $dump_addmenus = $this->__get_bagian_lists();
         foreach($dump_addmenus as $key => $value){
+            $rujukanopts[$key] = $value;
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),
@@ -337,15 +341,31 @@ class ekgModule extends mainModule
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'ekg' . DS . 'ekg.tpl',
             '#addmenu' => array(
-                'title' => __t('medical record'),
-                'action' => '/user/patient/medical_record/' . $vcache['patients'],
-                'position' => 'top',
-                'class' => 'button',
-                'methode' => 'choose',
-                'options' => $addmenuopts,
-                'filter' => 'bagian'
+                '#addmenu' => array(
+                    'title' => __t('medical record'),
+                    'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                    'position' => 'top',
+                    'class' => 'button',
+                    'methode' => 'choose',
+                    'options' => $addmenuopts,
+                    'filter' => 'bagian'
+                ),
+                '#addmenu0' => array(
+                    'title' => __t('dirujuk ke'),
+                    'action' => '/user/patient/register_form_submit',
+                    'position' => 'top',
+                    'class' => 'button',
+                    'methode' => 'choose',
+                    'options' => $rujukanopts,
+                    'user_required' => 'ekg',
+                    'filter' => 'bagian',
+                    'items' => array(
+                        'id' => $vcache['patients'],
+                        'strnum' => $vcache['strnum']
+                    )
+                )
             )
-        ); unset($addmenuopts);
+        ); unset($addmenuopts, $rujukanopts);
         $form['ekg']['kunjungan'] = array(
             '#type' => 'hidden',
             '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''

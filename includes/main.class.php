@@ -1010,7 +1010,7 @@ class mainModule
         $this->query->close();
         if($getit->_numOfRows > 0){
             $result = $getit->fields['nourut'] + 1;
-        }
+        } unset($getit);
         return $result;
     }
 

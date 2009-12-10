@@ -246,11 +246,20 @@ class patientModule extends mainModule
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getit->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
                 $result['data'][$i]['goto'] = '/user/patient/register_form/' . $getit->fields['id'];
                 $result['data'][$i]['nourut'] = $getit->fields['nourut'];
-                $result['data'][$i]['alamat'] = $getit->fields['alamat'] . ' ' . $getit->fields['kota'];
-                $getit->MoveNext();
+                $sql = $this->query->getSelect(
+                    array('kabupaten'),
+                    array('kabupaten'),
+                    array(
+                        array('&&', "id_kab=" . $getit->fields['kota'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['alamat'] = $getit->fields['alamat'] . ' ' . $getthis->fields['kabupaten'];
+                $getit->MoveNext(); unset($getthis);
             }
         }
-//        echo '<pre> tst'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -543,14 +552,8 @@ class patientModule extends mainModule
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
                     }
-//echo "<pre>"                    ;
-//print_r($this->formtype_fields[$value]);
-//echo "</pre>";
                     if ($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date')
                     {
-//                        echo $this->formtype_fields[$value];
-
-//                        echo $value . "<br />";
 
 
                         if($value == 'kelamin') {
@@ -655,7 +658,6 @@ class patientModule extends mainModule
                         $warning[$key] = $value;
                     }
                 }
-//            echo '<pre>'; print_r($vcache); echo '</pre>'; exit();
             }
         }
 
@@ -680,7 +682,7 @@ class patientModule extends mainModule
                 foreach($datafields as $value){
                     if(!in_array($value, $this->hidden_fields)){
                         $form['patient'][$value] = array(
-                            '#type' => ($value != 'kota' && $value != 'propinsi' ? $this->formtype_fields[$value] : 'text'),
+                            '#type' => $this->formtype_fields[$value],
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
@@ -702,15 +704,24 @@ class patientModule extends mainModule
                         } elseif($value == 'status'){
                             $options = $this->__get_statusm_options();
                         } elseif($value == 'kota'){
-                            $options = $this->__get_kabupaten_options('kabupaten');                            
+//                            $extra = "onchange=showKec()";
+                            $id = "kota";
+                            $options = $this->__get_kabupaten_options('kabupaten');
+//                            $options = "";
                         } elseif($value == 'propinsi'){
+                            $id = "propinsi";
+                            $extra = "onchange=\"showKab()\"";
                             $options = $this->__get_propinsi_options('nama_propinsi');
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
                         }
+                        $form['patient'][$value]['#id'] = $id;
+                        $form['patient'][$value]['#extra'] = $extra;
                         $form['patient'][$value]['#option'] = $options;
-//                    } elseif($value == 'strnum'){
-//                        $form['patient'][$value]['#extra'] = 'readonly="true"';
+
+                        unset ($extra,$id);
+                    } elseif($value == 'strnum'){
+                        $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
                     // ------ Add by emmank -------
                     if($this->formtype_fields[$value] == 'select'){
@@ -748,19 +759,15 @@ class patientModule extends mainModule
                 $form['patient']['submit'] = array(
                     '#type' => 'submit',
                     '#value' => __t('submit'),
-    //                '#title' => __t('&nbsp;'),
                     '#extra' => ' class="button"'
                );
             }
-//            echo '<pre>'; print_r($result); echo '</pre>';
-//            echo '<pre>'; print_r($form); echo '</pre>';
             return $form;
     }
-
+    
     function register_submit(){
         $dump = $this->__write_form_cache();
         $thevalue = array();
-//        echo '<pre>'; print_r($dump); echo '</pre>';
         foreach($dump as $key => $value){
             if($key == 'nama' || $key == 'alamat' || $key == 'kota' || $key == 'bagian'){
                 if(trim($value) == ''){
@@ -787,7 +794,6 @@ class patientModule extends mainModule
                 $thevalue[$key] = $value;
             }
         }
-//        echo '<pre>'; print_r($dump); echo '</pre>';
         if (trim($dump['id'])==''){
             $nom = 1;
             $sql = $this->query->getSelect(

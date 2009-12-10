@@ -103,6 +103,16 @@ function __create_add_menu($data){
                     '#title' => 'hidden',
                     '#action' => $data[$ky]['action']
                 );
+                if(isset($data[$ky]['items'])){
+                    if(is_array($data[$ky]['items'])){
+                        foreach($data[$ky]['items'] as $kk => $vv){
+                            $valadd['add'][$kk] = array(
+                                '#type' => 'hidden',
+                                '#value' => $vv
+                            );
+                        }
+                    }
+                }
                 if(isset($data[$ky]['methode']) && $data[$ky]['methode'] == 'choose'){
                     $valadd['add'][$data[$ky]['filter']] = array(
                         '#type' => 'select',
@@ -129,6 +139,16 @@ function __create_add_menu($data){
                 '#title' => 'hidden',
                 '#action' => $data['action'],
             );
+            if(isset($data['items'])){
+                if(is_array($data['items'])){
+                    foreach($data['items'] as $kk => $vv){
+                        $valadd['add'][$kk] = array(
+                            '#type' => 'hidden',
+                            '#value' => $vv
+                        );
+                    }
+                }
+            }
             if(isset($data['methode']) && $data['methode'] == 'choose'){
                 $valadd['add'][$data['filter']] = array(
                     '#type' => 'select',
