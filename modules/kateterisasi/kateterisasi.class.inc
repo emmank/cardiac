@@ -567,6 +567,8 @@ class kateterisasiModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
+        echo $opr;
+        echo "<pre>";print_r($strid);echo "</pre>";
         $this->__exec_db_ops(
             $this->query,
             'kateterisasi',

@@ -42,7 +42,7 @@ class kateterisasiConfig extends config
         'id' => 'hidden',
         'patients' => 'hidden',
         'tgl' => 'hidden',
-        'LCA/LM' => 'select',
+        'LCA_LM' => 'select',
         'LAD' => 'select',
         'D1' => 'select',
         'D2' => 'select',
@@ -63,7 +63,7 @@ class kateterisasiConfig extends config
     );
 
     var $fieldsisarray = array(
-        'LCA/LM',
+        'LCA_LM',
         'LAD' ,
         'D1' ,
         'D2',
@@ -81,7 +81,7 @@ class kateterisasiConfig extends config
     );
 
     var $reftable = array(
-        'LCA/LM' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'LCA_LM' => array('ref_kateterisasiref_steunosis','steunosis'),
         'LAD' => array('ref_kateterisasiref_steunosis','steunosis'),
         'D1' => array('ref_kateterisasiref_steunosis','steunosis'),
         'D2' => array('ref_kateterisasiref_steunosis','steunosis'),

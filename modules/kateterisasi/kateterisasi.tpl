@@ -72,7 +72,7 @@ foreach($data as $key => $value){
     $result .= '</fieldset>' . "\n";
 
 
-    echo "<pre>";print_r($value);echo "</pre>";
+//    echo "<pre>";print_r($value);echo "</pre>";
     $result .= '<div>' . "\n";
     $result .= '<table width=100% class="table" border="0">' . "\n";
     foreach($value as $yk => $lv){

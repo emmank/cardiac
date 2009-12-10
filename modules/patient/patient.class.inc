@@ -77,8 +77,8 @@ class patientModule extends mainModule
 
     function menu(){
         $items['patient_lists'] = array(
-            'title' => __t('patient lists'),
-            'description' => __t('lists of patient'),
+            'title' => __t('Pendaftaran pasien'),
+            'description' => __t('Daftar pasien'),
             'path' => '/node/patient',
             'exec' => 'view',
             'weight' => 5,
@@ -1110,7 +1110,7 @@ class patientModule extends mainModule
             '#type' => 'text',
             '#title' => __t('strnum'),
             '#size' => 15,
-            '#message' => __t('&laquo; kosongkan bila Anda adalah pasien baru')
+            '#message' => __t('&laquo; kosongkan bila Anda adalah pasien baru, kemudian klik submit')
         );
         $form['patient']['submit'] = array(
             '#type' => 'submit',
