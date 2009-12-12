@@ -377,9 +377,10 @@ class holterModule extends mainModule
                             'alamat',
                             'kota',
                             'propinsi',
-                            'nomor',
+//                            'nomor',
                             'kelamin',
-                            'gol_darah'
+                            'gol_darah',
+                            'strnum'
                         )
                     );
                     if(count($query) > 0){
@@ -404,9 +405,12 @@ class holterModule extends mainModule
                             } else {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
-                                        $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
+                                        $proplists = $this->__get_propinsi_options('nama_propinsi');
+                                        $kablists = $this->__get_kabupaten_options('kabupaten');
+                                        $vl = $vl . ' ' . $kablists[$query['kota']] . ' ' . $proplists[$query['propinsi']];
+                                        unset($proplists, $kablists);
                                         $tbpos = 4;
-                                    } elseif($ky == 'nomor'){
+                                    } elseif($ky == 'strnum'){
                                         $ky = 'no_registrasi';
                                         $tbpos = 0;
                                     } elseif($ky == 'nama'){
@@ -613,6 +617,7 @@ class holterModule extends mainModule
             $strid,
             $thevalue
         );
+        $iddata = $thevalue['id'];
         unset($thevalue, $opr, $strid);
 
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
@@ -629,7 +634,7 @@ class holterModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/user/holter/view');
+        redirect_to('/user/holter/detail_form/' . $iddata);
     }
 
     function view(){

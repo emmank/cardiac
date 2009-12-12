@@ -311,6 +311,7 @@ class authModule extends mainModule
         $this->__cache_inspects();
         setcookie($this->config->cookieid,"");
         session_destroy();
+//        $this->regload();
         redirect_to('/');
     }
 
