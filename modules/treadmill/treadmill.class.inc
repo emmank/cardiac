@@ -444,23 +444,9 @@ class treadmillModule extends mainModule
                     'methode' => 'choose',
                     'options' => $addmenuopts,
                     'filter' => 'bagian'
-                ),
-                '#addmenu0' => array(
-                    'title' => __t('dirujuk ke'),
-                    'action' => '/user/patient/register_form_submit',
-                    'position' => 'top',
-                    'class' => 'button',
-                    'methode' => 'choose',
-                    'options' => $rujukanopts,
-                    'user_required' => 'ekg',
-                    'filter' => 'bagian',
-                    'items' => array(
-                        'id' => $vcache['patients'],
-                        'strnum' => $vcache['strnum']
-                    )
                 )
             )
-        ); unset($addmenuopts, $rujukanopts);
+        ); unset($addmenuopts);
         $form['treadmill']['kunjungan'] = array(
             '#type' => 'hidden',
             '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
@@ -503,6 +489,22 @@ class treadmillModule extends mainModule
                         )
                     );
                     if(count($query) > 0){
+                        if($this->formhabit == 'readonly'){
+                            $form['ekg']['#addmenu']['#addmenu0'] = array(
+                                'title' => __t('dirujuk ke'),
+                                'action' => '/user/patient/register_form_submit',
+                                'position' => 'top',
+                                'class' => 'button',
+                                'methode' => 'choose',
+                                'options' => $rujukanopts,
+                                'user_required' => 'treadmill',
+                                'filter' => 'bagian',
+                                'items' => array (
+                                    'id' => $vcache['patients'],
+                                    'strnum' => $query['strnum']
+                                )
+                            );
+                        } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
                                 $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);

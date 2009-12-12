@@ -188,8 +188,106 @@ class patientModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['patient_antiran'] = array(
+            'title' => __t('Pasien Berkunjung'),
+            'description' => __t("Kunjungan Pasien Hari Ini"),
+            'path' => '/user/patient/antrian',
+            'exec' => 'antrian',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         return $items;
     }
+
+    function antrian(){
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('daftar pasien yang berkunjung hari ini');
+        $result['description'] = __t('antrian pasien yang mendaftar pada hari ini');
+        /* tambahan item search */
+        $result['search'] = $this->search();
+
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '4%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'nama',
+                'caption' => __t('nama'),
+                'width' => '25%',
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'tgl_lahir',
+                'caption' => __t('usia'),
+                'width' => '10%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'alamat',
+                'caption' => __t('alamat'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'bagian',
+                'caption' => __t('bagian'),
+                'width' => '15%',
+                'align' => 'left'
+            )
+        );
+
+
+        $sql = $this->query->getSelect(
+            array('id', 'patients', 'bagian'),
+            array('kunjungan'),
+            array(
+                array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                array('&&', "day(pukul)=" . date('j', $this->config->time))
+            ),
+            'pukul desc'
+        );
+        $this->query->connect();
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $result['data'][$i]['bagian'] = $getit->fields['bagian'];
+                $sql = $this->query->getSelect(
+                    array(),
+                    array('patients'),
+                    array(
+                        array('&&', "id=" . $getit->fields['patients'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['nama'] = $getthis->fields['nama'];
+                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+//                $result['data'][$i]['goto'] = '/user/patient/register_form/' . $getit->fields['id'];
+                $result['data'][$i]['alamat'] = $getthis->fields['alamat'];
+                unset($getthis);
+                $sql = $this->query->getSelect(
+                    array('kabupaten'),
+                    array('kabupaten'),
+                    array(
+                        array('&&', "id_kab=" . $getit->fields['kota'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['alamat'] .= ' ' . $getthis->fields['kabupaten'];
+                $getit->MoveNext(); unset($getthis);
+            }
+        }
+        return $result;
+    }
+
 
     function register(){
         $result = array();
@@ -888,7 +986,7 @@ class patientModule extends mainModule
         $this->__flush_caches();
 
         unset($dump);
-        redirect_to('/user/patient/register');
+        redirect_to('/user/patient/antrian');
     }
 
     function __set_form_submit(){

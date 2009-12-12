@@ -130,7 +130,6 @@ class mainModule
 
     function sync_scheme($tablename, $interpreter){
         $lists = $this->__get_db_table_lists($interpreter);
-//        echo '<pre>'; print_r($lists); echo '</pre>';
         if(in_array($tablename, $lists)){
             unset($lists);
             $lists = $this->__get_field_lists($tablename);
@@ -820,14 +819,8 @@ class mainModule
 
     function today_patient_lists(){
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-//        echo '<pre>'; print_r($dump); echo '</pre>'; exit();
-//        if(count($dump) > 3){
         $bagian = trim($dump[1]);
-//        } else {
-//            redirect_to('/');
-//        }
         $result = array();
-//        $idbagian = $this->__get_bagian_id($bagian);
         $this->query->connect();
         $sql = $this->query->getSelect(
             array(),
@@ -836,21 +829,16 @@ class mainModule
                 array('&&', "year(pukul)=" . date('Y', $this->config->time)),
                 array('&&', "month(pukul)=" . date('n', $this->config->time)),
                 array('&&', "day(pukul)=" . date('j', $this->config->time)),
-//                array('&&', "bagian=" . $idbagian),
                 array('&&', "bagian=" . $bagian),
                 array('&&', "doneby is null")
             ),
             'pukul'
         ); unset($idbagian);
-//        $this->query->conn->debug = true;
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
-//        exit();
         if($query->_numOfRows == 1){
             redirect_to('/user/' . $bagian . '/form/' . $query->fields['id']);
-//            exit();
         } elseif($query->_numOfRows < 1){
-//          echo 'di sini di bagian ' . $bagian; exit();
             $pesan = __t('tidak ada pasien hari ini !');
             redirect_to('/user/' . $bagian . '/message/' . urlencode($pesan));
         }
@@ -895,6 +883,7 @@ class mainModule
             } unset($gpatient);
             $query->MoveNext();
         } unset($query);
+//        echo '<pre>'; print_r($result); echo '</pre>'; exit();
         return $result;
     }
 

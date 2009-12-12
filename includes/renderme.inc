@@ -292,7 +292,11 @@ function __create_table($value){
     }
     if(count($value['data']) > 0){
         foreach($value['data'] as $key => $val){
-            $result .= '<tr class="menu_plain" onmouseover=\'this.className="menu_highlight"\' onmouseout=\'this.className="menu_plain"\' style="cursor:pointer" onclick=\'location.href="' . $val['goto'] . '"\'>' . "\n";
+            if(isset($val['goto'])){
+                $result .= '<tr class="menu_plain" onmouseover=\'this.className="menu_highlight"\' onmouseout=\'this.className="menu_plain"\' style="cursor:pointer" onclick=\'location.href="' . $val['goto'] . '"\'>' . "\n";
+            } else {
+                $result .= '<tr class="menu_plain">' . "\n";
+            }
             foreach($value['header'] as $ky=>$vl){
                 $result .= '<td align="' . $vl['align'] . '">' . "\n";
                 if($vl['field'] == 'none'){
