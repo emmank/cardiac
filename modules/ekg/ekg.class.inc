@@ -277,11 +277,11 @@ class ekgModule extends mainModule
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
-                if(preg_match('/^back_/', $dump[3])){
-//                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
-//                    $vcache = $this->__get_ekg_data((int)$ekg_id);
-//                    $this->vardump = $vcache;
-//                    unset($cardio_id);
+                if(preg_match('/^edit_/', $dump[3])){
+                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
+                    $vcache = $this->__get_ekg_data((int)$ekg_id);
+                    $this->vardump = $vcache;
+                    unset($cardio_id);
                     redirect_to('/user/ekg/view');
                 } else {
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
@@ -383,7 +383,6 @@ class ekgModule extends mainModule
                             'alamat',
                             'kota',
                             'propinsi',
-                            'nomor',
                             'kelamin',
                             'gol_darah',
                             'strnum'
@@ -421,7 +420,7 @@ class ekgModule extends mainModule
                                     if($ky == 'alamat'){
                                         $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
                                         $tbpos = 4;
-                                    } elseif($ky == 'nomor'){
+                                    } elseif($ky == 'strnum'){
                                         $ky = 'no_registrasi';
                                         $tbpos = 0;
                                     } elseif($ky == 'nama'){
@@ -535,7 +534,7 @@ class ekgModule extends mainModule
 
         $form['ekg']['submit'] = array(
             '#type' => 'submit',
-            '#value' => ($this->formhabit == 'readonly' ? __t('back') : __t('submit'))
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
         return $form;
     }
@@ -607,6 +606,7 @@ class ekgModule extends mainModule
             $strid,
             $thevalue
         );
+        $iddata = $thevalue['id'];
         unset($thevalue, $opr, $strid);
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
@@ -623,7 +623,7 @@ class ekgModule extends mainModule
             $this->query->close();
         }
         $this->__flush_caches();
-        redirect_to('/user/ekg/view');
+        redirect_to('/user/ekg/detail_form/' . $iddata);
     }
 
     function view(){
