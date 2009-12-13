@@ -38,7 +38,8 @@ class mainModule
         'A',
         'B',
         'AB',
-        'O'
+        'O',
+        ''
     );
 
 
@@ -246,6 +247,7 @@ class mainModule
                         $arrayval
                     );
                     $interpreter->connect();
+//                    $interpreter->conn->debug=true;
                     $interpreter->conn->Execute($sql); unset($sql);
                     $interpreter->close();
                 } else {
