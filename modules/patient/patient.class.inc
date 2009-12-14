@@ -39,6 +39,7 @@ class patientModule extends mainModule
         'nomor' => 'hidden',
         'nama' => 'text',
         'kelamin' => 'select',
+//        'kelamin' => 'radio',
         'tp_lahir' => 'text',
         'tgl_lahir' => 'date',
         'gol_darah' => 'select',
@@ -1319,6 +1320,13 @@ class patientModule extends mainModule
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
                     }
+//                    if ($this->formtype_fields[$value] == 'radio') {
+//                       $form['patient'][$value] = array (
+//                           '#type' => 'radio',
+//                           '#title' => 'Jenis Kelamin',
+//                           '#option' => $this->__get_kelamin_options()
+//                       );
+//                    }
                     if($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
                         if($value == 'kelamin') {
                             $options = $this->__get_kelamin_options();  
@@ -1382,7 +1390,7 @@ class patientModule extends mainModule
                     '#extra' => ' class="button"'
                );
             }
-//            echo '<pre>'; print_r($result); echo '</pre>';//===add by emmank
+//            echo '<pre>'; print_r($form); echo '</pre>';//===add by emmank
             return $form;
     }
 
