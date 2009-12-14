@@ -517,8 +517,11 @@ class treadmillModule extends mainModule
                             } else {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
-                                        $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
+                                        $proplists = $this->__get_propinsi_options('nama_propinsi');
+                                        $kablists = $this->__get_kabupaten_options('kabupaten');
+                                        $vl = $vl . ' ' . $kablists[$query['kota']] . ' ' . $proplists[$query['propinsi']];
                                         $tbpos = 3;
+                                        unset($proplists, $kablists);
                                     } elseif($ky == 'strnum'){
                                         $ky = 'no_registrasi';
                                         $tbpos = 0;

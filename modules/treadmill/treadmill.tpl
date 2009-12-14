@@ -58,7 +58,7 @@ foreach($data as $key => $value){
         if($vl['#type'] != 'textarea'){
             $result .= '<input type="text" value="' . $vl['#value'] .'" readonly="true"> <br />' . "\n";
         } else {
-            $result .= '<textarea  readonly="true">' . $vl['#value'] .'</textarea> <br />' . "\n";
+            $result .= '<textarea  readonly="true" rows="3" cols="30">' . $vl['#value'] .'</textarea> <br />' . "\n";
         }
         if((int)$ky > 3 && ((int)$ky + 1) % 8 == 0){
             unset($setdiv);
