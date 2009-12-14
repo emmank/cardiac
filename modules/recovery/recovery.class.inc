@@ -183,15 +183,15 @@ class recoveryModule extends mainModule
     function treadmill_submit(){
         $thefields = $this->__get_data_fields('recovery', $this->query);
         foreach($this->config->free_val as $key => $value){
-            if(preg_match('/^recovery_/', $key)){
+            if(preg_match('/^recovery_/', $key) || $key == 'id'){
                 $key = trim(preg_replace('/^recovery_/', '', $key));
                 if(in_array($key, $thefields)){
                     if($key == 'gelombang_t'){
-                        if($value != 'Inverted'){
+                        if($value[0] != 'Inverted'){
                             unset($value[1]);
                         }
                     }
-                    if(count($value) > 0){
+                    if(is_array($value)){
                         $value = implode('|', $value);
                     }
                     $thevalue[$key] = $value;

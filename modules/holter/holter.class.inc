@@ -270,13 +270,12 @@ class holterModule extends mainModule
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
-                if(preg_match('/^back_/', $dump[3])){
-//                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
-//                    $vcache = $this->__get_holter_data((int)$ekg_id);
-//                    $this->vardump = $vcache;
-//                    unset($cardio_id);
-                    echo "cardio";
-//                    redirect_to('/user/holter/view');
+                if(preg_match('/^edit_/', $dump[3])){
+                    $holter_id = preg_replace('/^edit_/','',$dump[3]);
+                    $vcache = $this->__get_holter_data((int)$holter_id);
+                    $this->vardump = $vcache;
+                    unset($holter_id);
+                    redirect_to('/user/holter/view');
                 } else {
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
                 }
@@ -377,7 +376,6 @@ class holterModule extends mainModule
                             'alamat',
                             'kota',
                             'propinsi',
-//                            'nomor',
                             'kelamin',
                             'gol_darah',
                             'strnum'
@@ -539,7 +537,7 @@ class holterModule extends mainModule
         $form['holter']['#lookother'] = $this->config->fieldtype;
         $form['holter']['submit'] = array(
             '#type' => 'submit',
-            '#value' => ($this->formhabit == 'readonly' ? __t('back') : __t('submit'))
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
         return $form;
     }
@@ -624,7 +622,7 @@ class holterModule extends mainModule
             $sql = $this->query->updateData(
                 'kunjungan',
                 array(
-                    'doneby' => '1'
+                    'doneby' => $_COOKIE[$this->config->cookieid]
                 ),
                 array(
                     array('&&', "id=" . $_POST['kunjungan'])

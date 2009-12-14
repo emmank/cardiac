@@ -133,7 +133,7 @@ class latihanModule extends mainModule
     function treadmill_submit(){
         $thefields = $this->__get_data_fields('latihan', $this->query);
         foreach($this->config->free_val as $key => $value){
-             if(preg_match('/^latihan_/', $key)){
+             if(preg_match('/^latihan_/', $key) || $key == 'id'){
                 $key = trim(preg_replace('/^latihan_/', '', $key));
                 if(in_array($key, $thefields)){
                     if($key == 'tekanan_darah'){
@@ -145,7 +145,7 @@ class latihanModule extends mainModule
                             unset($value[1], $value[2]);
                         }
                     }
-                    if(count($value) > 0){
+                    if(is_array($value)){
                         $value = implode('|', $value);
                     }
                     $thevalue[$key] = $value;

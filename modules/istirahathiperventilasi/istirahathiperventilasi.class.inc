@@ -114,6 +114,7 @@ class istirahathiperventilasiModule extends mainModule
                     );
                 }
             }
+            $result['datafields'][$value]['#readonly'] = isset($this->config->free_val['readonly']) ? TRUE : FALSE;
         }
         return $result;
     }
@@ -121,15 +122,15 @@ class istirahathiperventilasiModule extends mainModule
     function treadmill_submit(){
         $thefields = $this->__get_data_fields('istirahathiperventilasi', $this->query);
         foreach($this->config->free_val as $key => $value){
-             if(preg_match('/^istirahathiperventilasi_/', $key)){
+             if(preg_match('/^istirahathiperventilasi_/', $key) || $key == 'id'){
                 $key = trim(preg_replace('/^istirahathiperventilasi_/', '', $key));
                 if(in_array($key, $thefields)){
                     if($key == 'gelombang_t'){
-                        if($value != 'Inverted'){
+                        if($value[0] != 'Inverted'){
                             unset($value[1]);
                         }
                     }
-                    if(count($value) > 0){
+                    if(is_array($value)){
                         $value = implode('|', $value);
                     }
                     $thevalue[$key] = $value;

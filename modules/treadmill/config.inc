@@ -71,6 +71,13 @@ class treadmillConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
+            'tgl' => array(
+                'type' => 'date',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
             'inputtime' => array(
                 'type' => 'datetime',
                 'null' => 0,

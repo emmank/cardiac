@@ -49,31 +49,54 @@ foreach($vl['datafields'] as $yk => $lv){
                             $uu['value'] = explode('|', $uu['value']);
                         }
                         if($uu['type'] == 'select'){
-                            $result .= '<select name="' . $ky . '_' . $ee . '[0]" size="1">' . "\n";
-                            foreach($uu['theref'] as $ey => $al){
-                                $result .= '<option name="' . $ey . '"' . (isset($uu['value'][0]) && $uu['value'][0] == $ey ? ' selected' : '') . '>' . __t($al) . '</option>' . "\n";
-                            }
-                            $result .= '</select>' . "\n";
-                        } elseif($uu['type'] == 'radio'){
-                            $result .= '<div>' . "\n";
-                            $gth = 1;
-                            foreach($uu['theref'] as $ey => $al){
-                                $result .= '<input type="radio" name="' . $ky . '_' . $ee . '[0]" value="' . $ey . '"' . (isset($uu['value'][0]) && $uu['value'][0] == $ey ? ' checked="true"' : '') . '>' . __t($al);
-                                if(eregi('hipert', $al)){
-                                    $result .= ' ' . __t('sistolik') . ' <input type="text" name="' . $ky . '_' . $ee . '[' . $gth . ']"' . (isset($uu['value'][1]) && $uu['value'][0] == $ey ? ' value="' . $uu['value'][1] . '"' : '') . ' size="5"> mmHg' . "\n";
-                                    $gth++;
-                                    $result .= ', ' . __t('diastolik') . ' <input type="text" name="' . $ky . '_' . $ee . '[' . $gth . ']"' . (isset($uu['value'][2]) && $uu['value'][0] == $ey ? ' value="' . $uu['value'][2] . '"' : '') . ' size="5"> mmHg' . "\n";
-                                    $gth++;
+                            if(isset($uu['readonly']) && $uu['readonly'] !== FALSE){
+                                $result .= $uu['theref'][$uu['value'][0]] . "\n";
+                            } else {
+                                $result .= '<select name="' . $ky . '_' . $ee . '[0]" size="1">' . "\n";
+                                foreach($uu['theref'] as $ey => $al){
+                                    $result .= '<option name="' . $ey . '"' . (isset($uu['value'][0]) && $uu['value'][0] == $ey ? ' selected' : '') . '>' . __t($al) . '</option>' . "\n";
                                 }
-                                $result .= "<br />\n";
-                            } unset($gth);
-                            $result .= '</div>' . "\n";
+                                $result .= '</select>' . "\n";
+                            }
+                        } elseif($uu['type'] == 'radio'){
+                            if(isset($uu['readonly']) && $uu['readonly'] !== FALSE){
+                                $result .= $uu['theref'][$uu['value'][0]];
+                                if(isset($uu['value'][1])){
+                                    $result .= ' ' . __t('sistolik') . ' ' . $uu['value'][1] . 'mmHg';
+                                    if(isset($uu['value'][2])){
+                                        $result .= ' ' . __t('diastolik') . ' ' . $uu['value'][2] . 'mmHg';
+                                    }
+                                }
+                                $result .= "\n";
+                            } else {
+                                $result .= '<div>' . "\n";
+                                $gth = 1;
+                                foreach($uu['theref'] as $ey => $al){
+                                    $result .= '<input type="radio" name="' . $ky . '_' . $ee . '[0]" value="' . $ey . '"' . (isset($uu['value'][0]) && $uu['value'][0] == $ey ? ' checked="true"' : '') . '>' . __t($al);
+                                    if(eregi('hipert', $al)){
+                                        $result .= ' ' . __t('sistolik') . ' <input type="text" name="' . $ky . '_' . $ee . '[' . $gth . ']"' . (isset($uu['value'][1]) && $uu['value'][0] == $ey ? ' value="' . $uu['value'][1] . '"' : '') . ' size="5"> mmHg' . "\n";
+                                        $gth++;
+                                        $result .= ', ' . __t('diastolik') . ' <input type="text" name="' . $ky . '_' . $ee . '[' . $gth . ']"' . (isset($uu['value'][2]) && $uu['value'][0] == $ey ? ' value="' . $uu['value'][2] . '"' : '') . ' size="5"> mmHg' . "\n";
+                                        $gth++;
+                                    }
+                                    $result .= "<br />\n";
+                                } unset($gth);
+                                $result .= '</div>' . "\n";
+                            }
                         } else {
-                            $result .= '<input type="text" name="' . $ky . '_' . $ee . '[0]" size="' . (isset($uu['size']) ? $uu['size'] : '') . '">' . "\n";
+                            if(isset($uu['readonly'])){
+                                $result .= $uu['value'][0];
+                            } else {
+                                $result .= '<input type="text" name="' . $ky . '_' . $ee . '[0]" size="' . (isset($uu['size']) ? $uu['size'] : '') . '"' . (isset($uu['value'][0]) ? ' value="' . $uu['value'][0] . '"' : '') . '>' . "\n";
+                            }
                         }
                         if(!eregi('konfigurasi', $ee) && eregi('ekg', $kk)){
                             $result .= ' ' . __t('pada menit ke') . ' : ';
-                            $result .= '<input type="text" name="' . $ky . '_' . $ee . '[1]" size="' . (isset($uu['size']) ? $uu['size'] : '') . '">' . "\n";
+                            if(isset($uu['readonly'])){
+                                $result .= $uu['value'][1];
+                            } else {
+                                $result .= '<input type="text" name="' . $ky . '_' . $ee . '[1]" size="' . (isset($uu['size']) ? $uu['size'] : '') . '"' . (isset($uu['value'][1]) ? ' value="' . $uu['value'][1] . '"' : '') . '>' . "\n";
+                            }
                         }
                         $result .= '</div>' . "\n";
                     }
@@ -81,21 +104,34 @@ foreach($vl['datafields'] as $yk => $lv){
                     if(isset($ll['value'])){
                         $ll['value'] = explode('|', $ll['value']);
                     }
-                    if($ll['type'] == 'select'){
-                        $result .= '<select name="' . $ky . '_' . $yy . '[0]" size="1">' . "\n";
-                        foreach($ll['theref'] as $ee => $uu){
-                            $result .= '<option value="' . $ee . '"' . (isset($ll['value'][0]) && $ll['value'][0] == $ee ? ' selected' : '') . '>' . __t($uu) . '</option>' . "\n";
+                    if(isset($ll['readonly'])){
+                        if(isset($ll['theref'])){
+                            $result .= $ll['theref'][$ll['value'][0]];
+                        } else {
+                            $result .= $ll['value'][0];
                         }
-                        $result .= '</select>' . "\n";
-                    } elseif($ll['type'] == 'radio'){
-                        foreach($ll['theref'] as $ee => $uu){
-                            $result .= '<input type="radio" name="' . $ky . '_' . $ee . '[0]" value="' . $ee . '"' . (isset($ll['value'][0]) && $ll['value'][0] == $ee ? ' checked="true"' : '') . '> ' . __t($uu) . "<br />\n";
-                        }
+                        $result .= "\n";
                     } else {
-                        $result .= '<input type="text" name="' . $ky . '_' . $yy . '[0]" size="' . (isset($ll['value'][0]) ? $ll['value'][0] : '') . '">' . "\n";
+                        if($ll['type'] == 'select'){
+                            $result .= '<select name="' . $ky . '_' . $yy . '[0]" size="1">' . "\n";
+                            foreach($ll['theref'] as $ee => $uu){
+                                $result .= '<option value="' . $ee . '"' . (isset($ll['value'][0]) && $ll['value'][0] == $ee ? ' selected' : '') . '>' . __t($uu) . '</option>' . "\n";
+                            }
+                            $result .= '</select>' . "\n";
+                        } elseif($ll['type'] == 'radio'){
+                            foreach($ll['theref'] as $ee => $uu){
+                                $result .= '<input type="radio" name="' . $ky . '_' . $ee . '[0]" value="' . $ee . '"' . (isset($ll['value'][0]) && $ll['value'][0] == $ee ? ' checked="true"' : '') . '> ' . __t($uu) . "<br />\n";
+                            }
+                        } else {
+                            $result .= '<input type="text" name="' . $ky . '_' . $yy . '[0]" size="' . (isset($ll['value'][0]) ? $ll['value'][0] : '') . '">' . "\n";
+                        }
                     }
                     if(eregi('irama', $yy)){
-                        $result .= ' ' . __t('pada menit ke') . ' <input type="text" name="' . $ky. '_' . $yy . '[1]" size="10">' . "\n";
+                        if(isset($ll['readonly'])){
+                            $result .= ' ' . __t('pada menit ke') . ' ' . $ll['value'][1] . "\n";
+                        } else {
+                            $result .= ' ' . __t('pada menit ke') . ' <input type="text" name="' . $ky. '_' . $yy . '[1]" size="10"' . (isset($ll['value'][1]) ? ' value="' . $ll['value'][1] . '"' : '') . '>' . "\n";
+                        }
                     }
                 }
                 $result .= '</td>' . "\n";
@@ -108,20 +144,32 @@ foreach($vl['datafields'] as $yk => $lv){
             if(isset($vv['value'])){
                 $vv['value'] = explode('|', $vv['value']);
             }
-            $result .= '<div>' . "\n";
-            if($vv['type'] == 'text'){
-                $result .= '<input type="text" name="' .   $ky . '_' . $kk . ($kk == 'protokol' ? '[0]' : '') . '" size="' . (isset($vv['size']) ? $vv['size'] : 20) . '">';
-                if($kk == 'protokol'){
-                    $result .= ' ' . __t('Stage') . ' ' . __t('lamanya') . ' : <input type="text" name="' . $ky . '_' . $kk . '[1]" size="' . (isset($vv['size']) ? $vv['size'] : 20) . '"> ' . __t('menit') . "\n";
+            if(isset($vv['readonly'])){
+                if(isset($vv['theref'])){
+                    $result .= $vv['theref'][$vv['value'][0]];
+                } else {
+                    $result .= $vv['value'][0];
+                    if($kk == 'protokol'){
+                        $result .= ' ' . __t('Stage') . ' ' . __t('lamanya') . ' : ' . $vv['value'][1];
+                    }
                 }
-            } elseif($vv['type'] == 'select'){
-                $result .= '<select name="' . $ky . '_' . $kk . '[0]" size="1">' . "\n";
-                foreach($vv['theref'] as $yy => $ll){
-                    $result .= '<option value="' . $yy . '"' . (isset($vv['value'][0]) && $vv['value'][0] == $yy ? ' selected' : '') . '>' . __t($ll) . '</option>' . "\n";
+                $result .= "\n";
+            } else {
+                $result .= '<div>' . "\n";
+                if($vv['type'] == 'text'){
+                    $result .= '<input type="text" name="' .   $ky . '_' . $kk . ($kk == 'protokol' ? '[0]' : '') . '" size="' . (isset($vv['size']) ? $vv['size'] : 20) . '">';
+                    if($kk == 'protokol'){
+                        $result .= ' ' . __t('Stage') . ' ' . __t('lamanya') . ' : <input type="text" name="' . $ky . '_' . $kk . '[1]" size="' . (isset($vv['size']) ? $vv['size'] : 20) . '"' . (isset($vv['value'][1]) ? ' value="' . $vv['value'][1] . '"' : '') . '> ' . __t('menit') . "\n";
+                    }
+                } elseif($vv['type'] == 'select'){
+                    $result .= '<select name="' . $ky . '_' . $kk . '[0]" size="1">' . "\n";
+                    foreach($vv['theref'] as $yy => $ll){
+                        $result .= '<option value="' . $yy . '"' . (isset($vv['value'][0]) && $vv['value'][0] == $yy ? ' selected' : '') . '>' . __t($ll) . '</option>' . "\n";
+                    }
+                    $result .= '</select>' . "\n";
                 }
-                $result .= '</select>' . "\n";
+                $result .= '</div>' . "\n";
             }
-            $result .= '</div>' . "\n";
         }
     }
     $result .= '</td>' . "\n";
