@@ -660,8 +660,8 @@ class vascularModule extends mainModule
         );
 
         $form['vascular']['tab_items']['carotis'] = $this->__loadCarotis();
-//        $form['vascular']['tab_items']['superior'] = $this->__loadCarotisBerdiri();
-//        $form['vascular']['tab_items']['inferior'] = $this->__loadCarotisHiperventilasi();
+        $form['vascular']['tab_items']['superior'] = $this->__loadSuperior();
+        $form['vascular']['tab_items']['inferior'] = $this->__loadInferior();
 //        $form['vascular']['tab_items']['abdomen'] = $this->__loadFaseLatihan();
 //        $form['vascular']['tab_items']['recovery'] = $this->__loadFaseRecovery();
 //        $form['vascular']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
@@ -687,31 +687,31 @@ class vascularModule extends mainModule
         }
     }
 
-    function __loadCarotisBerdiri($exec=NULL){
-        $this->__include_module('istirahatberdiri');
+    function __loadSuperior($exec=NULL){
+        $this->__include_module('superior');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->Carotis_config->free_val = $this->vardump;
+            $this->superior_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
-                return $this->istirahatberdiri_exec->vascular_submit();
+                return $this->superior_exec->vascular_submit();
             }
         } else {
-            return $this->istirahatberdiri_exec->vascular_menu();
+            return $this->superior_exec->vascular_menu();
         }
     }
 
-    function __loadCarotisHiperventilasi($exec=NULL){
-        $this->__include_module('istirahathiperventilasi');
+    function __loadInferior($exec=NULL){
+        $this->__include_module('inferior');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->Carotis_config->free_val = $this->vardump;
+            $this->inferior_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
-                return $this->istirahathiperventilasi_exec->vascular_submit();
+                return $this->inferior_exec->vascular_submit();
             }
         } else {
-            return $this->istirahathiperventilasi_exec->vascular_menu();
+            return $this->inferior_exec->vascular_menu();
         }
     }
 
@@ -807,8 +807,8 @@ class vascularModule extends mainModule
         );
         unset($thevalue, $opr, $strid);
         $this->__loadCarotis('submit');
-//        $this->__loadCarotisBerdiri('submit');
-//        $this->__loadCarotisHiperventilasi('submit');
+        $this->__loadSuperior('submit');
+        $this->__loadInferior('submit');
 //        $this->__loadFaseLatihan('submit');
 //        $this->__loadFaseRecovery('submit');
 //        $this->__loadKesimpulan('submit');
