@@ -19,7 +19,7 @@
  *  
  *  config.php
  *  
- *  Created on Sep 14, 2009, 9:47:03 AM
+ *  Created on Oct 1, 2009, 1:10:09 PM
  */
 
 class vascularConfig extends config
@@ -34,5 +34,64 @@ class vascularConfig extends config
         'host' => 'localhost',
         'user' => 'root',
         'passwd' => 'emmank'
+    );
+    var $hiddenfields = array(
+        'id'
+    );
+    var $fields_form_type = array(
+        'id' => 'hidden',
+        'teens' => 'hidden',
+        'tgl' => 'date',
+        'patients' => 'select',
+        'nomor' => 'text',
+        'inputer' => 'hidden',
+        'inputtime' => 'hidden',
+        'updated' => 'hidden'
+    );
+    var $table_scheme = array(
+        'vascular' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'patients' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'kunjungan' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputtime' => array(
+                'type' => 'datetime',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputer' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'updated' => array(
+                'type' => 'varchar(50)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
     );
 }

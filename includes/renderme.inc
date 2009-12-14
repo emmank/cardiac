@@ -334,7 +334,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     foreach($data as $key => $value){
         $result .= '<div id=block>' . "\n";
         if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden' && trim($value['#title']) != '' && !is_null($value['#title']) && $value['#type'] != 'submit'){
-            $result .= '<label id="'.$key.'" for="'. $key .'">' . ucwords($value['#title']) . '</label>' . "\n";
+            $result .= '<label for="'. $key .'"' . (isset($value['#id_label']) ? ' id="' . $value['#id_label'] . '"' : '') . '>' . ucwords($value['#title']) . '</label>' . "\n";
         }
         if(in_array($value['#type'], $forminput)){
             if($value['#type'] == 'checkbox' || $value['#type'] == 'radio'){
@@ -476,6 +476,8 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                     }
                 }
                 $result .= '</select>' . "\n";
+
+                        echo "<pre>";print_r($yk);echo "</pre>";
             }
         } elseif($value['#type'] == 'date'){
             $value['#value'] = $value['#value'] == '' ? array('1970', '01', '01') : explode('-', $value['#value']);
