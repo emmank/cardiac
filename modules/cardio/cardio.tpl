@@ -24,7 +24,17 @@
 
 foreach($data as $key => $value){
     if(isset($value['#addmenu'])){
-        $result .= __create_add_menu($value['#addmenu']);
+        if(is_array($value['#addmenu'])){
+            $result .= '<table><tr>';
+            foreach($value['#addmenu'] as $ky => $vl){
+                $result .= '<td>';
+                $result .= __create_add_menu($vl);
+                $result .= '</td>';
+            }
+            $result .= '</tr></table>';
+        } else {
+            $result .= __create_add_menu($value['#addmenu']);
+        }
     }
     $result .= __create_form_open($value, $key);
     $result .= "\n" . '<fieldset>' . "\n";

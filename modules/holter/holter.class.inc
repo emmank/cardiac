@@ -270,13 +270,12 @@ class holterModule extends mainModule
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
-                if(preg_match('/^back_/', $dump[3])){
-//                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
-//                    $vcache = $this->__get_holter_data((int)$ekg_id);
-//                    $this->vardump = $vcache;
-//                    unset($cardio_id);
-                    echo "cardio";
-//                    redirect_to('/user/holter/view');
+                if(preg_match('/^edit_/', $dump[3])){
+                    $holter_id = preg_replace('/^edit_/','',$dump[3]);
+                    $vcache = $this->__get_holter_data((int)$holter_id);
+                    $this->vardump = $vcache;
+                    unset($holter_id);
+                    redirect_to('/user/holter/view');
                 } else {
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
                 }
@@ -302,8 +301,12 @@ class holterModule extends mainModule
             '' => __t('-- medical record --'),
             'all' => __t('semua')
         );
+        $rujukanopts = array(
+            '' => __t('-- dirujuk ke --')
+        );
         $dump_addmenus = $this->__get_bagian_lists();
         foreach($dump_addmenus as $key => $value){
+            $rujukanopts[$key] = $value;
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),
@@ -331,13 +334,15 @@ class holterModule extends mainModule
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'holter' . DS . 'holter.tpl',
             '#addmenu' => array(
-                'title' => __t('medical record'),
-                'action' => '/user/patient/medical_record/' . $vcache['patients'],
-                'position' => 'top',
-                'class' => 'button',
-                'methode' => 'choose',
-                'options' => $addmenuopts,
-                'filter' => 'bagian'
+                '#addmenu' => array(
+                    'title' => __t('medical record'),
+                    'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                    'position' => 'top',
+                    'class' => 'button',
+                    'methode' => 'choose',
+                    'options' => $addmenuopts,
+                    'filter' => 'bagian'
+                )
             )
         ); unset($addmenuopts);
         $form['holter']['kunjungan'] = array(
@@ -363,16 +368,47 @@ class holterModule extends mainModule
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
-                    $query = $this->__get_patient_data($vcache['patients'], array('nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah'));
+                    $query = $this->__get_patient_data(
+                        $vcache['patients'],
+                        array(
+                            'nama',
+                            'tgl_lahir',
+                            'alamat',
+                            'kota',
+                            'propinsi',
+                            'kelamin',
+                            'gol_darah',
+                            'strnum'
+                        )
+                    );
                     if(count($query) > 0){
+                        if($this->formhabit == 'readonly'){
+                            $form['holter']['#addmenu']['#addmenu0'] = array(
+                                'title' => __t('dirujuk ke'),
+                                'action' => '/user/patient/register_form_submit',
+                                'position' => 'top',
+                                'class' => 'button',
+                                'methode' => 'choose',
+                                'options' => $rujukanopts,
+                                'user_required' => 'holter',
+                                'filter' => 'bagian',
+                                'items' => array (
+                                    'id' => $vcache['patients'],
+                                    'strnum' => $query['strnum']
+                                )
+                            );
+                        } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
                             } else {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
-                                        $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
+                                        $proplists = $this->__get_propinsi_options('nama_propinsi');
+                                        $kablists = $this->__get_kabupaten_options('kabupaten');
+                                        $vl = $vl . ' ' . $kablists[$query['kota']] . ' ' . $proplists[$query['propinsi']];
+                                        unset($proplists, $kablists);
                                         $tbpos = 4;
-                                    } elseif($ky == 'nomor'){
+                                    } elseif($ky == 'strnum'){
                                         $ky = 'no_registrasi';
                                         $tbpos = 0;
                                     } elseif($ky == 'nama'){
@@ -501,7 +537,7 @@ class holterModule extends mainModule
         $form['holter']['#lookother'] = $this->config->fieldtype;
         $form['holter']['submit'] = array(
             '#type' => 'submit',
-            '#value' => ($this->formhabit == 'readonly' ? __t('back') : __t('submit'))
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
         return $form;
     }
@@ -579,13 +615,14 @@ class holterModule extends mainModule
             $strid,
             $thevalue
         );
+        $iddata = $thevalue['id'];
         unset($thevalue, $opr, $strid);
 
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',
                 array(
-                    'doneby' => '1'
+                    'doneby' => $_COOKIE[$this->config->cookieid]
                 ),
                 array(
                     array('&&', "id=" . $_POST['kunjungan'])
@@ -595,7 +632,7 @@ class holterModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/user/holter/view');
+        redirect_to('/user/holter/detail_form/' . $iddata);
     }
 
     function view(){

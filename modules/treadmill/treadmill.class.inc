@@ -403,8 +403,12 @@ class treadmillModule extends mainModule
             '' => __t('-- medical record --'),
             'all' => __t('semua')
         );
+        $rujukanopts = array(
+            '' => __t('-- dirujuk ke --')
+        );
         $dump_addmenus = $this->__get_bagian_lists();
         foreach($dump_addmenus as $key => $value){
+            $rujukanopts[$key] = $value;
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),
@@ -432,13 +436,15 @@ class treadmillModule extends mainModule
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'treadmill' . DS . 'treadmill.tpl',
             '#addmenu' => array(
-                'title' => __t('medical record'),
-                'action' => '/user/patient/medical_record/' . $vcache['patients'],
-                'position' => 'top',
-                'class' => 'button',
-                'methode' => 'choose',
-                'options' => $addmenuopts,
-                'filter' => 'bagian'
+                '#addmenu' => array(
+                    'title' => __t('medical record'),
+                    'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                    'position' => 'top',
+                    'class' => 'button',
+                    'methode' => 'choose',
+                    'options' => $addmenuopts,
+                    'filter' => 'bagian'
+                )
             )
         ); unset($addmenuopts);
         $form['treadmill']['kunjungan'] = array(
@@ -473,7 +479,6 @@ class treadmillModule extends mainModule
                             'alamat',
                             'kota',
                             'propinsi',
-                            'nomor',
                             'kelamin',
                             'gol_darah',
                             'tinggi',
@@ -483,6 +488,22 @@ class treadmillModule extends mainModule
                         )
                     );
                     if(count($query) > 0){
+                        if($this->formhabit == 'readonly'){
+                            $form['treadmill']['#addmenu']['#addmenu0'] = array(
+                                'title' => __t('dirujuk ke'),
+                                'action' => '/user/patient/register_form_submit',
+                                'position' => 'top',
+                                'class' => 'button',
+                                'methode' => 'choose',
+                                'options' => $rujukanopts,
+                                'user_required' => 'treadmill',
+                                'filter' => 'bagian',
+                                'items' => array (
+                                    'id' => $vcache['patients'],
+                                    'strnum' => $query['strnum']
+                                )
+                            );
+                        } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
                                 $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
@@ -496,8 +517,11 @@ class treadmillModule extends mainModule
                             } else {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
-                                        $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
+                                        $proplists = $this->__get_propinsi_options('nama_propinsi');
+                                        $kablists = $this->__get_kabupaten_options('kabupaten');
+                                        $vl = $vl . ' ' . $kablists[$query['kota']] . ' ' . $proplists[$query['propinsi']];
                                         $tbpos = 3;
+                                        unset($proplists, $kablists);
                                     } elseif($ky == 'strnum'){
                                         $ky = 'no_registrasi';
                                         $tbpos = 0;
@@ -676,7 +700,7 @@ class treadmillModule extends mainModule
     function __loadFaseIstirahat($exec=NULL){
         $this->__include_module('istirahat');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->FaseIstirahat_config->free_val = $this->vardump;
+            $this->istirahat_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
@@ -690,7 +714,7 @@ class treadmillModule extends mainModule
     function __loadFaseIstirahatBerdiri($exec=NULL){
         $this->__include_module('istirahatberdiri');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->FaseIstirahat_config->free_val = $this->vardump;
+            $this->istirahatberdiri_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
@@ -704,7 +728,7 @@ class treadmillModule extends mainModule
     function __loadFaseIstirahatHiperventilasi($exec=NULL){
         $this->__include_module('istirahathiperventilasi');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->FaseIstirahat_config->free_val = $this->vardump;
+            $this->istirahathiperventilasi_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
@@ -718,7 +742,7 @@ class treadmillModule extends mainModule
     function __loadFaseLatihan($exec=NULL){
         $this->__include_module('latihan');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->FaseLatihan_config->free_val = $this->vardump;
+            $this->latihan_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
@@ -732,7 +756,7 @@ class treadmillModule extends mainModule
     function __loadFaseRecovery($exec=NULL){
         $this->__include_module('recovery');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->FaseRecovery_config->free_val = $this->vardump;
+            $this->recovery_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
@@ -805,6 +829,7 @@ class treadmillModule extends mainModule
             $strid,
             $thevalue
         );
+        $iddata = $thevalue['id'];
         unset($thevalue, $opr, $strid);
         $this->__loadFaseIstirahat('submit');
         $this->__loadFaseIstirahatBerdiri('submit');
@@ -826,7 +851,7 @@ class treadmillModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/user/treadmill/view');
+        redirect_to('/user/treadmill/detail_form/' . $iddata);
     }
 
 }

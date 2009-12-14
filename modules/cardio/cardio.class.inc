@@ -491,8 +491,12 @@ class cardioModule extends mainModule
             '' => __t('-- medical record --'),
             'all' => __t('semua')
         );
+        $rujukanopts = array(
+            '' => __t('-- dirujuk ke --')
+        );
         $dump_addmenus = $this->__get_bagian_lists();
         foreach($dump_addmenus as $key => $value){
+            $rujukanopts[$key] = $value;
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),
@@ -520,13 +524,15 @@ class cardioModule extends mainModule
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'cardio' . DS . 'cardio.tpl',
             '#addmenu' => array(
-                'title' => __t('medical record'),
-                'action' => '/user/patient/medical_record/' . $vcache['patients'],
-                'position' => 'top',
-                'class' => 'button',
-                'methode' => 'choose',
-                'options' => $addmenuopts,
-                'filter' => 'bagian'
+                '#addmenu' => array(
+                    'title' => __t('medical record'),
+                    'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                    'position' => 'top',
+                    'class' => 'button',
+                    'methode' => 'choose',
+                    'options' => $addmenuopts,
+                    'filter' => 'bagian'
+                )
             )
         ); unset($addmenuopts);
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['kunjungan'] = array(
@@ -552,8 +558,37 @@ class cardioModule extends mainModule
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
-                    $query = $this->__get_patient_data($vcache['patients'], array('nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah'));
+                    $query = $this->__get_patient_data(
+                        $vcache['patients'],
+                        array(
+                            'nama',
+                            'tgl_lahir',
+                            'alamat',
+                            'kota',
+                            'propinsi',
+                            'nomor',
+                            'kelamin',
+                            'gol_darah',
+                            'strnum'
+                        )
+                    );
                     if(count($query) > 0){
+                        if($this->formhabit == 'readonly'){
+                            $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['#addmenu']['#addmenu0'] = array(
+                                'title' => __t('dirujuk ke'),
+                                'action' => '/user/patient/register_form_submit',
+                                'position' => 'top',
+                                'class' => 'button',
+                                'methode' => 'choose',
+                                'options' => $rujukanopts,
+                                'user_required' => 'cardio_' . ($teens == 0 ? 'dewasa' : 'anak'),
+                                'filter' => 'bagian',
+                                'items' => array (
+                                    'id' => $vcache['patients'],
+                                    'strnum' => $query['strnum']
+                                )
+                            );
+                        } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
                                 $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
@@ -563,7 +598,7 @@ class cardioModule extends mainModule
                                     '#title' => __t('umur'),
                                     '#tbpos' => 3
                                 );
-                            } else {
+                            } elseif($ky != 'strnum') {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
                                         $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];

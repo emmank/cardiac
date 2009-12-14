@@ -277,11 +277,11 @@ class ekgModule extends mainModule
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
-                if(preg_match('/^back_/', $dump[3])){
-//                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
-//                    $vcache = $this->__get_ekg_data((int)$ekg_id);
-//                    $this->vardump = $vcache;
-//                    unset($cardio_id);
+                if(preg_match('/^edit_/', $dump[3])){
+                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
+                    $vcache = $this->__get_ekg_data((int)$ekg_id);
+                    $this->vardump = $vcache;
+                    unset($cardio_id);
                     redirect_to('/user/ekg/view');
                 } else {
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
@@ -308,8 +308,12 @@ class ekgModule extends mainModule
             '' => __t('-- medical record --'),
             'all' => __t('semua')
         );
+        $rujukanopts = array(
+            '' => __t('-- dirujuk ke --')
+        );
         $dump_addmenus = $this->__get_bagian_lists();
         foreach($dump_addmenus as $key => $value){
+            $rujukanopts[$key] = $value;
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),
@@ -337,13 +341,15 @@ class ekgModule extends mainModule
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'ekg' . DS . 'ekg.tpl',
             '#addmenu' => array(
-                'title' => __t('medical record'),
-                'action' => '/user/patient/medical_record/' . $vcache['patients'],
-                'position' => 'top',
-                'class' => 'button',
-                'methode' => 'choose',
-                'options' => $addmenuopts,
-                'filter' => 'bagian'
+                '#addmenu' => array(
+                    'title' => __t('medical record'),
+                    'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                    'position' => 'top',
+                    'class' => 'button',
+                    'methode' => 'choose',
+                    'options' => $addmenuopts,
+                    'filter' => 'bagian'
+                )
             )
         ); unset($addmenuopts);
         $form['ekg']['kunjungan'] = array(
@@ -369,8 +375,36 @@ class ekgModule extends mainModule
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
-                    $query = $this->__get_patient_data($vcache['patients'], array('nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah'));
+                    $query = $this->__get_patient_data(
+                        $vcache['patients'],
+                        array(
+                            'nama',
+                            'tgl_lahir',
+                            'alamat',
+                            'kota',
+                            'propinsi',
+                            'kelamin',
+                            'gol_darah',
+                            'strnum'
+                        )
+                    );
                     if(count($query) > 0){
+                        if($this->formhabit == 'readonly'){
+                            $form['ekg']['#addmenu']['#addmenu0'] = array(
+                                'title' => __t('dirujuk ke'),
+                                'action' => '/user/patient/register_form_submit',
+                                'position' => 'top',
+                                'class' => 'button',
+                                'methode' => 'choose',
+                                'options' => $rujukanopts,
+                                'user_required' => 'ekg',
+                                'filter' => 'bagian',
+                                'items' => array (
+                                    'id' => $vcache['patients'],
+                                    'strnum' => $query['strnum']
+                                )
+                            );
+                        } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
 //                                $vl = $this->agecount_in_month(strtotime($vl));
@@ -386,7 +420,7 @@ class ekgModule extends mainModule
                                     if($ky == 'alamat'){
                                         $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
                                         $tbpos = 4;
-                                    } elseif($ky == 'nomor'){
+                                    } elseif($ky == 'strnum'){
                                         $ky = 'no_registrasi';
                                         $tbpos = 0;
                                     } elseif($ky == 'nama'){
@@ -500,7 +534,7 @@ class ekgModule extends mainModule
 
         $form['ekg']['submit'] = array(
             '#type' => 'submit',
-            '#value' => ($this->formhabit == 'readonly' ? __t('back') : __t('submit'))
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
         return $form;
     }
@@ -572,6 +606,7 @@ class ekgModule extends mainModule
             $strid,
             $thevalue
         );
+        $iddata = $thevalue['id'];
         unset($thevalue, $opr, $strid);
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
@@ -588,7 +623,7 @@ class ekgModule extends mainModule
             $this->query->close();
         }
         $this->__flush_caches();
-        redirect_to('/user/ekg/view');
+        redirect_to('/user/ekg/detail_form/' . $iddata);
     }
 
     function view(){

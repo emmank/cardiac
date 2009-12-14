@@ -27,59 +27,51 @@ require_once MODULES_DIR . DS . 'perawatan' . DS . 'config.inc';
 class perawatanModule extends mainModule
 {
     var $title = 'perawatan';
-    var $description = 'Manajemen data digital pasien perawatanlogi';
+    var $description = 'Manajemen data digital pasien rawat inap';
     var $hidden_fields = array(
-        'id', 'teens', 'inputer','updated', 'inputtime'
+        'id', 'inputer','updated', 'inputtime', 'pukul_keluar'
     );
 
     function menu(){
-        $items['perawatan_form'] = array(
-            'title' => __t('form perawatan'),
-            'description' => __t('formulir perawatan'),
+        $items['perawatan_register'] = array(
+            'title' => __t('Registrasi Perawatan'),
+            'description' => __t('Registrasi Pendaftaran Pasien Rawat Inap'),
             'path' => '/user/perawatan/form',
-            'exec' => 'dewasa_form',
+            'exec' => 'form',
             'weight' => '0',
-            'user_required' => 'kardio dewasa'
+            'user_required' => 'perawatan'
         );
-//        $items['perawatan_anak_form'] = array(
-//            'title' => __t('form perawatan anak'),
-//            'description' => __t('formulir perawatan anak'),
-//            'path' => '/user/perawatan_anak/form',
-//            'exec' => 'anak_form',
-//            'weight' => '0',
-//            'user_required' => 'kardio anak'
-//        );
-        $items['perawatan_form_submit'] = array(
-            'title' => __t('form perawatan'),
-            'description' => __t('formulir perawatan'),
+        $items['perawatan_register_submit'] = array(
+            'title' => __t('Registrasi Perawatan'),
+            'description' => __t('Eksekusi Registrasi Pendaftaran Pasien Rawat Inap'),
             'path' => '/user/perawatan/form_submit',
-            'exec' => 'dewasa_form_submit',
+            'exec' => 'form_submit',
             'weight' => '0',
-            'user_required' => 'kardio dewasa'
+            'user_required' => 'perawatan'
         );
-//        $items['perawatan_anak_form_submit'] = array(
-//            'title' => __t('form perawatan anak'),
-//            'description' => __t('formulir perawatan anak'),
-//            'path' => '/user/perawatan_anak/form_submit',
-//            'exec' => 'anak_form_submit',
-//            'weight' => '0',
-//            'user_required' => 'kardio anak'
-//        );
-//        $items['perawatan_anak_get_lists'] = array(
-//            'title' => __t('list antrian perawatan anak'),
-//            'description' => __t('list antrian perawatan anak'),
-//            'path' => '/user/perawatan_anak/today_perawatan_lists',
-//            'exec' => '__get_today_lists',
-//            'weight' => '0',
-//            'user_required' => 'kardio anak'
-//        );
-        $items['perawatan_get_lists'] = array(
-            'title' => __t('list antrian perawatan'),
-            'description' => __t('formulir perawatan'),
-            'path' => '/user/perawatan/today_perawatan_lists',
+        $items['perawatan_daftar'] = array(
+            'title' => __t('perawatan'),
+            'description' => __t('Daftar Pasien Rawat Inap'),
+            'path' => '/user/perawatan/list',
+            'exec' => 'view',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['perawatan_search'] = array(
+            'title' => __t('Cari Pasien'),
+            'description' => __t('Cari Pasien Rawat Inap'),
+            'path' => '/care/perawatan/search',
+            'exec' => 'search',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['perawatan_antrian'] = array(
+            'title' => __t('Antrian Pasien'),
+            'description' => __t('Antrian Pasien Rawat Inap'),
+            'path' => '/user/perawatan/today_patient_lists',
             'exec' => '__get_today_lists',
             'weight' => '0',
-            'user_required' => 'kardio dewasa'
+            'user_required' => 'users'
         );
         $items['perawatan_message'] = array(
             'title' => __t('perawatan message'),
@@ -87,37 +79,13 @@ class perawatanModule extends mainModule
             'path' => '/user/perawatan/message',
             'exec' => 'message',
             'weight' => 5,
-            'user_required' => 'kardio dewasa'
+            'user_required' => 'perawatan'
         );
-//        $items['perawatan_anak_view'] = array(
-//            'title' => __t('perawatan anak'),
-//            'description' => __t('explore perawatan anak'),
-//            'path' => '/user/perawatan_anak/view',
-//            'exec' => 'anak_view',
-//            'weight' => 5,
-//            'user_required' => 'users'
-//        );
-        $items['perawatan_view'] = array(
-            'title' => __t('perawatan'),
-            'description' => __t('explore perawatan'),
-            'path' => '/user/perawatan/view',
-            'exec' => 'view',
-            'weight' => '0',
-            'user_required' => 'users'
-        );
-//        $items['perawatan_anak_detail'] = array(
-//            'title' => __t('detail perawatan anak'),
-//            'description' => __t("detail perawatan anak's patients"),
-//            'path' => '/user/perawatan_anak/detail_form',
-//            'exec' => 'anak_detail_form',
-//            'weight' => '0',
-//            'user_required' => 'users'
-//        );
         $items['perawatan_detail'] = array(
             'title' => __t('detail perawatan'),
             'description' => __t("detail perawatan's patients"),
             'path' => '/user/perawatan/detail_form',
-            'exec' => 'dewasa_detail_form',
+            'exec' => '_detail_form',
             'weight' => '0',
             'user_required' => 'users'
         );
@@ -125,46 +93,68 @@ class perawatanModule extends mainModule
             'title' => __t('search perawatan'),
             'description' => __t("search perawatan's patients"),
             'path' => '/user/perawatan/search',
-            'exec' => 'dewasa_search',
+            'exec' => '_search',
             'weight' => '0',
             'user_required' => 'users'
         );
-//        $items['perawatan_anak_search'] = array(
-//            'title' => __t('search perawatan anak'),
-//            'description' => __t("search perawatan anak's patients"),
-//            'path' => '/user/perawatan_anak/search',
-//            'exec' => 'anak_search',
-//            'weight' => '0',
-//            'user_required' => 'users'
-//        );
         $items['perawatan_search_submit'] = array(
             'title' => __t('submitted search perawatan'),
             'description' => __t("submitted search perawatan's patients"),
             'path' => '/user/perawatan/search_submit',
-            'exec' => 'dewasa_search_submit',
+            'exec' => '_search_submit',
             'weight' => '0',
             'user_required' => 'users'
         );
-//        $items['perawatan_anak_search_submit'] = array(
-//            'title' => __t('submitted search perawatan anak'),
-//            'description' => __t("submitted search perawatan anak's patients"),
-//            'path' => '/user/perawatan_anak/search_submit',
-//            'exec' => 'anak_search_submit',
-//            'weight' => '0',
-//            'user_required' => 'users'
-//        );
         return $items;
     }
 
-    function dewasa_search_submit(){
-        return $this->__get_search_submit();
+    function _search(){
+        $result = array();
+        $result['type'] = 'search';
+        $result['title'] = __t('Cari data pasien perawatan');
+        $result['description'] = __t('Mencari data pasien perawatan');
+        $result['dataform']['character'] = array(
+            '#type' => 'character'
+        );
+        $i = 0;
+        foreach($this->config->abjad as $value){
+            $result['dataform']['character']['data'][$i]['show'] = $value;
+            $sql = $this->query->getSelect(
+                array('perawatan|id as perawatan_id'),
+                array('perawatan', 'patients'),
+                array(
+                    array('&&', "perawatan|patients=patients|id"),
+                    array('&&', "patients|nama like '" . strtolower($value) . "%'")
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            $result['dataform']['character']['data'][$i]['links'] = $getit->_numOfRows > 0 ? '/user/perawatan/search/' . $value : NULL;
+            unset($getit); $i++;
+        } unset($i);
+        $result['dataform']['form'] = array(
+            '#type' => 'form',
+            '#action' => '/user/perawatan/search',
+            '#id' => 'perawatan_search',
+            '#title' => __t('search'),
+            'data' => array(
+                '#type' => 'text',
+                '#size' => 40
+            ),
+            'submit' => array(
+                '#type' => 'submit',
+                '#value' => __t('search')
+            )
+        );
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($_POST['data']) || isset($dump[3])){
+            $result['result'] = $this->__get_search_submit($teens);
+        } unset($dump);
+        return $result;
     }
 
-    function anak_search_submit(){
-        return $this->__get_search_submit(1);
-    }
-
-    function __get_search_submit($teens=0){
+    function _search_submit(){
         if(isset($_POST['data'])){
             $str = $_POST['data'];
             $dump = $this->__get_patients_search($str);
@@ -190,8 +180,7 @@ class perawatanModule extends mainModule
                         array('id', 'inputtime'),
                         array('perawatan'),
                         array(
-                            array('&&', "patients=" . $vl),
-                            array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
+                            array('&&', "patients=" . $vl)
                         )
                     );
                     $this->query->connect();
@@ -238,88 +227,30 @@ class perawatanModule extends mainModule
                 }
             }
         } unset($dump);
-//        echo '<pre>'; print_r($result); echo '</pre>'; exit();
-        return $result;
-    }
-
-    function dewasa_search(){
-        return $this->__get_search();
-    }
-
-    function anak_search(){
-        return $this->__get_search(1);
-    }
-
-    function __get_search($teens=0){
-        $result = array();
-        $result['type'] = 'search';
-        $result['title'] = __t('Cari data pasien perawatan');
-        $result['description'] = __t('Mencari data pasien perawatan');
-        $result['dataform']['character'] = array(
-            '#type' => 'character'
-        );
-        $i = 0;
-        foreach($this->config->abjad as $value){
-            $result['dataform']['character']['data'][$i]['show'] = $value;
-            $sql = $this->query->getSelect(
-                array('perawatan|id as perawatan_id'),
-                array('perawatan', 'patients'),
-                array(
-                    array('&&', "perawatan|patients=patients|id"),
-                    array('&&', "patients|nama like '" . strtolower($value) . "%'"),
-                    array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
-                )
-            );
-            $this->query->connect();
-            $getit = $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-            $result['dataform']['character']['data'][$i]['links'] = $getit->_numOfRows > 0 ? '/user/perawatan/search/' . $value : NULL;
-            unset($getit); $i++;
-        } unset($i);
-        $result['dataform']['form'] = array(
-            '#type' => 'form',
-            '#action' => '/user/perawatan/search',
-            '#id' => 'perawatan_search',
-            '#title' => __t('search'),
-            'data' => array(
-                '#type' => 'text',
-                '#size' => 40
-            ),
-            'submit' => array(
-                '#type' => 'submit',
-                '#value' => __t('search')
-            )
-        );
-        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        if(isset($_POST['data']) || isset($dump[3])){
-            $result['result'] = $this->__get_search_submit($teens);
-        } unset($dump);
-//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
     function view(){
+        $this->sync_scheme('perawatan', $this->query);
+        $this->sync_scheme('ruang', $this->query);
+        $this->sync_scheme('perawatan_items', $this->query);
         return $this->__get_view();
     }
 
-    function anak_view(){
-        return $this->__get_view(1);
-    }
-
-    function __get_view($teens=0){
+    function __get_view(){
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('daftar beberapa pasien');
         $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
         $result['addmenu']['#add'] = array(
-            'title' => __t('add'),
+            'title' => __t('register'),
             'action' => '/user/perawatan/form',
             'position' => 'top',
             'user_required' => 'users'
         );
         $result['addmenu']['#search'] = array(
             'title' => __t('search'),
-            'action' => '/user/perawatan/search',
+            'action' => '/care/perawatan/search',
             'position' => 'top',
             'user_required' => 'users'
         );
@@ -342,8 +273,8 @@ class perawatanModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => 'inputtime',
-                'caption' => __t('tgl periksa'),
+                'field' => 'pukul_masuk',
+                'caption' => __t('tanggal masuk'),
                 'width' => '25%',
                 'align' => 'right'
             )
@@ -353,19 +284,18 @@ class perawatanModule extends mainModule
             array(),
             array('perawatan'),
             array(
-                array('&&', "teens=" . ($teens != 0 ? $teens : 0))
+                array('&&', "pukul_keluar is null")
             ),
             'inputtime desc',
             '0,10'
         ); unset($where);
         $this->query->connect();
-//        $this->query->conn->debug=true;
         $getit = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($getit->_numOfRows > 0){
             for($i=0; $i<$getit->_numOfRows; $i++){
                 $sql = $this->query->getSelect(
-                    array('id', 'nama', 'tgl_lahir', 'inputtime'),
+                    array('id', 'nama', 'tgl_lahir'),
                     array('patients'),
                     array(
                         array('&&', "id=" . $getit->fields['patients'])
@@ -377,54 +307,8 @@ class perawatanModule extends mainModule
                 $result['data'][$i]['nama'] = $getthis->fields['nama'];
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
                 $result['data'][$i]['goto'] = '/user/perawatan/detail_form/' . $getit->fields['id'];
-                $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                $result['data'][$i]['pukul_masuk'] = date('j-n-Y H:i:s', strtotime($getit->fields['pukul_masuk']));
                 $getit->MoveNext();
-            }
-        }
-//        echo '<pre>'; print_r($result); echo '</pre>';
-        return $result;
-    }
-
-    function dewasa_detail_form(){
-        return $this->__detail_form();
-    }
-
-    function anak_detail_form(){
-        return $this->__detail_form(1);
-    }
-
-    function __detail_form($teens=0){
-        $this->formhabit = 'readonly';
-        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        $vcache = $this->__get_perawatan_data((int)$dump[3]);
-        $this->vardump = $this->__write_custom_cache($vcache);
-        $this->vardump['readonly'] = $this->formhabit;
-        if($teens == 0){
-            $result = $this->dewasa_form();
-        } else {
-            $result = $this->anak_form();
-        }
-        return $result;
-    }
-
-    function __get_today_lists(){
-        $result = array();
-//        echo "disini";
-        $result = $this->today_patient_lists();
-//        echo "<pre>"; print_r($result); echo "</pre>";
-        if(count($result['data'])>0){
-//            echo "disini";
-            
-            foreach($result['data'] as $key => $value){
-                if(!is_null($teens)){
-                    if($value['age'] <= $this->config->teenlimit){
-                        $result['data'][$key] = $value;
-                    }
-                } else {
-                    if($value['age'] > $this->config->teenlimit){
-                        $result['data'][$key] = $value;
-                    }
-                }
             }
         }
         return $result;
@@ -450,15 +334,28 @@ class perawatanModule extends mainModule
         return $result;
     }
 
-    function dewasa_form(){
-        return $this->__get_form();
+    function _detail_form(){
+        $this->formhabit = 'readonly';
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $vcache = $this->__get_perawatan_data((int)$dump[3]);
+        $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
+        $result = $this->form();
+        return $result;
     }
 
-    function anak_form(){
-        return $this->__get_form(1);
+    function __get_today_lists(){
+        $result = array();
+        $result = $this->today_patient_lists();
+        if(count($result['data'])>0){
+            foreach($result['data'] as $key => $value){
+                $result['data'][$key] = $value;
+            }
+        }
+        return $result;
     }
 
-    function __get_form($teens=0){
+    function form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
         } else {
@@ -473,8 +370,7 @@ class perawatanModule extends mainModule
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
                 }
             } else {
-//                echo "test";
-                redirect_to('/user/perawatan/today_perawatan_lists');
+                redirect_to('/user/perawatan/today_patient_lists');
             } unset($dump);
         }
         $this->query->connect();
@@ -495,8 +391,12 @@ class perawatanModule extends mainModule
             '' => __t('-- medical record --'),
             'all' => __t('semua')
         );
+        $rujukanopts = array(
+            '' => __t('-- dirujuk ke --')
+        );
         $dump_addmenus = $this->__get_bagian_lists();
         foreach($dump_addmenus as $key => $value){
+            $rujukanopts[$key] = $value;
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),
@@ -516,21 +416,23 @@ class perawatanModule extends mainModule
         $form['perawatan'] = array(
             '#type' => 'special',
             '#id' => 'perawatan',
-            '#title' => __t('Perawatan'),
+            '#title' => __t('perawatan'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/perawatan/form/' . ($this->formhabit == 'readonly' ? 'edit_' . $vcache['id'] : '/form_submit'),
+            '#action' => '/user/perawatan/form' . ($this->formhabit == 'readonly' ? '/edit_' . $vcache['id'] : '_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'perawatan' . DS . 'perawatan.tpl',
             '#addmenu' => array(
-                'title' => __t('medical record'),
-                'action' => '/user/patient/medical_record/' . $vcache['patients'],
-                'position' => 'top',
-                'class' => 'button',
-                'methode' => 'choose',
-                'options' => $addmenuopts,
-                'filter' => 'bagian'
+                '#addmenu' => array(
+                    'title' => __t('medical record'),
+                    'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                    'position' => 'top',
+                    'class' => 'button',
+                    'methode' => 'choose',
+                    'options' => $addmenuopts,
+                    'filter' => 'bagian'
+                )
             )
         ); unset($addmenuopts);
         $form['perawatan']['kunjungan'] = array(
@@ -547,17 +449,49 @@ class perawatanModule extends mainModule
                     );
                 }
             } else {
-                if($value == 'tgl'){
-                    if(!isset($vcache['tgl']) || $vcache['tgl'] == ''){
-                        $vcache['tgl'] = date('Y-m-d', $this->config->time);
+                if($value == 'pukul_masuk'){
+                    if(!isset($vcache['pukul_masuk']) || $vcache['pukul_masuk'] == ''){
+                        $vcache['pukul_masuk'] = date('Y-m-d H:i:s', $this->config->time);
                     }
                 } elseif($value == 'patients'){
                     $form['perawatan'][$value] = array(
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
-                    $query = $this->__get_patient_data($vcache['patients'], array('nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah'));
+                    $query = $this->__get_patient_data(
+                        $vcache['patients'],
+                        array(
+                            'strnum',
+                            'nama',
+                            'tgl_lahir',
+                            'alamat',
+                            'kota',
+                            'propinsi',
+                            'kelamin',
+                            'gol_darah',
+                            'tinggi',
+                            'berat',
+                            'tekanan_darah',
+                            'indikasi'
+                        )
+                    );
                     if(count($query) > 0){
+                        if($this->formhabit == 'readonly'){
+                            $form['perawatan']['#addmenu']['#addmenu0'] = array(
+                                'title' => __t('dirujuk ke'),
+                                'action' => '/user/patient/register_form_submit',
+                                'position' => 'top',
+                                'class' => 'button',
+                                'methode' => 'choose',
+                                'options' => $rujukanopts,
+                                'user_required' => 'perawatan',
+                                'filter' => 'bagian',
+                                'items' => array (
+                                    'id' => $vcache['patients'],
+                                    'strnum' => $query['strnum']
+                                )
+                            );
+                        } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
                                 $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
@@ -565,33 +499,46 @@ class perawatanModule extends mainModule
                                     '#type' => 'info',
                                     '#value' => $vl . ' tahun',
                                     '#title' => __t('umur'),
-                                    '#tbpos' => 3
+                                    '#tbpos' => 2
                                 );
+                                $usiapatient = floor($vl);
                             } else {
                                 if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
-                                        $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
-                                        $tbpos = 4;
-                                    } elseif($ky == 'nomor'){
+                                        $proplists = $this->__get_propinsi_options('nama_propinsi');
+                                        $kablists = $this->__get_kabupaten_options('kabupaten');
+                                        $vl = $vl . ' ' . $kablists[$query['kota']] . ' ' . $proplists[$query['propinsi']];
+                                        $tbpos = 3;
+                                        unset($proplists, $kablists);
+                                    } elseif($ky == 'strnum'){
                                         $ky = 'no_registrasi';
                                         $tbpos = 0;
                                     } elseif($ky == 'nama'){
                                         $tbpos = 1;
                                     } elseif($ky == 'kelamin'){
                                         $vl = $this->kelamin[$vl];
-                                        $tbpos = 2;
+                                        $tbpos = 9;
                                     } elseif($ky == 'gol_darah'){
                                         $tbpos = 5;
+                                    } elseif($ky == 'tinggi'){
+                                        $tbpos = 10;
+                                    } elseif ($ky == 'berat'){
+                                        $tbpos = 11;
+                                    } elseif ($ky == 'indikasi'){
+                                        $tbpos = 4;
+                                    } elseif ($ky == 'tekanan_darah'){
+                                        $tbpos = 12;
                                     }
                                     $form['perawatan'][$ky] = array(
                                         '#type' => $ky == 'alamat' ? 'textarea' : 'info',
                                         '#value' => $vl,
                                         '#title' => __t($ky),
-                                        '#tbpos' => $tbpos
+                                        '#tbpos' => $tbpos,
+                                        '#readonly' => true
                                     );
                                     if($ky == 'alamat'){
                                         $form['perawatan'][$ky]['#extra'] = 'readonly="true"';
-                                        $form['perawatan'][$ky]['#cols'] = '55';
+                                        $form['perawatan'][$ky]['#cols'] = '30';
                                         $form['perawatan'][$ky]['#rows'] = '3';
                                     } elseif($ky == 'no_registrasi'){
                                         $form['perawatan'][$ky]['#link'] = '/user/perawatan/today_patient_lists';
@@ -600,6 +547,24 @@ class perawatanModule extends mainModule
                                 }
                             }
                         }
+                        $druser = $this->__get_user_info(1);
+                        $sql = $this->query->getSelect(
+                            array('nama'),
+                            array('stafs'),
+                            array(
+                                array('&&', "id=" . $druser['id'])
+                            )
+                        ); unset($druser);
+                        $this->query->connect();
+                        $getstaf = $this->query->conn->Execute($sql); unset($sql);
+                        $this->query->close();
+                        $form['perawatan']['handleby'] = array(
+                            '#type' => 'info',
+                            '#value' => $getstaf->fields['nama'],
+                            '#title' => __t('dr yg kerjakan'),
+                            '#tbpos' => 13,
+                            '#readonly' => true
+                        ); unset($getstaf);
                         $sql = $this->query->getSelect(
                             array('pukul'),
                             array('kunjungan'),
@@ -623,7 +588,8 @@ class perawatanModule extends mainModule
                             '#type' => 'info',
                             '#value' => count($dumpfrek),
                             '#title' => __t('kunjungan_ke'),
-                            '#tbpos' => 6
+                            '#tbpos' => 6,
+                            '#readonly' => true
                         );
                         unset($dumpfrek, $getfrek);
                         $sql = $this->query->getSelect(
@@ -640,11 +606,45 @@ class perawatanModule extends mainModule
                             '#type' => 'info',
                             '#value' => $getsender->fields['nama'],
                             '#title' => __t('pengirim'),
-                            '#tbpos' => 7
+                            '#tbpos' => 5,
+                            '#readonly' => true
                         );
                         unset($getsender);
+                        $sql = $this->query->getSelect(
+                            array(),
+                            array('nadi_latihan'),
+                            array(
+                                array('&&', "umur=" . $usiapatient)
+                            )
+                        );
+                        $this->query->connect();
+                        $getthis = $this->query->conn->Execute($sql); unset($sql);
+                        $this->query->close();
+                        $form['perawatan']['denyut_jantung_max'] = array(
+                            '#type' => 'info',
+                            '#value' => $getthis->fields['nadi'],
+                            '#title' => __t('denyut_jantung_max'),
+                            '#tbpos' => 7,
+                            '#readonly' => true
+                        ); unset($getthis);
+                        $sql = $this->query->getSelect(
+                            array(),
+                            array('thr'),
+                            array(
+                                array('&&', "umur=" . $usiapatient)
+                            )
+                        );
+                        $this->query->connect();
+                        $getthis = $this->query->conn->Execute($sql); unset($sql);
+                        $this->query->close();
+                        $form['perawatan']['target_denyut_jantung_max'] = array(
+                            '#type' => 'info',
+                            '#value' => $getthis->fields['nadi_85'],
+                            '#title' => __t('target_denyut_jantung_max'),
+                            '#tbpos' => 14,
+                            '#readonly' => true
+                        ); unset($getthis);
                     }
-//                    $this->query->close();
                 }
                 if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
                     $form['perawatan'][$value] = array(
@@ -654,31 +654,48 @@ class perawatanModule extends mainModule
                         '#title' => __t($value),
                         '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                     );
+                    if($this->config->fields_form_type[$value] == 'datetime'){
+                        $form['perawatan'][$value]['#theref'] = $this->nama_bulan;
+                        $form['perawatan'][$value]['#value'] = isset($vcache[$value]) ? $vcache[$value] : date('Y-m-d H:i:s', $this->config->time);
+                    } elseif($value == 'ruang'){
+                        $ruanglists = $this->__get_ruang_options('ruang');
+                        foreach($ruanglists as $ky => $vl){
+                            $sql = $this->query->getSelect(
+                                array('ruang'),
+                                array('perawatan'),
+                                array(
+                                    array('&&', "ruang=" . $ky)
+                                )
+                            );
+                            $this->query->connect();
+                            $getit = $this->query->conn->Execute($sql); unset($sql);
+                            $this->query->close();
+                            if($getit->_numOfRows < 1){
+                                $form['perawatan'][$value]['#option'][$ky] = $vl;
+                            } elseif($ky == $vcache[$value]){
+                                $form['perawatan'][$value]['#option'][$ky] = $vl;
+                            } unset($getit);
+                        }
+                        if($this->formhabit == 'readonly'){
+                            $form['perawatan'][$value]['#value'] = $ruanglists[$vcache['ruang']];
+                        } unset($ruanglists);
+                    }
                 }
                 if($this->formhabit == 'readonly'){
-                    $form['perawatan'][$value]['#extra'] = 'readonly="true"';
+                    $form['perawatan'][$value]['#readonly'] = TRUE;
                 }
             }
         }
-
-        $form['perawatan']['tab_items']['pengkajian'] = $this->__loadPengkajian();
-        $form['perawatan']['tab_items']['rencana'] = $this->__loadRencana();
-        $form['perawatan']['tab_items']['pemeriksaan'] = $this->__loadPemeriksaan();
-        $form['perawatan']['tab_items']['tindakan'] = $this->__loadTindakan();
-        $form['perawatan']['tab_items']['pemberian'] = $this->__loadPemberian();
-        $form['perawatan']['tab_items']['perkembangan'] = $this->__loadPerkembangan();
-//        $form['perawatan']['tab_items']['nose'] = $this->__loadNose();
-//        $form['perawatan']['tab_items']['headface'] = $this->__loadHeadFace();
-//        $form['perawatan']['tab_items']['neck'] = $this->__loadNeck();
-//        $form['perawatan']['tab_items']['mouth'] = $this->__loadMouth();
-//        $form['perawatan']['tab_items']['space'] = "";
-//        $form['perawatan']['tab_items']['thorax'] = $this->__loadThorax();
-//        $form['perawatan']['tab_items']['paru'] = $this->__loadParu();
-//        $form['perawatan']['tab_items']['hearth'] = $this->__loadHearth();
-//        $form['perawatan_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['abdomen'] = $this->__loadAbdomen();
-//        $form['perawatan_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['anusrectum'] = $this->__loadAnusrectum();
-//        $form['perawatan_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['punggung'] = $this->__loadPunggung();
-//        $form['perawatan_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['extermitas'] = $this->__loadExtermitas();
+        if(!isset($vcache['inputtime']) || $vcache['inputtime'] == '0000-00-00 00:00:00' || is_null($vcache['inputtime'] || trim($vcache['inputtime']) == '')){
+            $vcache['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
+        }
+        $form['perawatan']['tanggal'] = array(
+            '#type' => 'info',
+            '#value' => date('j-n-Y', strtotime($vcache['inputtime'])),
+            '#title' => __t('tanggal'),
+            '#tbpos' => 8,
+            '#readonly' => true
+        );
 
         $form['perawatan']['submit'] = array(
             '#type' => 'submit',
@@ -687,100 +704,25 @@ class perawatanModule extends mainModule
         return $form;
     }
 
-    function __loadPengkajian($exec=NULL){
-        $this->__include_module('pengkajian');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->pengkajian_config->free_val = $this->vardump;
+    function __get_refs($fields, $sort=NULL){
+        $result = array();
+        $sql = $this->query->getSelect(
+            array(),
+            array($this->config->reftable[$fields][0]),
+            NULL,
+            (!is_null($sort) ? $sort . ' asc' : 'id asc')
+        );
+        $this->query->connect();
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        for($i=0; $i<$query->_numOfRows; $i++){
+            $result[$query->fields['id']] = $query->fields[$this->config->reftable[$fields][1]];
+            $query->MoveNext();
         }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->pengkajian_exec->perawatan_submit();
-            }
-        } else {
-//            echo "disini";
-            return $this->pengkajian_exec->perawatan_menu();
-        }
+        return $result;
     }
 
-    function __loadRencana($exec=NULL){
-        $this->__include_module('rencana');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->vitalSign_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->rencana_exec->perawatan_submit();
-            }
-        } else {
-            return $this->rencana_exec->perawatan_menu();
-        }
-    }
-////
-    function __loadPemeriksaan($exec=NULL){
-        $this->__include_module('pemeriksaan');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->pemeriksaan_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->pemeriksaan_exec->perawatan_submit();
-            }
-        } else {
-            return $this->pemeriksaan_exec->perawatan_menu();
-        }
-    }
-    
-    function __loadTindakan($exec=NULL){
-        $this->__include_module('tindakan');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->tindakan_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->tindakan_exec->perawatan_submit();
-            }
-        } else {
-            return $this->tindakan_exec->perawatan_menu();
-        }
-    }
-    
-    function __loadPerkembangan($exec=NULL){
-        $this->__include_module('perkembangan');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->perkembangan_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->perkembangan_exec->perawatan_submit();
-            }
-        } else {
-            return $this->perkembangan_exec->perawatan_menu();
-        }
-    }
-
-    function __loadPemberian($exec=NULL){
-        $this->__include_module('pemberian');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->pemberian_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->pemberian_exec->perawatan_submit();
-            }
-        } else {
-            return $this->pemberian_exec->perawatan_menu();
-        }
-    }
-
-    function dewasa_form_submit(){
-        return $this->__get_form_submit();
-    }
-
-    function anak_form_submit(){
-        return $this->__get_form_submit(1);
-    }
-
-    function __get_form_submit($teens=0){
+    function form_submit(){
         $this->vardump = $this->__write_form_cache();
         $sql = $this->query->getSelect(
             array(),
@@ -794,59 +736,40 @@ class perawatanModule extends mainModule
         $this->query->close();
         $thevalue = array(
             'patients' => $query->fields['patients'],
-            'tgl' => date('Y-m-d', strtotime($query->fields['pukul']))
         );
         unset($query);
         $thefields = $this->__get_data_fields('perawatan', $this->query);
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
+                if($key == 'pukul_masuk'){
+                    ksort($value);
+                    $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
+                }
                 $thevalue[$key] = $value;
             }
         } unset($thefields);
-        if($teens != 0 && $teens != '0'){
-            $thevalue['teens'] = 1;
-        }
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
             $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->updateData(
-                'perawatan',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
             $thevalue['id'] = $this->__get_id_insert_value('perawatan', 'id', $this->query);
             $thevalue['inputer'] = $user['userid'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
-            $sql = $this->query->saveData(
-                'perawatan',
-                $thevalue
-            );
             $this->vardump['id'] = $thevalue['id'];
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        unset($thevalue);
-        $this->__loadPengkajian('submit');
-        $this->__loadRencana('submit');
-        $this->__loadPemeriksaan('submit');
-        $this->__loadTindakan('submit');
-        $this->__loadPemberian('submit');
-        $this->__loadPerkembangan('submit');
-//        $this->__loadNose('submit');
-//        $this->__loadHeadFace('submit');
-//        $this->__loadNeck('submit');
-//        $this->__loadMouth('submit');
-//        $this->__loadThorax('submit');
-//        $this->__loadParu('submit');
-//        $this->__loadHearth('submit');
-//        $this->__loadAbdomen('submit');
-//        $this->__loadAnusrectum('submit');
-//        $this->__loadPunggung('submit');
-//        $this->__loadExtermitas('submit');
+        $this->__exec_db_ops(
+            $this->query,
+            'perawatan',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        $iddata = $thevalue['id'];
+        unset($thevalue, $opr, $strid);
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',
@@ -861,7 +784,6 @@ class perawatanModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        redirect_to('/user/perawatan/view');
+        redirect_to('/user/perawatan/detail_form/' . $iddata);
     }
-
 }

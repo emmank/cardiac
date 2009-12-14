@@ -100,7 +100,7 @@ class kesimpulanModule extends mainModule
     function treadmill_submit(){
         $thefields = $this->__get_data_fields('kesimpulan', $this->query);
         foreach($this->config->free_val as $key => $value){
-            if(preg_match('/^kesimpulan_/', $key)){
+            if(preg_match('/^kesimpulan_/', $key) || $key == 'id'){
                 $key = trim(preg_replace('/^kesimpulan_/', '', $key));
                 if(in_array($key, $thefields)){
                     $thevalue[$key] = $value;

@@ -58,7 +58,7 @@ foreach($data as $key => $value){
         if($vl['#type'] != 'textarea'){
             $result .= '<input type="text" value="' . $vl['#value'] .'" readonly="true"> <br />' . "\n";
         } else {
-            $result .= '<textarea  readonly="true">' . $vl['#value'] .'</textarea> <br />' . "\n";
+            $result .= '<textarea  readonly="true" rows="3" cols="30">' . $vl['#value'] .'</textarea> <br />' . "\n";
         }
         if((int)$ky > 3 && ((int)$ky + 1) % 5 == 0){
             unset($setdiv);
@@ -211,11 +211,13 @@ foreach($data as $key => $value){
     $result .= '</div>' . "\n";
 
     $result .= '<div>' . "\n";
-    $result .= '<table width=100% class="table" border="1">' . "\n";
-    $result .= '<th></th>' . "\n";
-    $result .= '<th width="20%">' . __t('type') . '</th>' . "\n";
-    $result .= '<th width="25%">' . __t('kali') . '</th>' . "\n";
-    $result .= '<th width="25%">' . __t('waktu') . '</th>' . "\n";
+    $result .= '<table width=100% class="table" border="0">' . "\n";
+    $result .= '<tr>' . "\n";
+    $result .= '<td></td>' . "\n";
+    $result .= '<td width="20%" align="left" style="font-weight:bold">' . __t('type') . '</td>' . "\n";
+    $result .= '<td width="25%" align="left" style="font-weight:bold">' . __t('kali') . '</td>' . "\n";
+    $result .= '<td width="25%" align="left" style="font-weight:bold">' . __t('waktu') . '</td>' . "\n";
+    $result .= '</tr>' . "\n";
     foreach($value['#otherlook'] as $yk => $lv){
         $result .= '<tr><td align="left">' . ucwords($lv['#title']) . '</td>' . "\n";
         $result .= '<td align="left">' . "\n";

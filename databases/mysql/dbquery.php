@@ -136,7 +136,7 @@ class dbset
 				if (!isset($first)){$sql .= ", ";} else {unset($first);}
 			$sql .= $key;
 			}
-		$sql .= ") values ("; $first = 1;
+		$sql .= ") VALUES ("; $first = 1;
 			foreach($thevalue as $value){
 				if (!isset($first)){$sql .= ", ";} else {unset($first);}
 			$sql .= is_null($value)?"NULL":"'".mysql_escape_string($value)."'";

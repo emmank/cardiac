@@ -238,23 +238,23 @@ function __get_active_menus($forced=NULL){
     global $user, $systemquery, $configs;
     $result = array();
     $lists = __get_menu_lists(!is_null($forced) ? $forced : NULL);
-    if(count($user) < 1){
-        if(isset($_COOKIE[$configs->cookiesession])){
-            $sql = $systemquery->getSelect(
-                array(),
-                array($configs->auth_use_table[0]),
-                array(
-                    array('&&', $configs->auth_use_table[3] . "=" . $_COOKIE[$configs->cookiesession])
-                )
-            );
-            $systemquery->connect();
-            $getit = $systemquery->conn->Execute($sql); unset($sql);
-            $systemquery->close();
-            if($getit->_numOfRows > 0){
-                $user = $getit->fields;
-            } unset($getit);
-        }
-    }
+//    if(count($user) < 1){
+//        if(isset($_COOKIE[$configs->cookiesession])){
+//            $sql = $systemquery->getSelect(
+//                array(),
+//                array($configs->auth_use_table[0]),
+//                array(
+//                    array('&&', $configs->auth_use_table[3] . "=" . $_COOKIE[$configs->cookiesession])
+//                )
+//            );
+//            $systemquery->connect();
+//            $getit = $systemquery->conn->Execute($sql); unset($sql);
+//            $systemquery->close();
+//            if($getit->_numOfRows > 0){
+//                $user = $getit->fields;
+//            } unset($getit);
+//        }
+//    }
 //    echo '<pre>'; print_r($user); echo '</pre>'; exit();
 //    echo '<pre>'; print_r($lists); echo '</pre>'; exit();
     foreach($lists as $key=>$value){
@@ -344,23 +344,23 @@ function __get_active_paths($forced=NULL){
     global $user, $systemquery, $configs;
     $result = array();
     $lists = __get_menu_lists(!is_null($forced) ? $forced : NULL);
-    if(count($user) < 1){
-        if(isset($_COOKIE[$configs->cookiesession])){
-            $sql = $systemquery->getSelect(
-                array(),
-                array($configs->auth_use_table[0]),
-                array(
-                    array('&&', $configs->auth_use_table[3] . "=" . $_COOKIE[$configs->cookiesession])
-                )
-            );
-            $systemquery->connect();
-            $getit = $systemquery->conn->Execute($sql); unset($sql);
-            $systemquery->close();
-            if($getit->_numOfRows > 0){
-                $user = $getit->fields;
-            } unset($getit);
-        }
-    }
+//    if(count($user) < 1){
+//        if(isset($_COOKIE[$configs->cookiesession])){
+//            $sql = $systemquery->getSelect(
+//                array(),
+//                array($configs->auth_use_table[0]),
+//                array(
+//                    array('&&', $configs->auth_use_table[3] . "=" . $_COOKIE[$configs->cookiesession])
+//                )
+//            );
+//            $systemquery->connect();
+//            $getit = $systemquery->conn->Execute($sql); unset($sql);
+//            $systemquery->close();
+//            if($getit->_numOfRows > 0){
+//                $user = $getit->fields;
+//            } unset($getit);
+//        }
+//    }
 //    echo '<pre>'; print_r($user); echo '</pre>'; exit();
 //    echo '<pre>'; print_r($lists); echo '</pre>'; exit();
     foreach($lists as $key=>$value){

@@ -63,7 +63,14 @@ function __check_registry(){
         $systemquery->close();
         if($getregistry->_numOfRows < 1){
             __write_registry();
-        } unset($getregistry);
+        } else {
+            if(eregi('logout', $getregistry->fields['primary_links'])){
+                if(!isset($_COOKIE[$configs->cookieid])){
+                    redirect_to('/logout');
+                }
+            }
+        }
+        unset($getregistry);
     }
 }
 
@@ -196,8 +203,6 @@ function __write_registry(){
     $primary_links = __get_primary_links();
     $secondary_links = __get_secondary_links();
     $navigations = __get_navigations();
-//    echo '<pre>'; print_r($navigations); echo '</pre>'; exit();
-//    echo '<pre>'; print_r($menu_actives); echo '</pre>'; exit();
     $thevalue = array();
     foreach ($primary_links as $key=>$value){
         if(in_array($value['menus'], $menu_actives)){
