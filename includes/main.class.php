@@ -439,6 +439,24 @@ class mainModule
         return $result;
     }
 
+    function __get_ruang_options($field){
+        $result = array();
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('ruang'),
+            NULL,
+            $field
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        for($i=0; $i<$query->_numOfRows; $i++){
+            $result[$query->fields['id']] = ucwords(__t($query->fields[$field]));
+            $query->MoveNext();
+        } unset($query);
+        $this->query->close();
+        return $result;
+    }
+
     function __get_propinsi_options($field){
         $result = array();
         $this->query->connect();

@@ -40,12 +40,20 @@ class perawatanConfig extends config
     );
     var $fields_form_type = array(
         'id' => 'hidden',
-        'tgl' => 'date',
+        'pukul_masuk' => 'datetime',
         'patients' => 'select',
-        'nomor' => 'text',
+        'pukul_keluar' => 'datetime',
+        'ruang' => 'select',
+        'kunjungan' => 'select',
         'inputer' => 'hidden',
         'inputtime' => 'hidden',
         'updated' => 'hidden'
+    );
+    var $fieldsisarray = array(
+        'pukul_masuk', 'pukul_keluar', 'ruang', 'patients', 'kunjungan'
+    );
+    var $reftable = array(
+        'ruang' => array('ruang', 'ruang')
     );
     var $table_scheme = array(
         'perawatan' => array(
@@ -123,6 +131,29 @@ class perawatanConfig extends config
             ),
             'ruang' => array(
                 'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        ),
+        'perawatan_items' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'items' => array(
+                'type' => 'varchar(100)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'module' => array(
+                'type' => 'varchar(100)',
                 'null' => 0,
                 'key' => '',
                 'default' => NULL,
