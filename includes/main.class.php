@@ -446,16 +446,15 @@ class mainModule
         $sql = $this->query->getSelect(
             array(),
             array('propinsi'),
-            NULL,
-            $field
+            NULL
         );
         $query = $this->query->conn->Execute($sql); unset($sql);
         for($i=0; $i<$query->_numOfRows; $i++){
             $result[$query->fields['kode_bps']] = ucwords(__t($query->fields[$field]));
             $query->MoveNext();
-        } unset($query);
+        }unset($query);
         $this->query->close();
-//        print_r ($result);
+//        echo "<pre>";print_r ($result);echo "</pre>";
         return $result;
     }
 

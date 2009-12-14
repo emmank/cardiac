@@ -553,7 +553,7 @@ class kateterisasiModule extends mainModule
                 }
             }
         } unset($thefields);
-        echo "<pre>";print_r($thevalue);echo "</pre>";
+//        echo "<pre>";print_r($thevalue);echo "</pre>";
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
             $thevalue['updated'] = $user['userid'] . '|' . date('Y-m-d H:i:s', $this->config->time);
@@ -567,8 +567,8 @@ class kateterisasiModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
-        echo $opr;
-        echo "<pre>";print_r($strid);echo "</pre>";
+//        echo $opr;
+//        echo "<pre>";print_r($strid);echo "</pre>";
         $this->__exec_db_ops(
             $this->query,
             'kateterisasi',
@@ -587,9 +587,9 @@ class kateterisasiModule extends mainModule
                     array('&&', "id=" . $_POST['kunjungan'])
                 )
             );
-//            $this->query->connect();
-//            $this->query->conn->Execute($sql); unset($sql);
-//            $this->query->close();
+            $this->query->connect();
+            $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
         }
         
         $this->__flush_caches();

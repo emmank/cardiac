@@ -660,7 +660,7 @@ class cardioModule extends mainModule
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['presentStatus'] = $this->__loadPresentStatus();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['vitalSign'] = $this->__loadVitalSign();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['eye'] = $this->__loadEye();
-        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['ear'] = $this->__loadEar();
+//        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['ear'] = $this->__loadEar();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['nose'] = $this->__loadNose();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['headface'] = $this->__loadHeadFace();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['neck'] = $this->__loadNeck();
@@ -877,19 +877,19 @@ class cardioModule extends mainModule
         }
     }
 
-    function __loadEar($exec=NULL){
-        $this->__include_module('ear');
-        if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->ear_config->free_val = $this->vardump;
-        }
-        if(!is_null($exec)){
-            if($exec == 'submit'){
-                return $this->ear_exec->cardio_submit();
-            }
-        } else {
-            return $this->ear_exec->cardio_menu();
-        }
-    }
+//    function __loadEar($exec=NULL){
+//        $this->__include_module('ear');
+//        if(isset($this->vardump) && count($this->vardump) > 0){
+//            $this->ear_config->free_val = $this->vardump;
+//        }
+//        if(!is_null($exec)){
+//            if($exec == 'submit'){
+//                return $this->ear_exec->cardio_submit();
+//            }
+//        } else {
+//            return $this->ear_exec->cardio_menu();
+//        }
+//    }
 
     function dewasa_form_submit(){
         return $this->__get_form_submit();
@@ -949,7 +949,7 @@ class cardioModule extends mainModule
         $this->__loadPresentStatus('submit');
         $this->__loadVitalSign('submit');
         $this->__loadEye('submit');
-        $this->__loadEar('submit');
+//        $this->__loadEar('submit');
         $this->__loadNose('submit');
         $this->__loadHeadFace('submit');
         $this->__loadNeck('submit');
