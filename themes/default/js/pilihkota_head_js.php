@@ -1,5 +1,10 @@
 <script language="JavaScript" type="text/JavaScript">
- function showKab()
+
+//function changeLabel(bool) {
+//   document.getElementById("pret").innerHTML = (bool) ? "Nama Istri" : "Nama Suami";
+//}
+
+function showKab()
  {
      <?php
     // membaca semua propinsi

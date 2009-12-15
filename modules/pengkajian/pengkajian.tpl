@@ -17,121 +17,115 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  pengkajian.php
+ *  perawatan.php
  *  
- *  Created on Oct 28, 2009, 9:51:59 AM
+ *  Created on Oct 26, 2009, 5:28:48 AM
  */
-$result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 
-$result .= '<div id="menu_parent">Main Menu</div>';
-$result .= '<div id="menu_child">';
-$result .= '<a href="#" rel="menu1">Item 1</a>';
-$result .= '<a href="#" rel="menu2">Item 2</a>';
-$result .= '<a href="#" rel="menu3">Item 3</a>';
-$result .= '</div>';
-
-
-$result .= '<div id="menu1" class="tabcontent">';
-$result .= 'Tab content 1 here<br />Tab content 1 here<br />';
-$result .= '</div>';
-
-$result .= '<script type="text/javascript">';
-$result .= 'at_attach("menu_parent", "menu_child", "hover", "y", "pointer")';
-$result .= '</script>';
-
-$result .= $vl['datafields']['pengkajian']['title'];
-$result .= '<table width=100% class="table">' . "\n";
-$cnt = 0;
-//echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
-foreach($vl['datafields'] as $yk => $lv){
-    if($lv['type'] != 'hidden'){
-        if($cnt < 1){
-            $result .= '<tr valign="top">' . "\n";
-        }
-        $result .= '<td>' . ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
-        $result .= '<td>';
-        if($lv['type'] == 'select'){
-            if($lv['readonly'] === true){
-                $result .= $lv['theref'][$lv['value']] . "\n";
-            } else {
-                $result .= '<select name="' . $yk . '" size="' . $lv['size']. '">' . "\n";
-                if(isset($lv['blankopt'])){
-                    $result .= '<option value=""></option>';
-                }
-                foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<option value="' . $kc . '"' . (isset($lv['value']) && $lv['value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
-                }
-                $result .= '</select>' . "\n";
+foreach($data as $key => $value){
+    if(isset($value['#addmenu'])){
+        $result .= __create_add_menu($value['#addmenu']);
+    }
+    $result .= __create_form_open($value, $key);
+    $result .= "\n" . '<fieldset>' . "\n";
+    $result .= '<legend>' . __t('Identitas Pasien') . '</legend>' . "\n";
+    foreach($value as $ky => $vl){
+        if(!eregi('#', $ky)){
+            if($vl['#type'] == 'hidden'){
+                $result .= '<input type="hidden" name="' . $ky . '" value="' . $vl['#value'] . '">' . "\n";
             }
-        } elseif($lv['type'] == 'checkbox'){
-            $lv['value'] = explode(',', $lv['value']);
-            if($lv['readonly'] === true){
-                foreach($lv['value'] as $vv){
-                    if(isset($koma)){$result .= ', ';}
-                    $result .= $lv['theref'][$vv]; $koma = 1;
-                } unset($koma);
-            } else {
-                $htg = 0;
-                foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<input type="checkbox" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . (count($lv['value']) > 0 && in_array($kc, $lv['value']) ? ' checked="true"' : '') . '>';
-                    $result .= $isi . "<br />";
-                    $htg++;
-                } unset($htg);
-            }
-        } elseif($lv['type'] == 'radio'){
-            if($lv['readonly'] === true){
-                $result .= $lv['theref'][$lv['value']];
-            } else {
-                $htg = 0;
-                foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<input type="radio" name="' . $yk . '[' . $htg . ']" value="' . $kc . '"' . ($kc == $lv['value'] ? ' checked="true"' : '') . '>';
-                    $result .= $isi . "<br />";
-                    $htg++;
-                } unset($htg);
-            }
-        } elseif($lv['type'] == 'datetime'){
-            if(isset($lv['value'])){
-                $datetime = $lv['value'];
-            } else {
-                $datetime = date('Y-m-d H:i:s', $lv['timenow']);
-            }
-            list($dumptgl, $dumptime) = explode(' ', $datetime);
-            unset($datetime);
-            $dumptgl = explode('-', $dumptgl);
-            $dumptime = explode(':', $dumptime);
-            if($lv['readonly'] === true){
-                $result .= $dumptgl[2] . "&nbsp;";
-                $result .= $lv['theref'][$dumptgl[1]] . "&nbsp;";
-                $result .= $dumptgl[0] . "&nbsp;";
-                $result .= $dumptime[0] . ":";
-                $result .= $dumptime[1] . ":";
-                $result .= $dumptime[2];
-            } else {
-                $result .= '<input type="text" name="' . $yk . '[2]" size="2" maxlength="2" value="' . $dumptgl[2] . '">' . "&nbsp";
-                $result .= '<select name="' . $yk . '[1]" size="1">' . "\n";
-                foreach($lv['theref'] as $kc => $isi){
-                    $result .= '<option value="' . $kc . '"' . ($dumptgl[1] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
-                }
-                $result .= '</select>' . "&nbsp;";
-                $result .= '<input type="text" name="' . $yk . '[0]" size="4" maxlength="4" value="' . $dumptgl[0] . '">' . "<br />\n";
-                $result .= '<input type="text" name="' . $yk . '[3]" size="2" maxlength="2" value="' . $dumptime[0] . '">' . ":";
-                $result .= '<input type="text" name="' . $yk . '[4]" size="2" maxlength="2" value="' . $dumptime[1] . '">' . ":";
-                $result .= '<input type="text" name="' . $yk . '[5]" size="2" maxlength="2" value="' . $dumptime[2] . '">' . "\n";
-            }
-        } else {
-            if($lv['readonly'] === true){
-                $result .= $lv['value'];
-            } else {
-                $result .= '<input type="' . $lv['type'] . '" name="' . $yk . '"' . (isset($lv['size']) ? ' size="' . $lv['size'] . '"' : '') . (isset($lv['value']) ? ' value="' . $lv['value'] . '"' : '') . '>' . "\n";
-            }
-        }
-        $result .= '</td>' . "\n";
-        $cnt++;
-        if($cnt > 1){
-            $cnt = 0;
-            $result .= '</tr>' . "\n";
         }
     }
-} unset($cnt);
-$result .= '</table>' . "\n";
-$result .= '</div>' . "\n";
+    $gettbpos = array();
+    foreach($value as $ky => $vl){
+        if(!eregi('#', $ky)){
+            if($ky != 'tab_items'){
+                if(isset($vl['#tbpos'])){
+                    $gettbpos[$vl['#tbpos']] = $vl;
+                    $gettbpos[$vl['#tbpos']]['#key'] = $ky;
+                }
+            }
+        }
+    }
+    ksort($gettbpos);
+    foreach($gettbpos as $ky => $vl){
+        if((int)$ky < 1 || (int)$ky % 8 == 0){
+            $result .= '<div id="kolom">' . "\n";
+            $setdiv = 1;
+        }
+        $result .= '<label>' . ucwords (str_replace ("_"," ",$vl['#title'])) . '</label>';
+        if($vl['#type'] != 'textarea'){
+            $result .= '<input type="text" value="' . $vl['#value'] .'" readonly="true"> <br />' . "\n";
+        } else {
+            $result .= '<textarea  readonly="true" rows="' . (isset($vl['#rows']) ? $vl['#rows'] : 3) . '" cols="' . (isset($vl['#cols']) ? $vl['#cols'] : 30) . '">' . $vl['#value'] .'</textarea> <br />' . "\n";
+        }
+        if((int)$ky > 3 && ((int)$ky + 1) % 8 == 0){
+            unset($setdiv);
+            $result .= '</div>' . "\n";
+        }
+    } unset($gettbpos);
+    if(isset($setdiv)){
+        $result .= '</div>' . "\n";
+        unset($setdiv);
+    }
+    $result .= '</fieldset>' . "\n";
+
+    $result .= '<fieldset>' . "\n";
+    foreach($value as $ky => $vl){
+        if(!eregi('#', $ky)){
+            if(!isset($vl['#tbpos'])){
+                $result .= '<div><label>' . ucwords (str_replace ("_"," ",$vl['#title'])) . '</label></div>' . "\n";
+                $result .= '<div>' . "\n";
+                if($vl['#type'] == 'datetime'){
+                    if(isset($vl['#value'])){
+                        $datetime = $vl['#value'];
+                    }
+                    list($dumptgl, $dumptime) = explode(' ', $datetime);
+                    unset($datetime);
+                    $dumptgl = explode('-', $dumptgl);
+                    $dumptime = explode(':', $dumptime);
+                    if($vl['#readonly'] === true){
+                        $result .= $dumptgl[2] . "&nbsp;";
+                        $result .= ucwords(__t($vl['#theref'][$dumptgl[1]])) . "&nbsp;";
+                        $result .= $dumptgl[0] . "&nbsp;";
+                        $result .= $dumptime[0] . ":";
+                        $result .= $dumptime[1] . ":";
+                        $result .= $dumptime[2];
+                    } else {
+                        $result .= '<input type="text" name="' . $ky . '[2]" size="2" maxlength="2" value="' . $dumptgl[2] . '" style="text-align:right">' . "&nbsp" . "\n";
+                        $result .= '<select name="' . $ky . '[1]" size="1">' . "\n";
+                        foreach($vl['#theref'] as $kc => $isi){
+                            $result .= '<option value="' . $kc . '"' . ($dumptgl[1] == $kc ? ' selected=selected' : '') . '>' . ucwords(__t($isi)) . '</option>' . "\n";
+                        }
+                        $result .= '</select>' . "&nbsp;" . "\n";
+                        $result .= '<input type="text" name="' . $ky . '[0]" size="4" maxlength="4" value="' . $dumptgl[0] . '" style="text-align:right">&nbsp;' . "\n";
+                        $result .= '<input type="text" name="' . $ky . '[3]" size="2" maxlength="2" value="' . $dumptime[0] . '" style="text-align:right">' . ":";
+                        $result .= '<input type="text" name="' . $ky . '[4]" size="2" maxlength="2" value="' . $dumptime[1] . '" style="text-align:right">' . ":";
+                        $result .= '<input type="text" name="' . $ky . '[5]" size="2" maxlength="2" value="' . $dumptime[2] . '" style="text-align:right">' . "\n";
+                    }
+                } elseif($ky == 'ruang') {
+                    if(isset($vl['#readonly']) && $vl['#readonly'] !== FALSE){
+                        $result .= $vl['#value'] . "\n";
+                    } else {
+                        $result .= '<select name="' . $ky . '" size="1">' . "\n";
+                        if(count($vl['#option']) > 0){
+                            foreach($vl['#option'] as $yk => $lv){
+                                $result .= '<option value="' . $yk . '"' . (isset($vl['#value']) && $vl['#value'] == $yk ? ' selected' : '') . '>' . ucwords(__t($lv)) . '</option>' . "\n";
+                            }
+                        }
+                        $result .= '</select>' . "\n";
+                    }
+                }
+                $result .= '</div>' . "\n";
+            }
+        }
+    }
+    $result .= '</fieldset>' . "\n";
+
+    if(isset($value['submit'])){
+        $result .= '<div>' . "\n";
+        $result .= '<input type="submit" value="' . $value['submit']['#value'] . '"' . (isset($value['submit']['#extra']) ? ' ' . $value['submit']['#extra'] : '') . '>';
+        $result .= '</div>' . "\n";
+    }
+    $result .= __create_form_close();
+}
