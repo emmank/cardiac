@@ -1356,6 +1356,7 @@ class patientModule extends mainModule
 //                            $extra = "onchange=showKec()";
                             $id = "kota";
                             $options = $this->__get_default_kabupaten_options('kabupaten');
+                            $form['patient'][$value]['#value'] = "22";
 //                            $options = "";
                         } elseif($value == 'propinsi'){
                             $id = "propinsi";
