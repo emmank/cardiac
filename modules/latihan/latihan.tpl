@@ -24,6 +24,7 @@
 //echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 //$result .= $vl['datafields']['Fase Latihan']['title'];
+
 $result .= '<table width=100% class="table" border="0">' . "\n";
 foreach($vl['datafields'] as $yk => $lv){
     $result .= '<tr valign="top">' . "\n";
@@ -31,11 +32,13 @@ foreach($vl['datafields'] as $yk => $lv){
     $result .= '<td align="left">' . "\n";
     foreach($lv as $kk => $vv){
         $result .= '<div>' . __t($kk) .'</div>' . "\n";
+        echo "<pre>";print_r($vv);echo "</pre>";
         if(!isset($vv['type'])){
             $htg = 1;
             $result .= '<div>' . "\n";
             $result .= '<table width="100%" align="left">' . "\n";
             foreach($vv as $yy => $ll){
+                
                 $result .= '<tr valign="top">' . "\n";
                 $result .= '<td align="right" width="5%">' . $htg . '. </td>' . "\n";
                 $result .= '<td align="left" width="25%">' . __t($yy) . '</td>' . "\n";
@@ -105,7 +108,11 @@ foreach($vl['datafields'] as $yk => $lv){
                     if(isset($ll['value'])){
                         $ll['value'] = explode('|', $ll['value']);
                     }
+<<<<<<< HEAD
                     if(isset($ll['readonly']) && $ll['readonly'] != FALSE){
+=======
+                    if(isset($ll['readonly']) && $ll['readonly'] !== FALSE){
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                         if(isset($ll['theref'])){
                             $result .= $ll['theref'][$ll['value'][0]];
                         } else {
@@ -142,6 +149,7 @@ foreach($vl['datafields'] as $yk => $lv){
             $result .= '</table>' . "\n";
             $result .= '</div>' . "\n";
         } else {
+//            echo "<pre>";print_r($vv);echo "</pre>";
             if(isset($vv['value'])){
                 $vv['value'] = explode('|', $vv['value']);
             }

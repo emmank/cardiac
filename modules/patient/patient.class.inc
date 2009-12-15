@@ -102,8 +102,8 @@ class patientModule extends mainModule
             'user_required' => FALSE
         );
         $items['patient_strnum'] = array(
-            'title' => __t('Get Strnum Form'),
-            'description' => __t('patient get strnum form'),
+            'title' => __t('Pendaftaran Pasien'),
+            'description' => __t(''),
             'path' => '/node/patient/strnumform',
             'exec' => 'strnum_form',
             'weight' => 5,
@@ -158,8 +158,8 @@ class patientModule extends mainModule
             'user_required' => 'users'
         );
         $items['patient_detail'] = array(
-            'title' => __t('patient detail'),
-            'description' => __t("Detail of patient's info"),
+            'title' => __t('Detail Pasien'),
+            'description' => __t("Informasi detail Pasien"),
             'path' => '/user/patient/detail',
             'exec' => 'detail_form',
             'weight' => '0',
@@ -1363,6 +1363,8 @@ class patientModule extends mainModule
                             $extra = "onchange=\"showKab()\"";
                             $options = $this->__get_propinsi_options('nama_propinsi');
                             $form['patient'][$value]['#value'] = "73";
+//                            $form['patient'][$value]['#value'] = $id;
+//                            echo '<pre>'; print_r($options[73]); echo '</pre>';exit;
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
                         }
