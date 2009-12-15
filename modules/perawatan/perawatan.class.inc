@@ -60,7 +60,7 @@ class perawatanModule extends mainModule
         $items['perawatan_search'] = array(
             'title' => __t('Cari Pasien'),
             'description' => __t('Cari Pasien Rawat Inap'),
-            'path' => '/care/perawatan/search',
+            'path' => '/user/perawatan/search',
             'exec' => 'search',
             'weight' => '0',
             'user_required' => 'users'
@@ -105,7 +105,19 @@ class perawatanModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['perawatan_redirect'] = array(
+            'title' => __t('redirect to perawatans item'),
+            'description' => __t("redirect perawatan's patients to it's items"),
+            'path' => '/care/perawatan',
+            'exec' => '__redirect',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         return $items;
+    }
+
+    function __redirect(){
+        redirect_to('/care/' . $_POST['items'] . '/' . $_POST['pid']);
     }
 
     function _search(){
@@ -387,16 +399,19 @@ class perawatanModule extends mainModule
         if(!isset($vcache['patients'])){
             $vcache['patients'] = $query->fields['patients']; unset($query);
         }
+        $rujukanopts = array(
+            '' => __t('-- perawatan --')
+        );
+        $dumprjk = $this->__get_perawatan_lists();
+        foreach($dumprjk as $key => $value){
+            $rujukanopts[$key] = $value;
+        } unset($dumprjk);
         $addmenuopts = array(
             '' => __t('-- medical record --'),
             'all' => __t('semua')
         );
-        $rujukanopts = array(
-            '' => __t('-- dirujuk ke --')
-        );
         $dump_addmenus = $this->__get_bagian_lists();
         foreach($dump_addmenus as $key => $value){
-            $rujukanopts[$key] = $value;
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),
@@ -479,16 +494,15 @@ class perawatanModule extends mainModule
                         if($this->formhabit == 'readonly'){
                             $form['perawatan']['#addmenu']['#addmenu0'] = array(
                                 'title' => __t('dirujuk ke'),
-                                'action' => '/user/patient/register_form_submit',
+                                'action' => '/care/perawatan',
                                 'position' => 'top',
                                 'class' => 'button',
                                 'methode' => 'choose',
                                 'options' => $rujukanopts,
                                 'user_required' => 'perawatan',
-                                'filter' => 'bagian',
+                                'filter' => 'items',
                                 'items' => array (
-                                    'id' => $vcache['patients'],
-                                    'strnum' => $query['strnum']
+                                    'id' => $vcache['id']
                                 )
                             );
                         } unset($rujukanopts);

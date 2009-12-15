@@ -21,6 +21,7 @@
  *  
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
+//echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 //$result .= $vl['datafields']['Fase Latihan']['title'];
 $result .= '<table width=100% class="table" border="0">' . "\n";
@@ -84,7 +85,7 @@ foreach($vl['datafields'] as $yk => $lv){
                                 $result .= '</div>' . "\n";
                             }
                         } else {
-                            if(isset($uu['readonly'])){
+                            if(isset($uu['readonly']) && $uu['readonly'] !== FALSE){
                                 $result .= $uu['value'][0];
                             } else {
                                 $result .= '<input type="text" name="' . $ky . '_' . $ee . '[0]" size="' . (isset($uu['size']) ? $uu['size'] : '') . '"' . (isset($uu['value'][0]) ? ' value="' . $uu['value'][0] . '"' : '') . '>' . "\n";
@@ -92,7 +93,7 @@ foreach($vl['datafields'] as $yk => $lv){
                         }
                         if(!eregi('konfigurasi', $ee) && eregi('ekg', $kk)){
                             $result .= ' ' . __t('pada menit ke') . ' : ';
-                            if(isset($uu['readonly'])){
+                            if(isset($uu['readonly']) && $uu['readonly'] !== FALSE){
                                 $result .= $uu['value'][1];
                             } else {
                                 $result .= '<input type="text" name="' . $ky . '_' . $ee . '[1]" size="' . (isset($uu['size']) ? $uu['size'] : '') . '"' . (isset($uu['value'][1]) ? ' value="' . $uu['value'][1] . '"' : '') . '>' . "\n";
@@ -104,7 +105,7 @@ foreach($vl['datafields'] as $yk => $lv){
                     if(isset($ll['value'])){
                         $ll['value'] = explode('|', $ll['value']);
                     }
-                    if(isset($ll['readonly'])){
+                    if(isset($ll['readonly']) && $ll['readonly'] != FALSE){
                         if(isset($ll['theref'])){
                             $result .= $ll['theref'][$ll['value'][0]];
                         } else {
@@ -127,7 +128,7 @@ foreach($vl['datafields'] as $yk => $lv){
                         }
                     }
                     if(eregi('irama', $yy)){
-                        if(isset($ll['readonly'])){
+                        if(isset($ll['readonly']) && $ll['readonly'] !== FALSE){
                             $result .= ' ' . __t('pada menit ke') . ' ' . $ll['value'][1] . "\n";
                         } else {
                             $result .= ' ' . __t('pada menit ke') . ' <input type="text" name="' . $ky. '_' . $yy . '[1]" size="10"' . (isset($ll['value'][1]) ? ' value="' . $ll['value'][1] . '"' : '') . '>' . "\n";
@@ -144,7 +145,7 @@ foreach($vl['datafields'] as $yk => $lv){
             if(isset($vv['value'])){
                 $vv['value'] = explode('|', $vv['value']);
             }
-            if(isset($vv['readonly'])){
+            if(isset($vv['readonly']) && $vv['readonly'] !== FALSE){
                 if(isset($vv['theref'])){
                     $result .= $vv['theref'][$vv['value'][0]];
                 } else {
