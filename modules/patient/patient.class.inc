@@ -1355,14 +1355,13 @@ class patientModule extends mainModule
                         } elseif($value == 'kota'){
 //                            $extra = "onchange=showKec()";
                             $id = "kota";
-                            $options = $this->__get_kabupaten_options('kabupaten');
+                            $options = $this->__get_default_kabupaten_options('kabupaten');
 //                            $options = "";
                         } elseif($value == 'propinsi'){
                             $id = "propinsi";
                             $extra = "onchange=\"showKab()\"";
                             $options = $this->__get_propinsi_options('nama_propinsi');
-//                            $form['patient'][$value]['#value'] = $id;
-//                            echo '<pre>'; print_r($options[73]); echo '</pre>';exit;
+                            $form['patient'][$value]['#value'] = "73";
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
                         }

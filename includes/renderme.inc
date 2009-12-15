@@ -474,6 +474,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                 }
                 if (!empty ($value['#option'])) {
                 foreach($value['#option'] as $yk => $lv){
+//                    echo "<pre>"; print_r($value["#option"]); echo "</pre>";
                     $result .= '<option value="' . $yk . '"';
                     if($yk == $value['#value']){
                         $result .= ' selected';
