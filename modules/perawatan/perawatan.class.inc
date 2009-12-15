@@ -117,7 +117,7 @@ class perawatanModule extends mainModule
     }
 
     function __redirect(){
-        redirect_to('/care/' . $_POST['items'] . '/' . $_POST['pid']);
+        redirect_to('/care/perawatan/' . $_POST['items'] . '/' . $_POST['id']);
     }
 
     function _search(){
