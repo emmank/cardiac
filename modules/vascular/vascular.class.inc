@@ -662,7 +662,7 @@ class vascularModule extends mainModule
         $form['vascular']['tab_items']['carotis'] = $this->__loadCarotis();
         $form['vascular']['tab_items']['superior'] = $this->__loadSuperior();
         $form['vascular']['tab_items']['inferior'] = $this->__loadInferior();
-//        $form['vascular']['tab_items']['abdomen'] = $this->__loadFaseLatihan();
+        $form['vascular']['tab_items']['vascabdomen'] = $this->__loadAbdomen();
 //        $form['vascular']['tab_items']['recovery'] = $this->__loadFaseRecovery();
 //        $form['vascular']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
 
@@ -715,17 +715,17 @@ class vascularModule extends mainModule
         }
     }
 
-    function __loadFaseLatihan($exec=NULL){
-        $this->__include_module('latihan');
+    function __loadAbdomen($exec=NULL){
+        $this->__include_module('vascabdomen');
         if(isset($this->vardump) && count($this->vardump) > 0){
-            $this->FaseLatihan_config->free_val = $this->vardump;
+            $this->vascabdomen_config->free_val = $this->vardump;
         }
         if(!is_null($exec)){
             if($exec == 'submit'){
-                return $this->latihan_exec->vascular_submit();
+                return $this->vascabdomen_exec->vascular_submit();
             }
         } else {
-            return $this->latihan_exec->vascular_menu();
+            return $this->vascabdomen_exec->vascular_menu();
         }
     }
 
@@ -809,7 +809,7 @@ class vascularModule extends mainModule
         $this->__loadCarotis('submit');
         $this->__loadSuperior('submit');
         $this->__loadInferior('submit');
-//        $this->__loadFaseLatihan('submit');
+        $this->__loadAbdomen('submit');
 //        $this->__loadFaseRecovery('submit');
 //        $this->__loadKesimpulan('submit');
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
