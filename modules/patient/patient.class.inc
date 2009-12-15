@@ -653,8 +653,6 @@ class patientModule extends mainModule
                     }
                     if ($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date')
                     {
-
-
                         if($value == 'kelamin') {
                             $options = $this->__get_kelamin_options();
                             $extra = ' onchange="changeLabel(this.checked)"';
@@ -663,9 +661,8 @@ class patientModule extends mainModule
                             $options = $this->nama_bulan;
                         } elseif($value == 'status'){
                             $options = $this->__get_statusm_options();
+                            $extra = ' onchange="disablePasangan(this.checked)"';
                         } elseif($value == 'kota'){
-//                            echo $value;
-//                            $form['patient'][$value]['#extra'] = "onchange='showKec()'";
                             $id="kota";
                             $options = $this->__get_kabupaten_options('kabupaten');
                         } elseif($value == 'propinsi'){
@@ -679,7 +676,6 @@ class patientModule extends mainModule
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
                         }
-
                         $form['patient'][$value]['#option'] = $options;
                         $form['patient'][$value]['#extra'] = $extra;
                         $form['patient'][$value]['#id'] = $id;
@@ -809,6 +805,7 @@ class patientModule extends mainModule
                             $options = $this->nama_bulan;
                         } elseif($value == 'status'){
                             $options = $this->__get_statusm_options();
+                            $id='status';
                         } elseif($value == 'kota'){
 //                            $extra = "onchange=showKec()";
                             $id = "kota";
@@ -1321,9 +1318,14 @@ class patientModule extends mainModule
                         );
                         if(eregi('nama_suami_istri', $value)){
                             $form['patient'][$value]['#id_label'] = 'namapas';
+                            $form['patient'][$value]['#id'] = 'tnamapas';
+//                            $form['patient'][$value]['#extra'] = ' disabled=false';
+
                         }
                         if(eregi('pekerjaan_suami_istri', $value)){
                             $form['patient'][$value]['#id_label'] = 'pekpas';
+                            $form['patient'][$value]['#id'] = 'tpekpas';
+//                            $form['patient'][$value]['#extra'] = ' disabled=false';
                         }
                     } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
@@ -1348,15 +1350,19 @@ class patientModule extends mainModule
                             $options = $this->nama_bulan;
                         } elseif($value == 'status'){
                             $options = $this->__get_statusm_options();
+                            $extra = ' onchange="disablePasangan(this.checked)"';
+                            $id .= 'status';
                         } elseif($value == 'kota'){
 //                            $extra = "onchange=showKec()";
                             $id = "kota";
-                            $options = $this->__get_kabupaten_options('kabupaten');
+                            $options = $this->__get_default_kabupaten_options('kabupaten');
+                            $form['patient'][$value]['#value'] = "22";
 //                            $options = "";
                         } elseif($value == 'propinsi'){
                             $id = "propinsi";
                             $extra = "onchange=\"showKab()\"";
                             $options = $this->__get_propinsi_options('nama_propinsi');
+                            $form['patient'][$value]['#value'] = "73";
 //                            $form['patient'][$value]['#value'] = $id;
 //                            echo '<pre>'; print_r($options[73]); echo '</pre>';exit;
                         } elseif($value == 'agama'){

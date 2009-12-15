@@ -662,7 +662,11 @@ class vascularModule extends mainModule
         $form['vascular']['tab_items']['carotis'] = $this->__loadCarotis();
         $form['vascular']['tab_items']['superior'] = $this->__loadSuperior();
         $form['vascular']['tab_items']['inferior'] = $this->__loadInferior();
+<<<<<<< HEAD
+//        $form['vascular']['tab_items']['abdomen'] = $this->__loadFaseLatihan();
+=======
         $form['vascular']['tab_items']['vascabdomen'] = $this->__loadAbdomen();
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
 //        $form['vascular']['tab_items']['recovery'] = $this->__loadFaseRecovery();
 //        $form['vascular']['tab_items']['kesimpulan'] = $this->__loadKesimpulan();
 
@@ -715,6 +719,19 @@ class vascularModule extends mainModule
         }
     }
 
+<<<<<<< HEAD
+    function __loadFaseLatihan($exec=NULL){
+        $this->__include_module('latihan');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->FaseLatihan_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->latihan_exec->vascular_submit();
+            }
+        } else {
+            return $this->latihan_exec->vascular_menu();
+=======
     function __loadAbdomen($exec=NULL){
         $this->__include_module('vascabdomen');
         if(isset($this->vardump) && count($this->vardump) > 0){
@@ -726,6 +743,7 @@ class vascularModule extends mainModule
             }
         } else {
             return $this->vascabdomen_exec->vascular_menu();
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
         }
     }
 
@@ -809,7 +827,11 @@ class vascularModule extends mainModule
         $this->__loadCarotis('submit');
         $this->__loadSuperior('submit');
         $this->__loadInferior('submit');
+<<<<<<< HEAD
+//        $this->__loadFaseLatihan('submit');
+=======
         $this->__loadAbdomen('submit');
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
 //        $this->__loadFaseRecovery('submit');
 //        $this->__loadKesimpulan('submit');
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
