@@ -121,19 +121,34 @@ class vascabdomenModule extends mainModule
     function vascular_submit(){
         $thefields = $this->__get_data_fields('vascabdomen', $this->query);
         foreach($this->config->free_val as $key => $value){
-             if(preg_match('/^vascabdomen_/', $key)){
-                $key = trim(preg_replace('/^vascabdomen_/', '', $key));
-                if(in_array($key, $thefields)){
-                    if($key == 'gelombang_t'){
-                        if($value != 'Inverted'){
-                            unset($value[1]);
-                        }
+             if(preg_match('/abdominalis/', $key)){
+//                $key = trim(preg_replace('/^carotis_/', '', $key));
+//                if(in_array($key, $thefields)){
+//                    if($key == 'gelombang_t'){
+//                        if($value != 'Inverted'){
+//                            unset($value[1]);
+//                        }
+//                    }
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
                     }
-                    if(count($value) > 0){
-                        $value = implode('|', $value);
+//                }
+            }
+            if(preg_match('/renalis/', $key)){
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
                     }
-                    $thevalue[$key] = $value;
-                }
+            }
+            if(preg_match('/^vena$/', $key)){
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
+                    }
             }
        } unset($thefields);
         if($_POST['id'] != ''){

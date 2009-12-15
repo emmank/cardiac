@@ -45,7 +45,7 @@ class vascularModule extends mainModule
             'title' => __t('form vascular'),
             'description' => __t('formulir vascular'),
             'path' => '/user/vascular/form_submit',
-            'exec' => '_form_submit',
+            'exec' => 'form_submit',
             'weight' => '0',
             'user_required' => 'vascular'
         );
@@ -77,7 +77,7 @@ class vascularModule extends mainModule
             'title' => __t('detail vascular'),
             'description' => __t("detail vascular's patients"),
             'path' => '/user/vascular/detail_form',
-            'exec' => '_detail_form',
+            'exec' => 'detail_form',
             'weight' => '0',
             'user_required' => 'users'
         );
@@ -85,7 +85,7 @@ class vascularModule extends mainModule
             'title' => __t('search vascular'),
             'description' => __t("search vascular's patients"),
             'path' => '/user/vascular/search',
-            'exec' => '_search',
+            'exec' => 'search',
             'weight' => '0',
             'user_required' => 'users'
         );
@@ -93,14 +93,14 @@ class vascularModule extends mainModule
             'title' => __t('submitted search vascular'),
             'description' => __t("submitted search vascular's patients"),
             'path' => '/user/vascular/search_submit',
-            'exec' => '_search_submit',
+            'exec' => 'search_submit',
             'weight' => '0',
             'user_required' => 'users'
         );
         return $items;
     }
 
-    function _search_submit(){
+    function search_submit(){
         return $this->__get_search_submit();
     }
 
@@ -180,7 +180,7 @@ class vascularModule extends mainModule
         return $result;
     }
 
-    function _search(){
+    function search(){
         return $this->__get_search();
     }
 
@@ -310,7 +310,7 @@ class vascularModule extends mainModule
         return $result;
     }
 
-    function _detail_form(){
+    function detail_form(){
         return $this->__detail_form();
     }
 
@@ -758,7 +758,7 @@ class vascularModule extends mainModule
         }
     }
 
-    function _form_submit(){
+    function form_submit(){
         return $this->__get_form_submit();
     }
 

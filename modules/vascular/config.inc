@@ -40,9 +40,9 @@ class vascularConfig extends config
     );
     var $fields_form_type = array(
         'id' => 'hidden',
-        'teens' => 'hidden',
-        'tgl' => 'date',
-        'patients' => 'select',
+        'patients' => 'hidden',
+        'tgl' => 'hidden',
+        'kunjungan' => 'hidden',
         'nomor' => 'text',
         'inputer' => 'hidden',
         'inputtime' => 'hidden',
@@ -59,6 +59,13 @@ class vascularConfig extends config
             ),
             'patients' => array(
                 'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tgl' => array(
+                'type' => 'datetime',
                 'null' => 0,
                 'key' => '',
                 'default' => NULL,

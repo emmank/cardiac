@@ -121,23 +121,35 @@ class carotisModule extends mainModule
     }
 
     function vascular_submit(){
+//        echo "vascular_submit";
         $thefields = $this->__get_data_fields('carotis', $this->query);
         foreach($this->config->free_val as $key => $value){
-            if(preg_match('/^carotis_/', $key)){
-                $key = trim(preg_replace('/^carotis_/', '', $key));
-                if(in_array($key, $thefields)){
-                    if($key == 'gelombang_t'){
-                        if($value != 'Inverted'){
-                            unset($value[1]);
-                        }
+//            echo '<pre>palue '; print_r($value); echo '</pre>';
+            if(preg_match('/carotis/', $key)){
+//                $key = trim(preg_replace('/^carotis_/', '', $key));
+//                if(in_array($key, $thefields)){
+//                    if($key == 'gelombang_t'){
+//                        if($value != 'Inverted'){
+//                            unset($value[1]);
+//                        }
+//                    }
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
                     }
-                    if(count($value) > 0){
-                        $value = implode('|', $value);
-                    }
-                    $thevalue[$key] = $value;
-                }
+//                }
             }
+            if(preg_match('/jugularis/', $key)){
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
+                    }
+            }
+            
         } unset($thefields);
+        
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $opr = 'update';
@@ -146,6 +158,9 @@ class carotisModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
+//        echo '<pre>'; print_r($opr); echo '</pre>';
+//        echo '<pre>'; print_r($strid); echo '</pre>';
+//        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->__exec_db_ops(
             $this->query,
             'carotis',

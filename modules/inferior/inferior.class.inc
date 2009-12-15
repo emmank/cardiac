@@ -121,19 +121,48 @@ class inferiorModule extends mainModule
     function vascular_submit(){
         $thefields = $this->__get_data_fields('inferior', $this->query);
         foreach($this->config->free_val as $key => $value){
-             if(preg_match('/^inferior_/', $key)){
-                $key = trim(preg_replace('/^inferior_/', '', $key));
-                if(in_array($key, $thefields)){
-                    if($key == 'gelombang_t'){
-                        if($value != 'Inverted'){
-                            unset($value[1]);
-                        }
+             if(preg_match('/fermoralis/', $key)){
+//                $key = trim(preg_replace('/^carotis_/', '', $key));
+//                if(in_array($key, $thefields)){
+//                    if($key == 'gelombang_t'){
+//                        if($value != 'Inverted'){
+//                            unset($value[1]);
+//                        }
+//                    }
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
                     }
-                    if(count($value) > 0){
-                        $value = implode('|', $value);
+//                }
+            }
+            if(preg_match('/paplitca/', $key)){
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
                     }
-                    $thevalue[$key] = $value;
-                }
+            }
+            if(preg_match('/tibalin/', $key)){
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
+                    }
+            }
+            if(preg_match('/aorsalin/', $key)){
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
+                    }
+            }
+            if(preg_match('/^vena$/', $key)){
+                    if(is_array($value) > 0){
+                        $thevalue[$key] = implode('|', $value);
+                    } else {
+                        $thevalue[$key] = $value;
+                    }
             }
        } unset($thefields);
         if($_POST['id'] != ''){
@@ -144,6 +173,9 @@ class inferiorModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
+        echo '<pre>'; print_r($opr); echo '</pre>';
+        echo '<pre>'; print_r($strid); echo '</pre>';
+        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->__exec_db_ops(
             $this->query,
             'inferior',
