@@ -21,7 +21,6 @@
  *  
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
-//echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 //$result .= $vl['datafields']['Fase Latihan']['title'];
 $result .= '<table width=100% class="table" border="0">' . "\n";

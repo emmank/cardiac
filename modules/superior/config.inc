@@ -19,13 +19,13 @@
  *  
  *  config.php
  *  
- *  Created on Oct 1, 2009, 1:10:09 PM
+ *  Created on Oct 3, 2009, 4:31:28 PM
  */
 
-class vascularConfig extends config
+class superiorConfig extends config
 {
     var $rdbms = 'mysql';
-    var $dbvascular = array(
+    var $dbsuperior = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',
@@ -40,16 +40,33 @@ class vascularConfig extends config
     );
     var $fields_form_type = array(
         'id' => 'hidden',
-        'teens' => 'hidden',
-        'tgl' => 'date',
-        'patients' => 'select',
-        'nomor' => 'text',
-        'inputer' => 'hidden',
-        'inputtime' => 'hidden',
-        'updated' => 'hidden'
+        'artery_brachialis' => 'select',
+        'artery_radialis' => 'select',
+        'artery_ulmaris' => 'select',
+        'vena' => 'select'
+    );
+
+    var $fieldsisarray = array(
+        'artery_brachialis',
+        'artery_radialis',
+        'artery_ulmaris' ,
+        'vena' 
+    );
+
+    var $reftable = array(
+        'artery_brachialis' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'artery_radialis' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'artery_ulmaris' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena' => array('ref_kateterisasiref_steunosis','steunosis')
+    );
+    var $qrs_complex = array(
+        'qrs_axis', 'qrs_durasi', 'qrs_konfigurasi_patologi', 'qrs_konfigurasi_r_s'
+    );
+    var $segment_st = array(
+        'segmen_st_depresi', 'segmen_st_elevasi'
     );
     var $table_scheme = array(
-        'vascular' => array(
+        'superior' => array(
             'id' => array(
                 'type' => 'int(11)',
                 'null' => 0,
@@ -57,37 +74,30 @@ class vascularConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'patients' => array(
-                'type' => 'int(11)',
-                'null' => 0,
+            'artery_brachialis' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'kunjungan' => array(
-                'type' => 'int(11)',
-                'null' => 0,
+            'artery_radialis' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inputtime' => array(
-                'type' => 'datetime',
-                'null' => 0,
+            'artery_ulmaris' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inputer' => array(
-                'type' => 'int(11)',
-                'null' => 0,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'updated' => array(
-                'type' => 'varchar(50)',
-                'null' => 0,
+            'vena' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''

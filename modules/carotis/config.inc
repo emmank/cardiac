@@ -19,13 +19,13 @@
  *  
  *  config.php
  *  
- *  Created on Oct 1, 2009, 1:10:09 PM
+ *  Created on Oct 3, 2009, 4:31:28 PM
  */
 
-class vascularConfig extends config
+class carotisConfig extends config
 {
     var $rdbms = 'mysql';
-    var $dbvascular = array(
+    var $dbcarotis = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',
@@ -40,16 +40,36 @@ class vascularConfig extends config
     );
     var $fields_form_type = array(
         'id' => 'hidden',
-        'teens' => 'hidden',
-        'tgl' => 'date',
-        'patients' => 'select',
-        'nomor' => 'text',
-        'inputer' => 'hidden',
-        'inputtime' => 'hidden',
-        'updated' => 'hidden'
+        'artery_carotis_communis' => 'select',
+        'artery_carotis_interna' => 'select',
+        'artery_carotis_eksterna' => 'select',
+        'vena_jugularis_interna' => 'select',
+        'vena_jugularis_superficial' => 'select'
+    );
+
+    var $fieldsisarray = array(
+        'artery_carotis_communis',
+        'artery_carotis_interna',
+        'artery_carotis_eksterna',
+        'vena_jugularis_interna',
+        'vena_jugularis_superficial'
+    );
+
+    var $reftable = array(
+        'artery_carotis_communis' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'artery_carotis_interna' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'artery_carotis_eksterna' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_jugularis_interna' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_jugularis_superficial' => array('ref_kateterisasiref_steunosis','steunosis')
+    );
+    var $qrs_complex = array(
+        'qrs_axis', 'qrs_durasi', 'qrs_konfigurasi_patologi', 'qrs_konfigurasi_r_s'
+    );
+    var $segment_st = array(
+        'segmen_st_depresi', 'segmen_st_elevasi'
     );
     var $table_scheme = array(
-        'vascular' => array(
+        'carotis' => array(
             'id' => array(
                 'type' => 'int(11)',
                 'null' => 0,
@@ -57,37 +77,37 @@ class vascularConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'patients' => array(
-                'type' => 'int(11)',
-                'null' => 0,
+            'artery_carotis_communis' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'kunjungan' => array(
-                'type' => 'int(11)',
-                'null' => 0,
+            'artery_carotis_interna' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inputtime' => array(
-                'type' => 'datetime',
-                'null' => 0,
+            'artery_carotis_eksterna' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inputer' => array(
-                'type' => 'int(11)',
-                'null' => 0,
+            'vena_jugularis_interna' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'updated' => array(
-                'type' => 'varchar(50)',
-                'null' => 0,
+            'vena_jugularis_superficial' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''

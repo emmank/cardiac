@@ -17,28 +17,28 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  vascular.php
+ *  carotis.php
  *  
- *  Created on Oct 1, 2009, 1:11:20 PM
+ *  Created on Oct 3, 2009, 4:34:16 PM
  */
 
-require_once MODULES_DIR . DS . 'vascular' . DS . 'vascular.class.inc';
+require_once MODULES_DIR . DS . 'carotis' . DS . 'carotis.class.inc';
 
-if(!isset($vascular_config)){
-    $vascular_config = new vascularConfig();
-} elseif(!$vascular_config instanceof vascularConfig) {
-    $vascular_config = new vascularConfig();
+if(!isset($carotis_config)){
+    $carotis_config = new carotisConfig();
+} elseif(!$carotis_config instanceof carotisConfig) {
+    $carotis_config = new carotisConfig();
 }
 
-require_once DBSTRINGS_DIR . DS . $vascular_config->rdbms . DS . 'dbquery.php';
-if(!isset($vascular_query)){
-    $vascular_query = new dbset();
-} elseif(!$vascular_query instanceof dbset) {
-    $vascular_query = new dbset();
+require_once DBSTRINGS_DIR . DS . $carotis_config->rdbms . DS . 'dbquery.php';
+if(!isset($carotis_query)){
+    $carotis_query = new dbset();
+} elseif(!$carotis_query instanceof dbset) {
+    $carotis_query = new dbset();
 }
 
-if(!isset($vascular_exec)){
-    $vascular_exec = new vascularModule();
-} elseif(!$vascular_exec instanceof vascularModule) {
-    $vascular_exec = new vascularModule();
+if(!isset($carotis_exec)){
+    $carotis_exec = new carotisModule();
+} elseif(!$carotis_exec instanceof carotisModule) {
+    $carotis_exec = new carotisModule();
 }

@@ -46,11 +46,34 @@ function showKab()
            echo "}\n";
 
         $query->MoveNext();
+    
     } unset($query);
     $systemquery->close();
  ?>
  }
- 
+
+//function changeLabel(bool) {
+//   <?php
+//        echo "document.getElementById(\"Nama Suami Istri\").innerHTML = (bool) ? \"Nama Suami\" : \"Nama Istri\";";
+//   ?>
+//}
+
+//function changeLabel2(bool) {
+//   document.getElementById("namapas").innerHTML = (bool) ? "Nama Suami" : "Nama Istri";
+//}
+
+function changeLabel(bool) {
+//    window.alert(bool);
+//window.alert(document.forms[0].kelamin.value);
+    if (document.forms[0].kelamin.value=="1"){
+        document.getElementById("namapas").innerHTML="Nama Istri";
+        document.getElementById("pekpas").innerHTML="Pekerjaan Istri";
+    } else {
+        document.getElementById("namapas").innerHTML="Nama Suami"
+        document.getElementById("pekpas").innerHTML="Pekerjaan Suami"
+    }
+}
+
 </script>
 
 <!--

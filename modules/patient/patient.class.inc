@@ -102,8 +102,8 @@ class patientModule extends mainModule
             'user_required' => FALSE
         );
         $items['patient_strnum'] = array(
-            'title' => __t('Get Strnum Form'),
-            'description' => __t('patient get strnum form'),
+            'title' => __t('Pendaftaran Pasien'),
+            'description' => __t(''),
             'path' => '/node/patient/strnumform',
             'exec' => 'strnum_form',
             'weight' => 5,
@@ -158,8 +158,8 @@ class patientModule extends mainModule
             'user_required' => 'users'
         );
         $items['patient_detail'] = array(
-            'title' => __t('patient detail'),
-            'description' => __t("Detail of patient's info"),
+            'title' => __t('Detail Pasien'),
+            'description' => __t("Informasi detail Pasien"),
             'path' => '/user/patient/detail',
             'exec' => 'detail_form',
             'weight' => '0',
@@ -657,6 +657,8 @@ class patientModule extends mainModule
 
                         if($value == 'kelamin') {
                             $options = $this->__get_kelamin_options();
+                            $extra = ' onchange="changeLabel(this.checked)"';
+                            $option_blank = 1;
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
                         } elseif($value == 'status'){
@@ -681,6 +683,10 @@ class patientModule extends mainModule
                         $form['patient'][$value]['#option'] = $options;
                         $form['patient'][$value]['#extra'] = $extra;
                         $form['patient'][$value]['#id'] = $id;
+                        if(isset($option_blank)){
+                            $form['patient'][$value]['#option_blank'] = $option_blank;
+                            unset($option_blank);
+                        }
 //                        $form['patient'][$value]['#option'] = $options;
 //                    } elseif($value == 'strnum'){
 //                        $form['patient'][$value]['#extra'] = 'readonly="true"';
@@ -797,6 +803,7 @@ class patientModule extends mainModule
 
                     if($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
                         if($value == 'kelamin') {
+                            $extra = 'onchange="changeLabel()"';
                             $options = $this->__get_kelamin_options();                            
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
@@ -1312,6 +1319,12 @@ class patientModule extends mainModule
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
+                        if(eregi('nama_suami_istri', $value)){
+                            $form['patient'][$value]['#id_label'] = 'namapas';
+                        }
+                        if(eregi('pekerjaan_suami_istri', $value)){
+                            $form['patient'][$value]['#id_label'] = 'pekpas';
+                        }
                     } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
                             '#type' => 'hidden',
@@ -1329,7 +1342,8 @@ class patientModule extends mainModule
 //                    }
                     if($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
                         if($value == 'kelamin') {
-                            $options = $this->__get_kelamin_options();  
+                            $extra = ' onchange="changeLabel(this.selected)"';
+                            $options = $this->__get_kelamin_options();
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
                         } elseif($value == 'status'){
@@ -1343,6 +1357,8 @@ class patientModule extends mainModule
                             $id = "propinsi";
                             $extra = "onchange=\"showKab()\"";
                             $options = $this->__get_propinsi_options('nama_propinsi');
+//                            $form['patient'][$value]['#value'] = $id;
+//                            echo '<pre>'; print_r($options[73]); echo '</pre>';exit;
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
                         }
@@ -1350,6 +1366,14 @@ class patientModule extends mainModule
                         $form['patient'][$value]['#id'] = $id;
                         $form['patient'][$value]['#extra'] = $extra;
                         $form['patient'][$value]['#option'] = $options;
+                        if(isset($option_blank)){
+                            $form['patient'][$value]['#option_blank'] = $option_blank;
+                            unset($option_blank);
+                        }
+                        if(isset($id_label)){
+                            $form['patient'][$value]['#id_label'] = $id_label;
+                            unset($id_label);
+                        }
 
                         unset ($extra,$id);
                     } elseif($value == 'strnum'){
@@ -1358,6 +1382,7 @@ class patientModule extends mainModule
                     // ------ Add by emmank -------
                     if($this->formtype_fields[$value] == 'select'){
                         if($value == 'gol_darah') {
+                            $form['patient'][$value]['#message'] = 'Kosongkan jika tidak tahu';
                             $options = $this->__get_goldarah_options();
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
@@ -1366,7 +1391,7 @@ class patientModule extends mainModule
                     } elseif($value == 'strnum'){
                         $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
-
+//                    echo '<pre>'; print_r($value); echo '</pre>';
                 } unset($options, $extra, $id);
                 $form['patient']['keluhan'] = array(
                     '#type' => 'textarea',
@@ -1389,6 +1414,7 @@ class patientModule extends mainModule
     //                '#title' => __t('&nbsp;'),
                     '#extra' => ' class="button"'
                );
+//               echo '<pre>'; print_r($form); echo '</pre>';exit;
             }
 //            echo '<pre>'; print_r($form); echo '</pre>';//===add by emmank
             return $form;

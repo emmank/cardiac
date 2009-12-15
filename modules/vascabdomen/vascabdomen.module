@@ -17,28 +17,28 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  vascular.php
+ *  vascabdomen.php
  *  
- *  Created on Oct 1, 2009, 1:11:20 PM
+ *  Created on Oct 3, 2009, 4:34:16 PM
  */
 
-require_once MODULES_DIR . DS . 'vascular' . DS . 'vascular.class.inc';
+require_once MODULES_DIR . DS . 'vascabdomen' . DS . 'vascabdomen.class.inc';
 
-if(!isset($vascular_config)){
-    $vascular_config = new vascularConfig();
-} elseif(!$vascular_config instanceof vascularConfig) {
-    $vascular_config = new vascularConfig();
+if(!isset($vascabdomen_config)){
+    $vascabdomen_config = new vascabdomenConfig();
+} elseif(!$vascabdomen_config instanceof vascabdomenConfig) {
+    $vascabdomen_config = new vascabdomenConfig();
 }
 
-require_once DBSTRINGS_DIR . DS . $vascular_config->rdbms . DS . 'dbquery.php';
-if(!isset($vascular_query)){
-    $vascular_query = new dbset();
-} elseif(!$vascular_query instanceof dbset) {
-    $vascular_query = new dbset();
+require_once DBSTRINGS_DIR . DS . $vascabdomen_config->rdbms . DS . 'dbquery.php';
+if(!isset($vascabdomen_query)){
+    $vascabdomen_query = new dbset();
+} elseif(!$vascabdomen_query instanceof dbset) {
+    $vascabdomen_query = new dbset();
 }
 
-if(!isset($vascular_exec)){
-    $vascular_exec = new vascularModule();
-} elseif(!$vascular_exec instanceof vascularModule) {
-    $vascular_exec = new vascularModule();
+if(!isset($vascabdomen_exec)){
+    $vascabdomen_exec = new vascabdomenModule();
+} elseif(!$vascabdomen_exec instanceof vascabdomenModule) {
+    $vascabdomen_exec = new vascabdomenModule();
 }
