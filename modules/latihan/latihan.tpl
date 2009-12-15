@@ -23,6 +23,7 @@
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 //$result .= $vl['datafields']['Fase Latihan']['title'];
+
 $result .= '<table width=100% class="table" border="0">' . "\n";
 foreach($vl['datafields'] as $yk => $lv){
     $result .= '<tr valign="top">' . "\n";
@@ -30,14 +31,16 @@ foreach($vl['datafields'] as $yk => $lv){
     $result .= '<td align="left">' . "\n";
     foreach($lv as $kk => $vv){
         $result .= '<div>' . __t($kk) .'</div>' . "\n";
+        echo "<pre>";print_r($vv);echo "</pre>";
         if(!isset($vv['type'])){
             $htg = 1;
             $result .= '<div>' . "\n";
             $result .= '<table width="100%" align="left">' . "\n";
             foreach($vv as $yy => $ll){
+                
                 $result .= '<tr valign="top">' . "\n";
                 $result .= '<td align="right" width="5%">' . $htg . '. </td>' . "\n";
-                $result .= '<td align="left" width="25%">' . __t($yy) . '</td>' . "\n";
+                $result .= '<td align="left" width="25%">yy' . __t($yy) . '</td>' . "\n";
                 $result .= '<td align="' . (eregi('st', $yy) ? 'left' : 'left') . '">' . "\n";
                 if(!isset($ll['type'])){
                     foreach($ll as $ee => $uu){
@@ -141,10 +144,13 @@ foreach($vl['datafields'] as $yk => $lv){
             $result .= '</table>' . "\n";
             $result .= '</div>' . "\n";
         } else {
+            echo "<pre>";print_r($vv);echo "</pre>";
             if(isset($vv['value'])){
+                echo "ada value";
                 $vv['value'] = explode('|', $vv['value']);
             }
             if(isset($vv['readonly'])){
+                echo "ada readonly";
                 if(isset($vv['theref'])){
                     $result .= $vv['theref'][$vv['value'][0]];
                 } else {
@@ -156,6 +162,7 @@ foreach($vl['datafields'] as $yk => $lv){
                 $result .= "\n";
             } else {
                 $result .= '<div>' . "\n";
+                echo "jika value dan readonly kosong";
                 if($vv['type'] == 'text'){
                     $result .= '<input type="text" name="' .   $ky . '_' . $kk . ($kk == 'protokol' ? '[0]' : '') . '" size="' . (isset($vv['size']) ? $vv['size'] : 20) . '">';
                     if($kk == 'protokol'){

@@ -61,9 +61,9 @@ class latihanConfig extends config
         'respon_denyut_jantung',
         'puncak_denyut_jantung',
         'tekanan_darah',
-//        'segmen_st_depresi',
-//        'segmen_st_elevasi',
-//        'segmen_st_konfigurasi'
+        'segmen_st_depresi',
+        'segmen_st_elevasi',
+        'segmen_st_konfigurasi'
     );
     var $reftable = array(
         'irama_dasar' => array('ref_ekg_irama','irama'),

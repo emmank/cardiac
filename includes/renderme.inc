@@ -472,7 +472,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                 }
                 $result .= '</select>' . "\n";
 
-                        echo "<pre>";print_r($yk);echo "</pre>";
+//                        echo "<pre>";print_r($yk);echo "</pre>";
             }
         } elseif($value['#type'] == 'date'){
             $value['#value'] = $value['#value'] == '' ? array('1970', '01', '01') : explode('-', $value['#value']);
