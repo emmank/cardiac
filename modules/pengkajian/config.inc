@@ -40,22 +40,58 @@ class pengkajianConfig extends config
     );
     var $typeoffields = array(
         'id' => 'hidden',
-        'tall' => 'text',
-        'weight' => 'text',
-        'tension' => 'text',
-        'risk_factor' => 'checkbox',
-        'catched' => 'datetime',
-        'nutrient' => 'select',
-        'main_soreness' => 'select',
-        'ilness_history' => 'checkbox'
     );
     var $fieldsisarray = array(
-        'nutrient', 'main_soreness', 'risk_factor', 'ilness_history'
+        
     );
     var $reftable = array(
         'risk_factor' => array('ref_present_risk_factor', 'risk_factor'),
-        'nutrient' => array('ref_present_nutrient', 'nutrient'),
-        'main_soreness' => array('ref_present_soreness', 'soreness'),
-        'ilness_history' => array('ref_present_illness_history', 'illness_history')
+    );
+
+    var $table_scheme = array(
+        'pengkajian' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'perawatan' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tgl' => array(
+                'type' => 'date',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputer' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputtime' => array(
+                'type' => 'datetime',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'updated' => array(
+                'type' => 'varchar(100)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
     );
 }

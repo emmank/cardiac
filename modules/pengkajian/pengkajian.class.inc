@@ -30,202 +30,50 @@ class pengkajianModule extends mainModule
     var $description = '';
 
     function menu(){
-        $items['ref_present_nutrient'] = array(
-            'title' => __t('gizi'),
-            'description' => __t('nutrient reference for present status'),
-            'path' => '/reference/nutrient',
-            'exec' => 'nutrient_view',
+        $items['pengkajian_view'] = array(
+            'title' => __t('pengkajian'),
+            'description' => __t('daftar pengkajian'),
+            'path' => '/care/pengkajian',
+            'exec' => '__view',
             'weight' => 5,
             'user_required' => NULL
-        );
-        $items['ref_present_nutrient_detail'] = array(
-            'title' => __t('nutrient detail'),
-            'description' => __t('nutrient reference detail for present status'),
-            'path' => '/reference/nutrient/detail',
-            'exec' => 'nutrient_detail',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_nutrient_form'] = array(
-            'title' => __t('nutrient form'),
-            'description' => __t('nutrient reference form for present status'),
-            'path' => '/reference/nutrient/form',
-            'exec' => 'nutrient_form',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_nutrient_form_submit'] = array(
-            'title' => __t('nutrient form'),
-            'description' => __t('Execute nutrient reference form for present status'),
-            'path' => '/reference/nutrient/form_submit',
-            'exec' => 'nutrient_form_submit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_nutrient_edit'] = array(
-            'title' => __t('nutrient edit'),
-            'description' => __t('Editing nutrient reference form for present status'),
-            'path' => '/reference/nutrient/edit',
-            'exec' => 'nutrient_edit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_nutrient_drop'] = array(
-            'title' => __t('nutrient drop'),
-            'description' => __t('Remove nutrient reference form for present status'),
-            'path' => '/reference/nutrient/drop',
-            'exec' => 'nutrient_drop',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-         $items['ref_present_soreness'] = array(
-            'title' => __t('Keluhan Utama'),
-            'description' => __t('soreness reference form for present status'),
-            'path' => '/reference/soreness',
-            'exec' => 'soreness_view',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_soreness_detail'] = array(
-            'title' => __t('detil keluhan'),
-            'description' => __t('soreness reference detail for present status'),
-            'path' => '/reference/soreness/detail',
-            'exec' => 'soreness_detail',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_soreness_form'] = array(
-            'title' => __t('soreness form'),
-            'description' => __t('soreness reference form for present status'),
-            'path' => '/reference/soreness/form',
-            'exec' => 'soreness_form',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_soreness_form_submit'] = array(
-            'title' => __t('soreness form'),
-            'description' => __t('Execute soreness reference form for present status'),
-            'path' => '/reference/soreness/form_submit',
-            'exec' => 'soreness_form_submit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_soreness_edit'] = array(
-            'title' => __t('soreness edit'),
-            'description' => __t('Editing soreness reference form for present status'),
-            'path' => '/reference/soreness/edit',
-            'exec' => 'soreness_edit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_soreness_drop'] = array(
-            'title' => __t('soreness drop'),
-            'description' => __t('Remove soreness reference form for present status'),
-            'path' => '/reference/soreness/drop',
-            'exec' => 'soreness_drop',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_risk_factor'] = array(
-            'title' => __t('Faktor Resiko'),
-            'description' => __t('risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor',
-            'exec' => 'ref_risk_factor_view',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_risk_factor_detail'] = array(
-            'title' => __t('detil keluhan'),
-            'description' => __t(' risk_factor reference detail for present status'),
-            'path' => '/reference/risk_factor/detail',
-            'exec' => 'ref_risk_factor_detail',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_risk_factor_form'] = array(
-            'title' => __t('risk_factor form'),
-            'description' => __t(' risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor/form',
-            'exec' => 'ref_risk_factor_form',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_risk_factor_form_submit'] = array(
-            'title' => __t('risk_factor form'),
-            'description' => __t('Execute risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor/form_submit',
-            'exec' => 'ref_risk_factor_form_submit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_risk_factor_edit'] = array(
-            'title' => __t('risk_factor edit'),
-            'description' => __t('Editing  risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor/edit',
-            'exec' => 'ref_risk_factor_edit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_risk_factor_drop'] = array(
-            'title' => __t('risk_factor drop'),
-            'description' => __t('Remove  risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor/drop',
-            'exec' => 'ref_risk_factor_drop',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_illness_history'] = array(
-            'title' => __t('Riwayat Penyakit'),
-            'description' => __t('illness_history reference form for present status'),
-            'path' => '/reference/illness_history',
-            'exec' => 'ref_illness_history_view',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_illness_history_detail'] = array(
-            'title' => __t('detil keluhan'),
-            'description' => __t('illness_history reference detail for present status'),
-            'path' => '/reference/illness_history/detail',
-            'exec' => 'ref_illness_history_detail',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_illness_history_form'] = array(
-            'title' => __t('illness_history form'),
-            'description' => __t('illness_history reference form for present status'),
-            'path' => '/reference/illness_history/form',
-            'exec' => 'ref_illness_history_form',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_illness_history_form_submit'] = array(
-            'title' => __t('illness_history form'),
-            'description' => __t('Execute illness_history reference form for present status'),
-            'path' => '/reference/illness_history/form_submit',
-            'exec' => 'ref_illness_history_form_submit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_illness_history_edit'] = array(
-            'title' => __t('illness_history edit'),
-            'description' => __t('Editing illness_history reference form for present status'),
-            'path' => '/reference/illness_history/edit',
-            'exec' => 'ref_illness_history_edit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_illness_history_drop'] = array(
-            'title' => __t('illness_history drop'),
-            'description' => __t('Remove illness_history reference form for present status'),
-            'path' => '/reference/illness_history/drop',
-            'exec' => 'ref_illness_history_drop',
-            'weight' => '0',
-            'user_required' => 'reference'
         );
        return $items;
     }
 
-    function nutrient_view(){
+    function __head_page($id){
+        $this->sync_scheme('pengkajian', $this->query);
+        $result = array();
+        $sql = $this->query->getSelect(
+            array(),
+            array('perawatan'),
+            array(
+                array('&&', "id=" . $id)
+            )
+        );
+        $this->query->connect();
+        $getit = $this->query->conn->Execute($qsl); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            $result = $getit->fields;
+            $sql = $this->query->getSelect(
+                array('nama'),
+                array('patients'),
+                array(
+                    array('&&', "id=" . $getit->fields['patients'])
+                )
+            );
+            $this->query->connect();
+            $getthis = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getthis->_numOfRows > 0){
+                $result['nama'] = $getthis->fields['nama'];
+            }
+        }
+        return $result;
+    }
+
+    function __view(){
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('Referensi Gizi');

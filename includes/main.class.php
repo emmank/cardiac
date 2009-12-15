@@ -835,6 +835,26 @@ class mainModule
         return $result;
     }
 
+    function __get_perawatan_lists(){
+        $result = array();
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('perawatan_items'),
+            NULL,
+            'id'
+        );
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows > 0){
+            for($i=0; $i<$query->_numOfRows; $i++){
+                $result[$query->fields['module']] = __t($query->fields['items']);
+                $query->MoveNext();
+            }
+        }
+        return $result;
+    }
+
     function today_patient_lists(){
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         $bagian = trim($dump[1]);
