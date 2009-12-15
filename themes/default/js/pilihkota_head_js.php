@@ -74,6 +74,22 @@ function changeLabel(bool) {
     }
 }
 
+function disablePasangan(bool) {
+    if (document.getElementById("status").value=="kawin") {
+        document.getElementById("tnamapas").value="";
+        document.getElementById("tpekpas").value="";
+        document.getElementById("tnamapas").disabled=false;
+        document.getElementById("tpekpas").disabled=false;
+    } else {
+        document.getElementById("tnamapas").value="";
+        document.getElementById("tpekpas").value="";
+        document.getElementById("tnamapas").disabled=true;
+        document.getElementById("tpekpas").disabled=true;
+    }
+}
+
+
+
 </script>
 
 <!--
