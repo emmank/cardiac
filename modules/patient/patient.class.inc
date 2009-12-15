@@ -39,6 +39,7 @@ class patientModule extends mainModule
         'nomor' => 'hidden',
         'nama' => 'text',
         'kelamin' => 'select',
+//        'kelamin' => 'radio',
         'tp_lahir' => 'text',
         'tgl_lahir' => 'date',
         'gol_darah' => 'select',
@@ -77,24 +78,24 @@ class patientModule extends mainModule
 
     function menu(){
         $items['patient_lists'] = array(
-            'title' => __t('patient lists'),
-            'description' => __t('lists of patient'),
+            'title' => __t('Pendaftaran pasien'),
+            'description' => __t('Daftar pasien'),
             'path' => '/node/patient',
             'exec' => 'view',
             'weight' => 5,
             'user_required' => FALSE
         );
         $items['patient_form'] = array(
-            'title' => __t('patient form'),
-            'description' => __t('patient check form'),
+            'title' => __t('Formulir Pendaftaran Pasien'),
+            'description' => __t(''),
             'path' => '/node/patient/form',
             'exec' => 'form',
             'weight' => 5,
             'user_required' => FALSE
         );
         $items['patient_form_submit'] = array(
-            'title' => __t('patient form'),
-            'description' => __t('patient check form'),
+            'title' => __t('Formulir Pendaftaran Pasien'),
+            'description' => __t(''),
             'path' => '/node/patient/form_submit',
             'exec' => 'form_submit',
             'weight' => 5,
@@ -824,6 +825,10 @@ class patientModule extends mainModule
                     // ------ Add by emmank -------
                     if($this->formtype_fields[$value] == 'select'){
                         if($value == 'gol_darah') {
+//                            $form['patient']['gol_darah'] = array(
+//                                '#message' => __t('&laquo; kosongkan bila Anda adalah pasien baru, kemudian klik submit')
+//                            );
+                            $form['patient']['gol_darah']['#message'] = __t('&laquo; kosongkan bila Anda adalah pasien baru, kemudian klik submit');
                             $options = $this->__get_goldarah_options();
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
@@ -1234,7 +1239,7 @@ class patientModule extends mainModule
             '#type' => 'text',
             '#title' => __t('strnum'),
             '#size' => 15,
-            '#message' => __t('&laquo; kosongkan bila Anda adalah pasien baru')
+            '#message' => __t('&laquo; kosongkan bila Anda adalah pasien baru, kemudian klik submit')
         );
         $form['patient']['submit'] = array(
             '#type' => 'submit',
@@ -1315,6 +1320,13 @@ class patientModule extends mainModule
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
                     }
+//                    if ($this->formtype_fields[$value] == 'radio') {
+//                       $form['patient'][$value] = array (
+//                           '#type' => 'radio',
+//                           '#title' => 'Jenis Kelamin',
+//                           '#option' => $this->__get_kelamin_options()
+//                       );
+//                    }
                     if($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
                         if($value == 'kelamin') {
                             $options = $this->__get_kelamin_options();  
@@ -1378,7 +1390,7 @@ class patientModule extends mainModule
                     '#extra' => ' class="button"'
                );
             }
-//            echo '<pre>'; print_r($result); echo '</pre>';//===add by emmank
+//            echo '<pre>'; print_r($form); echo '</pre>';//===add by emmank
             return $form;
     }
 

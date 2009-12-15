@@ -330,14 +330,16 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     $result = '<div id=form>';
 //    $result = '<div>';
 //    echo '<pre>'; print_r($data); echo '</pre>';
+
     foreach($data as $key => $value){
         $result .= '<div id=block>' . "\n";
         if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden' && trim($value['#title']) != '' && !is_null($value['#title']) && $value['#type'] != 'submit'){
-            $result .= '<label for="'. $key .'">' . ucwords($value['#title']) . '</label>' . "\n";
+            $result .= '<label id="'.$key.'" for="'. $key .'">' . ucwords($value['#title']) . '</label>' . "\n";
         }
         if(in_array($value['#type'], $forminput)){
             if($value['#type'] == 'checkbox' || $value['#type'] == 'radio'){
 //                $result .= '<div>' . "\n"; $o = 0;
+
                 if(isset($value['#readonly']) && $value['readonly'] !== FALSE){
                     $dumpit = array();
                     $value['#value'] = explode(',', $value['#value']);
@@ -347,12 +349,15 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                     $result .= implode(', ', $dumpit) . "\n";
                     unset($dumpit);
                 } else {
+
                     foreach($value['#option'] as $ky => $vl){
+//                    echo '<pre>'; print_r($value); echo '</pre>';
                         $namekey = $value['#type'] == 'checkbox' ? $key . '[' . $o . ']' : $key;
                         if($o > 0){
 //                            $result .= '<label for="'. $namekey .'">&nbsp;</label>';
                         }
                         $result .= '<div style="clear:both">' . "\n";
+//                        $result .= '<div style="border:solid 1px #000;">' . "\n";
                         $result .= '<input type="' . $value['#type'] . '" name="' . $namekey . '" value="' . $ky . '"';
     //                    echo '<pre>'; print_r($value); echo '</pre>';
                         if(in_array($ky, $value['#value'])){
