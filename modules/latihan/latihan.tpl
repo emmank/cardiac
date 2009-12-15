@@ -40,7 +40,7 @@ foreach($vl['datafields'] as $yk => $lv){
                 
                 $result .= '<tr valign="top">' . "\n";
                 $result .= '<td align="right" width="5%">' . $htg . '. </td>' . "\n";
-                $result .= '<td align="left" width="25%">yy' . __t($yy) . '</td>' . "\n";
+                $result .= '<td align="left" width="25%">' . __t($yy) . '</td>' . "\n";
                 $result .= '<td align="' . (eregi('st', $yy) ? 'left' : 'left') . '">' . "\n";
                 if(!isset($ll['type'])){
                     foreach($ll as $ee => $uu){
@@ -146,11 +146,9 @@ foreach($vl['datafields'] as $yk => $lv){
         } else {
             echo "<pre>";print_r($vv);echo "</pre>";
             if(isset($vv['value'])){
-                echo "ada value";
                 $vv['value'] = explode('|', $vv['value']);
             }
             if(isset($vv['readonly'])){
-                echo "ada readonly";
                 if(isset($vv['theref'])){
                     $result .= $vv['theref'][$vv['value'][0]];
                 } else {
