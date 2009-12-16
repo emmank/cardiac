@@ -334,7 +334,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     foreach($data as $key => $value){
         $result .= '<div id=block>' . "\n";
         if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden' && trim($value['#title']) != '' && !is_null($value['#title']) && $value['#type'] != 'submit'){
-            $result .= '<label id="'.$key.'" for="'. $key .'">' . ucwords($value['#title']) . '</label>' . "\n";
+            $result .= '<label for="'. $key .'"' . (isset($value['#id_label']) ? ' id="' . $value['#id_label'] . '"' : '') . '>' . ucwords($value['#title']) . '</label>' . "\n";
         }
         if(in_array($value['#type'], $forminput)){
             if($value['#type'] == 'checkbox' || $value['#type'] == 'radio'){
@@ -359,7 +359,13 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                         $result .= '<div style="clear:both">' . "\n";
 //                        $result .= '<div style="border:solid 1px #000;">' . "\n";
                         $result .= '<input type="' . $value['#type'] . '" name="' . $namekey . '" value="' . $ky . '"';
-    //                    echo '<pre>'; print_r($value); echo '</pre>';
+//                        echo '<pre>'; print_r($value); echo '</pre>';
+                        if(isset($iditem) && !is_null($iditem)){
+                            $result .= ' id="' . $iditem . '"';
+                        }
+                        if($value["#id"]){
+                            $result .= ' id="' . $value['#id'] . '"';
+                        }
                         if(in_array($ky, $value['#value'])){
                             $result .= ' checked="true"';
 //                            echo "test";
@@ -369,9 +375,6 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                         }
                         if(isset($value['#extra'])){
                             $result .= ' ' . $value['#extra'];
-                        }
-                        if(isset($iditem) && !is_null($iditem)){
-                            $result .= ' id="' . $iditem . '"';
                         }
                         if(isset($classitem) && !is_null($classitem)){
                             $result .= ' class="' . $classitem . '"';
@@ -401,6 +404,9 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                 }
                 if(isset($value['#extra'])){
                     $result .= ' ' . $value['#extra'];
+                }
+                if(isset($value['#id'])){
+                    $result .= ' id="' . $value['#id'] .'"';
                 }
                 if(isset($iditem) && !is_null($iditem)){
                     $result .= ' id="' . $iditem . '"';
@@ -468,6 +474,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
                 }
                 if (!empty ($value['#option'])) {
                 foreach($value['#option'] as $yk => $lv){
+//                    echo "<pre>"; print_r($value["#option"]); echo "</pre>";
                     $result .= '<option value="' . $yk . '"';
                     if($yk == $value['#value']){
                         $result .= ' selected';

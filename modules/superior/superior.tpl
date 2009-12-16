@@ -52,7 +52,11 @@ foreach($vl['datafields'] as $yk => $lv){
                             $result .= '</select></td><td width="10%" align="right">';
 
                             $result .= 'Diameter </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[1]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
                                 $result .= '<option value="Normal">Normal </option>';
                                 $result .= '<option value="Kecil">Kecil </option>';
@@ -60,7 +64,11 @@ foreach($vl['datafields'] as $yk => $lv){
                             $result .= '</select><tr><td width="10%" align="right">';
 
                             $result .= 'Flow </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[2]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
                                 $result .= '<option value="Triphesic">Triphesic </option>';
                                 $result .= '<option value="Biphesic">Biphesic </option>';
@@ -68,28 +76,44 @@ foreach($vl['datafields'] as $yk => $lv){
                             $result .= '</select><tr><td width="10%" align="right">';
 
                             $result .= 'Compression ultrasonography </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[3]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
                                 $result .= '<option value="Positif">Positif </option>';
                                 $result .= '<option value="Negatif">Negatif </option>';
                             $result .= '</select><tr><td width="10%" align="right">';
 
                             $result .= 'Uji Squeezing </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[4]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
                                 $result .= '<option value="Positif">Positif </option>';
                                 $result .= '<option value="Negatif">Negatif </option>';
                             $result .= '</select><tr><td width="10%" align="right">';
 
                             $result .= 'Refluks </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[5]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
                                 $result .= '<option value="Positif">Positif </option>';
                                 $result .= '<option value="Negatif">Negatif </option>';
                             $result .= '</select><tr><td width="10%" align="right">';
 
                             $result .= 'Thrambus </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[6]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
                                 $result .= '<option value="Kecil">Kecil </option>';
                                 $result .= '<option value="Sedang">Sedang </option>';
@@ -104,7 +128,11 @@ foreach($vl['datafields'] as $yk => $lv){
                             $result .= '</select></td><td width="10%" align="right">';
 
                             $result .= 'Diameter </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[1]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
 //                            foreach($lv['#theref'] as $kk => $vv){
                                 $result .= '<option value="Normal">Normal </option>';
@@ -113,7 +141,11 @@ foreach($vl['datafields'] as $yk => $lv){
 //                            }
                             $result .= '</select><tr><td width="10%" align="right">';
                             $result .= 'Flow </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[2]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
 //                            foreach($lv['#theref'] as $kk => $vv){
                                 $result .= '<option value="Triphesic">Triphesic </option>';
@@ -122,7 +154,11 @@ foreach($vl['datafields'] as $yk => $lv){
 //                            }
                             $result .= '</select><tr><td width="10%" align="right">';
                             $result .= 'Steunosis </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[3]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
 //                            foreach($lv['#theref'] as $kk => $vv){
                                 $result .= '<option value="Mild">Mild </option>';
@@ -131,7 +167,11 @@ foreach($vl['datafields'] as $yk => $lv){
 //                            }
                             $result .= '</select><tr><td width="10%" align="right">';
                             $result .= 'Thrambus </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[4]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
 //                            foreach($lv['#theref'] as $kk => $vv){
                                 $result .= '<option value="Kecil">Kecil </option>';
@@ -141,7 +181,11 @@ foreach($vl['datafields'] as $yk => $lv){
 //                            }
                             $result .= '</select><tr><td width="10%" align="right">';
                             $result .= 'Kalsifkasi </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[5]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
 //                            foreach($lv['#theref'] as $kk => $vv){
                                 $result .= '<option value="Mild">Mild </option>';
@@ -151,7 +195,11 @@ foreach($vl['datafields'] as $yk => $lv){
 //                            }
                             $result .= '</select><tr><td width="10%" align="right">';
                             $result .= 'Lain </td><td>';
+<<<<<<< HEAD
+                            $result .= '<select name="' . $yk . '[0]" size="1">';
+=======
                             $result .= '<select name="' . $yk . '[6]" size="1">';
+>>>>>>> b9c8420f4362aab62a817374ce92e2cb8711d8da
                             $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
 //                            foreach($lv['#theref'] as $kk => $vv){
                                 $result .= '<option value="Tourtous">Tourtous </option>';
