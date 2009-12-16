@@ -173,9 +173,9 @@ class inferiorModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
-        echo '<pre>'; print_r($opr); echo '</pre>';
-        echo '<pre>'; print_r($strid); echo '</pre>';
-        echo '<pre>'; print_r($thevalue); echo '</pre>';
+//        echo '<pre>'; print_r($opr); echo '</pre>';
+//        echo '<pre>'; print_r($strid); echo '</pre>';
+//        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->__exec_db_ops(
             $this->query,
             'inferior',
