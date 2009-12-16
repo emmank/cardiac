@@ -61,6 +61,13 @@ class authModule extends mainModule
             'weight' => '50',
             'user_required' => NULL
         );
+        $items['reload_menus'] = array(
+            'title' => __t('reloading menus'),
+            'path' => '/reload_menus',
+            'exec' => 'reload_menus',
+            'weight' => '50',
+            'user_required' => NULL
+        );
         return $items;
     }
 
@@ -317,6 +324,10 @@ class authModule extends mainModule
 
     function regload(){
         __write_registry();
+    }
+
+    function reload_menus(){
+        __reload_menus();
     }
 
 }

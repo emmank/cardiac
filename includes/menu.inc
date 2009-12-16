@@ -126,7 +126,39 @@ function menu_organize(){
     $getit = $systemquery->conn->Execute($sql); unset($sql);
     $systemquery->close();
     if(!isset($_COOKIE[$configs->cookiesession]) || $getit->_numOfRows < 1){
-        header('Location:/reload_menus.php'); exit();
+        $sql = $systemquery->getSelect(
+            array('id'),
+            array('menus'),
+            array(
+                array('&&', "module=auth"),
+                array('&&', "id=reload_menus")
+            )
+        );
+        $systemquery->connect();
+        $getthis = $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        if($getthis->_numOfRows < 1){
+            $thevalue = array(
+                'id' => 'reload_menus',
+                'menus' => '',
+                'weight' => '50',
+                'title' => __t('reloading menus'),
+                'path' => '/reload_menus',
+                'exec' => 'reload_menus',
+                'source' => 'modules',
+                'module' => 'auth'
+            );
+            $sql = $systemquery->saveData(
+                'menus',
+                $thevalue
+            ); unset($thevalue);
+            $systemquery->connect();
+            $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            redirect_to('/regload'); exit();
+        } else {
+            redirect_to('/reload_menus'); exit();
+        }
     }
     $primary_links = explode(',', $getit->fields['primary_links']);
     $secondary_links = explode(',', $getit->fields['secondary_links']);
