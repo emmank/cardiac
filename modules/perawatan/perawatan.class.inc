@@ -117,7 +117,7 @@ class perawatanModule extends mainModule
     }
 
     function __redirect(){
-        redirect_to('/care/perawatan/' . $_POST['items'] . '/' . $_POST['id']);
+        redirect_to('/care/perawatan/' . $_POST['items'] . '/' . $_POST['pid']);
     }
 
     function _search(){
@@ -502,7 +502,7 @@ class perawatanModule extends mainModule
                                 'user_required' => 'perawatan',
                                 'filter' => 'items',
                                 'items' => array (
-                                    'id' => $vcache['id']
+                                    'pid' => $vcache['id']
                                 )
                             );
                         } unset($rujukanopts);
