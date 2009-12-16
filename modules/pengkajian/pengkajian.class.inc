@@ -34,7 +34,7 @@ class pengkajianModule extends mainModule
             'title' => __t('pengkajian'),
             'description' => __t('daftar pengkajian'),
             'path' => '/care/perawatan/pengkajian',
-            'exec' => 'view',
+            'exec' => 'view_form',
             'weight' => 5,
             'user_required' => NULL
         );
@@ -43,6 +43,7 @@ class pengkajianModule extends mainModule
 
     function __head_page($id){
         $this->sync_scheme('pengkajian', $this->query);
+        $this->sync_scheme('pengkajian_items', $this->query);
         $result = array();
         $sql = $this->query->getSelect(
             array(),
@@ -68,12 +69,28 @@ class pengkajianModule extends mainModule
             $this->query->close();
             if($getthis->_numOfRows > 0){
                 $result['nama'] = $getthis->fields['nama'];
-            }
+            } unset($getthis);
+            $sql = $this->query->getSelect(
+                array('ruang'),
+                array('ruang'),
+                array(
+                    array('&&', "id=" . $getit->fields['ruang'])
+                )
+            );
+            $this->query->connect();
+            $getthis = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getthis->_numOfRows > 0){
+                $result['ruang'] = $getthis->fields['ruang'];
+            } unset($getthis);
+            $result['pukul_masuk'] = date('j', strtotime($getit->fields['pukul_masuk']));
+            $result['pukul_masuk'] .= ' ' . __t($this->nama_bulan[date('n', strtotime($getit->fields['pukul_masuk']))]);
+            $result['pukul_masuk'] .= ' ' . date('Y H:i:s', strtotime($getit->fields['pukul_masuk']));
         }
         return $result;
     }
 
-    function view(){
+    function view_form(){
         if(isset($_POST['id'])){
             $id = $_POST['id'];
         } else {
@@ -82,20 +99,59 @@ class pengkajianModule extends mainModule
                 $id = $dump[3];
             }
         }
-        $result['perawatan'] = array(
+        $patientinfo = $this->__head_page($id);
+        $rujukanopts = array(
+            '' => __t('-- perawatan --')
+        );
+        $dumprjk = $this->__get_perawatan_lists();
+        foreach($dumprjk as $key => $value){
+            if($key != 'pengkajian'){
+                $rujukanopts[$key] = $value;
+            }
+        } unset($dumprjk);
+        $addmenuopts = array(
+            '' => __t('-- medical record --'),
+            'all' => __t('semua')
+        );
+        $dump_addmenus = $this->__get_bagian_lists();
+        foreach($dump_addmenus as $key => $value){
+            $sql = $this->query->getSelect(
+                array('id'),
+                array('kunjungan'),
+                array(
+                    array('&&', "patients=" . $patientinfo['patients']),
+                    array('&&', "bagian=" . $value),
+                    array('&&', "doneby is not null")
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $addmenuopts[$key] = $value;
+            } unset($getit);
+        } unset($dump_addmenus);
+        $pkjitems = array(
+            '' => __t('-- pengkajian --')
+        );
+        $dumppkj = $this->__get_pengkajian_lists();
+        foreach($dumppkj as $key => $value){
+            $pkjitems[$key] = $value;
+        } unset($dumppkj);
+        $result['pengkajian'] = array(
             '#type' => 'special',
-            '#id' => 'perawatan',
-            '#title' => __t('perawatan'),
+            '#id' => 'pengkajian',
+            '#title' => __t('pengkajian'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/perawatan/form' . ($this->formhabit == 'readonly' ? '/edit_' . $vcache['id'] : '_submit'),
+            '#action' => '/care/perawatan/pengkajian/form' . ($this->formhabit == 'readonly' ? '/edit_' . $vcache['id'] : '_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
-            '#formtpl' => MODULES_DIR . DS . 'perawatan' . DS . 'perawatan.tpl',
+            '#formtpl' => MODULES_DIR . DS . 'pengkajian' . DS . 'pengkajian.tpl',
             '#addmenu' => array(
                 '#addmenu' => array(
                     'title' => __t('medical record'),
-                    'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                    'action' => '/user/patient/medical_record/' . $patientinfo['patients'],
                     'position' => 'top',
                     'class' => 'button',
                     'methode' => 'choose',
@@ -103,8 +159,38 @@ class pengkajianModule extends mainModule
                     'filter' => 'bagian'
                 )
             ),
-            '#patientinfo' => $this->__head_page($id)
+            '#patientinfo' => $patientinfo
         ); unset($addmenuopts);
+//        if($this->formhabit == 'readonly'){
+            $result['pengkajian']['#addmenu']['#addmenu0'] = array(
+                'title' => __t('dirujuk ke'),
+                'action' => '/care/perawatan',
+                'position' => 'top',
+                'class' => 'button',
+                'methode' => 'choose',
+                'options' => $rujukanopts,
+                'user_required' => 'perawatan',
+                'filter' => 'items',
+                'items' => array (
+                    'id' => $patientinfo['id']
+                )
+            );
+            $result['pengkajian']['#addmenu']['#addmenu1'] = array(
+                'title' => __t('pengkajian'),
+                'action' => '/care/perawatan/pengkajian_items',
+                'position' => 'top',
+                'class' => 'button',
+                'methode' => 'choose',
+                'options' => $pkjitems,
+                'user_required' => 'perawatan',
+                'filter' => 'items',
+                'items' => array (
+                    'id' => $patientinfo['id']
+                )
+            );
+//        }
+        unset($rujukanopts, $pkjitems);
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 

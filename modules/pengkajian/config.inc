@@ -92,6 +92,22 @@ class pengkajianConfig extends config
                 'default' => NULL,
                 'extra' => ''
             )
+        ),
+        'pengkajian_items' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'items' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
         )
     );
 }
