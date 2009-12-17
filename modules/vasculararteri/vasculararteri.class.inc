@@ -74,8 +74,8 @@ class vasculararteriModule extends mainModule
             'user_required' => 'vasculararteri'
         );
         $items['vasculararteri_view'] = array(
-            'title' => __t('vasculararteri'),
-            'description' => __t('explore vasculararteri'),
+            'title' => __t('Vascular Arteriography'),
+            'description' => __t('explore vascular arteriography'),
             'path' => '/user/vasculararteri/view',
             'exec' => 'view',
             'weight' => '0',

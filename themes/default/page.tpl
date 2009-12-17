@@ -49,7 +49,19 @@
 ***********************************************/
 
 </script>
-
+    
+<script src="/themes/default/js/jquery-1.3.2.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready( function() {
+    $("#toggle-hidden-div").click( function() {
+        $("#hidden-div").slideToggle('slow');
+    });
+    
+    $("#toggle-ahidden-div").click( function() {
+        $("#ahidden-div").slideToggle('slow');
+    });
+});
+</script>
 
 </head>
 <body<?php if (isset($body_login)){echo " onLoad=\"".$body_login. "\"";}?>>

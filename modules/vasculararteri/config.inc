@@ -105,7 +105,7 @@ class vasculararteriConfig extends config
         'segmen_st_depresi', 'segmen_st_elevasi'
     );
     var $table_scheme = array(
-        'kateterisasi' => array(
+        'vasculararteri' => array(
             'id' => array(
                 'type' => 'int(11)',
                 'null' => 0,
