@@ -72,7 +72,7 @@ foreach($data as $key => $value){
     $result .= '</fieldset>' . "\n";
     
     $result .= '<div>' . "\n";
-    $result .= '<table width=100% class="table" border="0">' . "\n";
+    $result .= '<table width=100% class="table" border="1">' . "\n";
     foreach($value as $yk => $lv){
         if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
             if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
@@ -126,11 +126,13 @@ foreach($data as $key => $value){
                         if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
                             $result .= $lv['#value'][0];
                         } else {
+                            
                             foreach($lv['#customized']['option'] as $kk => $vv){
+//                                echo "<pre>";print_r($kk);echo "</pre>";
                                 if(isset($koma)){
-                                    $result .= '<br />';
+                                    $result .= '<br /> ';
                                 }
-                                $result .= '<input type="radio" name="' . $yk . '[0]" value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' checked="true"' : '') . '> ' . $vv;
+                                $result .= '<input type="radio" name="' . $yk . '[0]" value="'.$kk.'"> '. $kk ;//<input type="radio" name="' . $yk . '[0]" value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' checked="true"' : '') . '> ' . $vv;
                                 $koma = 0;
                             } unset($koma);
                         }
@@ -173,7 +175,7 @@ foreach($data as $key => $value){
                             }
                         }
                     } else {
-                        $result .= '<br />' . __t('pada sandapan') . "\n";
+//                        $result .= '<br />' . __t('pada sandapan') . "\n";
                         if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
                             $result .= $lv['#theref'][$lv['#value'][1]];
                         } else {
