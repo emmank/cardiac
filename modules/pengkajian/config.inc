@@ -36,14 +36,14 @@ class pengkajianConfig extends config
         'passwd' => 'emmank'
     );
     var $module_included = array(
-        'riwayat_kesehatan',
+        'riwayatKesehatan',
         'alergi',
         'kondisi',
-        'nutrisi_kesehatan',
+        'nutrisiKesehatan',
         'aktivitas',
         'eliminasi',
         'pola_tidur',
-        'psiko_sosial',
+        'psikoSosial',
         'rencana'
     );
 }

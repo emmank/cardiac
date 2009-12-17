@@ -38,7 +38,19 @@ class pengkajianModule extends mainModule
             'weight' => 5,
             'user_required' => NULL
         );
+        $items['pengkajian_redirect'] = array(
+            'title' => __t('redirect pengkajian'),
+            'description' => __t('redirecting pengkajian menus'),
+            'path' => '/care/pengkajian/redirect',
+            'exec' => '__redirect',
+            'weight' => 5,
+            'user_required' => NULL
+        );
        return $items;
+    }
+
+    function __redirect(){
+        redirect_to('/care/' . $_POST['items'] . '/view/' . $_POST['pid']);
     }
 
     function __head_page($id){
@@ -115,13 +127,6 @@ class pengkajianModule extends mainModule
         $result['title'] = __t('pengkajian pasien') . (!is_null($pid) ? ' ' . __t('a.n.') . ' ' . $patientinfo['nama'] : '');
         $result['description'] = (!is_null($pid) ? __t('daftar pengkajian pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'] : __t('daftar pengkajian beberapa pasien terakhir'));
         if(!is_null($pid)){
-            $result['headerfill'] = array(
-                'patient_info' => array(
-                    'type' => 'fieldset',
-                    'title' => __t('patient info'),
-                    'datainfo' => $patientinfo
-                )
-            );
             $addmenuopts = array(
                 '' => __t('-- medical record --'),
                 'all' => __t('semua')
@@ -172,7 +177,7 @@ class pengkajianModule extends mainModule
                 'user_required' => 'perawatan',
                 'filter' => 'items',
                 'items' => array (
-                    'id' => $patientinfo['id']
+                    'pid' => $patientinfo['id']
                 )
             ); unset($rujukanopts);
         }
