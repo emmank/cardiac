@@ -175,7 +175,7 @@ foreach($data as $key => $value){
                             }
                         }
                     } else {
-//                        $result .= '<br />' . __t('pada sandapan') . "\n";
+                        $result .= '<br />' . __t('pada sandapan') . "\n";
                         if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
                             $result .= $lv['#theref'][$lv['#value'][1]];
                         } else {
