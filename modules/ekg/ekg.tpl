@@ -72,7 +72,7 @@ foreach($data as $key => $value){
     $result .= '</fieldset>' . "\n";
     
     $result .= '<div>' . "\n";
-    $result .= '<table width=100% class="table" border="1">' . "\n";
+    $result .= '<table width=100% class="table" border="0">' . "\n";
     foreach($value as $yk => $lv){
         if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
             if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
