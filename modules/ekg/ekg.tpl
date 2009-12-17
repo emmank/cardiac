@@ -86,6 +86,7 @@ foreach($data as $key => $value){
     $cnt = 0;
     foreach($value as $yk => $lv){
         if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
+//            echo "<pre>";print_r($lv);echo "</pre>";
             if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
                 $result .= '<tr valign="top">' . "\n";
                 if(!isset($lv['#customized'])){
@@ -114,6 +115,7 @@ foreach($data as $key => $value){
                     if(!is_array($lv['#value'])){
                         $lv['#value'] = explode('|', $lv['#value']);
                     }
+                    echo "<pre>";print_r($lv);echo "</pre>";
                     if(!isset($dumpt)){$dumpt = array();}
                     if(!in_array($lv['#customized']['title'], $dumpt)){
                         $dumpt[] = $lv['#customized']['title'];
@@ -128,7 +130,7 @@ foreach($data as $key => $value){
                         } else {
                             
                             foreach($lv['#customized']['option'] as $kk => $vv){
-//                                echo "<pre>";print_r($kk);echo "</pre>";
+                                
                                 if(isset($koma)){
                                     $result .= '<br /> ';
                                 }
