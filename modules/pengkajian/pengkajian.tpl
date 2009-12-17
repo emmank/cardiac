@@ -39,6 +39,5 @@ foreach($data as $key => $value){
     $result .= '</fieldset>' . "\n";
     
     $result .= '<fieldset>' . "\n";
-
     $result .= '</fieldset>' . "\n";
 }

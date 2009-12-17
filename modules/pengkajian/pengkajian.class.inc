@@ -38,20 +38,10 @@ class pengkajianModule extends mainModule
             'weight' => 5,
             'user_required' => NULL
         );
-        $items['pengkajian_form'] = array(
-            'title' => __t('form pengkajian'),
-            'description' => __t('formulir pengkajian pasien'),
-            'path' => '/care/pengkajian/form',
-            'exec' => 'form',
-            'weight' => 5,
-            'user_required' => NULL
-        );
        return $items;
     }
 
     function __head_page($id){
-        $this->sync_scheme('pengkajian', $this->query);
-        $this->sync_scheme('pengkajian_items', $this->query);
         $result = array();
         if(!is_null($id) && trim($id) != ''){
             $sql = $this->query->getSelect(
@@ -132,12 +122,6 @@ class pengkajianModule extends mainModule
                     'datainfo' => $patientinfo
                 )
             );
-            $result['addmenu']['#add'] = array(
-                'title' => __t('input'),
-                'action' => '/care/pengkajian/form/' . $pid,
-                'position' => 'top',
-                'user_required' => 'users'
-            );
             $addmenuopts = array(
                 '' => __t('-- medical record --'),
                 'all' => __t('semua')
@@ -200,27 +184,40 @@ class pengkajianModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => (!is_null($pid) ? 'inputer' : 'nama'),
-                'caption' => (!is_null($pid) ? __t('ditangani oleh') : __t('nama')),
+                'field' => (!is_null($pid) ? 'items' : 'nama'),
+                'caption' => (!is_null($pid) ? __t('pengkajian') : __t('nama')),
                 'align' => 'left'
             ),
             array(
-                'field' => (!is_null($pid) ? 'tgl' : 'pukul_masuk'),
-                'caption' => (!is_null($pid) ? __t('tanggal') : __t('tanggal masuk')),
-                'width' => '25%',
-                'align' => 'right'
+                'field' => (!is_null($pid) ? 'fuel' : 'pukul_masuk'),
+                'caption' => (!is_null($pid) ? __t('data') : __t('tanggal masuk')),
+                'width' => '20%',
+                'align' => (!is_null($pid) ? 'center' : 'right')
             )
         );
 
         if(!is_null($pid)){
-            $sql = $this->query->getSelect(
-                array(),
-                array('pengkajian'),
-                array(
-                    array('&&', "perawatan=" . $pid)
-                ),
-                'inputtime desc'
-            );
+            foreach($this->config->module_included as $key => $value){
+                if($this->module_is_active($value) !== FALSE){
+                    $result['data'][$key]['items'] = __t($value);
+                    $result['data'][$key]['goto'] = '/care/' . $value . '/view/' . $pid;
+                    $sql = $this->query->getSelect(
+                            array('id'),
+                            array($value),
+                            array(
+                                array('&&', "perawatan=" . $pid)
+                            )
+                    );
+                    $this->query->connect();
+                    $getit = $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                    if($getit->_numOfRows > 0){
+                        $result['data'][$key]['fuel'] = __t('available');
+                    } else {
+                        $result['data'][$key]['fuel'] = __t('-- empty --');
+                    }
+                }
+            }
         } else {
             $sql = $this->query->getSelect(
                 array(),
@@ -230,26 +227,11 @@ class pengkajianModule extends mainModule
                 ),
                 'inputtime desc'
             );
-        }
-        $this->query->connect();
-        $getit = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if($getit->_numOfRows > 0){
-            for($i=0; $i<$getit->_numOfRows; $i++){
-                if(!is_null($pid)){
-                    $sql = $this->query->getSelect(
-                        array('nama'),
-                        array('stafs'),
-                        array(
-                            array('&&', "id=" . $getit->fields['inputer'])
-                        )
-                    );
-                    $this->query->connect();
-                    $getthis = $this->query->conn->Execute($sql); unset($sql);
-                    $this->query->close();
-                    $result['data'][$i]['inputer'] = $getthis->fields['nama'];
-                    $result['data'][$i]['goto'] = '/care/pengkajian/detail_form/' . $getit->fields['id'];
-                } else {
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                for($i=0; $i<$getit->_numOfRows; $i++){
                     $sql = $this->query->getSelect(
                         array('id', 'nama', 'tgl_lahir'),
                         array('patients'),
@@ -262,121 +244,11 @@ class pengkajianModule extends mainModule
                     $this->query->close();
                     $result['data'][$i]['nama'] = $getthis->fields['nama'] . ' (' . number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th)';
                     $result['data'][$i]['goto'] = '/care/perawatan/pengkajian/' . $getit->fields['id'];
-                    }
-                $result['data'][$i]['pukul_masuk'] = date('j-n-Y H:i:s', strtotime($getit->fields['pukul_masuk']));
-                $getit->MoveNext();
+                    $result['data'][$i]['pukul_masuk'] = date('j-n-Y H:i:s', strtotime($getit->fields['pukul_masuk']));
+                    $getit->MoveNext();
+                }
             }
         }
         return $result;
     }
-
-    function form(){
-        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        if(count($dump) > 3){
-            return $this->__get_form($dump[3]);
-        } else {
-            redirect_to('/care/perawatan/pengkajian');
-        }
-    }
-
-    function __get_form($pid){
-        $patientinfo = $this->__head_page($pid);
-        if(count($patientinfo) < 1){
-            redirect_to('/'); exit();
-        }
-        
-        $addmenuopts = array(
-            '' => __t('-- medical record --'),
-            'all' => __t('semua')
-        );
-        $dump_addmenus = $this->__get_bagian_lists();
-        foreach($dump_addmenus as $key => $value){
-            $sql = $this->query->getSelect(
-                array('id'),
-                array('kunjungan'),
-                array(
-                    array('&&', "patients=" . $patientinfo['patients']),
-                    array('&&', "bagian=" . $value),
-                    array('&&', "doneby is not null")
-                )
-            );
-            $this->query->connect();
-            $getit = $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-            if($getit->_numOfRows > 0){
-                $addmenuopts[$key] = $value;
-            } unset($getit);
-        } unset($dump_addmenus);
-        $result['pengkajian'] = array(
-            '#type' => 'special',
-            '#id' => 'pengkajian',
-            '#title' => __t('pengkajian'),
-            '#collapsible' => TRUE,
-            '#collapsed' => FALSE,
-            '#weight' => -3,
-            '#action' => '/care/perawatan/pengkajian/form' . ($this->formhabit == 'readonly' ? '/edit_' . $vcache['id'] : '_submit'),
-            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
-            '#formtpl' => MODULES_DIR . DS . 'pengkajian' . DS . 'pengkajian.tpl',
-            '#addmenu' => array(
-                '#addmenu' => array(
-                    'title' => __t('medical record'),
-                    'action' => '/user/patient/medical_record/' . $patientinfo['patients'],
-                    'position' => 'top',
-                    'class' => 'button',
-                    'methode' => 'choose',
-                    'options' => $addmenuopts,
-                    'filter' => 'bagian'
-                )
-            ),
-            '#patientinfo' => $patientinfo
-        ); unset($addmenuopts);
-        if($this->formhabit == 'readonly'){
-            $rujukanopts = array(
-                '' => __t('-- perawatan --')
-            );
-            $dumprjk = $this->__get_perawatan_lists();
-            foreach($dumprjk as $key => $value){
-                if($key != 'pengkajian'){
-                    $rujukanopts[$key] = $value;
-                }
-            } unset($dumprjk);
-            $result['pengkajian']['#addmenu']['#addmenu0'] = array(
-                'title' => __t('dirujuk ke'),
-                'action' => '/care/perawatan',
-                'position' => 'top',
-                'class' => 'button',
-                'methode' => 'choose',
-                'options' => $rujukanopts,
-                'user_required' => 'perawatan',
-                'filter' => 'items',
-                'items' => array (
-                    'id' => $patientinfo['id']
-                )
-            );
-            $pkjitems = array(
-                '' => __t('-- pengkajian --')
-            );
-            $dumppkj = $this->__get_pengkajian_lists();
-            foreach($dumppkj as $key => $value){
-                $pkjitems[$key] = $value;
-            } unset($dumppkj);
-            $result['pengkajian']['#addmenu']['#addmenu1'] = array(
-                'title' => __t('pengkajian'),
-                'action' => '/care/perawatan/pengkajian_items',
-                'position' => 'top',
-                'class' => 'button',
-                'methode' => 'choose',
-                'options' => $pkjitems,
-                'user_required' => 'perawatan',
-                'filter' => 'items',
-                'items' => array (
-                    'id' => $patientinfo['id']
-                )
-            );
-        unset($rujukanopts, $pkjitems);
-        }
-//        echo '<pre>'; print_r($result); echo '</pre>';
-        return $result;
-    }
-
 }

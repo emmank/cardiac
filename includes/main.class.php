@@ -1198,4 +1198,22 @@ class mainModule
        return $result;
    }
 
+   function module_is_active($modulename){
+       $sql = $this->sysquery->getSelect(
+               array('id'),
+               array('modules'),
+               array(
+                   array('&&', "module=" . $modulename)
+               )
+       );
+       $this->sysquery->connect();
+       $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+       $this->sysquery->close();
+       if($getit->_numOfRows > 0){
+           return TRUE;
+       } else {
+           return FALSE;
+       }
+   }
+
 }
