@@ -36,16 +36,40 @@ class riwayatKesehatanConfig extends config
         'passwd' => 'emmank'
     );
     var $hiddenfields = array(
-        'id'
+        'id', 'inputer', 'inputtime', 'updated', 'perawatan'
     );
     var $typeoffields = array(
         'id' => 'hidden',
+        'perawatan' => 'hidden',
+        'tgl' => 'datetime',
+        'cara_masuk' => 'text',
+        'keluhan' => 'text',
+        'pernah_diopname' => 'text',
+        'pernah_berobat' => 'checkbox',
+        'berat_sebelum_sakit' => 'text',
+        'berat_sekarang' => 'text',
+        'pernah_dioperasi' => 'checkbox',
+        'hari_pasca_operasi' => 'text',
+        'kesadaran' => 'text',
+        'pengertian_klien' => 'checkbox',
+        'r_haid_menarche' => 'text',
+        'r_haid_dys_menarche' => 'text',
+        'r_haid_siklus' => 'text',
+        'r_haid_lamanya' => 'text',
+        'r_haid_alat_kb' => 'text',
+        'r_hamil_hamil' => 'text',
+        'r_hamil_hpht' => 'date',
+        'r_hamil_taksiran_pantas' => 'text',
+        'r_hamil_usia' => 'text',
+        'inputer' => 'system',
+        'inputtime' => 'system',
+        'updated' => 'system'
     );
     var $fieldsisarray = array(
 
     );
     var $reftable = array(
-        'risk_factor' => array('ref_present_risk_factor', 'risk_factor'),
+        'risk_factor' => array('ref_present_risk_factor', 'risk_factor', 'id'),
     );
 
     var $table_scheme = array(
@@ -190,7 +214,7 @@ class riwayatKesehatanConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'r_hamil_taksiran_pantus' => array(
+            'r_hamil_taksiran_pantas' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',
@@ -212,7 +236,7 @@ class riwayatKesehatanConfig extends config
                 'extra' => ''
             ),
             'inputtime' => array(
-                'type' => 'date',
+                'type' => 'datetime',
                 'null' => 0,
                 'key' => '',
                 'default' => NULL,

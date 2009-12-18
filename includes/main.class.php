@@ -533,8 +533,9 @@ class mainModule
                 $value = implode('-', $value);
                 $result[$key] = $value;
             } elseif(is_array($value)){
-                $result[$key] = $value;
+                ksort($value);
                 $value = implode('|', $value);
+                $result[$key] = $value;
             } else {
                 if($value == ''){
                     if(!isset($blank)){
@@ -1214,6 +1215,26 @@ class mainModule
        } else {
            return FALSE;
        }
+   }
+
+   function __get_ref_options($tablename, $fverbose, $fchoose, $interpreter){
+       $result = array();
+       $sql = $interpreter->getSelect(
+               array($fchoose, $fverbose),
+               array($tablename),
+               NULL,
+               $fverbose . 'desc'
+       );
+       $interpreter->connect();
+       $getit = $interpreter->conn->Execute($sql); unset($sql);
+       $interpreter->close();
+       if($getit->_numOfRows > 0){
+           for($i=0; $i<$getit->_numOfRows; $i++){
+               $result[$getit->fields[$fchoose]] = $getit->fields[$fverbose];
+               $getit->MoveNext();
+           }
+       } unset($getit);
+       return $result;
    }
 
 }

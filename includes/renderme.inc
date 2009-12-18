@@ -716,6 +716,337 @@ function __create_main_image()
     return $result;
 }
 
+function __set_form_elements($name, $type=NULL, $size=NULL, $id=NULL, $class=NULL, $style=NULL, $value=NULL, $extra=NULL){
+    $result = ' NAME="' . $name . '"';
+    if(!is_null($type)){
+        $result .= ' TYPE="' . $type . '"';
+    }
+    if(!is_null($size)){
+        $result .= ' SIZE="' . $size . '"';
+    }
+    if(!is_null($id)){
+        $result .= ' ID="' . $id . '"';
+    }
+    if(!is_null($class)){
+        $result .= ' CLASS="' . $class . '"';
+    }
+    if(!is_null($style)){
+        $result .= ' STYLE="' . $style . '"';
+    }
+    if(!is_null($value)){
+        $result .= ' VALUE="' . $value . '"';
+    }
+    if(!is_null($extra)){
+        $result .= ' ' . $extra;
+    }
+    return($result);
+}
+
+function __create_items_of_form($data){
+    $result = '';
+    if($data['#type'] == 'select'){
+        if(isset($data['#readonly']) && $data['#readonly'] !== FALSE){
+            $result .= $data['#option'][$data['#value']] . "\n";
+        } else {
+            $result .= '<SELECT';
+            $result .= __set_form_elements(
+                    $data['#name'],
+                    NULL,
+                    isset($data['#size']) && ctype_digit($data['#size']) && $data['#size'] != '0' && $data['#size'] != '1' ? $data['#size'] : 1,
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    NULL,
+                    isset($data['#extra']) ? $data['#extra'] : NULL
+            );
+            $result .= '>' . "\n";
+            if(isset($data['#blankopt'])){
+                $result .= '<OPTION VALUE=""></OPTION>' . "\n";
+            }
+            foreach($data['#option'] as $key => $value){
+                $result .= '<OPTION VALUE="' . $key . '"';
+                if(isset($data['#value']) && $data['#value'] == $key){
+                    $result .= ' SELECTED="SELECTED"';
+                }
+                $result .= '>' . ucwords(__t($value)) . '</OPTION>' . "\n";
+            }
+            $result .= '</SELECT>';
+        }
+    } elseif($data['#type'] == 'date'){
+        if(isset($data['#value'])){
+            $thevalue = explode('-', $data['#value']);
+        }
+        if(isset($data['#readonly']) && $data['#readonly'] !== FALSE){
+            $result .= $thevalue[2];
+            $result .= ' ' . (isset($data['#option']) ? ucwords(__t($data['#option'][$thevalue[1]])) : $thevalue[1]);
+            $result .= ' ' . $thevalue[0] . "\n";
+        } else {
+            $extra = trim($data['#extra']) != '' ? $data['#extra'] : '';
+            $extra .= ' MAXLENGTH="2"';
+            $result .= '<INPUT';
+            $result .= __set_form_elements(
+                    $data['#name'] . '[2]',
+                    'TEXT',
+                    '2',
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    isset($thevalue[2]) ? $thevalue[2] : NULL,
+                    isset($extra) ? $extra : NULL
+            );
+            $result .= '> &nbsp;' . "\n";
+            unset($extra);
+
+            $result .= '<SELECT';
+            $result .= __set_form_elements(
+                    $data['#name'] . '[1]',
+                    NULL,
+                    1,
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    NULL,
+                    isset($data['#extra']) ? $data['#extra'] : NULL
+            );
+            $result .= '>' . "\n";
+            foreach($data['#option'] as $key => $value){
+                $result .= '<OPTION VALUE="' . $key . '"';
+                if(isset($thevalue[1]) && $thevalue[1] == $key){
+                    $result .= ' SELECTED="SELECTED"';
+                }
+                $result .= '>' . ucwords(__t($value)) . '</OPTION>' . "\n";
+            }
+            $result .= '</SELECT> &nbsp;' . "\n";
+
+            $extra = trim($data['#extra']) != '' ? $data['#extra'] : '';
+            $extra .= ' MAXLENGTH="4"';
+            $result .= '<INPUT';
+            $result .= __set_form_elements(
+                    $data['#name'] . '[0]',
+                    'TEXT',
+                    '4',
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    isset($thevalue[0]) ? $thevalue[0] : NULL,
+                    isset($extra) ? $extra : NULL
+            );
+            $result .= '>' . "\n";
+            unset($extra);
+        }
+        unset($thevalue);
+    } elseif($data['#type'] == 'datetime'){
+        if(isset($data['#value'])){
+            $thevalue = array();
+            $dump = explode(' ', $data['#value']);
+            $i=0;
+            foreach($dump as $key => $value){
+                if($i < 1){
+                    $dump0 = explode('-', $value);
+                } else {
+                    $dump0 = explode(':', $value);
+                }
+                foreach($dump0 as $ky => $vl){
+                    $thevalue[$i] = $vl;
+                    $i++;
+                }
+                unset($dump0);
+            } unset($i, $dump);
+        }
+        if(isset($data['#readonly']) && $data['#readonly'] !== FALSE){
+            $result .= $thevalue[2];
+            $result .= ' ' . (isset($data['#option']) ? ucwords(__t($data['#option'][$thevalue[1]])) : $thevalue[1]);
+            $result .= ' ' . $thevalue[0];
+            $result .= ' ' . $thevalue[3];
+            $result .= ':' . $thevalue[4];
+            $result .= ':' . $thevalue[5] . "\n";
+        } else {
+            $extra = trim($data['#extra']) != '' ? $data['#extra'] : '';
+            $extra .= ' MAXLENGTH="2"';
+            $result .= '<INPUT';
+            $result .= __set_form_elements(
+                    $data['#name'] . '[2]',
+                    'TEXT',
+                    '2',
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    isset($thevalue[2]) ? $thevalue[2] : NULL,
+                    isset($extra) ? $extra : NULL
+            );
+            $result .= '> &nbsp;' . "\n";
+            unset($extra);
+
+            $result .= '<SELECT';
+            $result .= __set_form_elements(
+                    $data['#name'] . '[1]',
+                    NULL,
+                    1,
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    NULL,
+                    isset($data['#extra']) ? $data['#extra'] : NULL
+            );
+            $result .= '>' . "\n";
+            foreach($data['#option'] as $key => $value){
+                $result .= '<OPTION VALUE="' . $key . '"';
+                if(isset($thevalue[1]) && $thevalue[1] == $key){
+                    $result .= ' SELECTED="SELECTED"';
+                }
+                $result .= '>' . ucwords(__t($value)) . '</OPTION>' . "\n";
+            }
+            $result .= '</SELECT> &nbsp;' . "\n";
+
+            $extra = trim($data['#extra']) != '' ? $data['#extra'] : '';
+            $extra .= ' MAXLENGTH="4"';
+            $result .= '<INPUT';
+            $result .= __set_form_elements(
+                    $data['#name'] . '[0]',
+                    'TEXT',
+                    '4',
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    isset($thevalue[0]) ? $thevalue[0] : NULL,
+                    isset($extra) ? $extra : NULL
+            );
+            $result .= '> &nbsp; ' . __t('pukul') . ' ' . "\n";
+
+            $extra = trim($data['#extra']) != '' ? $data['#extra'] : '';
+            $extra .= ' MEXLENGTH="2"';
+            $result .= '<INPUT';
+            $result .= __set_form_elements(
+                    $data['#name'] . '[3]',
+                    'TEXT',
+                    '2',
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    isset($thevalue[3]) ? $thevalue[3] : NULL,
+                    isset($extra) ? $extra : NULL
+            );
+            $result .= '> : ' . "\n";
+            unset($extra);
+
+            $extra = trim($data['#extra']) != '' ? $data['#extra'] : '';
+            $extra .= ' MAXLENGTH="2"';
+            $result .= '<INPUT';
+            $result .= __set_form_elements(
+                    $data['#name'] . '[4]',
+                    'TEXT',
+                    '2',
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    isset($thevalue[4]) ? $thevalue[4] : NULL,
+                    isset($extra) ? $extra : NULL
+            );
+            $result .= '> : ' . "\n";
+            unset($extra);
+
+            $extra = trim($data['#extra']) != '' ? $data['#extra'] : '';
+            $extra .= ' MAXLENGTH="2"';
+            $result .= '<INPUT';
+            $result .= __set_form_elements(
+                    $data['#name'] . '[5]',
+                    'TEXT',
+                    '2',
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    isset($thevalue[5]) ? $thevalue[5] : NULL,
+                    isset($extra) ? $extra : NULL
+            );
+            $result .= '>' . "\n";
+            unset($extra);
+        }
+        unset($thevalue);
+    } elseif($data['#type'] == 'checkbox'){
+        if(isset($data['#readonly']) && $data['#readonly'] !== FALSE){
+            $result .= $data['#value'] . "\n";
+        } else {
+            $result .= '<INPUT';
+            $result .= __set_form_elements(
+                    $data['#name'],
+                    isset($data['#type']) ? $data['#type'] : 'CHECKBOX',
+                    '2',
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    1,
+                    isset($data['#value']) && !is_null($data['#value']) && trim($data['#value']) != '' ? ' CHECKED="TRUE"' : NULL
+            );
+            $result .= '>' . "\n";
+        }
+    } elseif($data['#type'] == 'radio'){
+        if(isset($data['#readonly']) && $data['#readonly'] !== FALSE){
+            $result .= $data['#option'][$data['#value']] . "\n";
+        } else {
+            $result .= '<div>' . "\n";
+            foreach($data['#option'] as $key => $value){
+                $result .= '<div>';
+                $result .= '<INPUT';
+                $result .= __set_form_elements(
+                        $data['#name'],
+                        isset($data['#type']) ? $data['#type'] : 'RADIO',
+                        NULL,
+                        isset($data['#id']) ? $data['#id'] : NULL,
+                        isset($data['#class']) ? $data['#class'] : NULL,
+                        isset($data['#style']) ? $data['#style'] : NULL,
+                        $key,
+                        isset($data['#value']) && $data['#value'] == $key ? ' CHECKED="TRUE"' : NULL
+                );
+                $result .= '>' . ucwords(__t($value));
+                $result .= '</div>' . "\n";
+            }
+            $result .= '</div>' . "\n";
+        }
+    } elseif($data['#type'] == 'textarea'){
+        if(isset($data['#readonly']) && $data['#readonly'] !== FALSE){
+            $result .= $data['#value'] . "\n";
+        } else {
+            if(isset($data['#cols']) || isset($data['#rows'])){
+                $extra = isset($data['#cols']) ? ' COLS="' . $data['#cols'] . '"' : '';
+                $extra .= isset($data['#rows']) ? ' ROWS="' . $data['#rows'] . '"' : '';
+            } else {
+                $extra = ' COLS="25" ROWS="2"';
+            }
+            $result .= '<TEXTAREA';
+            $result .= __set_form_elements(
+                    $data['#name'],
+                    $data['#type'],
+                    isset($data['#size']) ? $data['#size'] : 20,
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    NULL,
+                    isset($extra) ? $extra : NULL
+            ); unset($extra);
+            $result .= '>' . (isset($data['#value']) ? $data['#value'] : '');
+            $result .= '</TEXTAREA>' . "\n";
+        }
+    } else {
+        if(isset($data['#readonly']) && $data['#readonly'] !== FALSE){
+            $result .= $data['#value'] . "\n";
+        } else {
+            $result .= '<INPUT';
+            $result .= __set_form_elements(
+                    $data['#name'],
+                    $data['#type'],
+                    isset($data['#size']) ? $data['#size'] : 20,
+                    isset($data['#id']) ? $data['#id'] : NULL,
+                    isset($data['#class']) ? $data['#class'] : NULL,
+                    isset($data['#style']) ? $data['#style'] : NULL,
+                    isset($data['#value']) ? $data['#value'] : NULL,
+                    isset($data['#extra']) ? $data['#extra'] : NULL
+            );
+            $result .= '>' . "\n";
+        }
+    }
+    return $result;
+}
+
 require_once THEMES_DIR . DS . $theme . DS . 'page.tpl';
 
 //end of file;

@@ -36,7 +36,7 @@ class riwayatKesehatanModule extends mainModule
             'path' => '/care/riwayatKesehatan/view',
             'exec' => 'view',
             'weight' => 5,
-            'user_required' => NULL
+            'user_required' => 'perawatan'
         );
         $items['riwayatKesehatan_form'] = array(
             'title' => __t('form riwayatKesehatan'),
@@ -44,9 +44,35 @@ class riwayatKesehatanModule extends mainModule
             'path' => '/care/riwayatKesehatan/form',
             'exec' => 'form',
             'weight' => 5,
-            'user_required' => NULL
+            'user_required' => 'perawatan'
+        );
+        $items['riwayatKesehatan_form_submit'] = array(
+            'title' => __t('form riwayatKesehatan'),
+            'description' => __t('formulir riwayatKesehatan pasien'),
+            'path' => '/care/riwayatKesehatan/form_submit',
+            'exec' => 'form_submit',
+            'weight' => 5,
+            'user_required' => 'perawatan'
+        );
+        $items['riwayatKesehatan_detail'] = array(
+            'title' => __t('detail form riwayatKesehatan'),
+            'description' => __t('formulir detil riwayatKesehatan pasien'),
+            'path' => '/care/riwayatKesehatan/detail_form',
+            'exec' => 'detail_form',
+            'weight' => 5,
+            'user_required' => 'perawatan'
         );
        return $items;
+    }
+
+    function detail_form(){
+        $this->formhabit = 'readonly';
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $vcache = $this->__get_riwayat_kesehatan_data((int)$dump[3]);
+        $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
+        $result = $this->__get_form($vcache['perawatan']);
+        return $result;
     }
 
     function __get_perawatan_head($pid){
@@ -92,6 +118,12 @@ class riwayatKesehatanModule extends mainModule
         $result['type'] = 'table';
         $result['title'] = __t('riwayat kesehatan pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'];
         $result['description'] = __t('daftar riwayat kesehatan pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'];
+        $result['addmenu']['#add'] = array(
+            'title' => __t('add'),
+            'action' => '/care/riwayatKesehatan/form/' . $pid,
+            'position' => 'top',
+            'user_required' => 'perawatan'
+        );
         $addmenuopts = array(
             '' => __t('-- medical record --'),
             'all' => __t('semua')
@@ -173,20 +205,20 @@ class riwayatKesehatanModule extends mainModule
                 'align' => 'right'
             ),
             array(
+                'field' => 'tgl',
+                'caption' => __t('tanggal'),
+                'width' => '30%',
+                'align' => 'right'
+            ),
+            array(
                 'field' => 'inputer',
                 'caption' => __t('pengambil data'),
                 'align' => 'left'
-            ),
-            array(
-                'field' => 'tgl',
-                'caption' => __t('tanggal'),
-                'width' => '20%',
-                'align' => 'right'
             )
         );
         $sql = $this->query->getSelect(
                 array(),
-                array('riwayatKesehatan'),
+                array('riwayat_kesehatan'),
                 array(
                     array('&&', "perawatan=" . $pid)
                 )
@@ -194,40 +226,82 @@ class riwayatKesehatanModule extends mainModule
         $this->query->connect();
         $getit = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
-        for($i=0; $i<$getit->_numOfRows; $i++){
-            $sql = $this->query->getSelect(
-                    array('nama'),
-                    array('stafs'),
-                    array('&&', "id=" . $getit->fields['inputer'])
-            );
-            $this->query->connect();
-            $getthis = $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-            $result['data'][$i]['inputer'] = $getthis->fields['nama'];
-            unset($getthis);
-            $result['data'][$i]['goto'] = '/care/riwayatKesehatan/detail_form/' . $pid . '/' . $getit->fields['id'];
-            $result['data'][$i]['tgl'] = date('j', strtotime($getthis->fields['tgl']));
-            $result['data'][$i]['tgl'] .= ucwords(__t($this->nama_bulan[date('n', strtotime($getthis->fields['tgl']))]));
-            $result['data'][$i]['tgl'] .= date('Y H:i:s', strtotime($getthis->fields['tgl']));
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $sql = $this->query->getSelect(
+                        array('nama'),
+                        array('stafs'),
+                        array(
+                            array('&&', "id=" . $getit->fields['inputer'])
+                        )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['inputer'] = ucwords($getthis->fields['nama']);
+                unset($getthis);
+                $result['data'][$i]['goto'] = '/care/riwayatKesehatan/detail_form/' . $getit->fields['id'];
+                $result['data'][$i]['tgl'] = date('j', strtotime($getit->fields['tgl']));
+                $result['data'][$i]['tgl'] .= ' ' . ucwords(__t($this->nama_bulan[date('n', strtotime($getit->fields['tgl']))]));
+                $result['data'][$i]['tgl'] .= ' ' . date('Y H:i:s', strtotime($getit->fields['tgl']));
+                $getit->MoveNext();
+            }
         } unset($getit);
+        return $result;
+    }
+
+    function __get_riwayat_kesehatan_data($id){
+        $result = array();
+        $sql = $this->query->getSelect(
+            array(),
+            array('riwayat_kesehatan'),
+            array(
+                array('&&', "id=" . $id)
+            )
+        );
+        $this->query->connect();
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows > 0){
+            foreach($query->fields as $key => $value){
+                $result[$key] = $value;
+            }
+        } unset($query);
         return $result;
     }
 
     function form(){
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         if(count($dump) > 3){
-            return $this->__get_form($dump[3]);
+            return $this->__get_form((int)$dump[3]);
         } else {
+            unset($dump);
             redirect_to('/care/perawatan/pengkajian');
         }
     }
 
     function __get_form($pid){
-        $patientinfo = $this->__head_page($pid);
+        $patientinfo = $this->__get_perawatan_head($pid);
         if(count($patientinfo) < 1){
             redirect_to('/'); exit();
         }
 
+        if ($this->__check_caches() === TRUE){
+            $vcache = $this->__read_form_cache();
+        } else {
+            $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+            if(count($dump) > 4){
+                if(preg_match('/^edit_/', $dump[4])){
+                    $riwayat_id = preg_replace('/^edit_/','',$dump[4]);
+                } else {
+                    $riwayat_id = $dump[4];
+                }
+                $vcache = $this->__get_riwayat_kesehatan_data((int)$riwayat_id);
+                unset($riwayat_id);
+                $this->vardump = $vcache;
+            } unset($dump);
+        }
+        $vcache['perawatan'] = $pid;
         $addmenuopts = array(
             '' => __t('-- medical record --'),
             'all' => __t('semua')
@@ -257,9 +331,9 @@ class riwayatKesehatanModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/care/perawatan/pengkajian/form' . ($this->formhabit == 'readonly' ? '/edit_' . $vcache['id'] : '_submit'),
+            '#action' => '/care/riwayatKesehatan/form' . (isset($this->formhabit) && $this->formhabit == 'readonly' ? '/' . $pid . '/edit_' . $vcache['id'] : '_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
-            '#formtpl' => MODULES_DIR . DS . 'pengkajian' . DS . 'pengkajian.tpl',
+            '#formtpl' => MODULES_DIR . DS . 'riwayatKesehatan' . DS . 'riwayatKesehatan.tpl',
             '#addmenu' => array(
                 '#addmenu' => array(
                     'title' => __t('medical record'),
@@ -279,9 +353,7 @@ class riwayatKesehatanModule extends mainModule
             );
             $dumprjk = $this->__get_perawatan_lists();
             foreach($dumprjk as $key => $value){
-                if($key != 'pengkajian'){
-                    $rujukanopts[$key] = $value;
-                }
+                $rujukanopts[$key] = $value;
             } unset($dumprjk);
             $result['pengkajian']['#addmenu']['#addmenu0'] = array(
                 'title' => __t('dirujuk ke'),
@@ -293,19 +365,19 @@ class riwayatKesehatanModule extends mainModule
                 'user_required' => 'perawatan',
                 'filter' => 'items',
                 'items' => array (
-                    'id' => $patientinfo['id']
+                    'pid' => $patientinfo['id']
                 )
             );
             $pkjitems = array(
                 '' => __t('-- pengkajian --')
             );
-            $dumppkj = $this->__get_pengkajian_lists();
+            $dumppkj = $this->__get_pengkajian_modules();
             foreach($dumppkj as $key => $value){
                 $pkjitems[$key] = $value;
             } unset($dumppkj);
             $result['pengkajian']['#addmenu']['#addmenu1'] = array(
                 'title' => __t('pengkajian'),
-                'action' => '/care/perawatan/pengkajian_items',
+                'action' => '/care/pengkajian/redirect',
                 'position' => 'top',
                 'class' => 'button',
                 'methode' => 'choose',
@@ -313,13 +385,128 @@ class riwayatKesehatanModule extends mainModule
                 'user_required' => 'perawatan',
                 'filter' => 'items',
                 'items' => array (
-                    'id' => $patientinfo['id']
+                    'pid' => $patientinfo['id']
                 )
             );
         unset($rujukanopts, $pkjitems);
         }
+        $thefields = $this->__get_data_fields('riwayat_kesehatan', $this->query);
+        foreach($thefields as $value){
+            if(in_array($value, $this->config->hiddenfields)){
+                if($this->config->typeoffields[$value] != 'system'){
+                    $result['pengkajian'][$value] = array(
+                        '#type' => 'hidden',
+                        '#value' => isset($vcache[$value]) ? $vcache[$value] : ''
+                    );
+                }
+            } else {
+                $result['pengkajian'][$value] = array(
+                    '#type' => $this->config->typeoffields[$value],
+                    '#title' => __t($value)
+                );
+                if($this->config->typeoffields[$value] == 'select' || $this->config->typeoffields[$value] == 'radio' || $this->config->typeoffields[$value] == 'date' || $this->config->typeoffields[$value] == 'datetime'){
+                    if($this->config->typeoffields[$value] == 'date' || $this->config->typeoffields[$value] == 'datetime'){
+                        $options = $this->nama_bulan;
+                        if(!isset($vcache[$value]) || is_null($vcache[$value]) || trim($vcache[$value]) == ''){
+                            if($this->config->typeoffields[$value] == 'date'){
+                                $vcache[$value] = date('Y-m-d', $this->config->time);
+                            } else {
+                                $vcache[$value] = date('Y-m-d H:i:s', $this->config->time);
+                            }
+                        }
+                    } else {
+                        $options = $this->__get_ref_options($this->config->reftable[$value][0], $this->config->reftable[$value][1], $this->config->reftable[$value][2], $this->query);
+                    }
+                    $result['pengkajian'][$value]['#option'] = $options;
+                    unset($options);
+                }
+                $result['pengkajian'][$value]['#value'] = isset($vcache[$value]) ? $vcache[$value] : '';
+                if(isset($this->formhabit) && $this->formhabit == 'readonly'){
+                    $result['pengkajian'][$value]['#readonly'] = true;
+                }
+            }
+        }
+        $result['pengkajian']['submit'] = array(
+            '#value' => isset($this->formhabit) && $this->formhabit == 'readonly' ? __t('edit') : __t('submit')
+        );
 //        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
+    function form_submit(){
+        return $this->__get_form_submit();
+    }
+
+    function __get_form_submit(){
+        $this->vardump = $this->__write_form_cache();
+        $thefields = $this->__get_data_fields('riwayat_kesehatan', $this->query);
+        foreach($this->vardump as $key => $value){
+            if(in_array($key, $thefields)){
+                if($this->config->typeoffields[$key] == 'date'){
+                    $value = explode('|', $value);
+                    $value = implode('-', $value);
+                } elseif($this->config->typeoffields[$key] == 'datetime'){
+                    $value = explode('-', $value);
+                    $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
+                }
+                $thevalue[$key] = $value;
+            }
+        } unset($thefields);
+        $user = $this->__get_user_info();
+        if($_POST['id'] != ''){
+            $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
+        } else {
+            $thevalue['id'] = $this->__get_id_insert_value('riwayat_kesehatan', 'id', $this->query);
+            $thevalue['inputer'] = $user['userid'];
+            $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
+            $this->vardump['id'] = $thevalue['id'];
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
+        }
+        $this->__exec_db_ops(
+            $this->query,
+            'riwayat_kesehatan',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        if(isset($thevalue['berat_sekarang']) && trim($thevalue['berat_sekarang']) != '' && ctype_digit($thevalue['berat_sekarang'])){
+            $sql = $this->query->getSelect(
+                    array('patients'),
+                    array('perawatan'),
+                    array(
+                        array('&&', "id=" . $thevalue['perawatan'])
+                    )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $sql = $this->query->getSelect(
+                        array('berat'),
+                        array('patients'),
+                        array(
+                            array('&&', "id=" . $getit->fields['patients'])
+                        )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getthis->fields['berat'] != $thevalue['berat_sekarang']){
+                    $this->__exec_db_ops(
+                        $this->query,
+                        'patients',
+                        'update',
+                        array('id', $getit->fields['patients']),
+                        array('berat', $thevalue['berat_sekarang'])
+                    );
+                } unset($getthis);
+            } unset($getit);
+        }
+        $iddata = $thevalue['id'];
+        unset($thevalue, $opr, $strid);
+        redirect_to('/care/riwayatKesehatan/detail_form/' . $iddata);
+    }
 }
