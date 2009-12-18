@@ -757,8 +757,11 @@ class perawatanModule extends mainModule
         foreach($this->vardump as $key => $value){
             echo "<pre>";print_r($value);echo "</pre>";
             if(in_array($key, $thefields)){
-                if($key == 'pukul_masuk'){
-                    ksort($value);
+                if($this->config->typeoffields[$key] == 'date'){
+                    $value = explode('|', $value);
+                    $value = implode('-', $value);
+                } elseif($this->config->typeoffields[$key] == 'datetime'){
+                    $value = explode('-', $value);
                     $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
                 }
                 $thevalue[$key] = $value;
