@@ -69,4 +69,9 @@ class pemberianConfig extends config
         'main_soreness' => array('ref_present_soreness', 'soreness'),
         'ilness_history' => array('ref_present_illness_history', 'illness_history')
     );
+    var $table_scheme = array(
+        'pemberian_cairan' => array(
+
+        )
+    );
 }
