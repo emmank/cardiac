@@ -221,7 +221,8 @@ class riwayatKesehatanModule extends mainModule
                 array('riwayat_kesehatan'),
                 array(
                     array('&&', "perawatan=" . $pid)
-                )
+                ),
+                'tgl desc'
         );
         $this->query->connect();
         $getit = $this->query->conn->Execute($sql); unset($sql);

@@ -46,4 +46,15 @@ class pengkajianConfig extends config
         'psikoSosial',
         'rencana'
     );
+    var $module_tableuse = array(
+        'riwayatKesehatan' => 'riwayat_kesehatan',
+        'alergi' => 'alergi',
+        'kondisi' => 'kondisi',
+        'nutrisiKesehatan' => 'nutrisi_kesehatan',
+        'aktivitas' => 'aktivitas',
+        'eliminasi' => 'eliminasi',
+        'pola_tidur' => 'pola_tidur',
+        'psikoSosial' => 'psiko_sosial',
+        'rencana' => 'rencana'
+    );
 }

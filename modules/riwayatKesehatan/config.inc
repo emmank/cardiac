@@ -71,7 +71,6 @@ class riwayatKesehatanConfig extends config
     var $reftable = array(
         'risk_factor' => array('ref_present_risk_factor', 'risk_factor', 'id'),
     );
-
     var $table_scheme = array(
         'riwayat_kesehatan' => array(
             'id' => array(

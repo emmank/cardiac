@@ -208,7 +208,7 @@ class pengkajianModule extends mainModule
                     $result['data'][$key]['goto'] = '/care/' . $value . '/view/' . $pid;
                     $sql = $this->query->getSelect(
                             array('id'),
-                            array($value),
+                            array($this->config->module_tableuse[$value]),
                             array(
                                 array('&&', "perawatan=" . $pid)
                             )
@@ -217,7 +217,7 @@ class pengkajianModule extends mainModule
                     $getit = $this->query->conn->Execute($sql); unset($sql);
                     $this->query->close();
                     if($getit->_numOfRows > 0){
-                        $result['data'][$key]['fuel'] = __t('available');
+                        $result['data'][$key]['fuel'] = __t('available') . ' (' . $getit->_numOfRows . ')';
                     } else {
                         $result['data'][$key]['fuel'] = __t('-- empty --');
                     }

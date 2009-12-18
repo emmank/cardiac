@@ -155,7 +155,7 @@ class mainModule
                     );
                 } else {
                     if($dbfieldlists[$value]['Type'] != $this->config->table_scheme[$tablename][$value]['type'] ||
-                        (trim($this->config->table_scheme[$tablename][$value]['key']) != '' && !eregi($dbfieldlists[$value]['Key'], $this->config->table_scheme[$tablename][$value]['key'])) ||
+                        (trim($this->config->table_scheme[$tablename][$value]['key']) != '' && !eregi($this->config->table_scheme[$tablename][$value]['key'], $dbfieldlists[$value]['Key'])) ||
                         $dbfieldlists[$value]['Null'] != $this->config->table_scheme[$tablename][$value]['null'] ||
                         $dbfieldlists[$value]['Default'] != $this->config->table_scheme[$tablename][$value]['default'] ||
                         $dbfieldlists[$value]['extra'] != $this->config->table_scheme[$tablename][$value]['extra']){

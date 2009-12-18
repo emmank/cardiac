@@ -32,13 +32,12 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html><head>
-
     <title><?php echo $configs->systitle; ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <!--link rel="stylesheet" type="text/css" href="/themes/<?php echo $theme;?>/css/default.css"-->
     <link rel="stylesheet" type="text/css" href="/themes/<?php echo $theme;?>/css/<?php if(isset($body_login)){echo 'login';} else {echo 'style';}?>.css">
     <link rel="stylesheet" type="text/css" href="/themes/<?php echo $theme;?>/css/tabcontent.css">
-    <link href="main_files/column4.css" media="all" rel="stylesheet" type="text/css">
+    <link href="/themes/<?php echo $theme;?>/css/column4.css" media="all" rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="/themes/<?php echo $theme;?>/js/tabcontent.js">
 
@@ -79,7 +78,7 @@ $(document).ready( function() {
 
 <?php if(!isset($body_login)){?>
 <div id="header">
-<a href="/regload"><IMG src="/themes/<?php echo $theme;?>/images/cardiac_logo.png" border="0" align="left"></a>
+    <a href="/regload"><IMG src="/themes/<?php echo $theme;?>/images/cardiac_logo.png" border="0" align="left" alt="noimage"></a>
 </div>
     <?php if(isset($managed_menus['primary_links'])){?>
     <div id=main-nav>
@@ -127,7 +126,7 @@ $(document).ready( function() {
     <?php }?>
     </div>
 </div>
-</div>
+<!--/div-->
 <div id="footer">
 <?php
 echo str_replace(",","<br />",$configs->identity_message);
