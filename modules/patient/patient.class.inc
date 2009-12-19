@@ -32,45 +32,45 @@ class patientModule extends mainModule
         'id', 'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'strnum', 'foto', 'tinggi', 'berat', 'berat', 'tekanan_darah', 'indikasi'
     );
     var $system_job = array(
-        'nomor', 'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'foto'
+        'inputer', 'inputtime', 'updated', 'sandi', 'sesi', 'timelog', 'groups', 'foto'
     );
     var $formtype_fields = array(
         'id' => 'hidden',
         'nomor' => 'hidden',
+        'strnum' => 'text',
         'nama' => 'text',
         'kelamin' => 'select',
 //        'kelamin' => 'radio',
         'tp_lahir' => 'text',
         'tgl_lahir' => 'date',
         'gol_darah' => 'select',
+        'agama' => 'select',
+        'suku' => 'text',
+        'tinggi' => 'text',
+        'berat' => 'text',
+        'tekanan_darah' => 'text',
+        'indikasi' => 'textarea',
+        'pekerjaan' => 'text',
+        'pendidikan' => 'text',
+        'no_identitas' => 'text',
         'alamat' => 'textarea',
         'propinsi' => 'select',
         'kota' => 'select',
         'kode_pos' => 'text',
         'no_tlp' => 'text',
         'no_hp' => 'text',
-        'no_identitas' => 'text',
         'sandi' => 'password',
-        'status' => 'select',
-        'nama_suami_istri' => 'text',
-        'pekerjaan_suami_istri' => 'text',
-        'foto' => 'hidden',
-        'pekerjaan' => 'text',
-        'pendidikan' => 'text',
-        'agama' => 'select',
-        'suku' => 'text',
         'nama_ayah' => 'text',
         'pekerjaan_ayah' => 'text',
         'nama_ibu' => 'text',
         'pekerjaan_ibu' => 'text',
-        'tinggi' => 'text',
-        'berat' => 'text',
-        'tekanan_darah' => 'text',
-        'indikasi' => 'textarea',
+        'status' => 'select',
+        'nama_suami_istri' => 'text',
+        'pekerjaan_suami_istri' => 'text',
+        'foto' => 'hidden',
         'inputtime' => 'hidden',
         'sesi' => 'hidden',
         'timelog' => 'hidden',
-        'strnum' => 'text',
         'groups' => 'hidden',
         'inputer' => 'hidden',
         'updated' => 'hidden'
@@ -636,13 +636,20 @@ class patientModule extends mainModule
                 foreach($datafields as $value){
                     if(!in_array($value, $this->hidden_fields)){
                         $form['patient'][$value] = array(
-//                            '#type' => ($value != 'kota' && $value != 'propinsi' ? $this->formtype_fields[$value] : 'text'),
-                            '#type' => (($value != 'kota' || $value != 'propinsi') ? $this->formtype_fields[$value] : 'text'),
-//                            '#type' =>  $this->formtype_fields[$value],
-                            '#title' => __t($value),
+                            '#type' =>  $this->formtype_fields[$value],
+                            '#title' => __t((eregi('suami_istri', $value) ? ($vcache['kelamin'] == '1' ? eregi_replace('suami_istri', 'istri', $value) : eregi_replace('suami_istri', 'suami', $value)) : $value)),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
+                        if(eregi('nama_suami_istri', $value)){
+                            $form['patient'][$value]['#id_label'] = 'namapas';
+                            $form['patient'][$value]['#id'] = 'tnamapas';
+
+                        }
+                        if(eregi('pekerjaan_suami_istri', $value)){
+                            $form['patient'][$value]['#id_label'] = 'pekpas';
+                            $form['patient'][$value]['#id'] = 'tpekpas';
+                        }
                     } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
                             '#type' => 'hidden',
@@ -651,19 +658,18 @@ class patientModule extends mainModule
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
                     }
-                    if ($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date')
-                    {
+                    if ($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
                         if($value == 'kelamin') {
+                            $extra = ' onchange="changeLabel(this.selected)"';
                             $options = $this->__get_kelamin_options();
-                            $extra = ' onchange="changeLabel(this.checked)"';
-                            $option_blank = 1;
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
                         } elseif($value == 'status'){
                             $options = $this->__get_statusm_options();
                             $extra = ' onchange="disablePasangan(this.checked)"';
+                            $id='status';
                         } elseif($value == 'kota'){
-                            $id="kota";
+                            $id = "kota";
                             $options = $this->__get_kabupaten_options('kabupaten');
                         } elseif($value == 'propinsi'){
                             $id = "propinsi";
@@ -671,19 +677,18 @@ class patientModule extends mainModule
                             $options = $this->__get_propinsi_options('nama_propinsi');
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
-                        } elseif ($value == 'gol_darah') {
+                        } elseif($value == 'gol_darah') {
+                            $form['patient']['gol_darah']['#message'] = __t('&laquo; kosongkan bila tidak tahu');
                             $options = $this->__get_goldarah_options();
-                        } elseif($this->formtype_fields[$value] == 'date'){
-                            $options = $this->nama_bulan;
                         }
-                        $form['patient'][$value]['#option'] = $options;
-                        $form['patient'][$value]['#extra'] = $extra;
                         $form['patient'][$value]['#id'] = $id;
-                        if(isset($option_blank)){
-                            $form['patient'][$value]['#option_blank'] = $option_blank;
-                            unset($option_blank);
+                        $form['patient'][$value]['#extra'] = $extra;
+                        $form['patient'][$value]['#option'] = $options;
+                        unset ($extra,$id);
+                        if(isset($id_label)){
+                            $form['patient'][$value]['#id_label'] = $id_label;
+                            unset($id_label);
                         }
-//                        $form['patient'][$value]['#option'] = $options;
 //                    } elseif($value == 'strnum'){
 //                        $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
@@ -784,13 +789,22 @@ class patientModule extends mainModule
                     if(!in_array($value, $this->hidden_fields)){
                         $form['patient'][$value] = array(
                             '#type' => $this->formtype_fields[$value],
-                            '#title' => __t($value),
+                            '#title' => __t((eregi('suami_istri', $value) ? ($vcache['kelamin'] == '1' ? eregi_replace('suami_istri', 'istri', $value) : eregi_replace('suami_istri', 'suami', $value)) : $value)),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
+                        if(eregi('nama_suami_istri', $value)){
+                            $form['patient'][$value]['#id_label'] = 'namapas';
+                            $form['patient'][$value]['#id'] = 'tnamapas';
+
+                        }
+                        if(eregi('pekerjaan_suami_istri', $value)){
+                            $form['patient'][$value]['#id_label'] = 'pekpas';
+                            $form['patient'][$value]['#id'] = 'tpekpas';
+                        }
                     } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
-                            '#type' => 'hidden',
+                            '#type' => ($value == 'strnum' ? 'text' : 'hidden'),
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
@@ -799,48 +813,39 @@ class patientModule extends mainModule
 
                     if($this->formtype_fields[$value] == 'select' || $this->formtype_fields[$value] == 'date'){
                         if($value == 'kelamin') {
-                            $extra = 'onchange="changeLabel()"';
+                            $extra = ' onchange="changeLabel(this.selected)"';
                             $options = $this->__get_kelamin_options();                            
                         } elseif($this->formtype_fields[$value] == 'date'){
                             $options = $this->nama_bulan;
                         } elseif($value == 'status'){
                             $options = $this->__get_statusm_options();
+                            $extra = ' onchange="disablePasangan(this.checked)"';
                             $id='status';
                         } elseif($value == 'kota'){
-//                            $extra = "onchange=showKec()";
                             $id = "kota";
                             $options = $this->__get_kabupaten_options('kabupaten');
-//                            $options = "";
                         } elseif($value == 'propinsi'){
                             $id = "propinsi";
                             $extra = "onchange=\"showKab()\"";
                             $options = $this->__get_propinsi_options('nama_propinsi');
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
+                        } elseif($value == 'gol_darah') {
+                            $form['patient']['gol_darah']['#message'] = __t('&laquo; kosongkan bila Anda tidak tahu');
+                            $options = $this->__get_goldarah_options();
                         }
                         $form['patient'][$value]['#id'] = $id;
                         $form['patient'][$value]['#extra'] = $extra;
                         $form['patient'][$value]['#option'] = $options;
-
                         unset ($extra,$id);
-                    } elseif($value == 'strnum'){
-                        $form['patient'][$value]['#extra'] = 'readonly="true"';
+                        if(isset($id_label)){
+                            $form['patient'][$value]['#id_label'] = $id_label;
+                            unset($id_label);
+                        }
+//                    } elseif($value == 'strnum'){
+//                        $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
                     // ------ Add by emmank -------
-                    if($this->formtype_fields[$value] == 'select'){
-                        if($value == 'gol_darah') {
-//                            $form['patient']['gol_darah'] = array(
-//                                '#message' => __t('&laquo; kosongkan bila Anda adalah pasien baru, kemudian klik submit')
-//                            );
-                            $form['patient']['gol_darah']['#message'] = __t('&laquo; kosongkan bila Anda adalah pasien baru, kemudian klik submit');
-                            $options = $this->__get_goldarah_options();
-                        } elseif($this->formtype_fields[$value] == 'date'){
-                            $options = $this->nama_bulan;
-                        }
-                        $form['patient'][$value]['#option'] = $options;
-  //                  } elseif($value == 'strnum'){
-  //                      $form['patient'][$value]['#extra'] = 'readonly="true"';
-                    }
 
                 } unset($options);
 //                echo '<pre>'; print_r($vcache); echo '</pre>';
@@ -854,11 +859,124 @@ class patientModule extends mainModule
                 $form['patient']['bagian'] = array(
                     '#type' => 'select',
                     '#value' => isset($vcache['bagian']) ? $vcache['bagian'] : '',
-                    '#title' => __t('dirujuk ke'),
+                    '#title' => __t('bagian'),
                     '#error' => isset($vcache['blank']) && in_array('bagian', $vcache['blank']) ? 1 : 0,
                     '#option' => $options,
                     '#option_blank' => 1
                 ); unset($options);
+                $options = array();
+                foreach($this->config->cara_berkunjung_opts as $value){
+                    $options[$value] = $value;
+                }
+                $form['patient']['cara_berkunjung'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['cara_berkunjung']) ? $vcache['cara_berkunjung'] : 'konsul',
+                    '#title' => __t('cara_berkunjung'),
+                    '#error' => isset($vcache['blank']) && in_array('cara_berkunjung', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#extra' => ' onchange="disableChooseBerkunjung(this.checked)"',
+                    '#id' => 'cara_berkunjung'
+                ); unset($options);
+                $options = $this->__get_ref_options(
+                        'konsul',
+                        'nama_konsul',
+                        'nama_konsul',
+                        $this->query
+                        );
+                $form['patient']['pilihan_cara_berkunjung[0]'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['pilihan_cara_berkunjung']) ? $vcache['pilihan_cara_berkunjung'] : '',
+                    '#title' => __t('konsul'),
+                    '#error' => isset($vcache['blank']) && in_array('pilihan_cara_berkunjung', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#id' => 'tchoosek',
+                    '#option_blank' => 1
+                ); unset($options);
+                if($vcache['cara_berkunjung'] != 'konsul'){
+                    $form['patient']['pilihan_cara_berkunjung[0]']['#extra'] = ' DISABLED="TRUE"';
+                }
+                $sql = $this->query->getDescribe('stafs');
+                $this->query->connect();
+                $getit = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getit->_numOfRows > 0){
+                    for($i=0; $i<$getit->_numOfRows; $i++){
+                        if($getit->fields['Field'] == 'jabatan'){$ok = 0;}
+                    }
+                } unset($getit);
+                if(!isset($ok)){
+                    $sql = $this->query->alterTableColumn(
+                            'stafs',
+                            array('jabatan'),
+                            'add',
+                            'varchar(255)'
+                    );
+                    $this->query->connect();
+                    $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                } else {
+                    unset($ok);
+                }
+                $options = array();
+                $sql = $this->query->getSelect(
+                        array('id', 'nama'),
+                        array('stafs'),
+                        array(
+                            array('&&', "jabatan=dokter")
+                        )
+                );
+                $this->query->connect();
+                $getit = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getit->_numOfRows > 0){
+                    for($i=0; $i<$getit->_numOfRows; $i++){
+                        $options[$getit->fields['id']] = $getit->fields['nama'];
+                        $getit->MoveNext();
+                    }
+                } unset($getit);
+                $form['patient']['pilihan_cara_berkunjung[1]'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['pilihan_cara_berkunjung']) ? $vcache['pilihan_cara_berkunjung'] : '',
+                    '#title' => __t('choose') . ' ' . __t('dokter'),
+                    '#error' => isset($vcache['blank']) && in_array('pilihan_cara_berkunjung', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#id' => 'tchoosed',
+                    '#option_blank' => 1
+                ); unset($options);
+                if($vcache['cara_berkunjung'] != 'pilih dokter'){
+                    $form['patient']['pilihan_cara_berkunjung[1]']['#extra'] = ' DISABLED="TRUE"';
+                }
+                $options = array();
+                foreach($this->config->cara_bayar_opts as $value){
+                    $options[$value] = $value;
+                }
+                $form['patient']['cara_bayar'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['cara_bayar']) ? $vcache['cara_bayar'] : 'tunai',
+                    '#title' => __t('cara_bayar'),
+                    '#error' => isset($vcache['blank']) && in_array('cara_bayar', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#extra' => ' onchange="disableCaraBayar(this.checked)"',
+                    '#id' => 'cara_bayar'
+                ); unset($options);
+                $options = $this->__get_ref_options(
+                        'asuransi',
+                        'nama_asuransi',
+                        'nama_asuransi',
+                        $this->query
+                        );
+                $form['patient']['pilihan_cara_bayar'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['pilihan_cara_bayar']) ? $vcache['pilihan_cara_bayar'] : '',
+                    '#title' => __t('asuransi'),
+                    '#error' => isset($vcache['blank']) && in_array('pilihan_cara_bayar', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#id' => 'tchooseb',
+                    '#option_blank' => 1
+                ); unset($options);
+                if($vcache['cara_bayar'] != 'asuransi'){
+                    $form['patient']['pilihan_cara_bayar']['#extra'] = ' DISABLED="TRUE"';
+                }
                 $form['patient']['idantrian'] = array(
                     '#type' => 'hidden',
                     '#value' => isset($vcache['idantrian']) ? $vcache['idantrian'] : ''
@@ -874,6 +992,7 @@ class patientModule extends mainModule
     
     function register_submit(){
         $dump = $this->__write_form_cache();
+        $patientfields = $this->__get_data_fields('patients', $this->query);
         $thevalue = array();
         foreach($dump as $key => $value){
             if($key == 'nama' || $key == 'alamat' || $key == 'kota' || $key == 'bagian'){
@@ -898,9 +1017,11 @@ class patientModule extends mainModule
                 } unset($tgldump);
             }
             if($key != 'submit' && $key != 'blank' && $key != 'keluhan' && $key != 'bagian' && $key != 'id' && $key != 'idantrian'){
-                $thevalue[$key] = $value;
+                if(in_array($key, $patientfields)){
+                    $thevalue[$key] = $value;
+                }
             }
-        }
+        } unset($patientfields);
         if (trim($dump['id'])==''){
             $nom = 1;
             $sql = $this->query->getSelect(
@@ -914,7 +1035,7 @@ class patientModule extends mainModule
                 $nom += $query->fields['no'];
             }
             $thevalue['nomor'] = $nom;
-            $thevalue['strnum'] = str_repeat('0', $this->config->digit_of_number - strlen($nom)) . $nom;
+//            $thevalue['strnum'] = str_repeat('0', $this->config->digit_of_number - strlen($nom)) . $nom;
             unset($nom);
             $dump['id'] = $this->__get_id_insert_value('patients', 'id', $this->query);
             $thevalue['id'] = $dump['id'];
@@ -971,6 +1092,10 @@ class patientModule extends mainModule
             'bagian' => $bagian,
             'nourut' => $no,
             'keluhan' => $dump['keluhan'],
+            'cara_berkunjung' => $dump['cara_berkunjung'],
+            'pilihan_cara_berkunjung' => (isset($dump['pilihan_cara_berkunjung']) ? $dump['pilihan_cara_berkunjung'] : NULL),
+            'cara_bayar' => $dump['cara_bayar'],
+            'pilihan_cara_bayar' => (isset($dump['pilihan_cara_bayar']) ? $dump['pilihan_cara_bayar'] : NULL),
             'inputer' => $_COOKIE[$this->config->cookieid]
         );
         $thevalue['id'] = $this->__get_id_insert_value('kunjungan', 'id', $this->query);
@@ -1081,6 +1206,10 @@ class patientModule extends mainModule
 
     function view(){
         $this->sync_scheme('patients', $this->query);
+        $this->sync_scheme('antrian', $this->query);
+        $this->sync_scheme('kunjungan', $this->query);
+        $this->sync_scheme('asuransi', $this->query);
+        $this->sync_scheme('konsul', $this->query);
         $this->__clean_queue();
         $result = array();
         $result['type'] = 'table';
@@ -1286,9 +1415,9 @@ class patientModule extends mainModule
         }
         if(!isset($vcache['strnum'])){
             redirect_to('/node/patient/strnumform'); exit;
-        } else {
-            if(!isset($vcache['nama'])){$vcache['strnum'] = '';}
-            elseif($vcache['nama'] == ''){$vcache['strnum'] = '';}
+//        } else {
+//            if(!isset($vcache['nama'])){$vcache['strnum'] = '';}
+//            elseif(trim($vcache['nama']) == ''){$vcache['strnum'] = '';}
         }
             $form['patient'] = array(
                 '#type' => 'fieldset',
@@ -1312,7 +1441,7 @@ class patientModule extends mainModule
                         $form['patient'][$value] = array(
 //                            '#type' => ($value != 'kota' && $value != 'propinsi' ? $this->formtype_fields[$value] : 'text'),
                             '#type' => $this->formtype_fields[$value],
-                            '#title' => __t($value),
+                            '#title' => __t((eregi('suami_istri', $value) ? ($vcache['kelamin'] == '1' ? eregi_replace('suami_istri', 'istri', $value) : eregi_replace('suami_istri', 'suami', $value)) : $value)),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                         );
@@ -1329,7 +1458,7 @@ class patientModule extends mainModule
                         }
                     } elseif(!in_array($value, $this->system_job)){
                         $form['patient'][$value] = array(
-                            '#type' => 'hidden',
+                            '#type' => ($value == 'strnum' ? 'text' : 'hidden'),
                             '#title' => __t($value),
                             '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
                             '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
@@ -1367,6 +1496,9 @@ class patientModule extends mainModule
 //                            echo '<pre>'; print_r($options[73]); echo '</pre>';exit;
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
+                        } elseif($value == 'gol_darah') {
+                            $form['patient'][$value]['#message'] = '&laquo; Kosongkan jika tidak tahu';
+                            $options = $this->__get_goldarah_options();
                         }
 
                         $form['patient'][$value]['#id'] = $id;
@@ -1382,20 +1514,8 @@ class patientModule extends mainModule
                         }
 
                         unset ($extra,$id);
-                    } elseif($value == 'strnum'){
-                        $form['patient'][$value]['#extra'] = 'readonly="true"';
-                    }
-                    // ------ Add by emmank -------
-                    if($this->formtype_fields[$value] == 'select'){
-                        if($value == 'gol_darah') {
-                            $form['patient'][$value]['#message'] = 'Kosongkan jika tidak tahu';
-                            $options = $this->__get_goldarah_options();
-                        } elseif($this->formtype_fields[$value] == 'date'){
-                            $options = $this->nama_bulan;
-                        }
-                        $form['patient'][$value]['#option'] = $options;
-                    } elseif($value == 'strnum'){
-                        $form['patient'][$value]['#extra'] = 'readonly="true"';
+//                    } elseif($value == 'strnum'){
+//                        $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
 //                    echo '<pre>'; print_r($value); echo '</pre>';
                 } unset($options, $extra, $id);
@@ -1409,9 +1529,115 @@ class patientModule extends mainModule
                 $form['patient']['bagian'] = array(
                     '#type' => 'select',
                     '#value' => isset($vcache['bagian']) ? $vcache['bagian'] : '',
-                    '#title' => __t('dirujuk ke'),
+                    '#title' => __t('bagian'),
                     '#error' => isset($vcache['blank']) && in_array('bagian', $vcache['blank']) ? 1 : 0,
                     '#option' => $options,
+                    '#option_blank' => 1
+                ); unset($options);
+                $options = array();
+                foreach($this->config->cara_berkunjung_opts as $value){
+                    $options[$value] = $value;
+                }
+                $form['patient']['cara_berkunjung'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['cara_berkunjung']) ? $vcache['cara_berkunjung'] : 'konsul',
+                    '#title' => __t('cara_berkunjung'),
+                    '#error' => isset($vcache['blank']) && in_array('cara_berkunjung', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#extra' => ' onchange="disableChooseBerkunjung(this.checked)"',
+                    '#id' => 'cara_berkunjung'
+                ); unset($options);
+                $options = $this->__get_ref_options(
+                        'konsul',
+                        'nama_konsul',
+                        'nama_konsul',
+                        $this->query
+                        );
+                $form['patient']['pilihan_cara_berkunjung[0]'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['pilihan_cara_berkunjung']) ? $vcache['pilihan_cara_berkunjung'] : '',
+                    '#title' => __t('konsul'),
+                    '#error' => isset($vcache['blank']) && in_array('pilihan_cara_berkunjung', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#id' => 'tchoosek',
+                    '#option_blank' => 1
+                ); unset($options);
+                $sql = $this->query->getDescribe('stafs');
+                $this->query->connect();
+                $getit = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getit->_numOfRows > 0){
+                    for($i=0; $i<$getit->_numOfRows; $i++){
+                        if($getit->fields['Field'] == 'jabatan'){$ok = 0;}
+                    }
+                } unset($getit);
+                if(!isset($ok)){
+                    $sql = $this->query->alterTableColumn(
+                            'stafs',
+                            array('jabatan'),
+                            'add',
+                            'varchar(255)'
+                    );
+                    $this->query->connect();
+                    $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                } else {
+                    unset($ok);
+                }
+                $options = array();
+                $sql = $this->query->getSelect(
+                        array('id', 'nama'),
+                        array('stafs'),
+                        array(
+                            array('&&', "jabatan=dokter")
+                        )
+                );
+                $this->query->connect();
+                $getit = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getit->_numOfRows > 0){
+                    for($i=0; $i<$getit->_numOfRows; $i++){
+                        $options[$getit->fields['id']] = $getit->fields['nama'];
+                        $getit->MoveNext();
+                    }
+                } unset($getit);
+                $form['patient']['pilihan_cara_berkunjung[1]'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['pilihan_cara_berkunjung']) ? $vcache['pilihan_cara_berkunjung'] : '',
+                    '#title' => __t('choose') . ' ' . __t('dokter'),
+                    '#error' => isset($vcache['blank']) && in_array('pilihan_cara_berkunjung', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#id' => 'tchoosed',
+                    '#extra' => ' disabled="true"',
+                    '#option_blank' => 1
+                ); unset($options);
+                $options = array();
+                foreach($this->config->cara_bayar_opts as $value){
+                    $options[$value] = $value;
+                }
+                $form['patient']['cara_bayar'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['cara_bayar']) ? $vcache['cara_bayar'] : 'tunai',
+                    '#title' => __t('cara_bayar'),
+                    '#error' => isset($vcache['blank']) && in_array('cara_bayar', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#extra' => ' onchange="disableCaraBayar(this.checked)"',
+                    '#id' => 'cara_bayar'
+                ); unset($options);
+                $options = $this->__get_ref_options(
+                        'asuransi',
+                        'nama_asuransi',
+                        'nama_asuransi',
+                        $this->query
+                        );
+                $form['patient']['pilihan_cara_bayar'] = array(
+                    '#type' => 'select',
+                    '#value' => isset($vcache['pilihan_cara_bayar']) ? $vcache['pilihan_cara_berkunjung'] : '',
+                    '#title' => __t('asuransi'),
+                    '#error' => isset($vcache['blank']) && in_array('pilihan_cara_bayar', $vcache['blank']) ? 1 : 0,
+                    '#option' => $options,
+                    '#id' => 'tchooseb',
+                    '#extra' => ' disabled="true"',
                     '#option_blank' => 1
                 ); unset($options);
                 $form['patient']['submit'] = array(
@@ -1458,7 +1684,7 @@ class patientModule extends mainModule
                 }
             }
         }
-        $thevalue['strnum'] = $dump['strnum'] == '' ? substr(str_shuffle($this->string_to_shuffle), 7, 4) : $dump['strnum'];
+        $thevalue['strnum'] = trim($dump['strnum']) == '' ? substr(str_shuffle($this->string_to_shuffle), 7, 4) : $dump['strnum'];
         $fqueue = $this->__get_fqmax();
         $thevalue['nourut'] = $fqueue;
         $thevalue['id'] = $this->__get_id_insert_value('antrian', 'id', $this->query);

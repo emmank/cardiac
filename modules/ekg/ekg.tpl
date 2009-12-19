@@ -115,7 +115,7 @@ foreach($data as $key => $value){
                     if(!is_array($lv['#value'])){
                         $lv['#value'] = explode('|', $lv['#value']);
                     }
-                    echo "<pre>";print_r($lv);echo "</pre>";
+//                    echo "<pre>";print_r($lv);echo "</pre>";
                     if(!isset($dumpt)){$dumpt = array();}
                     if(!in_array($lv['#customized']['title'], $dumpt)){
                         $dumpt[] = $lv['#customized']['title'];

@@ -69,8 +69,8 @@ $(document).ready( function() {
 
 <?php
 //    print_r($path);
-    if (($path['menu']== "patient" && $path['vars']=="form") ||
-        ($path['menu']== "patient" && $path['vars']=="update")
+    if (($path['menu']== "patient" && eregi("form", $path['vars'])) ||
+        ($path['menu']== "patient" && eregi("update", $path['vars']))
         ) {
         include_once "themes/".$theme."/js/pilihkota_head_js.php";
     }

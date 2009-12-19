@@ -71,5 +71,26 @@ function disablePasangan(bool) {
         document.getElementById("tpekpas").disabled=true;
     }
 }
+
+function disableChooseBerkunjung(bool) {
+    if (document.getElementById("cara_berkunjung").value=="konsul") {
+        document.getElementById("tchoosek").disabled=false;
+        document.getElementById("tchoosed").disabled=true;
+    } else if(document.getElementById("cara_berkunjung").value=="pilih dokter"){
+        document.getElementById("tchoosek").disabled=true;
+        document.getElementById("tchoosed").disabled=false;
+    } else {
+        document.getElementById("tchoosek").disabled=true;
+        document.getElementById("tchoosed").disabled=true;
+    }
+}
+
+function disableCaraBayar(bool) {
+    if (document.getElementById("cara_bayar").value=="asuransi") {
+        document.getElementById("tchooseb").disabled=false;
+    } else {
+        document.getElementById("tchooseb").disabled=true;
+    }
+}
 </script>
 
