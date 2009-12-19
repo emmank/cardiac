@@ -414,6 +414,7 @@ class alergiModule extends mainModule
                                 $vcache[$value] = date('Y-m-d H:i:s', $this->config->time);
                             }
                         }
+                        $result['rencana'][$value]['#style'] = 'text-align:right';
                     } else {
                         $options = $this->__get_ref_options($this->config->reftable[$value][0], $this->config->reftable[$value][1], $this->config->reftable[$value][2], $this->query);
                     }

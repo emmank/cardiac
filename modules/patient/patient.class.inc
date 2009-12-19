@@ -678,7 +678,9 @@ class patientModule extends mainModule
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
                         } elseif($value == 'gol_darah') {
-                            $form['patient']['gol_darah']['#message'] = __t('&laquo; kosongkan bila tidak tahu');
+                            if(is_null($readonly)){
+                                $form['patient']['gol_darah']['#message'] = __t('&laquo; kosongkan bila tidak tahu');
+                            }
                             $options = $this->__get_goldarah_options();
                         }
                         $form['patient'][$value]['#id'] = $id;

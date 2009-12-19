@@ -42,9 +42,9 @@ class pengkajianConfig extends config
         'nutrisiKesehatan',
         'aktivitas',
         'eliminasi',
-        'pola_tidur',
+        'polaTidur',
         'psikoSosial',
-        'rencana'
+        'aktivitasCairan'
     );
     var $module_tableuse = array(
         'riwayatKesehatan' => 'riwayat_kesehatan',
@@ -53,8 +53,8 @@ class pengkajianConfig extends config
         'nutrisiKesehatan' => 'nutrisi_kesehatan',
         'aktivitas' => 'aktivitas',
         'eliminasi' => 'eliminasi',
-        'pola_tidur' => 'pola_tidur',
+        'polaTidur' => 'pola_tidur',
         'psikoSosial' => 'psiko_sosial',
-        'rencana' => 'rencana'
+        'aktivitasCairan' => 'aktivitas_cairan'
     );
 }
