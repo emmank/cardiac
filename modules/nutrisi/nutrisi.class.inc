@@ -32,7 +32,7 @@ class nutrisiModule extends mainModule
     function menu(){
         $items['nutrisi_view'] = array(
             'title' => __t('nutrisi kesehatan'),
-            'description' => __t('daftar nutrisi'),
+            'description' => __t('daftar nutrisi pasien'),
             'path' => '/care/nutrisi/view',
             'exec' => 'view',
             'weight' => 5,

@@ -755,7 +755,7 @@ class perawatanModule extends mainModule
         $thefields = $this->__get_data_fields('perawatan', $this->query);
 
         foreach($this->vardump as $key => $value){
-            echo "<pre>";print_r($value);echo "</pre>";
+//            echo "<pre>";print_r($value);echo "</pre>";
             if(in_array($key, $thefields)){
                 if($this->config->typeoffields[$key] == 'date'){
                     $value = explode('|', $value);

@@ -17,47 +17,47 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  alergiclass.php
+ *  psikoSosialclass.php
  *  
  *  Created on Dec 18, 2009, 2:19:01 PM
  */
 
-require_once MODULES_DIR . DS . 'alergi' . DS . 'config.inc';
+require_once MODULES_DIR . DS . 'psikoSosial' . DS . 'config.inc';
 
-class alergiModule extends mainModule
+class psikoSosialModule extends mainModule
 {
-    var $title = 'alergi';
+    var $title = 'psikoSosial';
     var $description = '';
 
     function menu(){
-        $items['alergi_view'] = array(
-            'title' => __t('alergi'),
-            'description' => __t('daftar alergi'),
-            'path' => '/care/alergi/view',
+        $items['psikoSosial_view'] = array(
+            'title' => __t('psiko sosial'),
+            'description' => __t('daftar psiko sosial'),
+            'path' => '/care/psikoSosial/view',
             'exec' => 'view',
             'weight' => 5,
             'user_required' => 'perawatan'
         );
-        $items['alergi_form'] = array(
-            'title' => __t('form alergi'),
-            'description' => __t('formulir alergi pasien'),
-            'path' => '/care/alergi/form',
+        $items['psikoSosial_form'] = array(
+            'title' => __t('form psikoSosial'),
+            'description' => __t('formulir psikoSosial pasien'),
+            'path' => '/care/psikoSosial/form',
             'exec' => 'form',
             'weight' => 5,
             'user_required' => 'perawatan'
         );
-        $items['alergi_form_submit'] = array(
-            'title' => __t('form alergi'),
-            'description' => __t('formulir alergi pasien'),
-            'path' => '/care/alergi/form_submit',
+        $items['psikoSosial_form_submit'] = array(
+            'title' => __t('form psikoSosial'),
+            'description' => __t('formulir psikoSosial pasien'),
+            'path' => '/care/psikoSosial/form_submit',
             'exec' => 'form_submit',
             'weight' => 5,
             'user_required' => 'perawatan'
         );
-        $items['alergi_detail'] = array(
-            'title' => __t('detail form alergi'),
-            'description' => __t('formulir detil alergi pasien'),
-            'path' => '/care/alergi/detail_form',
+        $items['psikoSosial_detail'] = array(
+            'title' => __t('detail form psikoSosial'),
+            'description' => __t('formulir detil psikoSosial pasien'),
+            'path' => '/care/psikoSosial/detail_form',
             'exec' => 'detail_form',
             'weight' => 5,
             'user_required' => 'perawatan'
@@ -68,7 +68,7 @@ class alergiModule extends mainModule
     function detail_form(){
         $this->formhabit = 'readonly';
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        $vcache = $this->__get_alergi_data((int)$dump[3]);
+        $vcache = $this->__get_psikoSosial_data((int)$dump[3]);
         $this->vardump = $this->__write_custom_cache($vcache);
         $this->vardump['readonly'] = $this->formhabit;
         return $this->__get_form($vcache['perawatan']);
@@ -95,7 +95,7 @@ class alergiModule extends mainModule
     }
 
     function view(){
-        $this->sync_scheme('alergi', $this->query);
+        $this->sync_scheme('psikoSosial', $this->query);
         if(isset($_POST['pid'])){
             $pid = $_POST['pid'];
         } else {
@@ -115,11 +115,11 @@ class alergiModule extends mainModule
         $patientinfo = $this->__get_perawatan_head($pid);
         $result = array();
         $result['type'] = 'table';
-        $result['title'] = __t('alergi pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'];
-        $result['description'] = __t('daftar alergi pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'];
+        $result['title'] = __t('psikoSosial pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'];
+        $result['description'] = __t('daftar psikoSosial pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'];
         $result['addmenu']['#add'] = array(
             'title' => __t('add'),
-            'action' => '/care/alergi/form/' . $pid,
+            'action' => '/care/psikoSosial/form/' . $pid,
             'position' => 'top',
             'user_required' => 'perawatan'
         );
@@ -179,7 +179,7 @@ class alergiModule extends mainModule
         );
         $dumppkj = $this->__get_pengkajian_modules();
         foreach($dumppkj as $key => $value){
-            if($key != 'alergi'){
+            if($key != 'psikoSosial'){
                 $pkjopts[$key] = $value;
             }
         } unset($dumppkj);
@@ -204,14 +204,14 @@ class alergiModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => 'nama_alergi',
-                'caption' => __t('nama alergi'),
+                'field' => 'tgl',
+                'caption' => __t('Tanggal'),
                 'width' => '30%',
                 'align' => 'right'
             ),
             array(
-                'field' => 'jenis_alergi',
-                'caption' => __t('jenis alergi'),
+                'field' => 'psikoSosial',
+                'caption' => __t('psiko sosial'),
                 'width' => '30%',
                 'align' => 'right'
             ),
@@ -223,7 +223,7 @@ class alergiModule extends mainModule
         );
         $sql = $this->query->getSelect(
                 array(),
-                array('alergi'),
+                array('psikoSosial'),
                 array(
                     array('&&', "perawatan=" . $pid)
                 ),
@@ -246,22 +246,23 @@ class alergiModule extends mainModule
                 $this->query->close();
                 $result['data'][$i]['inputer'] = ucwords($getthis->fields['nama']);
                 unset($getthis);
-                $result['data'][$i]['goto'] = '/care/alergi/detail_form/' . $getit->fields['id'];
-                $result['data'][$i]['nama_alergi'] = $getit->fields['nama_alergi'];
-                $result['data'][$i]['jenis_alergi'] = $getit->fields['jenis_alergi'];
+                $result['data'][$i]['goto'] = '/care/psikoSosial/detail_form/' . $getit->fields['id'];
+                $result['data'][$i]['tgl'] = $getit->fields['tgl'];
+                $result['data'][$i]['psikoSosial'] = $getit->fields['psikoSosial'];
 //                $result['data'][$i]['tgl'] .= ' ' . ucwords(__t($this->nama_bulan[date('n', strtotime($getit->fields['tgl']))]));
 //                $result['data'][$i]['tgl'] .= ' ' . date('Y H:i:s', strtotime($getit->fields['tgl']));
                 $getit->MoveNext();
             }
         } unset($getit);
+//        echo "<pre>";print_r($result);echo "</pre>";
         return $result;
     }
 
-    function __get_alergi_data($id){
+    function __get_psikoSosial_data($id){
         $result = array();
         $sql = $this->query->getSelect(
             array(),
-            array('alergi'),
+            array('psikoSosial'),
             array(
                 array('&&', "id=" . $id)
             )
@@ -303,7 +304,7 @@ class alergiModule extends mainModule
                 } else {
                     $riwayat_id = $dump[4];
                 }
-                $vcache = $this->__get_alergi_data((int)$riwayat_id);
+                $vcache = $this->__get_psikoSosial_data((int)$riwayat_id);
                 unset($riwayat_id);
                 $this->vardump = $vcache;
             } unset($dump);
@@ -338,9 +339,9 @@ class alergiModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/care/alergi/form' . (isset($this->formhabit) && $this->formhabit == 'readonly' ? '/' . $pid . '/edit_' . $vcache['id'] : '_submit'),
+            '#action' => '/care/psikoSosial/form' . (isset($this->formhabit) && $this->formhabit == 'readonly' ? '/' . $pid . '/edit_' . $vcache['id'] : '_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
-            '#formtpl' => MODULES_DIR . DS . 'alergi' . DS . 'alergi.tpl',
+            '#formtpl' => MODULES_DIR . DS . 'psikoSosial' . DS . 'psikoSosial.tpl',
             '#addmenu' => array(
                 '#addmenu' => array(
                     'title' => __t('medical record'),
@@ -397,7 +398,7 @@ class alergiModule extends mainModule
             );
         unset($rujukanopts, $pkjitems);
         }
-        $thefields = $this->__get_data_fields('alergi', $this->query);
+        $thefields = $this->__get_data_fields('psikoSosial', $this->query);
         foreach($thefields as $value){
             if(in_array($value, $this->config->hiddenfields)){
                 if($this->config->typeoffields[$value] != 'system'){
@@ -445,7 +446,7 @@ class alergiModule extends mainModule
 
     function __get_form_submit(){
         $this->vardump = $this->__write_form_cache();
-        $thefields = $this->__get_data_fields('alergi', $this->query);
+        $thefields = $this->__get_data_fields('psikoSosial', $this->query);
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
                 if($this->config->typeoffields[$key] == 'date'){
@@ -454,6 +455,11 @@ class alergiModule extends mainModule
                 } elseif($this->config->typeoffields[$key] == 'datetime'){
                     $value = explode('-', $value);
                     $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
+                }
+//                echo "<pre>";print_r($thefields);echo "<pre>";
+                if ($thefields === 'suhu'){
+                    echo "<pre>";print_r($thefields);echo "<pre>";
+                    $value .= 'oC';
                 }
                 $thevalue[$key] = $value;
             }
@@ -464,7 +470,7 @@ class alergiModule extends mainModule
             $opr = 'update';
             $strid = array('id', $_POST['id']);
         } else {
-            $thevalue['id'] = $this->__get_id_insert_value('alergi', 'id', $this->query);
+            $thevalue['id'] = $this->__get_id_insert_value('psikoSosial', 'id', $this->query);
             $thevalue['inputer'] = $user['userid'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
             $this->vardump['id'] = $thevalue['id'];
@@ -473,13 +479,13 @@ class alergiModule extends mainModule
         }
         $this->__exec_db_ops(
             $this->query,
-            'alergi',
+            'psikoSosial',
             $opr,
             $strid,
             $thevalue
         );
         $iddata = $thevalue['id'];
         unset($thevalue, $opr, $strid);
-        redirect_to('/care/alergi/detail_form/' . $iddata);
+        redirect_to('/care/psikoSosial/detail_form/' . $iddata);
     }
 }

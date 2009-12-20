@@ -31,8 +31,8 @@ class kondisiModule extends mainModule
 
     function menu(){
         $items['kondisi_view'] = array(
-            'title' => __t('kondisi'),
-            'description' => __t('daftar kondisi'),
+            'title' => __t('kondisi pasien'),
+            'description' => __t('daftar kondisi pasien'),
             'path' => '/care/kondisi/view',
             'exec' => 'view',
             'weight' => 5,

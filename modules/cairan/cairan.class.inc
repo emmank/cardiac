@@ -32,7 +32,7 @@ class cairanModule extends mainModule
     function menu(){
         $items['cairan_view'] = array(
             'title' => __t('cairan aktivitas'),
-            'description' => __t('daftar kondisi cairan'),
+            'description' => __t('daftar cairan aktivitas pasien'),
             'path' => '/care/cairan/view',
             'exec' => 'view',
             'weight' => 5,
@@ -247,13 +247,14 @@ class cairanModule extends mainModule
                 $result['data'][$i]['inputer'] = ucwords($getthis->fields['nama']);
                 unset($getthis);
                 $result['data'][$i]['goto'] = '/care/cairan/detail_form/' . $getit->fields['id'];
-                $result['data'][$i]['kebiasaan'] = $getit->fields['kebiasaan_minum'];
-                $result['data'][$i]['jenis'] = $getit->fields['jenis_minuman'];
+                $result['data'][$i]['kebiasaan_minum'] = $getit->fields['kebiasaan_minum'];
+                $result['data'][$i]['jenis_minuman'] = $getit->fields['jenis_minuman'];
 //                $result['data'][$i]['tgl'] .= ' ' . ucwords(__t($this->nama_bulan[date('n', strtotime($getit->fields['tgl']))]));
 //                $result['data'][$i]['tgl'] .= ' ' . date('Y H:i:s', strtotime($getit->fields['tgl']));
                 $getit->MoveNext();
             }
         } unset($getit);
+//        echo "<pre>";print_r($result);echo "</pre>";
         return $result;
     }
 
