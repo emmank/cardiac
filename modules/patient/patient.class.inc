@@ -679,7 +679,7 @@ class patientModule extends mainModule
                             $options = $this->__get_agama_options();
                         } elseif($value == 'gol_darah') {
                             if(is_null($readonly)){
-                                $form['patient']['gol_darah']['#message'] = __t('&laquo; kosongkan bila tidak tahu');
+                                $form['patient']['gol_darah']['#message'] = '&laquo; ' . __t('kosongkan bila tidak tahu');
                             }
                             $options = $this->__get_goldarah_options();
                         }
@@ -1374,7 +1374,7 @@ class patientModule extends mainModule
             '#type' => 'text',
             '#title' => __t('strnum'),
             '#size' => 15,
-            '#message' => __t('&laquo; kosongkan bila Anda adalah pasien baru, kemudian klik submit')
+            '#message' => '&laquo; ' . __t('kosongkan bila Anda adalah pasien baru, kemudian klik submit')
         );
         $form['patient']['submit'] = array(
             '#type' => 'submit',
@@ -1499,7 +1499,7 @@ class patientModule extends mainModule
                         } elseif($value == 'agama'){
                             $options = $this->__get_agama_options();
                         } elseif($value == 'gol_darah') {
-                            $form['patient'][$value]['#message'] = '&laquo; Kosongkan jika tidak tahu';
+                            $form['patient'][$value]['#message'] = '&laquo; ' . __t('Kosongkan jika tidak tahu');
                             $options = $this->__get_goldarah_options();
                         }
 

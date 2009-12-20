@@ -614,7 +614,7 @@ function __get_menu_info($data){
         $systemquery->close();
         if($getit->_numOfRows > 0){
             foreach($getit->fields as $ky => $vl){
-                $result[$ky] = $vl;
+                $result[$ky] = $ky == 'title' || $ky == 'description' ? __t($vl) : $vl;
             }
         }
     }

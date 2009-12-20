@@ -162,7 +162,7 @@ class dbset
 	}
 
 	
-	function getSelect($select,$table,$where=NULL,$order=NULL){
+	function getSelect($select,$table,$where=NULL,$order=NULL,$limit=NULL){
 		if (is_null($select) || is_null($table)){$sql = 'error';} elseif(!is_array($select) || !is_array($table)){
 		$sql = "error";
 		} elseif(count($table) < 1){
@@ -215,6 +215,9 @@ class dbset
 					} else {$sql .= $value;}
 				}
 			}
+                        if(!is_null($limit)){
+                            $sql .= ' LIMIT ' . $limit;
+                        }
 		}
 	return $sql;
 	}
