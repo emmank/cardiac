@@ -39,22 +39,22 @@ class pengkajianConfig extends config
         'riwayatKesehatan',
         'alergi',
         'kondisi',
-        'nutrisiKesehatan',
+        'nutrisi',
+        'cairan',
         'aktivitas',
         'eliminasi',
-        'polaTidur',
+        'polatidur',
         'psikoSosial',
-        'aktivitasCairan'
     );
     var $module_tableuse = array(
         'riwayatKesehatan' => 'riwayat_kesehatan',
         'alergi' => 'alergi',
         'kondisi' => 'kondisi',
-        'nutrisiKesehatan' => 'nutrisi_kesehatan',
+        'nutrisi' => 'nutrisi',
+        'cairan' => 'cairan',
         'aktivitas' => 'aktivitas',
         'eliminasi' => 'eliminasi',
-        'polaTidur' => 'pola_tidur',
-        'psikoSosial' => 'psiko_sosial',
-        'aktivitasCairan' => 'aktivitas_cairan'
+        'polatidur' => 'polatidur',
+        'psikoSosial' => 'psikoSosial',
     );
 }

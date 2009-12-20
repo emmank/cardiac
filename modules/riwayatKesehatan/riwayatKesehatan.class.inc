@@ -31,8 +31,8 @@ class riwayatKesehatanModule extends mainModule
 
     function menu(){
         $items['riwayatKesehatan_view'] = array(
-            'title' => __t('riwayatKesehatan'),
-            'description' => __t('daftar riwayatKesehatan'),
+            'title' => __t('Riwayat Kesehatan'),
+            'description' => __t('daftar Riwayat Kesehatan'),
             'path' => '/care/riwayatKesehatan/view',
             'exec' => 'view',
             'weight' => 5,
