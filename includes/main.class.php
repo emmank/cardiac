@@ -902,6 +902,21 @@ class mainModule
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         $bagian = trim($dump[1]);
         $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('antrian');
+        $result['description'] = __t('Daftar Antrian Pasien');
+        $result['addmenu']['#add'] = array(
+            'title' => __t('view'),
+            'action' => '/user/' . $bagian . '/lists',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search'),
+            'action' => '/user/' . $bagian . '/search',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
         $this->query->connect();
         $sql = $this->query->getSelect(
             array(),
@@ -917,52 +932,71 @@ class mainModule
         ); unset($idbagian);
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
-        if($query->_numOfRows == 1){
-            redirect_to('/user/' . $bagian . '/form/' . $query->fields['id']);
-        } elseif($query->_numOfRows < 1){
-            $pesan = __t('tidak ada pasien hari ini !');
-            redirect_to('/user/' . $bagian . '/message/' . urlencode($pesan));
-        }
-        for($i=0; $i<$query->_numOfRows; $i++){
-            $result['type'] = 'table';
-            $result['title'] = __t('antrian');
-            $result['description'] = __t('Daftar Antrian Pasien');
-            $result['header'] = array(
-                array(
-                    'field' => 'none',
-                    'caption' => __t('no'),
-                    'width' => '5%',
-                    'align' => 'right'
-                ),
-                array(
-                    'field' => 'nomor',
-                    'caption' => __t('Nomor Register'),
-                    'width' => '15%',
-                    'align' => 'center'
-                ),
-                array(
-                    'field' => 'patients',
-                    'caption' => __t('Nama'),
-                    'align' => 'left'
-                ),
-                array(
-                    'field' =>'nourut',
-                    'caption' => __t('No Urut'),
-                    'width' => '15%',
-                    'align' => 'center'
-                )
+        if($query->_numOfRows < 1){
+            $sql = $this->query->getSelect(
+                    array('id'),
+                    array('kunjungan'),
+                    array(
+                        array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                        array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                        array('&&', "day(pukul)=" . date('j', $this->config->time)),
+                        array('&&', "bagian=" . $bagian),
+                        array('&&', "doneby is not null")
+                    )
             );
-            $gpatient = $this->__get_patient_data($query->fields['patients']);
-            if(count($gpatient) > 0){
-                $result['data'][$i] = $query->fields;
-                $result['data'][$i]['nomor'] = ucwords($gpatient['nomor']);
-                $result['data'][$i]['patients'] = ucwords($gpatient['nama']);
-                $age = $this->agecount_in_month(strtotime($gpatient['tgl_lahir']));
-                $result['data'][$i]['age'] = floor($age / 12); unset($age);
-                $result['data'][$i]['nourut'] = ucwords($query->fields['nourut']);
-                $result['data'][$i]['goto'] = '/user/' . $bagian . '/form/' . $query->fields['id'];
-            } unset($gpatient);
-            $query->MoveNext();
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $pesan = __t('habis mi pasien kodong... !');
+            } else {
+                $pesan = __t('tidak ada pasien hari ini !');
+            }
+            $result['addmessage'] = array(
+                array(
+                    'position' => 'bottom',
+                    'message' => $pesan
+                )
+            ); unset($pesan);
+        } else {
+                $result['header'] = array(
+                    array(
+                        'field' => 'none',
+                        'caption' => __t('no'),
+                        'width' => '5%',
+                        'align' => 'right'
+                    ),
+                    array(
+                        'field' => 'nomor',
+                        'caption' => __t('Nomor Register'),
+                        'width' => '15%',
+                        'align' => 'center'
+                    ),
+                    array(
+                        'field' => 'patients',
+                        'caption' => __t('Nama'),
+                        'align' => 'left'
+                    ),
+                    array(
+                        'field' =>'nourut',
+                        'caption' => __t('No Urut'),
+                        'width' => '15%',
+                        'align' => 'center'
+                    )
+                );
+            for($i=0; $i<$query->_numOfRows; $i++){
+                $gpatient = $this->__get_patient_data($query->fields['patients']);
+                if(count($gpatient) > 0){
+                    $result['data'][$i] = $query->fields;
+                    $result['data'][$i]['nomor'] = ucwords($gpatient['nomor']);
+                    $result['data'][$i]['patients'] = ucwords($gpatient['nama']);
+                    $age = $this->agecount_in_month(strtotime($gpatient['tgl_lahir']));
+                    $result['data'][$i]['age'] = floor($age / 12); unset($age);
+                    $result['data'][$i]['nourut'] = ucwords($query->fields['nourut']);
+                    $result['data'][$i]['goto'] = '/user/' . $bagian . '/form/' . $query->fields['id'];
+                } unset($gpatient);
+                $query->MoveNext();
+            }
         } unset($query);
 //        echo '<pre>'; print_r($result); echo '</pre>'; exit();
         return $result;

@@ -65,6 +65,14 @@ class treadmillModule extends mainModule
             'weight' => 5,
             'user_required' => 'treadmill'
         );
+        $items['treadmill_lists'] = array(
+            'title' => __t('treadmill'),
+            'description' => __t('explore treadmill'),
+            'path' => '/user/treadmill/lists',
+            'exec' => '__get_view',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         $items['treadmill_view'] = array(
             'title' => __t('treadmill'),
             'description' => __t('explore treadmill'),
@@ -232,7 +240,7 @@ class treadmillModule extends mainModule
 
     function view(){
         $this->sync_scheme('treadmill', $this->query);
-        return $this->__get_view();
+        return $this->__get_today_lists();
     }
 
     function __get_view(){

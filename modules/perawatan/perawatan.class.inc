@@ -52,8 +52,16 @@ class perawatanModule extends mainModule
         $items['perawatan_daftar'] = array(
             'title' => __t('perawatan'),
             'description' => __t('Daftar Pasien Rawat Inap'),
-            'path' => '/user/perawatan/list',
+            'path' => '/user/perawatan/view',
             'exec' => 'view',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['perawatan_view'] = array(
+            'title' => __t('perawatan'),
+            'description' => __t('Daftar Pasien Rawat Inap'),
+            'path' => '/user/perawatan/lists',
+            'exec' => '__get_view',
             'weight' => '0',
             'user_required' => 'users'
         );
@@ -246,7 +254,7 @@ class perawatanModule extends mainModule
         $this->sync_scheme('perawatan', $this->query);
         $this->sync_scheme('ruang', $this->query);
         $this->sync_scheme('perawatan_items', $this->query);
-        return $this->__get_view();
+        return $this->__get_today_lists();
     }
 
     function __get_view(){

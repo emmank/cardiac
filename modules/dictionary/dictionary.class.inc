@@ -149,7 +149,9 @@ class dictionaryModule extends mainModule
         if(isset($dump[3])){
             $page = trim($dump[3]);
             if(isset($dump[4])){
-                $vcache['strkey'] = trim($dump[4]);
+                $strkey = eregi_replace('-_dan_-', '&', urldecode($dump[4]));
+                $vcache['strkey'] = trim($strkey);
+                unset($strkey);
             } else {
                 redirect_to('/admin/dictionary/newwords/' . $page); exit();
             }
@@ -260,8 +262,10 @@ class dictionaryModule extends mainModule
         $this->sysquery->close();
         if($getit->_numOfRows > 0){
             for($i=0; $i<$getit->_numOfRows; $i++){
+                $strkey = eregi_replace('&', '-_dan_-', $getit->fields['id']);
                 $result['data'][$i] = $getit->fields;
-                $result['data'][$i]['goto'] = '/admin/dictionary/newwords_form/' . $pg . '/' . urlencode($getit->fields['id']);
+                $result['data'][$i]['goto'] = '/admin/dictionary/newwords_form/' . $pg . '/' . urlencode($strkey);
+                unset($strkey);
                 $getit->MoveNext();
             }
         }

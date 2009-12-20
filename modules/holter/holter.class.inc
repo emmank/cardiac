@@ -74,6 +74,14 @@ class holterModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['holter_lists'] = array(
+            'title' => __t('holter'),
+            'description' => __t('explore holter'),
+            'path' => '/user/holter/lists',
+            'exec' => 'lists',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         $items['holter_detail'] = array(
             'title' => __t('detail holter'),
             'description' => __t("detail holter's patients"),
@@ -636,6 +644,10 @@ class holterModule extends mainModule
     }
 
     function view(){
+        return $this->__get_today_lists();
+    }
+
+    function lists(){
         $this->sync_scheme('holter', $this->query);
         $result = array();
         $result['type'] = 'table';

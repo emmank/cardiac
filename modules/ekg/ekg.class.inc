@@ -65,11 +65,11 @@ class ekgModule extends mainModule
             'weight' => 5,
             'user_required' => 'ekg'
         );
-        $items['ekg_message'] = array(
-            'title' => __t('ekg message'),
-            'description' => __t('get ekg message'),
-            'path' => '/user/ekg/message',
-            'exec' => 'message',
+        $items['ekg_lists'] = array(
+            'title' => __t('ekg lists'),
+            'description' => __t('get ekg lists'),
+            'path' => '/user/ekg/lists',
+            'exec' => 'lists',
             'weight' => 5,
             'user_required' => 'ekg'
         );
@@ -238,6 +238,7 @@ class ekgModule extends mainModule
                 $result['data'][$key] = $value;
             }
         }
+//        echo '<pre>'; print_r($result); echo '</pre>'; //exit();
         return $result;
     }
 
@@ -282,7 +283,7 @@ class ekgModule extends mainModule
                     $vcache = $this->__get_ekg_data((int)$ekg_id);
                     $this->vardump = $vcache;
                     unset($cardio_id);
-                    redirect_to('/user/ekg/view');
+//                    redirect_to('/user/ekg/view');
                 } else {
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
                 }
@@ -627,6 +628,10 @@ class ekgModule extends mainModule
     }
 
     function view(){
+        return $this->__get_today_lists();
+    }
+
+    function lists(){
         $this->sync_scheme('ekg', $this->query);
         $result = array();
         $result['type'] = 'table';
