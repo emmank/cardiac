@@ -357,8 +357,10 @@ class dictionaryModule extends mainModule
             '#value' => $page
         );
         $form['translate'][$lang] = array(
-            '#type' => 'text',
+            '#type' => 'textarea',
             '#title' => __t('translate'),
+            '#cols' => 40,
+            '#rows' => 3,
             '#value' => $vcache[$lang]
         );
         $form['translate']['submit'] = array(
