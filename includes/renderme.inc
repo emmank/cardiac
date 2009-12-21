@@ -298,8 +298,10 @@ function __create_table($value){
 //    $result .= "<!--div style=\"font-wieght:bold;font-size:1em\">" . strtoupper($value['title']) . "</div-->\n";
     $result .= '<div>' . strtoupper($value['title']) . '</div>' . "\n";
     $result .= '<table width="100%" class="tbl">' . "\n";
-    foreach($value['header'] as $key=>$val){
-        $result .= '<th' . (isset($val['width']) && trim($val['width']) != '' ? ' width="' . $val['width'] . '"' : '') . '>' . ucwords($val['caption']) . '</th>' . "\n";
+    if(count($value['header']) > 0){
+        foreach($value['header'] as $key=>$val){
+            $result .= '<th' . (isset($val['width']) && trim($val['width']) != '' ? ' width="' . $val['width'] . '"' : '') . '>' . ucwords($val['caption']) . '</th>' . "\n";
+        }
     }
     if(count($value['data']) > 0){
         foreach($value['data'] as $key => $val){

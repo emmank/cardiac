@@ -137,6 +137,22 @@ class cardioModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['cardio_dewasa_lists'] = array(
+            'title' => __t('lists cardio dewasa'),
+            'description' => __t("lists cardio dewasa's patients"),
+            'path' => '/user/cardio_dewasa/lists',
+            'exec' => 'dewasa_lists',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['cardio_anak_lists'] = array(
+            'title' => __t('lists cardio anak'),
+            'description' => __t("lists cardio anak's patients"),
+            'path' => '/user/cardio_anak/lists',
+            'exec' => 'anak_lists',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         $items['cardio_dewasa_search_submit'] = array(
             'title' => __t('submitted search cardio dewasa'),
             'description' => __t("submitted search cardio dewasa's patients"),
@@ -299,14 +315,22 @@ class cardioModule extends mainModule
     }
 
     function dewasa_view(){
-        return $this->__get_view();
+        return $this->__get_today_lists();
     }
 
     function anak_view(){
-        return $this->__get_view(1);
+        return $this->__get_today_lists(1);
     }
 
-    function __get_view($teens=0){
+    function dewasa_lists(){
+        return $this->__get_lists();
+    }
+
+    function anak_lists(){
+        return $this->__get_lists(1);
+    }
+
+    function __get_lists($teens=0){
         $this->sync_scheme('cardio', $this->query);
         $result = array();
         $result['type'] = 'table';

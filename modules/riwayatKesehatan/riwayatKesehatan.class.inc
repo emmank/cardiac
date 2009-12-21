@@ -417,6 +417,12 @@ class riwayatKesehatanModule extends mainModule
                         }
                         $result['pengkajian'][$value]['#style'] = 'text-align:right';
                     } else {
+                        if(!isset($this->config->reftable[$value][0])){
+                            $options = array(
+                                __t('ya'),
+                                __t('tidak')
+                            );
+                        }
                         $options = $this->__get_ref_options($this->config->reftable[$value][0], $this->config->reftable[$value][1], $this->config->reftable[$value][2], $this->query);
                     }
                     $result['pengkajian'][$value]['#option'] = $options;
