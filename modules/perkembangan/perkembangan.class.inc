@@ -218,19 +218,19 @@ class perkembanganModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => (!is_null($pid) ? 'jenis_cairan' : 'nama'),
-                'caption' => (!is_null($pid) ? __t('jenis cairan') : __t('nama')),
+                'field' => (!is_null($pid) ? 'subyektif' : 'nama'),
+                'caption' => (!is_null($pid) ? __t('subyektif') : __t('nama')),
                 'align' => 'left'
             ),
             array(
-                'field' => (!is_null($pid) ? 'pemberi_instruksi' : 'usia'),
-                'caption' => (!is_null($pid) ? __t('pemberi instruksi') : __t('usia')),
+                'field' => (!is_null($pid) ? 'obyektif' : 'usia'),
+                'caption' => (!is_null($pid) ? __t('obyektif') : __t('usia')),
                 'width' => (!is_null($pid) ? '15%' : '25%'),
                 'align' => (!is_null($pid) ? 'center' : 'right')
             ),
             array(
-                'field' => (!is_null($pid) ? 'instruksi' : 'pukul_masuk'),
-                'caption' => (!is_null($pid) ? __t('instruksi') : __t('tanggal masuk')),
+                'field' => (!is_null($pid) ? 'analisa' : 'pukul_masuk'),
+                'caption' => (!is_null($pid) ? __t('analisa') : __t('tanggal masuk')),
                 'width' => '25%',
                 'align' => (!is_null($pid) ? 'center' : 'right')
             )

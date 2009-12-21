@@ -42,19 +42,28 @@ class vascabdomenConfig extends config
         'id' => 'hidden',
         'artery_abdominalis' => 'select',
         'artery_renalis' => 'select',
-        'vena' => 'select'
+        'vena_cava_inferior' => 'select',
+        'vena_cava_superior' => 'select',
+        'vena_jugularis_interna' => 'select',
+        'vena_jugularis_eksterna' => 'select'
     );
 
     var $fieldsisarray = array(
         'artery_abdominalis',
         'artery_renalis' ,
-        'vena'
+        'vena_cava_inferior',
+        'vena_cava_superior',
+        'vena_jugularis_interna',
+        'vena_jugularis_eksterna'
     );
 
     var $reftable = array(
         'artery_abdominalis' => array('ref_kateterisasiref_steunosis','steunosis'),
         'artery_renalis' => array('ref_kateterisasiref_steunosis','steunosis'),
-        'vena' => array('ref_kateterisasiref_steunosis','steunosis')
+        'vena_cava_inferior' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_cava_superior' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_jugularis_interna' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_jugularis_eksterna' => array('ref_kateterisasiref_steunosis','steunosis')
     );
     var $qrs_complex = array(
         'qrs_axis', 'qrs_durasi', 'qrs_konfigurasi_patologi', 'qrs_konfigurasi_r_s'
@@ -85,7 +94,28 @@ class vascabdomenConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'vena' => array(
+            'vena_cava_inferior' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_cava_superior' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_jugularis_interna' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_jugularis_eksterna' => array(
                 'type' => 'varchar(150)',
                 'null' => 1,
                 'key' => '',
