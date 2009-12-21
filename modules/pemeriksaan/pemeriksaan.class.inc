@@ -479,7 +479,7 @@ class pemeriksaanModule extends mainModule
             $strid = array('id', $_POST['id']);
         } else {
             $thevalue['id'] = $this->__get_id_insert_value('pemeriksaan', 'id', $this->query);
-            $thevalue['inputer'] = $user['userid'];
+            $thevalue['inputer'] = $user['id'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
             $this->vardump['id'] = $thevalue['id'];
             $opr = 'insert';

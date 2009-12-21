@@ -22,10 +22,10 @@
  *  Created on Oct 3, 2009, 4:31:28 PM
  */
 
-class perkembanganConfig extends config
+class pemberianCairanConfig extends config
 {
     var $rdbms = 'mysql';
-    var $dbperkembangan = array(
+    var $dbpemberianCairan = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',
@@ -57,7 +57,7 @@ class perkembanganConfig extends config
         'risk_factor' => array('ref_present_risk_factor', 'risk_factor', 'id'),
     );
     var $table_scheme = array(
-        'catatan_perkembangan' => array(
+        'catatan_pemberian_cairan' => array(
             'id' => array(
                 'type' => 'int(11)',
                 'null' => 0,
@@ -79,29 +79,29 @@ class perkembanganConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'subyektif' => array(
-                'type' => 'varchar(255)',
+            'jenis_cairan' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'obyektif' => array(
-                'type' => 'varchar(255)',
+            'pemberi_instruksi' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'analisa' => array(
-                'type' => 'varchar(255)',
+            'instruksi' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'planning' => array(
-                'type' => 'varchar(255)',
+            'pelaksana_instruksi' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,

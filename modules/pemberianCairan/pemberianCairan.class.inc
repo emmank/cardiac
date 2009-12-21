@@ -17,47 +17,47 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  rencanaclass.php
+ *  pemberianCairanclass.php
  *  
  *  Created on Oct 3, 2009, 4:35:17 PM
  */
 
-require_once MODULES_DIR . DS . 'rencana' . DS . 'config.inc';
+require_once MODULES_DIR . DS . 'pemberianCairan' . DS . 'config.inc';
 
-class rencanaModule extends mainModule
+class pemberianCairanModule extends mainModule
 {
-    var $title = 'rencana';
+    var $title = 'pemberianCairan';
     var $description = '';
 
     function menu(){
-        $items['rencana_view'] = array(
-            'title' => __t('rencana perawatan'),
-            'description' => __t('daftar rencana perawatan'),
-            'path' => '/care/perawatan/rencana',
+        $items['pemberianCairan_view'] = array(
+            'title' => __t('catatan pemberian cairan'),
+            'description' => __t('daftar pemberian Cairan perawatan'),
+            'path' => '/care/perawatan/pemberianCairan',
             'exec' => 'view',
             'weight' => 5,
             'user_required' => 'perawatan'
         );
-        $items['rencana_form'] = array(
-            'title' => __t('form rencana'),
-            'description' => __t('formulir rencana pasien'),
-            'path' => '/care/rencana/form',
+        $items['pemberianCairan_form'] = array(
+            'title' => __t('form pemberianCairan'),
+            'description' => __t('formulir pemberian Cairan pasien'),
+            'path' => '/care/pemberianCairan/form',
             'exec' => 'form',
             'weight' => 5,
             'user_required' => 'perawatan'
         );
-        $items['rencana_form_submit'] = array(
-            'title' => __t('form rencana'),
-            'description' => __t('formulir rencana pasien'),
-            'path' => '/care/rencana/form_submit',
+        $items['pemberianCairan_form_submit'] = array(
+            'title' => __t('form pemberianCairan'),
+            'description' => __t('formulir pemberian Cairan pasien'),
+            'path' => '/care/pemberianCairan/form_submit',
             'exec' => 'form_submit',
             'weight' => 5,
             'user_required' => 'perawatan'
         );
-        $items['rencana_detail'] = array(
-            'title' => __t('detail form rencana'),
-            'description' => __t('formulir detil rencana pasien'),
-            'path' => '/care/rencana/detail_form',
+        $items['pemberianCairan_detail'] = array(
+            'title' => __t('detail form pemberianCairan'),
+            'description' => __t('formulir detil pemberian Cairan pasien'),
+            'path' => '/care/pemberianCairan/detail_form',
             'exec' => 'detail_form',
             'weight' => 5,
             'user_required' => 'perawatan'
@@ -68,7 +68,7 @@ class rencanaModule extends mainModule
     function detail_form(){
         $this->formhabit = 'readonly';
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        $vcache = $this->__get_rencana_data((int)$dump[3]);
+        $vcache = $this->__get_pemberianCairan_data((int)$dump[3]);
         $this->vardump = $this->__write_custom_cache($vcache);
         $this->vardump['readonly'] = $this->formhabit;
         $result = $this->__get_form($vcache['perawatan']);
@@ -76,7 +76,7 @@ class rencanaModule extends mainModule
     }
 
     function __head_page($id){
-        $this->sync_scheme('rencana', $this->query);
+        $this->sync_scheme('catatan_pemberian_cairan', $this->query);
         $result = array();
         if(!is_null($id) && trim($id) != ''){
             $sql = $this->query->getSelect(
@@ -147,12 +147,12 @@ class rencanaModule extends mainModule
         }
         $result = array();
         $result['type'] = 'table';
-        $result['title'] = __t('rencana perawatan pasien') . (!is_null($pid) ? ' ' . __t('a.n.') . ' ' . $patientinfo['nama'] : '');
-        $result['description'] = (!is_null($pid) ? __t('daftar rencana perawatan pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'] : __t('daftar rencana perawatan beberapa pasien terakhir'));
+        $result['title'] = __t('pemberianCairan perawatan pasien') . (!is_null($pid) ? ' ' . __t('a.n.') . ' ' . $patientinfo['nama'] : '');
+        $result['description'] = (!is_null($pid) ? __t('daftar pemberianCairan perawatan pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'] : __t('daftar pemberianCairan perawatan beberapa pasien terakhir'));
         if(!is_null($pid)){
             $result['addmenu']['#add'] = array(
                 'title' => __t('add'),
-                'action' => '/care/rencana/form/' . $pid,
+                'action' => '/care/pemberianCairan/form/' . $pid,
                 'position' => 'top',
                 'user_required' => 'perawatan'
             );
@@ -192,7 +192,7 @@ class rencanaModule extends mainModule
             );
             $dumprjk = $this->__get_perawatan_lists();
             foreach($dumprjk as $key => $value){
-                if($key != 'rencana'){
+                if($key != 'pemberianCairan'){
                     $rujukanopts[$key] = $value;
                 }
             } unset($dumprjk);
@@ -218,28 +218,29 @@ class rencanaModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => (!is_null($pid) ? 'keluhan' : 'nama'),
-                'caption' => (!is_null($pid) ? __t('keluhan') : __t('nama')),
+                'field' => (!is_null($pid) ? 'jenis_cairan' : 'nama'),
+                'caption' => (!is_null($pid) ? __t('jenis cairan') : __t('nama')),
                 'align' => 'left'
             ),
             array(
-                'field' => (!is_null($pid) ? 'intervensi' : 'usia'),
-                'caption' => (!is_null($pid) ? __t('intervensi') : __t('usia')),
+                'field' => (!is_null($pid) ? 'pemberi_instruksi' : 'usia'),
+                'caption' => (!is_null($pid) ? __t('pemberi instruksi') : __t('usia')),
                 'width' => (!is_null($pid) ? '15%' : '25%'),
                 'align' => (!is_null($pid) ? 'center' : 'right')
             ),
             array(
-                'field' => (!is_null($pid) ? 'implementasi' : 'pukul_masuk'),
-                'caption' => (!is_null($pid) ? __t('implementasi') : __t('tanggal masuk')),
+                'field' => (!is_null($pid) ? 'instruksi' : 'pukul_masuk'),
+                'caption' => (!is_null($pid) ? __t('instruksi') : __t('tanggal masuk')),
                 'width' => '25%',
                 'align' => (!is_null($pid) ? 'center' : 'right')
             )
         );
 
         if(!is_null($pid)){
+
             $sql = $this->query->getSelect(
                 array(),
-                array('rencana'),
+                array('catatan_pemberian_cairan'),
                 array(
                     array('&&', "perawatan=" . $pid)
                 ),
@@ -251,9 +252,10 @@ class rencanaModule extends mainModule
             if($getit->_numOfRows > 0){
                 for($i=0; $i<$getit->_numOfRows; $i++){
                     $result['data'][$i] = $getit->fields;
-                    $result['data'][$i]['goto'] = '/care/rencana/detail_form/' . $getit->fields['id'];
+                    $result['data'][$i]['goto'] = '/care/pemberianCairan/detail_form/' . $getit->fields['id'];
                     $getit->MoveNext();
                 }
+//                echo '<pre>';print_r($result);echo '</pre>';
             } unset($getit);
         } else {
             $sql = $this->query->getSelect(
@@ -268,7 +270,7 @@ class rencanaModule extends mainModule
             $getit = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             if($getit->_numOfRows > 0){
-                for($i=0; $i<$getit->_numOfRows; $i++){
+                for($i=0; $i<$getit->_numOfRows; $i++){;
                     $sql = $this->query->getSelect(
                         array('id', 'nama', 'tgl_lahir'),
                         array('patients'),
@@ -281,20 +283,22 @@ class rencanaModule extends mainModule
                     $this->query->close();
                     $result['data'][$i]['nama'] = $getthis->fields['nama'];
                     $result['data'][$i]['usia'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
-                    $result['data'][$i]['goto'] = '/care/perawatan/rencana/' . $getit->fields['id'];
+                    $result['data'][$i]['goto'] = '/care/perawatan/pemberianCairan/' . $getit->fields['id'];
                     $result['data'][$i]['pukul_masuk'] = date('j-n-Y H:i:s', strtotime($getit->fields['pukul_masuk']));
                     $getit->MoveNext();
                 }
+//                unset($getthis);
+//                echo '<pre>';print_r($result);echo '</pre>';
             }
-        }
+        } unset($getit);
         return $result;
     }
     
-    function __get_rencana_data($id){
+    function __get_pemberianCairan_data($id){
         $result = array();
         $sql = $this->query->getSelect(
             array(),
-            array('rencana'),
+            array('catatan_pemberian_cairan'),
             array(
                 array('&&', "id=" . $id)
             )
@@ -307,6 +311,7 @@ class rencanaModule extends mainModule
                 $result[$key] = $value;
             }
         } unset($query);
+//        echo '<pre>';print_r($result);echo '</pre>';
         return $result;
     }
 
@@ -316,7 +321,7 @@ class rencanaModule extends mainModule
             return $this->__get_form((int)$dump[3]);
         } else {
             unset($dump);
-            redirect_to('/care/perawatan/rencana');
+            redirect_to('/care/perawatan/pemberianCairan');
         }
     }
 
@@ -332,12 +337,12 @@ class rencanaModule extends mainModule
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 4){
                 if(preg_match('/^edit_/', $dump[4])){
-                    $rencana_id = preg_replace('/^edit_/','',$dump[4]);
+                    $pemberianCairan_id = preg_replace('/^edit_/','',$dump[4]);
                 } else {
-                    $rencana_id = $dump[4];
+                    $pemberianCairan_id = $dump[4];
                 }
-                $vcache = $this->__get_rencana_data((int)$rencana_id);
-                unset($rencana_id);
+                $vcache = $this->__get_pemberianCairan_data((int)$pemberianCairan_id);
+                unset($pemberianCairan_id);
                 $this->vardump = $vcache;
             } unset($dump);
         }
@@ -364,16 +369,16 @@ class rencanaModule extends mainModule
                 $addmenuopts[$key] = $value;
             } unset($getit);
         } unset($dump_addmenus);
-        $result['rencana'] = array(
+        $result['pemberianCairan'] = array(
             '#type' => 'special',
-            '#id' => 'rencana',
-            '#title' => __t('rencana'),
+            '#id' => 'pemberianCairan',
+            '#title' => __t('pemberianCairan'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/care/rencana/form' . (isset($this->formhabit) && $this->formhabit == 'readonly' ? '/' . $pid . '/edit_' . $vcache['id'] : '_submit'),
+            '#action' => '/care/pemberianCairan/form' . (isset($this->formhabit) && $this->formhabit == 'readonly' ? '/' . $pid . '/edit_' . $vcache['id'] : '_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
-            '#formtpl' => MODULES_DIR . DS . 'rencana' . DS . 'rencana.tpl',
+            '#formtpl' => MODULES_DIR . DS . 'pemberianCairan' . DS . 'pemberianCairan.tpl',
             '#addmenu' => array(
                 '#addmenu' => array(
                     'title' => __t('medical record'),
@@ -395,7 +400,7 @@ class rencanaModule extends mainModule
             foreach($dumprjk as $key => $value){
                 $rujukanopts[$key] = $value;
             } unset($dumprjk);
-            $result['rencana']['#addmenu']['#addmenu0'] = array(
+            $result['pemberianCairan']['#addmenu']['#addmenu0'] = array(
                 'title' => __t('dirujuk ke'),
                 'action' => '/care/perawatan',
                 'position' => 'top',
@@ -409,17 +414,17 @@ class rencanaModule extends mainModule
                 )
             ); unset($rujukanopts);
         }
-        $thefields = $this->__get_data_fields('rencana', $this->query);
+        $thefields = $this->__get_data_fields('catatan_pemberian_cairan', $this->query);
         foreach($thefields as $value){
             if(in_array($value, $this->config->hiddenfields)){
                 if($this->config->typeoffields[$value] != 'system'){
-                    $result['rencana'][$value] = array(
+                    $result['pemberianCairan'][$value] = array(
                         '#type' => 'hidden',
                         '#value' => isset($vcache[$value]) ? $vcache[$value] : ''
                     );
                 }
             } else {
-                $result['rencana'][$value] = array(
+                $result['pemberianCairan'][$value] = array(
                     '#type' => $this->config->typeoffields[$value],
                     '#title' => __t($value)
                 );
@@ -433,20 +438,20 @@ class rencanaModule extends mainModule
                                 $vcache[$value] = date('Y-m-d H:i:s', $this->config->time);
                             }
                         }
-                        $result['rencana'][$value]['#style'] = 'text-align:right';
+                        $result['pemberianCairan'][$value]['#style'] = 'text-align:right';
                     } else {
                         $options = $this->__get_ref_options($this->config->reftable[$value][0], $this->config->reftable[$value][1], $this->config->reftable[$value][2], $this->query);
                     }
-                    $result['rencana'][$value]['#option'] = $options;
+                    $result['pemberianCairan'][$value]['#option'] = $options;
                     unset($options);
                 }
-                $result['rencana'][$value]['#value'] = isset($vcache[$value]) ? $vcache[$value] : '';
+                $result['pemberianCairan'][$value]['#value'] = isset($vcache[$value]) ? $vcache[$value] : '';
                 if(isset($this->formhabit) && $this->formhabit == 'readonly'){
-                    $result['rencana'][$value]['#readonly'] = true;
+                    $result['pemberianCairan'][$value]['#readonly'] = true;
                 }
             }
         }
-        $result['rencana']['submit'] = array(
+        $result['pemberianCairan']['submit'] = array(
             '#value' => isset($this->formhabit) && $this->formhabit == 'readonly' ? __t('edit') : __t('submit')
         );
 //        echo '<pre>'; print_r($result); echo '</pre>';
@@ -459,7 +464,7 @@ class rencanaModule extends mainModule
 
     function __get_form_submit(){
         $this->vardump = $this->__write_form_cache();
-        $thefields = $this->__get_data_fields('rencana', $this->query);
+        $thefields = $this->__get_data_fields('catatan_pemberian_cairan', $this->query);
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
                 if($this->config->typeoffields[$key] == 'date'){
@@ -478,22 +483,23 @@ class rencanaModule extends mainModule
             $opr = 'update';
             $strid = array('id', $_POST['id']);
         } else {
-            $thevalue['id'] = $this->__get_id_insert_value('rencana', 'id', $this->query);
+            $thevalue['id'] = $this->__get_id_insert_value('catatan_pemberian_cairan', 'id', $this->query);
             $thevalue['inputer'] = $user['id'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
             $this->vardump['id'] = $thevalue['id'];
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
+//        echo '<pre>';print_r($thevalue);echo '</pre>';
         $this->__exec_db_ops(
             $this->query,
-            'rencana',
+            'catatan_pemberian_cairan',
             $opr,
             $strid,
             $thevalue
         );
         $iddata = $thevalue['id'];
         unset($thevalue, $opr, $strid);
-        redirect_to('/care/rencana/detail_form/' . $iddata);
+        redirect_to('/care/pemberianCairan/detail_form/' . $iddata);
     }
 }

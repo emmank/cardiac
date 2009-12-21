@@ -22,10 +22,10 @@
  *  Created on Oct 3, 2009, 4:31:28 PM
  */
 
-class perkembanganConfig extends config
+class dietConfig extends config
 {
     var $rdbms = 'mysql';
-    var $dbperkembangan = array(
+    var $dbdiet = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',
@@ -42,10 +42,8 @@ class perkembanganConfig extends config
         'id' => 'hidden',
         'perawatan' => 'hidden',
         'tgl' => 'datetime',
-        'jenis_cairan' => 'text',
-        'pemberi_instruksi' => 'text',
-        'instruksi' => 'text',
-        'pelaksana_instruksi' => 'text',
+        'nama_diet' => 'text',
+        'catatan' => 'text',
         'inputer' => 'system',
         'inputtime' => 'system',
         'updated' => 'system'
@@ -57,7 +55,7 @@ class perkembanganConfig extends config
         'risk_factor' => array('ref_present_risk_factor', 'risk_factor', 'id'),
     );
     var $table_scheme = array(
-        'catatan_perkembangan' => array(
+        'diet' => array(
             'id' => array(
                 'type' => 'int(11)',
                 'null' => 0,
@@ -79,29 +77,15 @@ class perkembanganConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'subyektif' => array(
-                'type' => 'varchar(255)',
+            'nama_diet' => array(
+                'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'obyektif' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'analisa' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'planning' => array(
-                'type' => 'varchar(255)',
+            'catatan' => array(
+                'type' => 'varchar(150)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,

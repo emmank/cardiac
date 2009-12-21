@@ -17,7 +17,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  perkembangan.php
+ *  diet.php
  *  
  *  Created on Oct 28, 2009, 9:51:59 AM
  */
@@ -39,7 +39,6 @@ foreach($data as $key => $value){
     $result .= '</fieldset>' . "\n";
 
     $result .= __create_form_open($value, $key);
-//    echo '<pre>';print_r($value);echo '</pre>';
     $result .= '<fieldset>' . "\n";
     $result .= '<div id="form">' . "\n";
     foreach($value as $ky => $vl){
