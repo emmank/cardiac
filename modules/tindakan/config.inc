@@ -36,28 +36,83 @@ class tindakanConfig extends config
         'passwd' => 'emmank'
     );
     var $hiddenfields = array(
-        'id'
+        'id', 'inputer', 'inputtime', 'updated', 'perawatan'
     );
     var $typeoffields = array(
         'id' => 'hidden',
-        'tgl_tindakan' => 'datetime',
-        'tindakan' => 'text',
-        'jenis_tindakan' => 'text'
-//        ,
-//        'tension' => 'text',
-//        'risk_factor' => 'checkbox',
-//        'catched' => 'datetime',
-//        'nutrient' => 'select',
-//        'main_soreness' => 'select',
-//        'ilness_history' => 'checkbox'
+        'keluhan' => 'text',
+        'intervensi' => 'text',
+        'implementasi' => 'text',
+        'perawatan' => 'hidden',
+        'tgl' => 'datetime',
+        'inputer' => 'system',
+        'inputtime' => 'system',
+        'updated' => 'system'
     );
     var $fieldsisarray = array(
-        'nutrient', 'main_soreness', 'risk_factor', 'ilness_history'
+        'none',
     );
     var $reftable = array(
-        'risk_factor' => array('ref_present_risk_factor', 'risk_factor'),
-        'nutrient' => array('ref_present_nutrient', 'nutrient'),
-        'main_soreness' => array('ref_present_soreness', 'soreness'),
-        'ilness_history' => array('ref_present_illness_history', 'illness_history')
+        'risk_factor' => array('ref_present_risk_factor', 'risk_factor', 'id'),
+    );
+    var $table_scheme = array(
+        'tindakan' => array(
+            'id' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'perawatan' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tgl' => array(
+                'type' => 'datetime',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tindakan' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'jenis_tindakan' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputer' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'inputtime' => array(
+                'type' => 'datetime',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'updated' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
+        )
     );
 }
