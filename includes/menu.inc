@@ -177,6 +177,8 @@ function menu_organize(){
         $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
         $systemquery->close();
         $result['primary_links'][$i] = $get_menu_lists->fields;
+        $result['primary_links'][$i]['title'] = __t($get_menu_lists->fields['title']);
+        $result['primary_links'][$i]['description'] = __t($get_menu_lists->fields['description']);
         $result['primary_links'][$i]['name'] = trim($value);
         $i++; unset($get_menu_lists);
     }
@@ -193,6 +195,8 @@ function menu_organize(){
         $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
         $systemquery->close();
         $result['secondary_links'][$i] = $get_menu_lists->fields;
+        $result['secondary_links'][$i]['title'] = __t($get_menu_lists->fields['title']);
+        $result['secondary_links'][$i]['description'] = __t($get_menu_lists->fields['description']);
         $result['secondary_links'][$i]['name'] = trim($value);
         $i++; unset($get_menu_lists);
     } $i = 0;
@@ -208,6 +212,8 @@ function menu_organize(){
         $get_menu_lists = $systemquery->conn->Execute($sql); unset($sql);
         $systemquery->close();
         $result['navigations'][$i] = $get_menu_lists->fields;
+        $result['navigations'][$i]['title'] = __t($get_menu_lists->fields['title']);
+        $result['navigations'][$i]['description'] = __t($get_menu_lists->fields['description']);
         $sql = $systemquery->getSelect(
             array('parent'),
             array('navigations'),
@@ -614,7 +620,7 @@ function __get_menu_info($data){
         $systemquery->close();
         if($getit->_numOfRows > 0){
             foreach($getit->fields as $ky => $vl){
-                $result[$ky] = $vl;
+                $result[$ky] = $ky == 'title' || $ky == 'description' ? __t($vl) : $vl;
             }
         }
     }

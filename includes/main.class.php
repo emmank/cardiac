@@ -1223,7 +1223,7 @@ class mainModule
                array($fchoose, $fverbose),
                array($tablename),
                NULL,
-               $fverbose . 'desc'
+               $fverbose . ' desc'
        );
        $interpreter->connect();
        $getit = $interpreter->conn->Execute($sql); unset($sql);

@@ -299,11 +299,11 @@ function __reload_menus(){
     $systemquery->conn->Execute($sql); unset($sql);
     $systemquery->close();
     foreach ($allelements as $key => $value){
-            $value['id'] = $key;
-            $sql = $systemquery->saveData(
-                'menus',
-                $value
-            ); unset($value['id']);
+        $value['id'] = $key;
+        $sql = $systemquery->saveData(
+            'menus',
+            $value
+        ); unset($value['id']);
         $systemquery->connect();
         $systemquery->conn->Execute($sql); unset($sql);
         $systemquery->close();

@@ -48,7 +48,8 @@
 ***********************************************/
 
 </script>
-    
+
+<?php if($path['menu'] == 'vascular'){ ?>
 <script src="/themes/default/js/jquery-1.3.2.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready( function() {
@@ -61,6 +62,7 @@ $(document).ready( function() {
     });
 });
 </script>
+<?php } ?>
 
 </head>
 <body<?php if (isset($body_login)){echo " onLoad=\"".$body_login. "\"";}?>>
@@ -69,8 +71,8 @@ $(document).ready( function() {
 
 <?php
 //    print_r($path);
-    if (($path['menu']== "patient" && $path['vars']=="form") ||
-        ($path['menu']== "patient" && $path['vars']=="update")
+    if (($path['menu']== "patient" && eregi("form", $path['vars'])) ||
+        ($path['menu']== "patient" && eregi("update", $path['vars']))
         ) {
         include_once "themes/".$theme."/js/pilihkota_head_js.php";
     }

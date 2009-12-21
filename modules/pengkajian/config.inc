@@ -45,7 +45,6 @@ class pengkajianConfig extends config
         'eliminasi',
         'polatidur',
         'psikoSosial',
-        'cairanAktivitas'
     );
     var $module_tableuse = array(
         'riwayatKesehatan' => 'riwayat_kesehatan',
@@ -57,6 +56,5 @@ class pengkajianConfig extends config
         'eliminasi' => 'eliminasi',
         'polatidur' => 'polatidur',
         'psikoSosial' => 'psikoSosial',
-        'cairanAktivitas' => 'cairan_aktivitas'
     );
 }

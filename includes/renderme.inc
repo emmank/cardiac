@@ -273,29 +273,40 @@ function __create_items_detail($value){
     return $result;
 }
 
-function __create_table($value){
-//    echo "<pre>";
-//    print_r ($value);
-//    echo "</pre>";
+function __create_add_message($data){
+    $result = '<div>' . "\n";
+    $result .= $data;
+    $result .= '</div>' . "\n";
+    return $result;
+}
 
+function __create_table($value){
     $user = __get_vars_of_active_user();
     $result .= '';
     if(isset($value['addmenu'])){
         $result .= __create_add_menu($value['addmenu']);
     }
 
-    $result .= "<!--div style=\"font-wieght:bold;font-size:1em\">" . strtoupper($value['title']) . "</div-->\n";
+    if(isset($value['addmessage'])){
+        foreach($value['addmessage'] as $ky => $vl){
+            if(isset($vl['position']) && $vl['position'] == 'top'){
+                $result .= __create_add_message($vl['message']);
+            }
+        }
+    }
+
+//    $result .= "<!--div style=\"font-wieght:bold;font-size:1em\">" . strtoupper($value['title']) . "</div-->\n";
     $result .= '<div>' . strtoupper($value['title']) . '</div>' . "\n";
     $result .= '<table width="100%" class="tbl">' . "\n";
     foreach($value['header'] as $key=>$val){
-        $result .= '<th' . (isset($val['width']) ? ' width="' . $val['width'] . '"' : '') . '>' . ucwords($val['caption']) . '</th>' . "\n";
+        $result .= '<th' . (isset($val['width']) && trim($val['width']) != '' ? ' width="' . $val['width'] . '"' : '') . '>' . ucwords($val['caption']) . '</th>' . "\n";
     }
     if(count($value['data']) > 0){
         foreach($value['data'] as $key => $val){
             if(isset($val['goto'])){
-                $result .= '<tr class="menu_plain" onmouseover=\'this.className="menu_highlight"\' onmouseout=\'this.className="menu_plain"\' style="cursor:pointer" onclick=\'location.href="' . $val['goto'] . '"\'>' . "\n";
+                $result .= '<tr valign="top" class="menu_plain" onmouseover=\'this.className="menu_highlight"\' onmouseout=\'this.className="menu_plain"\' style="cursor:pointer" onclick=\'location.href="' . $val['goto'] . '"\'>' . "\n";
             } else {
-                $result .= '<tr class="menu_plain">' . "\n";
+                $result .= '<tr valign="top" class="menu_plain">' . "\n";
             }
             foreach($value['header'] as $ky=>$vl){
                 $result .= '<td align="' . $vl['align'] . '">' . "\n";
@@ -310,6 +321,9 @@ function __create_table($value){
         }
     }
     $result .= '</table>';
+    if(isset($value['bottommenu'])){
+        $result .= __create_add_menu($value['bottommenu']);
+    }
 
     if(isset($value['add_patient'])){
         $result .= "<br /><div id=search><font class=judul>Pendaftaran</font>";
@@ -322,6 +336,15 @@ function __create_table($value){
         $result .= "<br /><br />";
         $result .= __create_search($value["search"]);
     }
+
+    if(isset($value['addmessage'])){
+        foreach($value['addmessage'] as $ky => $vl){
+            if(isset($vl['position']) && $vl['position'] == 'bottom'){
+                $result .= __create_add_message($vl['message']);
+            }
+        }
+    }
+
     return $result;
 }
 
@@ -651,7 +674,7 @@ function __create_search($value){
 //    echo '<pre>'; print_r($value); echo '</pre>';
 //    $result .= "<br />Search\n <hr>";
     $result .= "<div id=search>";
-    $result .= "<font class=judul>Search</font>";
+    $result .= "<font class=judul>" . ucwords(__t('search')) . "</font>";
     if(is_array($value)){
         foreach($value as $yk => $lv){
 //    echo '<pre>'; print_r($value); echo '</pre>';
@@ -661,7 +684,7 @@ function __create_search($value){
 //                        $result .= "\n" . "<hr>\n";
                     }
                     if($val['#type'] == 'character'){
-                        $result .= "<div id=by_letter>Pencarian dengan huruf awalan : &nbsp;";
+                        $result .= "<div id=by_letter>" . ucwords(__t('pencarian dengan huruf awalan')) . " : &nbsp;";
                         foreach($val['data'] as $ky => $vl){
                             if(isset($koma)){$result .= ', ';}
                             $result .= !is_null($vl['links']) ? '<a href="' . $vl['links'] . '"><strong>' : '';

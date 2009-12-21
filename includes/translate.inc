@@ -41,13 +41,13 @@ function __t($string){
         array($lang),
         array('translations'),
         array(
-            array('&&', "strkey=" . $string)
+            array('&&', "strkey=" . trim(strtolower($string)))
         )
     );
     $systemquery->connect();
     $result = $systemquery->conn->Execute($sql); unset($sql);
     $systemquery->close();
-    if($result->_numOfRows > 0 && $result->fields[$lang] != ''){
+    if($result->_numOfRows > 0 && trim($result->fields[$lang]) != ''){
         if($getit->_numOfRows > 0){
             $sql = $systemquery->setDelete(
                 'dumptr',
@@ -61,7 +61,8 @@ function __t($string){
         } unset($getit);
         return $result->fields[$lang];
     } else {
-        if($getit->_numOfRows < 1){
+        $string = trim(strtolower($string));
+        if($getit->_numOfRows < 1 && $string != ''){
             $sql = $systemquery->saveData(
                 'dumptr',
                 array(
