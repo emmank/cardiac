@@ -2,12 +2,9 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/home/arman/cardiac/themes/default/page.tpl</file>
-        <file>file:/home/arman/cardiac/includes/renderme.inc</file>
-        <file>file:/home/arman/cardiac/themes/default/js/pilihkota_head_js.php</file>
-        <file>file:/home/arman/cardiac/modules/patient/patient.class.inc</file>
-        <file>file:/home/arman/cardiac/includes/main.class.php</file>
-        <file>file:/home/arman/cardiac/includes/bootstrap.inc</file>
-        <file>file:/home/arman/cardiac/themes/default/css/style.css</file>
+        <file>file:/home/denic/apache/cardiac/includes/bootstrap.inc</file>
+        <file>file:/home/denic/apache/cardiac/includes/menu.inc</file>
+        <file>file:/home/denic/apache/cardiac/themes/default/page.tpl</file>
+        <file>file:/home/denic/apache/cardiac/themes/default/content.tpl.php</file>
     </open-files>
 </project-private>

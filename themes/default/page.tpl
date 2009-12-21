@@ -95,7 +95,6 @@ $(document).ready( function() {
                         <?php if(!is_null($value['parent'])){?>
                             <?php
                             $exp_vpath = explode('/', preg_replace('/^\//','',$value['path']));
-//                            echo '<pre>'; print_r($value); echo '</pre>';
                             ?>
                             <?php if($exp_vpath[0] == $path['main']){?>
                                 <dt><a href="<?php echo $value['path']; ?>"<?php if (is_null($value['parent'])){?> style="font-weight:bold"<?php }?>><?php echo !is_null($value['parent']) ? ucwords($value['title']) : strtoupper($value['title']);?></a></dt>
