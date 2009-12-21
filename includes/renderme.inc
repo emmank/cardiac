@@ -793,7 +793,7 @@ function __create_items_of_form($data){
                 if(isset($data['#value']) && $data['#value'] == $key){
                     $result .= ' SELECTED="SELECTED"';
                 }
-                $result .= '>' . ucwords(__t($value)) . '</OPTION>' . "\n";
+                $result .= '>' . ucwords($value) . '</OPTION>' . "\n";
             }
             $result .= '</SELECT>';
         }
@@ -803,7 +803,7 @@ function __create_items_of_form($data){
         }
         if(isset($data['#readonly']) && $data['#readonly'] !== FALSE){
             $result .= $thevalue[2];
-            $result .= ' ' . (isset($data['#option']) ? ucwords(__t($data['#option'][$thevalue[1]])) : $thevalue[1]);
+            $result .= ' ' . (isset($data['#option']) ? ucwords($data['#option'][$thevalue[1]]) : $thevalue[1]);
             $result .= ' ' . $thevalue[0] . "\n";
         } else {
             $extra = trim($data['#extra']) != '' ? $data['#extra'] : '';
@@ -839,7 +839,7 @@ function __create_items_of_form($data){
                 if(isset($thevalue[1]) && $thevalue[1] == $key){
                     $result .= ' SELECTED="SELECTED"';
                 }
-                $result .= '>' . ucwords(__t($value)) . '</OPTION>' . "\n";
+                $result .= '>' . ucwords($value) . '</OPTION>' . "\n";
             }
             $result .= '</SELECT> &nbsp;' . "\n";
 
@@ -880,7 +880,7 @@ function __create_items_of_form($data){
         }
         if(isset($data['#readonly']) && $data['#readonly'] !== FALSE){
             $result .= $thevalue[2];
-            $result .= ' ' . (isset($data['#option']) ? ucwords(__t($data['#option'][$thevalue[1]])) : $thevalue[1]);
+            $result .= ' ' . (isset($data['#option']) ? ucwords($data['#option'][$thevalue[1]]) : $thevalue[1]);
             $result .= ' ' . $thevalue[0];
             $result .= ' ' . $thevalue[3];
             $result .= ':' . $thevalue[4];
@@ -919,7 +919,7 @@ function __create_items_of_form($data){
                 if(isset($thevalue[1]) && $thevalue[1] == $key){
                     $result .= ' SELECTED="SELECTED"';
                 }
-                $result .= '>' . ucwords(__t($value)) . '</OPTION>' . "\n";
+                $result .= '>' . ucwords($value) . '</OPTION>' . "\n";
             }
             $result .= '</SELECT> &nbsp;' . "\n";
 
@@ -1022,7 +1022,7 @@ function __create_items_of_form($data){
                         $key,
                         isset($data['#value']) && $data['#value'] == $key ? ' CHECKED="TRUE"' : NULL
                 );
-                $result .= '>' . ucwords(__t($value));
+                $result .= '>' . ucwords($value);
                 $result .= '</div>' . "\n";
             }
             $result .= '</div>' . "\n";

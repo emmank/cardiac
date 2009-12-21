@@ -25,7 +25,7 @@
 //Get translation string
 
 function __t($string){
-    global $systemquery;
+    global $systemquery, $configs;
     $lang = __get_lang();
     $sql = $systemquery->getSelect(
         array('id'),
@@ -63,6 +63,13 @@ function __t($string){
     } else {
         $string = trim(strtolower($string));
         if($getit->_numOfRows < 1 && $string != ''){
+//            $sql = $systemquery->getSelect(
+//                    array($lang),
+//                    array('translate'),
+//                    array(
+//                        array('&&', $lang . "=" . $string)
+//                    )
+//            );
             $sql = $systemquery->saveData(
                 'dumptr',
                 array(
