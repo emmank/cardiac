@@ -47,7 +47,15 @@ class inferiorConfig extends config
         'artery_tibalin_arterior' => 'select',
         'artery_tibalin_rasterior' => 'select',
         'artery_aorsalin_pedia' => 'select',
-        'vena' => 'select'
+        'vena_peropeal' => 'select',
+        'vena_tibicel' => 'select',
+        'vena_solcal' => 'select',
+        'vena_paplitcal' => 'select',
+        'vena_fulmoral_superior' => 'select',
+        'vena_fulmoral_cummonis' => 'select',
+        'vena_iliceca_eksterna' => 'select',
+        'vena_saphera_parva' => 'select',
+        'vena_saphera_magna' => 'select'
     );
 
     var $fieldsisarray = array(
@@ -58,7 +66,15 @@ class inferiorConfig extends config
         'artery_tibalin_arterior',
         'artery_tibalin_rasterior',
         'artery_aorsalin_pedia',
-        'vena'
+        'vena_peropeal',
+        'vena_tibicel',
+        'vena_solcal',
+        'vena_paplitcal',
+        'vena_fulmoral_superior',
+        'vena_fulmoral_cummonis',
+        'vena_iliceca_eksterna',
+        'vena_saphera_parva',
+        'vena_saphera_magna'
     );
 
     var $reftable = array(
@@ -69,7 +85,15 @@ class inferiorConfig extends config
         'artery_tibalin_arterior' => array('ref_kateterisasiref_steunosis','steunosis'),
         'artery_tibalin_rasterior' => array('ref_kateterisasiref_steunosis','steunosis'),
         'artery_aorsalin_pedia' => array('ref_kateterisasiref_steunosis','steunosis'),
-        'vena' => array('ref_kateterisasiref_steunosis','steunosis')
+        'vena_peropeal' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_tibicel' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_solcal' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_paplitcal' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_fulmoral_superior' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_fulmoral_cummonis' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_iliceca_eksterna' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_saphera_parva' => array('ref_kateterisasiref_steunosis','steunosis'),
+        'vena_saphera_magna' => array('ref_kateterisasiref_steunosis','steunosis')
     );
     var $qrs_complex = array(
         'qrs_axis', 'qrs_durasi', 'qrs_konfigurasi_patologi', 'qrs_konfigurasi_r_s'
@@ -135,7 +159,63 @@ class inferiorConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'vena' => array(
+            'vena_peropeal' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_tibicel' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_solcal' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_paplitcal' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_fulmoral_superior' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_fulmoral_cummonis' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_iliceca_eksterna' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_saphera_parva' => array(
+                'type' => 'varchar(150)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'vena_saphera_magna' => array(
                 'type' => 'varchar(150)',
                 'null' => 1,
                 'key' => '',

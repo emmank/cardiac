@@ -17,28 +17,28 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  pemberian.php
+ *  pemberianCairan.php
  *  
  *  Created on Oct 3, 2009, 4:34:16 PM
  */
 
-require_once MODULES_DIR . DS . 'pemberian' . DS . 'pemberian.class.inc';
+require_once MODULES_DIR . DS . 'pemberianCairan' . DS . 'pemberianCairan.class.inc';
 
-if(!isset($pemberian_config)){
-    $pemberian_config = new pemberianConfig();
-} elseif(!$pemberian_config instanceof pemberianConfig) {
-    $pemberian_config = new pemberianConfig();
+if(!isset($pemberianCairan_config)){
+    $pemberianCairan_config = new pemberianCairanConfig();
+} elseif(!$pemberianCairan_config instanceof pemberianCairanConfig) {
+    $pemberianCairan_config = new pemberianCairanConfig();
 }
 
-require_once DBSTRINGS_DIR . DS . $pemberian_config->rdbms . DS . 'dbquery.php';
-if(!isset($pemberian_query)){
-    $pemberian_query = new dbset();
-} elseif(!$pemberian_query instanceof dbset) {
-    $pemberian_query = new dbset();
+require_once DBSTRINGS_DIR . DS . $pemberianCairan_config->rdbms . DS . 'dbquery.php';
+if(!isset($pemberianCairan_query)){
+    $pemberianCairan_query = new dbset();
+} elseif(!$pemberianCairan_query instanceof dbset) {
+    $pemberianCairan_query = new dbset();
 }
 
-if(!isset($pemberian_exec)){
-    $pemberian_exec = new pemberianModule();
-} elseif(!$pemberian_exec instanceof pemberianModule) {
-    $pemberian_exec = new pemberianModule();
+if(!isset($pemberianCairan_exec)){
+    $pemberianCairan_exec = new pemberianCairanModule();
+} elseif(!$pemberianCairan_exec instanceof pemberianCairanModule) {
+    $pemberianCairan_exec = new pemberianCairanModule();
 }

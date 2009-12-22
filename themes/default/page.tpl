@@ -46,12 +46,34 @@
 <script src="/themes/default/js/jquery-1.3.2.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready( function() {
+    //carotis
     $("#toggle-hidden-div").click( function() {
         $("#hidden-div").slideToggle('slow');
     });
     
     $("#toggle-ahidden-div").click( function() {
         $("#ahidden-div").slideToggle('slow');
+    });
+    //superior
+    $("#toggle-vsuperiorhidden-div").click( function() {
+        $("#vsuperiorhidden-div").slideToggle('slow');
+    });
+    $("#toggle-asuperiorhidden-div").click( function() {
+        $("#asuperiorhidden-div").slideToggle('slow');
+    });
+    //inferior
+    $("#toggle-ainferiorhidden-div").click( function() {
+        $("#ainferiorhidden-div").slideToggle('slow');
+    });
+    $("#toggle-vinferiorhidden-div").click( function() {
+        $("#vinferiorhidden-div").slideToggle('slow');
+    });
+    //abdomen
+    $("#toggle-arabdomenhidden-div").click( function() {
+        $("#arabdomenhidden-div").slideToggle('slow');
+    });
+    $("#toggle-vabdomenhidden-div").click( function() {
+        $("#vabdomenhidden-div").slideToggle('slow');
     });
 });
 </script>

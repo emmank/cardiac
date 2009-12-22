@@ -26,1177 +26,491 @@ require_once MODULES_DIR . DS . 'tindakan' . DS . 'config.inc';
 
 class tindakanModule extends mainModule
 {
-    var $title = 'tindakan module';
+    var $title = 'tindakan';
     var $description = '';
 
     function menu(){
-        $items['ref_present_nutrient'] = array(
-            'title' => __t('gizi'),
-            'description' => __t('nutrient reference for present status'),
-            'path' => '/reference/nutrient',
-            'exec' => 'nutrient_view',
+        $items['tindakan_view'] = array(
+            'title' => __t('tindakan perawatan'),
+            'description' => __t('daftar tindakan perawatan'),
+            'path' => '/care/perawatan/tindakan',
+            'exec' => 'view',
             'weight' => 5,
-            'user_required' => NULL
+            'user_required' => 'perawatan'
         );
-        $items['ref_present_nutrient_detail'] = array(
-            'title' => __t('nutrient detail'),
-            'description' => __t('nutrient reference detail for present status'),
-            'path' => '/reference/nutrient/detail',
-            'exec' => 'nutrient_detail',
-            'weight' => '0',
-            'user_required' => NULL
+        $items['tindakan_form'] = array(
+            'title' => __t('form tindakan'),
+            'description' => __t('formulir tindakan pasien'),
+            'path' => '/care/tindakan/form',
+            'exec' => 'form',
+            'weight' => 5,
+            'user_required' => 'perawatan'
         );
-        $items['ref_present_nutrient_form'] = array(
-            'title' => __t('nutrient form'),
-            'description' => __t('nutrient reference form for present status'),
-            'path' => '/reference/nutrient/form',
-            'exec' => 'nutrient_form',
-            'weight' => '0',
-            'user_required' => 'reference'
+        $items['tindakan_form_submit'] = array(
+            'title' => __t('form tindakan'),
+            'description' => __t('formulir tindakan pasien'),
+            'path' => '/care/tindakan/form_submit',
+            'exec' => 'form_submit',
+            'weight' => 5,
+            'user_required' => 'perawatan'
         );
-        $items['ref_present_nutrient_form_submit'] = array(
-            'title' => __t('nutrient form'),
-            'description' => __t('Execute nutrient reference form for present status'),
-            'path' => '/reference/nutrient/form_submit',
-            'exec' => 'nutrient_form_submit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_nutrient_edit'] = array(
-            'title' => __t('nutrient edit'),
-            'description' => __t('Editing nutrient reference form for present status'),
-            'path' => '/reference/nutrient/edit',
-            'exec' => 'nutrient_edit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_nutrient_drop'] = array(
-            'title' => __t('nutrient drop'),
-            'description' => __t('Remove nutrient reference form for present status'),
-            'path' => '/reference/nutrient/drop',
-            'exec' => 'nutrient_drop',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-         $items['ref_present_soreness'] = array(
-            'title' => __t('Keluhan Utama'),
-            'description' => __t('soreness reference form for present status'),
-            'path' => '/reference/soreness',
-            'exec' => 'soreness_view',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_soreness_detail'] = array(
-            'title' => __t('detil keluhan'),
-            'description' => __t('soreness reference detail for present status'),
-            'path' => '/reference/soreness/detail',
-            'exec' => 'soreness_detail',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_soreness_form'] = array(
-            'title' => __t('soreness form'),
-            'description' => __t('soreness reference form for present status'),
-            'path' => '/reference/soreness/form',
-            'exec' => 'soreness_form',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_soreness_form_submit'] = array(
-            'title' => __t('soreness form'),
-            'description' => __t('Execute soreness reference form for present status'),
-            'path' => '/reference/soreness/form_submit',
-            'exec' => 'soreness_form_submit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_soreness_edit'] = array(
-            'title' => __t('soreness edit'),
-            'description' => __t('Editing soreness reference form for present status'),
-            'path' => '/reference/soreness/edit',
-            'exec' => 'soreness_edit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_soreness_drop'] = array(
-            'title' => __t('soreness drop'),
-            'description' => __t('Remove soreness reference form for present status'),
-            'path' => '/reference/soreness/drop',
-            'exec' => 'soreness_drop',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_risk_factor'] = array(
-            'title' => __t('Faktor Resiko'),
-            'description' => __t('risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor',
-            'exec' => 'ref_risk_factor_view',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_risk_factor_detail'] = array(
-            'title' => __t('detil keluhan'),
-            'description' => __t(' risk_factor reference detail for present status'),
-            'path' => '/reference/risk_factor/detail',
-            'exec' => 'ref_risk_factor_detail',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_risk_factor_form'] = array(
-            'title' => __t('risk_factor form'),
-            'description' => __t(' risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor/form',
-            'exec' => 'ref_risk_factor_form',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_risk_factor_form_submit'] = array(
-            'title' => __t('risk_factor form'),
-            'description' => __t('Execute risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor/form_submit',
-            'exec' => 'ref_risk_factor_form_submit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_risk_factor_edit'] = array(
-            'title' => __t('risk_factor edit'),
-            'description' => __t('Editing  risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor/edit',
-            'exec' => 'ref_risk_factor_edit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_risk_factor_drop'] = array(
-            'title' => __t('risk_factor drop'),
-            'description' => __t('Remove  risk_factor reference form for present status'),
-            'path' => '/reference/risk_factor/drop',
-            'exec' => 'ref_risk_factor_drop',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_illness_history'] = array(
-            'title' => __t('Riwayat Penyakit'),
-            'description' => __t('illness_history reference form for present status'),
-            'path' => '/reference/illness_history',
-            'exec' => 'ref_illness_history_view',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_illness_history_detail'] = array(
-            'title' => __t('detil keluhan'),
-            'description' => __t('illness_history reference detail for present status'),
-            'path' => '/reference/illness_history/detail',
-            'exec' => 'ref_illness_history_detail',
-            'weight' => '0',
-            'user_required' => NULL
-        );
-        $items['ref_present_illness_history_form'] = array(
-            'title' => __t('illness_history form'),
-            'description' => __t('illness_history reference form for present status'),
-            'path' => '/reference/illness_history/form',
-            'exec' => 'ref_illness_history_form',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_illness_history_form_submit'] = array(
-            'title' => __t('illness_history form'),
-            'description' => __t('Execute illness_history reference form for present status'),
-            'path' => '/reference/illness_history/form_submit',
-            'exec' => 'ref_illness_history_form_submit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_illness_history_edit'] = array(
-            'title' => __t('illness_history edit'),
-            'description' => __t('Editing illness_history reference form for present status'),
-            'path' => '/reference/illness_history/edit',
-            'exec' => 'ref_illness_history_edit',
-            'weight' => '0',
-            'user_required' => 'reference'
-        );
-        $items['ref_present_illness_history_drop'] = array(
-            'title' => __t('illness_history drop'),
-            'description' => __t('Remove illness_history reference form for present status'),
-            'path' => '/reference/illness_history/drop',
-            'exec' => 'ref_illness_history_drop',
-            'weight' => '0',
-            'user_required' => 'reference'
+        $items['tindakan_detail'] = array(
+            'title' => __t('detail form tindakan'),
+            'description' => __t('formulir detil tindakan pasien'),
+            'path' => '/care/tindakan/detail_form',
+            'exec' => 'detail_form',
+            'weight' => 5,
+            'user_required' => 'perawatan'
         );
        return $items;
     }
 
-    function nutrient_view(){
-        $result = array();
-        $result['type'] = 'table';
-        $result['title'] = __t('Referensi Gizi');
-        $result['description'] = __t('Referensi isian gizi yang dipakai untuk menilai kadar suatu keadaan terkini pasien');
-        $result['addmenu'] = array(
-            'title' => __t('add reference'),
-            'action' => '/reference/nutrient/form',
-            'position' => 'top',
-            'user_required' => 'reference'
-        );
-        $result['header'] = array(
-            array(
-                'field' => 'none',
-                'caption' => __t('no'),
-                'width' => '5%',
-                'align' => 'right'
-            ),
-            array(
-                'field' => 'nutrient',
-                'caption' => __t('keterangan'),
-                'align' => 'left'
-            )
-        );
-        $this->query->connect();
-        $sql = $this->query->getSelect(
-            array(),
-            array('ref_present_nutrient'),
-            NULL,
-            'nutrient'
-        );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if($query->_numOfRows > 0){
-            for($i=0; $i<$query->_numOfRows; $i++){
-                $result['data'][$i] = $query->fields;
-                $result['data'][$i]['nutrient'] = ucwords($query->fields['nutrient']);
-                $result['data'][$i]['goto'] = '/reference/nutrient/detail/' . $query->fields['id'];
-                $query->MoveNext();
-            }
-        }
-        return $result;
-    }
-
-    function nutrient_form(){
-        if ($this->__check_caches() === TRUE){
-            $vcache = $this->__read_form_cache();
-        }
-//        echo '<pre>'; print_r($vcache); echo '</pre>';
-        $form['group'] = array(
-            '#type' => 'fieldset',
-            '#id' => 'group',
-            '#title' => __t('add nutrient'),
-            '#collapsible' => TRUE,
-            '#collapsed' => FALSE,
-            '#focused_item' => 'nutrient',
-            '#weight' => -3,
-            '#action' => '/reference/nutrient/form_submit',
-            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
-        );
-        $this->query->connect();
-        $sql = $this->query->getDescribe('ref_present_nutrient');
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        for($i=0; $i<$query->_numOfRows; $i++){
-            if(!in_array($query->fields['Field'], array('id'))){
-                $form['group'][$query->fields['Field']] = array(
-                    '#type' => 'text',
-                    '#title' => __t($query->fields['Field']),
-                    '#value' => isset($vcache[$query->fields['Field']]) ? $vcache[$query->fields['Field']] : ($query->fields['Field'] == 'id' ? $_POST['id'] : ''),
-                    '#error' => isset($vcache['blank']) && in_array($query->fields['Field'], $vcache['blank']) ? 1 : 0
-                );
-            }
-            $query->MoveNext();
-        } unset($query);
-        $form['group']['submit'] = array(
-            '#type' => 'submit',
-            '#title' => '&nbsp;',
-            '#value' => __t('input')
-        );
-        return $form;
-    }
-
-    function nutrient_form_submit(){
-//        if($_POST['id'] != ''){
-            $dump = $this->__write_form_cache();
-            foreach($dump as $key => $value){
-                if($value == ''){
-                    $this->__write_custom_cache(
-                        array('error' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
-                    );
-                    redirect_to('/reference/nutrient/form');
-                    exit();
-                }
-                if($key != 'blank' && $key != 'submit'){
-                    $thevalue[$key] = $value;
-                }
-            } unset($dump);
-            $thevalue['id'] = $this->__get_id_insert_value('ref_present_nutrient', 'id', $this->query);
-//        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
-            $this->query->connect();
-            $sql = $this->query->saveData(
-                'ref_present_nutrient',
-                $thevalue
-            );
-            $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-            unset($thevalue);
-            redirect_to('/reference/nutrient');
-//        } else {
-//            redirect_to('/reference/cardionutrient/form');
-//        }
-    }
-
-    function nutrient_detail(){
+    function detail_form(){
+        $this->formhabit = 'readonly';
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        if(count($dump) > 4){
-            $update = $dump[4];
-        }
-        $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'nutrient', 'present_status', $this->query);
-        $result = array();
-        $result['type'] = 'items_detail';
-        $result['title'] = __t('detil referensi gizi');
-        $result['description'] = __t('informasi detil referensi gizi yang terpilih');
-        $result['id'] = $keyid;
-        $result['update_access'] = 'reference';
-        $result['dropable'] = $dropable !== FALSE ? '/reference/nutrient/drop' : '0';
-        unset($dropable);
-        $this->query->connect();
-        $sql = $this->query->getSelect(
-            array('id', 'nutrient'),
-            array('ref_present_nutrient'),
-            array(
-                array('&&', "id=" . $keyid)
-            )
-        );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if(isset($update)){
-            $showsubmit = array('textarea', 'date');
-        }
-        foreach($query->fields as $key => $value){
-            $result['data'][$key] = array(
-                'key' => __t($key),
-                'value' => $value,
-                'link' => '/reference/nutrient/detail/' . $keyid . '/' . $key,
-                'hide' => in_array($key, $this->config->hiddenfields) ? 1 : 0
-            );
-            if(isset($update) && $key == $update){
-                $result['data'][$key]['form'] = array(
-                    'detail' => array(
-                        '#type' => 'fieldset',
-                        '#title' => 'hidden',
-                        '#action' => '/reference/nutrient/edit/',
-                        'id' => array(
-                            '#type' => 'hidden',
-                            '#value' => $keyid
-                        ),
-                        $key => array(
-                            '#type' => 'text',
-                            '#value' => $value,
-                            '#title' => 'hidden',
-                            '#size' => $this->formtype_fields[$key] == 'select' ? 1 : 20,
-                            '#extra' => $this->formtype_fields[$key] == 'select' ? 'onchange="Javascript:this.form.submit()"' : ''
-                        )
-                    )
-                );
-                if(in_array($result['data'][$key]['form']['detail'][$key]['#type'], $showsubmit)){
-                    $result['data'][$key]['form']['detail'][$key]['submit'] = array(
-                        '#type' => 'submit',
-                        '#value' => 'submit',
-                        '#title' => 'hidden'
-                    );
-                }
-            }
-        } unset($query, $keyid);
-//        echo '<pre>'; print_r($result); echo '</pre>';
+        $vcache = $this->__get_tindakan_data((int)$dump[3]);
+        $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
+        $result = $this->__get_form($vcache['perawatan']);
         return $result;
     }
 
-    function nutrient_edit(){
-        foreach($_POST as $key => $value){
-            if($key != 'id'){
-                if(in_array($key, $this->__get_data_fields('ref_present_nutrient', $this->query))){
-                    $this->query->connect();
-                    $sql = $this->query->updateData(
-                        'ref_present_nutrient',
-                        array(
-                            $key => $value
-                        ),
-                        array(
-                            array('&&', "id=" . $_POST['id'])
-                        )
-                    );
-                    $this->query->conn->Execute($sql); unset($sql);
-                    $this->query->close();
-                }
-            }
-        }
-        redirect_to('/reference/nutrient/detail/' . $_POST['id']);
-    }
-
-    function nutrient_drop(){
-        if($this->__is_dropable($_POST['id'], 'nutrient', 'present_status', $this->query) !== FALSE){
-            $this->query->connect();
-            $sql = $this->query->setDelete(
-                'ref_present_nutrient',
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
-            $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-        }
-        redirect_to('/reference/nutrient');
-    }
-
-    function soreness_view(){
+    function __head_page($id){
+        $this->sync_scheme('tindakan', $this->query);
         $result = array();
-        $result['type'] = 'table';
-        $result['title'] = __t('Referensi Keluhan Utama');
-        $result['description'] = __t('Referensi isian keluhan yang dirasakan pasien');
-        $result['addmenu'] = array(
-            'title' => __t('add reference'),
-            'action' => '/reference/soreness/form',
-            'position' => 'top',
-            'user_required' => 'reference'
-        );
-        $result['header'] = array(
-            array(
-                'field' => 'none',
-                'caption' => __t('no'),
-                'width' => '5%',
-                'align' => 'right'
-            ),
-            array(
-                'field' => 'soreness',
-                'caption' => __t('keterangan'),
-                'align' => 'left'
-            )
-        );
-        $this->query->connect();
-        $sql = $this->query->getSelect(
-            array(),
-            array('ref_present_soreness'),
-            NULL,
-            'soreness'
-        );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if($query->_numOfRows > 0){
-            for($i=0; $i<$query->_numOfRows; $i++){
-                $result['data'][$i] = $query->fields;
-                $result['data'][$i]['soreness'] = ucwords($query->fields['soreness']);
-                $result['data'][$i]['goto'] = '/reference/soreness/detail/' . $query->fields['id'];
-                $query->MoveNext();
-            }
-        }
-        return $result;
-    }
-
-    function soreness_form(){
-        if ($this->__check_caches() === TRUE){
-            $vcache = $this->__read_form_cache();
-        }
-//        echo '<pre>'; print_r($vcache); echo '</pre>';
-        $form['group'] = array(
-            '#type' => 'fieldset',
-            '#id' => 'group',
-            '#title' => __t('add soreness'),
-            '#collapsible' => TRUE,
-            '#collapsed' => FALSE,
-            '#focused_item' => 'soreness',
-            '#weight' => -3,
-            '#action' => '/reference/soreness/form_submit',
-            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
-        );
-        $this->query->connect();
-        $sql = $this->query->getDescribe('ref_present_soreness');
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        for($i=0; $i<$query->_numOfRows; $i++){
-            if(!in_array($query->fields['Field'], array('id'))){
-                $form['group'][$query->fields['Field']] = array(
-                    '#type' => 'text',
-                    '#title' => __t($query->fields['Field']),
-                    '#value' => isset($vcache[$query->fields['Field']]) ? $vcache[$query->fields['Field']] : ($query->fields['Field'] == 'id' ? $_POST['id'] : ''),
-                    '#error' => isset($vcache['blank']) && in_array($query->fields['Field'], $vcache['blank']) ? 1 : 0
-                );
-            }
-            $query->MoveNext();
-        } unset($query);
-        $form['group']['submit'] = array(
-            '#type' => 'submit',
-            '#title' => '&nbsp;',
-            '#value' => __t('input')
-        );
-        return $form;
-    }
-
-    function soreness_form_submit(){
-//        if($_POST['id'] != ''){
-            $dump = $this->__write_form_cache();
-            foreach($dump as $key => $value){
-                if($value == ''){
-                    $this->__write_custom_cache(
-                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
-                    );
-                    redirect_to('/reference/soreness/form');
-                    exit();
-                }
-                if($key != 'blank' && $key != 'submit'){
-                    $thevalue[$key] = $value;
-                }
-            } unset($dump);
-            $thevalue['id'] = $this->__get_id_insert_value('ref_present_soreness', 'id', $this->query);
-//        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
-            $this->query->connect();
-            $sql = $this->query->saveData(
-                'ref_present_soreness',
-                $thevalue
-            );
-            $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-            unset($thevalue);
-            redirect_to('/reference/soreness');
-//        } else {
-//            redirect_to('/reference/cardiosoreness/form');
-//        }
-    }
-
-    function soreness_detail(){
-        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        if(count($dump) > 4){
-            $update = $dump[4];
-        }
-        $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'soreness', 'present_status', $this->query);
-        $result = array();
-        $result['type'] = 'items_detail';
-        $result['title'] = __t('detil referensi gizi');
-        $result['description'] = __t('informasi detil referensi gizi yang terpilih');
-        $result['id'] = $keyid;
-        $result['update_access'] = 'reference';
-        $result['dropable'] = $dropable !== FALSE ? '/reference/soreness/drop' : '0';
-        unset($dropable);
-        $this->query->connect();
-        $sql = $this->query->getSelect(
-            array('id', 'soreness'),
-            array('ref_present_soreness'),
-            array(
-                array('&&', "id=" . $keyid)
-            )
-        );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if(isset($update)){
-            $showsubmit = array('textarea', 'date');
-        }
-        foreach($query->fields as $key => $value){
-            $result['data'][$key] = array(
-                'key' => __t($key),
-                'value' => $value,
-                'link' => '/reference/soreness/detail/' . $keyid . '/' . $key,
-                'hide' => in_array($key, $this->config->hiddenfields) ? 1 : 0
-            );
-            if(isset($update) && $key == $update){
-                $result['data'][$key]['form'] = array(
-                    'detail' => array(
-                        '#type' => 'fieldset',
-                        '#title' => 'hidden',
-                        '#action' => '/reference/soreness/edit/',
-                        'id' => array(
-                            '#type' => 'hidden',
-                            '#value' => $keyid
-                        ),
-                        $key => array(
-                            '#type' => 'text',
-                            '#value' => $value,
-                            '#title' => 'hidden',
-                            '#size' => $this->formtype_fields[$key] == 'select' ? 1 : 20,
-                            '#extra' => $this->formtype_fields[$key] == 'select' ? 'onchange="Javascript:this.form.submit()"' : ''
-                        )
-                    )
-                );
-                if(in_array($result['data'][$key]['form']['detail'][$key]['#type'], $showsubmit)){
-                    $result['data'][$key]['form']['detail'][$key]['submit'] = array(
-                        '#type' => 'submit',
-                        '#value' => 'submit',
-                        '#title' => 'hidden'
-                    );
-                }
-            }
-        } unset($query, $keyid);
-//        echo '<pre>'; print_r($result); echo '</pre>';
-        return $result;
-    }
-
-    function soreness_edit(){
-        foreach($_POST as $key => $value){
-            if($key != 'id'){
-                if(in_array($key, $this->__get_data_fields('ref_present_soreness', $this->query))){
-                    $this->query->connect();
-                    $sql = $this->query->updateData(
-                        'ref_present_soreness',
-                        array(
-                            $key => $value
-                        ),
-                        array(
-                            array('&&', "id=" . $_POST['id'])
-                        )
-                    );
-                    $this->query->conn->Execute($sql); unset($sql);
-                    $this->query->close();
-                }
-            }
-        }
-        redirect_to('/reference/soreness/detail/' . $_POST['id']);
-    }
-
-    function soreness_drop(){
-        if($this->__is_dropable($_POST['id'], 'soreness', 'present_status', $this->query) !== FALSE){
-            $this->query->connect();
-            $sql = $this->query->setDelete(
-                'ref_present_soreness',
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
-            $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-        }
-        redirect_to('/reference/soreness');
-    }
-
-    function ref_risk_factor_view(){
-        $result = array();
-        $result['type'] = 'table';
-        $result['title'] = __t('Referensi Faktor Resiko');
-        $result['description'] = __t('Referensi isian faktor resiko pasien');
-        $result['addmenu'] = array(
-            'title' => __t('add reference'),
-            'action' => '/reference/risk_factor/form',
-            'position' => 'top',
-            'user_required' => 'reference'
-        );
-        $result['header'] = array(
-            array(
-                'field' => 'none',
-                'caption' => __t('no'),
-                'width' => '5%',
-                'align' => 'right'
-            ),
-            array(
-                'field' => 'risk_factor',
-                'caption' => __t('keterangan'),
-                'align' => 'left'
-            )
-        );
-        $this->query->connect();
-        $sql = $this->query->getSelect(
-            array(),
-            array('ref_present_risk_factor'),
-            NULL,
-            'risk_factor'
-        );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if($query->_numOfRows > 0){
-            for($i=0; $i<$query->_numOfRows; $i++){
-                $result['data'][$i] = $query->fields;
-                $result['data'][$i]['risk_factor'] = ucwords($query->fields['risk_factor']);
-                $result['data'][$i]['goto'] = '/reference/risk_factor/detail/' . $query->fields['id'];
-                $query->MoveNext();
-            }
-        }
-        return $result;
-    }
-
-    function ref_risk_factor_form(){
-        if ($this->__check_caches() === TRUE){
-            $vcache = $this->__read_form_cache();
-        }
-//        echo '<pre>'; print_r($vcache); echo '</pre>';
-        $form['group'] = array(
-            '#type' => 'fieldset',
-            '#id' => 'group',
-            '#title' => __t('add risk_factor'),
-            '#collapsible' => TRUE,
-            '#collapsed' => FALSE,
-            '#focused_item' => 'risk_factor',
-            '#weight' => -3,
-            '#action' => '/reference/risk_factor/form_submit',
-            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
-        );
-        $this->query->connect();
-        $sql = $this->query->getDescribe('ref_present_risk_factor');
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        for($i=0; $i<$query->_numOfRows; $i++){
-            if(!in_array($query->fields['Field'], array('id'))){
-                $form['group'][$query->fields['Field']] = array(
-                    '#type' => 'text',
-                    '#title' => __t($query->fields['Field']),
-                    '#value' => isset($vcache[$query->fields['Field']]) ? $vcache[$query->fields['Field']] : ($query->fields['Field'] == 'id' ? $_POST['id'] : ''),
-                    '#error' => isset($vcache['blank']) && in_array($query->fields['Field'], $vcache['blank']) ? 1 : 0
-                );
-            }
-            $query->MoveNext();
-        } unset($query);
-        $form['group']['submit'] = array(
-            '#type' => 'submit',
-            '#title' => '&nbsp;',
-            '#value' => __t('input')
-        );
-        return $form;
-    }
-
-    function ref_risk_factor_form_submit(){
-//        if($_POST['id'] != ''){
-            $dump = $this->__write_form_cache();
-            foreach($dump as $key => $value){
-                if($value == ''){
-                    $this->__write_custom_cache(
-                        array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
-                    );
-                    redirect_to('/reference/risk_factor/form');
-                    exit();
-                }
-                if($key != 'blank' && $key != 'submit'){
-                    $thevalue[$key] = $value;
-                }
-            } unset($dump);
-            $thevalue['id'] = $this->__get_id_insert_value('ref_present_risk_factor', 'id', $this->query);
-//        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
-            $this->query->connect();
-            $sql = $this->query->saveData(
-                'ref_present_risk_factor',
-                $thevalue
-            );
-            $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-            unset($thevalue);
-            redirect_to('/reference/risk_factor');
-//        } else {
-//            redirect_to('/reference/risk_factor/form');
-//        }
-    }
-
-    function ref_risk_factor_detail(){
-        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        if(count($dump) > 4){
-            $update = $dump[4];
-        }
-        $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'risk_factor', 'present_status', $this->query);
-        $result = array();
-        $result['type'] = 'items_detail';
-        $result['title'] = __t('detil referensi gizi');
-        $result['description'] = __t('informasi detil referensi gizi yang terpilih');
-        $result['id'] = $keyid;
-        $result['update_access'] = 'reference';
-        $result['dropable'] = $dropable !== FALSE ? '/reference/risk_factor/drop' : '0';
-        unset($dropable);
-        $this->query->connect();
-        $sql = $this->query->getSelect(
-            array('id', 'risk_factor'),
-            array('ref_present_risk_factor'),
-            array(
-                array('&&', "id=" . $keyid)
-            )
-        );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if(isset($update)){
-            $showsubmit = array('textarea', 'date');
-        }
-        foreach($query->fields as $key => $value){
-            $result['data'][$key] = array(
-                'key' => __t($key),
-                'value' => $value,
-                'link' => '/reference/risk_factor/detail/' . $keyid . '/' . $key,
-                'hide' => in_array($key, $this->config->hiddenfields) ? 1 : 0
-            );
-            if(isset($update) && $key == $update){
-                $result['data'][$key]['form'] = array(
-                    'detail' => array(
-                        '#type' => 'fieldset',
-                        '#title' => 'hidden',
-                        '#action' => '/reference/risk_factor/edit/',
-                        'id' => array(
-                            '#type' => 'hidden',
-                            '#value' => $keyid
-                        ),
-                        $key => array(
-                            '#type' => 'text',
-                            '#value' => $value,
-                            '#title' => 'hidden',
-                            '#size' => $this->formtype_fields[$key] == 'select' ? 1 : 20,
-                            '#extra' => $this->formtype_fields[$key] == 'select' ? 'onchange="Javascript:this.form.submit()"' : ''
-                        )
-                    )
-                );
-                if(in_array($result['data'][$key]['form']['detail'][$key]['#type'], $showsubmit)){
-                    $result['data'][$key]['form']['detail'][$key]['submit'] = array(
-                        '#type' => 'submit',
-                        '#value' => 'submit',
-                        '#title' => 'hidden'
-                    );
-                }
-            }
-        } unset($query, $keyid);
-//        echo '<pre>'; print_r($result); echo '</pre>';
-        return $result;
-    }
-
-    function ref_risk_factor_edit(){
-        foreach($_POST as $key => $value){
-            if($key != 'id'){
-                if(in_array($key, $this->__get_data_fields('ref_present_risk_factor', $this->query))){
-                    $this->query->connect();
-                    $sql = $this->query->updateData(
-                        'ref_present_risk_factor',
-                        array(
-                            $key => $value
-                        ),
-                        array(
-                            array('&&', "id=" . $_POST['id'])
-                        )
-                    );
-                    $this->query->conn->Execute($sql); unset($sql);
-                    $this->query->close();
-                }
-            }
-        }
-        redirect_to('/reference/risk_factor/detail/' . $_POST['id']);
-    }
-
-    function ref_risk_factor_drop(){
-        if($this->__is_dropable($_POST['id'], 'risk_factor', 'present_status', $this->query) !== FALSE){
-            $this->query->connect();
-            $sql = $this->query->setDelete(
-                'ref_present_risk_factor',
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
-            $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-        }
-        redirect_to('/reference/risk_factor');
-    }
-
-    function ref_illness_history_view(){
-        $result = array();
-        $result['type'] = 'table';
-        $result['title'] = __t('Referensi Riwayat Penyakit');
-        $result['description'] = __t('Referensi isian riwayat penyakit pasien');
-        $result['addmenu'] = array(
-            'title' => __t('add reference'),
-            'action' => '/reference/illness_history/form',
-            'position' => 'top',
-            'user_required' => 'reference'
-        );
-        $result['header'] = array(
-            array(
-                'field' => 'none',
-                'caption' => __t('no'),
-                'width' => '5%',
-                'align' => 'right'
-            ),
-            array(
-                'field' => 'illness_history',
-                'caption' => __t('keterangan'),
-                'align' => 'left'
-            )
-        );
-        $this->query->connect();
-        $sql = $this->query->getSelect(
-            array(),
-            array('ref_present_illness_history'),
-            NULL,
-            'illness_history'
-        );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if($query->_numOfRows > 0){
-            for($i=0; $i<$query->_numOfRows; $i++){
-                $result['data'][$i] = $query->fields;
-                $result['data'][$i]['illness_history'] = ucwords($query->fields['illness_history']);
-                $result['data'][$i]['goto'] = '/reference/illness_history/detail/' . $query->fields['id'];
-                $query->MoveNext();
-            }
-        }
-        return $result;
-    }
-
-    function ref_illness_history_form(){
-        if ($this->__check_caches() === TRUE){
-            $vcache = $this->__read_form_cache();
-        }
-//        echo '<pre>'; print_r($vcache); echo '</pre>';
-        $form['group'] = array(
-            '#type' => 'fieldset',
-            '#id' => 'group',
-            '#title' => __t('add illness_history'),
-            '#collapsible' => TRUE,
-            '#collapsed' => FALSE,
-            '#focused_item' => 'illness_history',
-            '#weight' => -3,
-            '#action' => '/reference/illness_history/form_submit',
-            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
-        );
-        $this->query->connect();
-        $sql = $this->query->getDescribe('ref_present_illness_history');
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        for($i=0; $i<$query->_numOfRows; $i++){
-            if(!in_array($query->fields['Field'], array('id'))){
-                $form['group'][$query->fields['Field']] = array(
-                    '#type' => 'text',
-                    '#title' => __t($query->fields['Field']),
-                    '#value' => isset($vcache[$query->fields['Field']]) ? $vcache[$query->fields['Field']] : ($query->fields['Field'] == 'id' ? $_POST['id'] : ''),
-                    '#error' => isset($vcache['blank']) && in_array($query->fields['Field'], $vcache['blank']) ? 1 : 0
-                );
-            }
-            $query->MoveNext();
-        } unset($query);
-        $form['group']['submit'] = array(
-            '#type' => 'submit',
-            '#title' => '&nbsp;',
-            '#value' => __t('input')
-        );
-        return $form;
-    }
-
-    function ref_illness_history_form_submit(){
-//        if($_POST['id'] != ''){
-            $dump = $this->__write_form_cache();
-            foreach($dump as $key => $value){
-                if($value == ''){
-                    $this->__write_custom_cache(
-                        array('error' . __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
-                    );
-                    redirect_to('/reference/illness_history/form');
-                    exit();
-                }
-                if($key != 'blank' && $key != 'submit'){
-                    $thevalue[$key] = $value;
-                }
-            } unset($dump);
-            $thevalue['id'] = $this->__get_id_insert_value('ref_present_illness_history', 'id', $this->query);
-//        echo '<pre>'; print_r($thevalue); echo '</pre>'; exit();
-            $this->query->connect();
-            $sql = $this->query->saveData(
-                'ref_present_illness_history',
-                $thevalue
-            );
-            $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-            unset($thevalue);
-            redirect_to('/reference/illness_history');
-//        } else {
-//            redirect_to('/reference/illness_history/form');
-//        }
-    }
-
-    function ref_illness_history_detail(){
-        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        if(count($dump) > 4){
-            $update = $dump[4];
-        }
-        $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'illness_history', 'present_status', $this->query);
-        $result = array();
-        $result['type'] = 'items_detail';
-        $result['title'] = __t('detil referensi gizi');
-        $result['description'] = __t('informasi detil referensi gizi yang terpilih');
-        $result['id'] = $keyid;
-        $result['update_access'] = 'reference';
-        $result['dropable'] = $dropable !== FALSE ? '/reference/illness_history/drop' : '0';
-        unset($dropable);
-        $this->query->connect();
-        $sql = $this->query->getSelect(
-            array('id', 'illness_history'),
-            array('ref_present_illness_history'),
-            array(
-                array('&&', "id=" . $keyid)
-            )
-        );
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if(isset($update)){
-            $showsubmit = array('textarea', 'date');
-        }
-        foreach($query->fields as $key => $value){
-            $result['data'][$key] = array(
-                'key' => __t($key),
-                'value' => $value,
-                'link' => '/reference/illness_history/detail/' . $keyid . '/' . $key,
-                'hide' => in_array($key, $this->config->hiddenfields) ? 1 : 0
-            );
-            if(isset($update) && $key == $update){
-                $result['data'][$key]['form'] = array(
-                    'detail' => array(
-                        '#type' => 'fieldset',
-                        '#title' => 'hidden',
-                        '#action' => '/reference/illness_history/edit/',
-                        'id' => array(
-                            '#type' => 'hidden',
-                            '#value' => $keyid
-                        ),
-                        $key => array(
-                            '#type' => 'text',
-                            '#value' => $value,
-                            '#title' => 'hidden',
-                            '#size' => $this->formtype_fields[$key] == 'select' ? 1 : 20,
-                            '#extra' => $this->formtype_fields[$key] == 'select' ? 'onchange="Javascript:this.form.submit()"' : ''
-                        )
-                    )
-                );
-                if(in_array($result['data'][$key]['form']['detail'][$key]['#type'], $showsubmit)){
-                    $result['data'][$key]['form']['detail'][$key]['submit'] = array(
-                        '#type' => 'submit',
-                        '#value' => 'submit',
-                        '#title' => 'hidden'
-                    );
-                }
-            }
-        } unset($query, $keyid);
-//        echo '<pre>'; print_r($result); echo '</pre>';
-        return $result;
-    }
-
-    function ref_illness_history_edit(){
-        foreach($_POST as $key => $value){
-            if($key != 'id'){
-                if(in_array($key, $this->__get_data_fields('ref_present_illness_history', $this->query))){
-                    $this->query->connect();
-                    $sql = $this->query->updateData(
-                        'ref_present_illness_history',
-                        array(
-                            $key => $value
-                        ),
-                        array(
-                            array('&&', "id=" . $_POST['id'])
-                        )
-                    );
-                    $this->query->conn->Execute($sql); unset($sql);
-                    $this->query->close();
-                }
-            }
-        }
-        redirect_to('/reference/illness_history/detail/' . $_POST['id']);
-    }
-
-    function ref_illness_history_drop(){
-        if($this->__is_dropable($_POST['id'], 'illness_history', 'present_status', $this->query) !== FALSE){
-            $this->query->connect();
-            $sql = $this->query->setDelete(
-                'ref_present_illness_history',
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
-            $this->query->conn->Execute($sql); unset($sql);
-            $this->query->close();
-        }
-        redirect_to('/reference/illness_history');
-    }
-
-    function __get_refs($fields, $sort=NULL){
-        $result = array();
-        $sql = $this->query->getSelect(
-            array(),
-            array($this->config->reftable[$fields][0]),
-            NULL,
-            (!is_null($sort) ? $sort . ' asc' : 'id asc')
-        );
-        $this->query->connect();
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        for($i=0; $i<$query->_numOfRows; $i++){
-            $result[$query->fields['id']] = $query->fields[$this->config->reftable[$fields][1]];
-            $query->MoveNext();
-        }
-        return $result;
-    }
-
-    function perawatan_menu(){
-        $result = array();
-        $result['#title'] = __t('tindakan');
-        $result['#tpl'] = MODULES_DIR . DS . 'tindakan' . DS . 'tindakan.tpl';
-        $datafields = $this->__get_data_fields('tindakan', $this->query);
-        if (count($this->config->free_val) > 0){
-            $vcache = $this->config->free_val;
+        if(!is_null($id) && trim($id) != ''){
             $sql = $this->query->getSelect(
                 array(),
-                array('tindakan'),
+                array('perawatan'),
                 array(
-                    array('&&', "id=" . $vcache['id'])
+                    array('&&', "id=" . $id)
                 )
-            ); unset($vcache);
+            );
             $this->query->connect();
             $getit = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             if($getit->_numOfRows > 0){
-                foreach($getit->fields as $key => $value){
-                    $vcache[$key] = $value;
-                }
+                $result = $getit->fields;
+                $sql = $this->query->getSelect(
+                    array('nama'),
+                    array('patients'),
+                    array(
+                        array('&&', "id=" . $getit->fields['patients'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getthis->_numOfRows > 0){
+                    $result['nama'] = $getthis->fields['nama'];
+                } unset($getthis);
+                $sql = $this->query->getSelect(
+                    array('ruang'),
+                    array('ruang'),
+                    array(
+                        array('&&', "id=" . $getit->fields['ruang'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getthis->_numOfRows > 0){
+                    $result['ruang'] = $getthis->fields['ruang'];
+                } unset($getthis);
+                $result['pukul_masuk'] = date('j', strtotime($getit->fields['pukul_masuk']));
+                $result['pukul_masuk'] .= ' ' . __t($this->nama_bulan[date('n', strtotime($getit->fields['pukul_masuk']))]);
+                $result['pukul_masuk'] .= ' ' . date('Y H:i:s', strtotime($getit->fields['pukul_masuk']));
             }
-        }
-        foreach($datafields as $key => $value){
-            if($value == 'catched'){
-                if(!isset($vcache['catched']) || $vcache['catched'] == ''){
-                    $vcache['catched'] = date('Y-m-d H:i:s', $this->config->time);
-                }
-            }
-            $result['datafields'][$value] = array(
-                'title' => __t($value),
-                'type' => $this->config->typeoffields[$value],
-                'value' => isset($vcache[$value]) ? $vcache[$value] : ''
-            );
-            if(in_array($value, $this->config->fieldsisarray)){
-                $result['datafields'][$value]['theref'] = $this->__get_refs($value);
-                $result['datafields'][$value]['blankopt'] = 1;
-            } elseif($this->config->typeoffields[$value] == 'datetime'){
-                $result['datafields'][$value]['theref'] = $this->nama_bulan;
-                $result['datafields'][$value]['timenow'] = $this->config->time;
-            } else {
-                $result['datafields'][$value]['size'] = 6;
-            }
-            $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
         return $result;
     }
 
-    function cardio_submit(){
+    function view(){
+        if(isset($_POST['pid'])){
+            $pid = $_POST['pid'];
+        } else {
+            $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+            if(count($dump) > 3){
+                $pid = $dump[3];
+            }
+        }
+        if(isset($pid)){
+            return $this->__get_view($pid);
+        } else {
+            return $this->__get_view();
+        }
+    }
+
+    function __get_view($pid = NULL){
+        if(!is_null($pid)){
+            $patientinfo = $this->__head_page($pid);
+        }
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('tindakan perawatan pasien') . (!is_null($pid) ? ' ' . __t('a.n.') . ' ' . $patientinfo['nama'] : '');
+        $result['description'] = (!is_null($pid) ? __t('daftar tindakan perawatan pasien') . ' ' . __t('a.n.') . ' ' . $patientinfo['nama'] : __t('daftar tindakan perawatan beberapa pasien terakhir'));
+        if(!is_null($pid)){
+            $result['addmenu']['#add'] = array(
+                'title' => __t('add'),
+                'action' => '/care/tindakan/form/' . $pid,
+                'position' => 'top',
+                'user_required' => 'perawatan'
+            );
+            $addmenuopts = array(
+                '' => __t('-- medical record --'),
+                'all' => __t('semua')
+            );
+            $dump_addmenus = $this->__get_bagian_lists();
+            foreach($dump_addmenus as $key => $value){
+                $sql = $this->query->getSelect(
+                    array('id'),
+                    array('kunjungan'),
+                    array(
+                        array('&&', "patients=" . $patientinfo['patients']),
+                        array('&&', "bagian=" . $value),
+                        array('&&', "doneby is not null")
+                    )
+                );
+                $this->query->connect();
+                $getit = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getit->_numOfRows > 0){
+                    $addmenuopts[$key] = $value;
+                } unset($getit);
+            } unset($dump_addmenus);
+            $result['addmenu']['#medical_record'] = array(
+                'title' => __t('medical record'),
+                'action' => '/user/patient/medical_record/' . $patientinfo['patients'],
+                'position' => 'top',
+                'class' => 'button',
+                'methode' => 'choose',
+                'options' => $addmenuopts,
+                'filter' => 'bagian'
+            );
+            $rujukanopts = array(
+                '' => __t('-- perawatan --')
+            );
+            $dumprjk = $this->__get_perawatan_lists();
+            foreach($dumprjk as $key => $value){
+                if($key != 'tindakan'){
+                    $rujukanopts[$key] = $value;
+                }
+            } unset($dumprjk);
+            $result['addmenu']['#dirujuk_ke'] = array(
+                'title' => __t('dirujuk ke'),
+                'action' => '/care/perawatan',
+                'position' => 'top',
+                'class' => 'button',
+                'methode' => 'choose',
+                'options' => $rujukanopts,
+                'user_required' => 'perawatan',
+                'filter' => 'items',
+                'items' => array (
+                    'pid' => $patientinfo['id']
+                )
+            ); unset($rujukanopts);
+        }
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => (!is_null($pid) ? 'tindakan' : 'nama'),
+                'caption' => (!is_null($pid) ? __t('tindakan') : __t('nama')),
+                'align' => 'left'
+            ),
+            array(
+                'field' => (!is_null($pid) ? 'jenis_tindakan' : 'usia'),
+                'caption' => (!is_null($pid) ? __t('jenis tindakan') : __t('usia')),
+                'width' => (!is_null($pid) ? '15%' : '25%'),
+                'align' => (!is_null($pid) ? 'center' : 'right')
+            ),
+            array(
+                'field' => (!is_null($pid) ? 'inputer' : 'pukul_masuk'),
+                'caption' => (!is_null($pid) ? __t('pelaksana') : __t('tanggal masuk')),
+                'width' => '25%',
+                'align' => (!is_null($pid) ? 'center' : 'right')
+            )
+        );
+
+        if(!is_null($pid)){
+
+            $sql = $this->query->getSelect(
+                array(),
+                array('tindakan'),
+                array(
+                    array('&&', "perawatan=" . $pid)
+                ),
+                'inputtime desc'
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                for($i=0; $i<$getit->_numOfRows; $i++){
+                    $sql = $this->query->getSelect(
+                        array('nama'),
+                        array('stafs'),
+                        array(
+                            array('&&', "id=" . $getit->fields['inputer'])
+                        )
+                    );
+                    $this->query->connect();
+                    $getthis = $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                    $result['data'][$i] = $getit->fields;
+                    $result['data'][$i]['inputer'] = ucwords($getthis->fields['nama']);
+                    unset($getthis);
+                    $result['data'][$i]['goto'] = '/care/tindakan/detail_form/' . $getit->fields['id'];
+                    $getit->MoveNext();
+                }
+//                echo '<pre>';print_r($result);echo '</pre>';
+            } unset($getit);
+        } else {
+            $sql = $this->query->getSelect(
+                array(),
+                array('perawatan'),
+                array(
+                    array('&&', "pukul_keluar is null")
+                ),
+                'inputtime desc'
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                for($i=0; $i<$getit->_numOfRows; $i++){
+                    $sql = $this->query->getSelect(
+                        array('id', 'nama', 'tgl_lahir'),
+                        array('patients'),
+                        array(
+                            array('&&', "id=" . $getit->fields['patients'])
+                        )
+                    ); unset($idpatient);
+                    $this->query->connect();
+                    $getthis = $this->query->conn->Execute($sql); unset($sql);
+                    $this->query->close();
+                    $result['data'][$i]['nama'] = $getthis->fields['nama'];
+//                    $result['data'][$i]['inputer'] = $getthis->fields['inputer'];
+                    $result['data'][$i]['usia'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+                    $result['data'][$i]['goto'] = '/care/perawatan/tindakan/' . $getit->fields['id'];
+                    $result['data'][$i]['pukul_masuk'] = date('j-n-Y H:i:s', strtotime($getit->fields['pukul_masuk']));
+                    $getit->MoveNext();
+                }
+//                echo '<pre>';print_r($result);echo '</pre>';
+            }
+        } unset($getit);
+        return $result;
+    }
+    
+    function __get_tindakan_data($id){
+        $result = array();
+        $sql = $this->query->getSelect(
+            array(),
+            array('tindakan'),
+            array(
+                array('&&', "id=" . $id)
+            )
+        );
+        $this->query->connect();
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows > 0){
+            foreach($query->fields as $key => $value){
+                $result[$key] = $value;
+            }
+        } unset($query);
+//        echo '<pre>';print_r($result);echo '</pre>';
+        return $result;
+    }
+
+    function form(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(count($dump) > 3){
+            return $this->__get_form((int)$dump[3]);
+        } else {
+            unset($dump);
+            redirect_to('/care/perawatan/tindakan');
+        }
+    }
+
+    function __get_form($pid){
+        $patientinfo = $this->__head_page($pid);
+        if(count($patientinfo) < 1){
+            redirect_to('/'); exit();
+        }
+
+        if ($this->__check_caches() === TRUE){
+            $vcache = $this->__read_form_cache();
+        } else {
+            $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+            if(count($dump) > 4){
+                if(preg_match('/^edit_/', $dump[4])){
+                    $tindakan_id = preg_replace('/^edit_/','',$dump[4]);
+                } else {
+                    $tindakan_id = $dump[4];
+                }
+                $vcache = $this->__get_tindakan_data((int)$tindakan_id);
+                unset($tindakan_id);
+                $this->vardump = $vcache;
+            } unset($dump);
+        }
+        $vcache['perawatan'] = $pid;
+        $addmenuopts = array(
+            '' => __t('-- medical record --'),
+            'all' => __t('semua')
+        );
+        $dump_addmenus = $this->__get_bagian_lists();
+        foreach($dump_addmenus as $key => $value){
+            $sql = $this->query->getSelect(
+                array('id'),
+                array('kunjungan'),
+                array(
+                    array('&&', "patients=" . $patientinfo['patients']),
+                    array('&&', "bagian=" . $value),
+                    array('&&', "doneby is not null")
+                )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $addmenuopts[$key] = $value;
+            } unset($getit);
+        } unset($dump_addmenus);
+        $result['tindakan'] = array(
+            '#type' => 'special',
+            '#id' => 'tindakan',
+            '#title' => __t('tindakan'),
+            '#collapsible' => TRUE,
+            '#collapsed' => FALSE,
+            '#weight' => -3,
+            '#action' => '/care/tindakan/form' . (isset($this->formhabit) && $this->formhabit == 'readonly' ? '/' . $pid . '/edit_' . $vcache['id'] : '_submit'),
+            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
+            '#formtpl' => MODULES_DIR . DS . 'tindakan' . DS . 'tindakan.tpl',
+            '#addmenu' => array(
+                '#addmenu' => array(
+                    'title' => __t('medical record'),
+                    'action' => '/user/patient/medical_record/' . $patientinfo['patients'],
+                    'position' => 'top',
+                    'class' => 'button',
+                    'methode' => 'choose',
+                    'options' => $addmenuopts,
+                    'filter' => 'bagian'
+                )
+            ),
+            '#patientinfo' => $patientinfo
+        ); unset($addmenuopts);
+        if($this->formhabit == 'readonly'){
+            $rujukanopts = array(
+                '' => __t('-- perawatan --')
+            );
+            $dumprjk = $this->__get_perawatan_lists();
+            foreach($dumprjk as $key => $value){
+                $rujukanopts[$key] = $value;
+            } unset($dumprjk);
+            $result['tindakan']['#addmenu']['#addmenu0'] = array(
+                'title' => __t('dirujuk ke'),
+                'action' => '/care/perawatan',
+                'position' => 'top',
+                'class' => 'button',
+                'methode' => 'choose',
+                'options' => $rujukanopts,
+                'user_required' => 'perawatan',
+                'filter' => 'items',
+                'items' => array (
+                    'pid' => $patientinfo['id']
+                )
+            ); unset($rujukanopts);
+        }
         $thefields = $this->__get_data_fields('tindakan', $this->query);
-        foreach($this->config->free_val as $key => $value){
-            if(in_array($key, $thefields)){
-                if($key == 'catched'){
-                    $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
-                } elseif($key == 'risk_factor' || $key == 'ilness_history'){
-                    if(count($value) > 0){
-                        $value = implode(',', $value);
+        foreach($thefields as $value){
+            if(in_array($value, $this->config->hiddenfields)){
+                if($this->config->typeoffields[$value] != 'system'){
+                    $result['tindakan'][$value] = array(
+                        '#type' => 'hidden',
+                        '#value' => isset($vcache[$value]) ? $vcache[$value] : ''
+                    );
+                }
+            } else {
+                $result['tindakan'][$value] = array(
+                    '#type' => $this->config->typeoffields[$value],
+                    '#title' => __t($value)
+                );
+                if($this->config->typeoffields[$value] == 'select' || $this->config->typeoffields[$value] == 'radio' || $this->config->typeoffields[$value] == 'date' || $this->config->typeoffields[$value] == 'datetime'){
+                    if($this->config->typeoffields[$value] == 'date' || $this->config->typeoffields[$value] == 'datetime'){
+                        $options = $this->nama_bulan;
+                        if(!isset($vcache[$value]) || is_null($vcache[$value]) || trim($vcache[$value]) == ''){
+                            if($this->config->typeoffields[$value] == 'date'){
+                                $vcache[$value] = date('Y-m-d', $this->config->time);
+                            } else {
+                                $vcache[$value] = date('Y-m-d H:i:s', $this->config->time);
+                            }
+                        }
+                        $result['tindakan'][$value]['#style'] = 'text-align:right';
+                    } else {
+                        $options = $this->__get_ref_options($this->config->reftable[$value][0], $this->config->reftable[$value][1], $this->config->reftable[$value][2], $this->query);
                     }
+                    $result['tindakan'][$value]['#option'] = $options;
+                    unset($options);
+                }
+                $result['tindakan'][$value]['#value'] = isset($vcache[$value]) ? $vcache[$value] : '';
+                if(isset($this->formhabit) && $this->formhabit == 'readonly'){
+                    $result['tindakan'][$value]['#readonly'] = true;
+                }
+            }
+        }
+        $result['tindakan']['submit'] = array(
+            '#value' => isset($this->formhabit) && $this->formhabit == 'readonly' ? __t('edit') : __t('submit')
+        );
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+
+    function form_submit(){
+        return $this->__get_form_submit();
+    }
+
+    function __get_form_submit(){
+        $this->vardump = $this->__write_form_cache();
+        $thefields = $this->__get_data_fields('tindakan', $this->query);
+        foreach($this->vardump as $key => $value){
+            if(in_array($key, $thefields)){
+                if($this->config->typeoffields[$key] == 'date'){
+                    $value = explode('|', $value);
+                    $value = implode('-', $value);
+                } elseif($this->config->typeoffields[$key] == 'datetime'){
+                    $value = explode('-', $value);
+                    $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
                 }
                 $thevalue[$key] = $value;
             }
         } unset($thefields);
+        $user = $this->__get_user_info();
         if($_POST['id'] != ''){
-            unset($thevalue['id']);
-            $sql = $this->query->updateData(
-                'tindakan',
-                $thevalue,
-                array(
-                    array('&&', "id=" . $_POST['id'])
-                )
-            );
+            $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
+            $opr = 'update';
+            $strid = array('id', $_POST['id']);
         } else {
-            $sql = $this->query->saveData(
-                'tindakan',
-                $thevalue
-            );
+            $thevalue['id'] = $this->__get_id_insert_value('tindakan', 'id', $this->query);
+            $thevalue['inputer'] = $user['id'];
+            $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
+            $this->vardump['id'] = $thevalue['id'];
+            $opr = 'insert';
+            $strid = array('id', $thevalue['id']);
         }
-//        echo '<pre>'; print_r($thevalue); echo '</pre>';
-        unset($thevalue);
-        $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
+        $this->__exec_db_ops(
+            $this->query,
+            'tindakan',
+            $opr,
+            $strid,
+            $thevalue
+        );
+        $iddata = $thevalue['id'];
+        unset($thevalue, $opr, $strid);
+        redirect_to('/care/tindakan/detail_form/' . $iddata);
     }
-
 }

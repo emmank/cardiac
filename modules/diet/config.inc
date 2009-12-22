@@ -22,10 +22,10 @@
  *  Created on Oct 3, 2009, 4:31:28 PM
  */
 
-class pemeriksaanConfig extends config
+class dietConfig extends config
 {
     var $rdbms = 'mysql';
-    var $dbpemeriksaan = array(
+    var $dbdiet = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',
@@ -40,11 +40,10 @@ class pemeriksaanConfig extends config
     );
     var $typeoffields = array(
         'id' => 'hidden',
-        'keluhan' => 'text',
-        'intervensi' => 'text',
-        'implementasi' => 'text',
         'perawatan' => 'hidden',
         'tgl' => 'datetime',
+        'nama_diet' => 'text',
+        'catatan' => 'text',
         'inputer' => 'system',
         'inputtime' => 'system',
         'updated' => 'system'
@@ -56,7 +55,7 @@ class pemeriksaanConfig extends config
         'risk_factor' => array('ref_present_risk_factor', 'risk_factor', 'id'),
     );
     var $table_scheme = array(
-        'pemeriksaan' => array(
+        'diet' => array(
             'id' => array(
                 'type' => 'int(11)',
                 'null' => 0,
@@ -78,92 +77,15 @@ class pemeriksaanConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'TD_sistolik' => array(
-                'type' => 'varchar(10)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'TD_diastolik' => array(
-                'type' => 'varchar(10)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'N_P_S' => array(
+            'nama_diet' => array(
                 'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
             ),
-            'kesadaran' => array(
-                'type' => 'varchar(100)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'penivien' => array(
-                'type' => 'varchar(100)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'pemasukan_oral' => array(
-                'type' => 'varchar(10)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'pemasukan_ngt' => array(
-                'type' => 'varchar(10)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'pemasukan_parantera' => array(
-                'type' => 'varchar(10)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'pengeluaran_muntah' => array(
-                'type' => 'varchar(10)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'pengeluaran_ngt' => array(
-                'type' => 'varchar(10)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'pengeluaran_BAK' => array(
-                'type' => 'varchar(10)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'pengeluaran_WSD' => array(
-                'type' => 'varchar(10)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'pengeluaran_drain' => array(
-                'type' => 'varchar(10)',
+            'catatan' => array(
+                'type' => 'varchar(150)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,

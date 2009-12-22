@@ -73,6 +73,14 @@ class vascularModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['vascular_lists'] = array(
+            'title' => __t('vascular'),
+            'description' => __t('explore vascular'),
+            'path' => '/user/vascular/lists',
+            'exec' => 'lists',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         $items['vascular_detail'] = array(
             'title' => __t('detail vascular'),
             'description' => __t("detail vascular's patients"),
@@ -230,7 +238,12 @@ class vascularModule extends mainModule
         return $result;
     }
 
+
     function view(){
+        return $this->__get_today_lists();
+    }
+
+    function lists(){
         $this->sync_scheme('vascular', $this->query);
         return $this->__get_view();
     }

@@ -151,6 +151,14 @@ class echocardiographyModule extends mainModule
             'weight' => 5,
             'user_required' => 'echocardiography'
         );
+        $items['echocardiography_lists'] = array(
+            'title' => __t('echocardiography'),
+            'description' => __t('explore echocardiography'),
+            'path' => '/user/echocardiography/lists',
+            'exec' => 'lists',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         $items['echocardiography_message'] = array(
             'title' => __t('echocardiography message'),
             'description' => __t('get echocardiography message'),
@@ -169,6 +177,87 @@ class echocardiographyModule extends mainModule
         );
       return $items;
     }
+
+    function view(){
+        return $this->__get_today_lists();
+    }
+
+    function lists(){
+//        $this->sync_scheme('echocardiography', $this->query);
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('daftar beberapa pasien');
+        $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
+        $result['addmenu']['#add'] = array(
+            'title' => __t('add'),
+            'action' => '/user/echocardiography/form',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search'),
+            'action' => '/user/echocardiography/search',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'nama',
+                'caption' => __t('nama'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'tgl_lahir',
+                'caption' => __t('usia'),
+                'width' => '10%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'inputtime',
+                'caption' => __t('tgl periksa'),
+                'width' => '25%',
+                'align' => 'right'
+            )
+        );
+
+        $sql = $this->query->getSelect(
+            array(),
+            array('echocardiography'),
+            NULL,
+            'inputtime desc',
+            '0,10'
+        ); unset($where);
+        $this->query->connect();
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $sql = $this->query->getSelect(
+                    array('id', 'nama', 'tgl_lahir', 'inputtime'),
+                    array('patients'),
+                    array(
+                        array('&&', "id=" . $getit->fields['patients'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['nama'] = $getthis->fields['nama'];
+                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+                $result['data'][$i]['goto'] = '/user/echocardiography/detail_form/' . $getit->fields['id'];
+                $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                $getit->MoveNext();
+            }
+        }
+        return $result;
+    }
+    
 
     function form(){
         if ($this->__check_caches() === TRUE){
@@ -354,6 +443,7 @@ class echocardiographyModule extends mainModule
         } else {
             $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
         }
+        echo "<pre>";print_r($thevalue);echo "</pre>";
         $this->query->connect();
         $sql = $this->query->saveData(
             'echocardiography', $thevalue
@@ -369,7 +459,7 @@ class echocardiographyModule extends mainModule
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         unset($dump, $thevalue);
-        unlink($this->config->fcache);
+//        unlink($this->config->fcache);
         $message = 'data pemeriksaan echocardiography pasien atas nama ' . $query->fields['nama'] . ' telah disimpan !';
         unset($query);
         redirect_to('/user/echocardiography/message/' . rawurlencode($message));
