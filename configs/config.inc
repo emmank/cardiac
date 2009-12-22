@@ -31,6 +31,7 @@ class config
     var $time;
     var $fcache;
     var $flog;
+    var $synclang = TRUE;
     var $security_features = TRUE;
     var $clean_url = TRUE;
     var $cacheseparator = '][';

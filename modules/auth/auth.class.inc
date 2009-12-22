@@ -68,6 +68,14 @@ class authModule extends mainModule
             'weight' => '50',
             'user_required' => NULL
         );
+        $items['sist_message'] = array(
+            'title' => __t('Page message'),
+            'description' => __t('Show message page'),
+            'path' => '/node/message',
+            'exec' => 'message',
+            'weight' => '0',
+            'user_required' => NULL
+        );
         return $items;
     }
 

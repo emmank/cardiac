@@ -21,7 +21,6 @@
  *
  *  Created on Sep 6, 2009, 11:03:48 AM
  */
-
 require_once 'includes' . DIRECTORY_SEPARATOR . 'constant.inc';
 require_once INCLUDES_DIR . DS . 'defaultvars.inc';
 require_once INCLUDES_DIR . DS . 'bootstrap.inc';

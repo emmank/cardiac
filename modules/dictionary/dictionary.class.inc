@@ -69,6 +69,14 @@ class dictionaryModule extends mainModule
             'weight' => '0',
             'user_required' => 'admin'
         );
+        $items['dictionary_dump'] = array(
+            'title' => __t('dump translations'),
+            'description' => __t('Dump table translations'),
+            'path' => '/admin/dictionary/dumpit',
+            'exec' => 'trans_dump',
+            'weight' => '0',
+            'user_required' => 'admin'
+        );
         $items['dictionary_newwords_submit'] = array(
             'title' => __t('translate new'),
             'description' => __t('Translate new words into default language'),
@@ -142,6 +150,49 @@ class dictionaryModule extends mainModule
         }
         $this->__flush_caches();
         redirect_to('/admin/dictionary/newwords/' . $dump['page']);
+    }
+
+    function trans_dump(){
+        $filedump = INCLUDES_DIR . '/synctr.inc';
+        $handle = fopen($filedump, 'w');
+        $sql = $this->sysquery->getSelect(
+                array(),
+                array('translations'),
+                NULL,
+                'strkey'
+        );
+        $this->sysquery->connect();
+        $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                if($i<1){
+                    foreach($getit->fields as $key => $value){
+                        if($key == 'strkey' || $key == $this->config->default_lang){
+                            if(isset($tab)){
+                                fwrite($handle, "\t");
+                            }
+                            fwrite($handle, $key);
+                            $tab = 0;
+                        }
+                    } unset($tab);
+                    fwrite($handle, "\n");
+                }
+                foreach($getit->fields as $key => $value){
+                    if($key == 'strkey' || $key == $this->config->default_lang){
+                        if(isset($tab)){
+                            fwrite($handle, "\t");
+                        }
+                        fwrite($handle, $value);
+                        $tab = 0;
+                    }
+                } unset($tab);
+                fwrite($handle, "\n");
+                $getit->MoveNext();
+            }
+        }
+        fclose($handle); unset($handle);
+        redirect_to('/admin/dictionary');
     }
 
     function translatenew_form(){

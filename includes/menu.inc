@@ -155,10 +155,11 @@ function menu_organize(){
             $systemquery->connect();
             $systemquery->conn->Execute($sql); unset($sql);
             $systemquery->close();
-            redirect_to('/regload'); exit();
-        } else {
-            redirect_to('/reload_menus'); exit();
+//        } else {
+//            redirect_to('/reload_menus'); exit();
         }
+        synclang();
+        redirect_to('/regload'); exit();
     }
     $primary_links = explode(',', $getit->fields['primary_links']);
     $secondary_links = explode(',', $getit->fields['secondary_links']);
