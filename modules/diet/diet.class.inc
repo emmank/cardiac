@@ -220,13 +220,14 @@ class dietModule extends mainModule
             array(
                 'field' => (!is_null($pid) ? 'nama_diet' : 'nama'),
                 'caption' => (!is_null($pid) ? __t('nama diet') : __t('nama')),
+                'width' => (!is_null($pid) ? '20%' : '25%'),
                 'align' => 'left'
             ),
             array(
                 'field' => (!is_null($pid) ? 'catatan' : 'usia'),
                 'caption' => (!is_null($pid) ? __t('catatan') : __t('usia')),
-                'width' => (!is_null($pid) ? '15%' : '25%'),
-                'align' => (!is_null($pid) ? 'center' : 'right')
+//                'width' => (!is_null($pid) ? '15%' : '25%'),
+                'align' => (!is_null($pid) ? 'left' : 'right')
             ),
             array(
                 'field' => (!is_null($pid) ? 'inputer' : 'pukul_masuk'),
@@ -237,6 +238,7 @@ class dietModule extends mainModule
         );
 
         if(!is_null($pid)){
+
             $sql = $this->query->getSelect(
                 array(),
                 array('diet'),
@@ -248,13 +250,26 @@ class dietModule extends mainModule
             $this->query->connect();
             $getit = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
+            $sql = $this->query->getSelect(
+                    array('nama'),
+                    array('stafs'),
+                    array(
+                        array('&&', "id=" . $getit->fields['inputer'])
+                    )
+            );
+            $this->query->connect();
+            $getthis = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            
+//            unset($getthis);
             if($getit->_numOfRows > 0){
                 for($i=0; $i<$getit->_numOfRows; $i++){
                     $result['data'][$i] = $getit->fields;
+                    $result['data'][$i]['inputer'] = ucwords($getthis->fields['nama']);
                     $result['data'][$i]['goto'] = '/care/diet/detail_form/' . $getit->fields['id'];
                     $getit->MoveNext();
                 }
-            } unset($getit);
+            } unset($getit,$getthis);
         } else {
             $sql = $this->query->getSelect(
                 array(),

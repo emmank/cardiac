@@ -57,6 +57,14 @@ class kateterisasiModule extends mainModule
             'weight' => '0',
             'user_required' => 'kateterisasi'
         );
+        $items['kateterisasi_lists'] = array(
+            'title' => __t('Kateterisasi'),
+            'description' => __t('explore kateterisasi'),
+            'path' => '/user/kateterisasi/lists',
+            'exec' => 'lists',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         $items['kateterisasi_message'] = array(
             'title' => __t('kateterisasi message'),
             'description' => __t('get kateterisasi message'),
@@ -597,6 +605,10 @@ class kateterisasiModule extends mainModule
     }
 
     function view(){
+        return $this->__get_today_lists();
+    }
+
+    function lists(){
 //        $this->sync_scheme('kateterisasi', $this->query);
         $result = array();
         $result['type'] = 'table';
