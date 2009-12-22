@@ -119,7 +119,7 @@ function unset_globals() {
 function __get_file_lists($path){
     if(is_dir($path)){
         $result = array(); clearstatcache(); $i = 0;
-            if ($handle = opendir($path)){
+            if (($handle = opendir($path)) !== FALSE){
                 while (false !== ($file = readdir($handle))){
                     if ($file != "." && $file != ".."){
                         $result[$i] = $file; $i++;
@@ -280,6 +280,8 @@ function __reload_menus(){
     $dumpsights = __get_menu_sights();
     foreach($dumpsights as $key=>$value){
         $allelements[$key] = $value;
+        $allelements[$key]['title'] = __t($value['title']);
+        $allelements[$key]['description'] = __t($value['description']);
         $allelements[$key]['source'] = 'configs';
     } unset($dumpsights);
     $modules = get_active_modules();
@@ -309,4 +311,57 @@ function __reload_menus(){
         $systemquery->close();
     }
     redirect_to('/regload');
+}
+
+function synclang(){
+    global $systemquery, $configs;
+    $filedump = INCLUDES_DIR . '/synctr.inc';
+    clearstatcache();
+    if(is_file($filedump)){
+        $handle = fopen($filedump, 'r');
+        while(!feof($handle)){
+            $buffer = fgets($handle);
+            list($strkey, $translate) = explode("\t", trim($buffer));
+            $strkey = trim($strkey);
+            $translate = trim($translate);
+            if(!isset($i)){
+                if($translate != $configs->default_lang){
+                    break;
+                }
+            }
+            $sql = $systemquery->getSelect(
+                    array(),
+                    array('translations'),
+                    array(
+                        array('&&', "strkey=" . strtolower($strkey))
+                    )
+            );
+            $systemquery->connect();
+            $getit = $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+            if($getit->_numOfRows > 0){
+                if($getit->fields[$configs->default_lang] != strtolower($translate)){
+                    $sql = $systemquery->updateData(
+                            'translations',
+                            array($strkey => $translate),
+                            array(
+                                array('&&', "strkey=" . strtolower($strkey))
+                            )
+                    );
+                }
+            } else {
+                $sql = $systemquery->saveData(
+                        'translations',
+                        array($strkey => $translate)
+                );
+            } unset($getit, $strkey, $translate);
+            if(isset($sql)){
+                $systemquery->connect();
+                $systemquery->conn->Execute($sql); unset($sql);
+                $systemquery->close();
+            }
+            unset($buffer);
+        } unset($i);
+        fclose($handle); unset($handle);
+    }
 }

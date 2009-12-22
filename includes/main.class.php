@@ -898,6 +898,36 @@ class mainModule
         return $result;
     }
 
+    function patient_visit_lists($thedate, $bagian=NULL, $patient=NULL){
+        $result = array();
+        $where = array(
+            array('&&', "year(pukul)=" . date('Y', strtotime($thedate))),
+            array('&&', "month(pukul)=" . date('n', strtotime($thedate))),
+            array('&&', "day(pukul)=" . date('j', strtotime($thedate)))
+        );
+        if(!is_null($bagian)){
+            $where[] = array('&&', "bagian=" . $bagian);
+        }
+        if(!is_null($patient)){
+            $where[] = array('&&', "patients=" . $patient);
+        }
+        $sql = $this->query->getSelect(
+                array(),
+                array('kunjungan'),
+                $where
+        );
+        $this->query->connect();
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $result[$i] = $getit->fields;
+                $getit->MoveNext();
+            }
+        } unset($getit);
+        return $result;
+    }
+
     function today_patient_lists(){
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         $bagian = trim($dump[1]);

@@ -1100,16 +1100,40 @@ class patientModule extends mainModule
             'pilihan_cara_bayar' => (isset($dump['pilihan_cara_bayar']) ? $dump['pilihan_cara_bayar'] : NULL),
             'inputer' => $_COOKIE[$this->config->cookieid]
         );
-        $thevalue['id'] = $this->__get_id_insert_value('kunjungan', 'id', $this->query);
-        $sql = $this->query->saveData(
-            'kunjungan',
-            $thevalue
+        $sql = $this->query->getSelect(
+                array(),
+                array('kunjungan'),
+                array(
+                    array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                    array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                    array('&&', "day(pukul)=" . date('j', $this->config->time)),
+                    array('&&', "patients=" . $thevalue['patients'])
+                )
         );
-//        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->query->connect();
-        $this->query->conn->Execute($sql); unset($sql);
+        $getit = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
-
+        if($getit->_numOfRows < 1){
+            $gogogo = 0;
+        } else {
+            if(!is_null($getit->fields['doneby'])){
+                $gogogo = 0;
+            }
+        }
+        if(isset($gogogo)){
+            unset($gogogo);
+            $thevalue['id'] = $this->__get_id_insert_value('kunjungan', 'id', $this->query);
+            $sql = $this->query->saveData(
+                'kunjungan',
+                $thevalue
+            );
+            $this->query->connect();
+            $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+        } else {
+            $pesan = __t('patient tidak bisa dirujuk !');
+            redirect_to('/node/message'); exit();
+        }
         $sql = $this->query->setDelete(
             'antrian',
             array(
