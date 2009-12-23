@@ -51,6 +51,22 @@ class dictionaryConfig extends config
                 'default' => NULL,
                 'extra' => ''
             )
+        ),
+        'isearch_translations' => array(
+            'strkey' => array(
+                'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => 'pri',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'phrase' => array(
+                'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            )
         )
     );
 }

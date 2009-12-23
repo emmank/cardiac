@@ -361,13 +361,19 @@ function synclang(){
                                         $configs->default_lang => $translate
                                     )
                         );
-                    } unset($getit, $strkey, $translate);
+                    } unset($getit);
                     if(isset($sql)){
                         $systemquery->connect();
 //                        $systemquery->conn->debug=true;
                         $systemquery->conn->Execute($sql); unset($sql);
                         $systemquery->close();
-                    }
+                        __update_trisearch(
+                                array(
+                                    'strkey' => strtolower($strkey),
+                                    $configs->default_lang => $translate
+                                )
+                        );
+                    } unset($strkey, $translate);
                 }
             }
             unset($buffer); $i=0;

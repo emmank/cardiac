@@ -214,11 +214,14 @@ dihentikan	dihentikan
 dihentikan reference detail for faselatihan	Detil referensi dihentikan
 dihentikan reference form for faselatihan	Formulir referensi dihentikan
 dokter	Dokter
+dump table translations	Ambil data dari table translations
+dump translations	Ambil data translasi
 durasi	Durasi
 durasi reference detail for ekgqrs	Detil referensi durasi
 durasi reference detail for ekgst	Detil referensi durasi
 durasi reference form for ekgqrs	Formulir referensi durasi
 durasi reference form for ekgst	Formulir referensi durasi
+echocardiography	Echocardiography
 echocardiography check form	Formulir pemeriksaan echocardiography
 echocardiography form	Formulir echocardiography
 echocardiography form submit	Formulir submit echocardiography
@@ -412,6 +415,7 @@ execute ulib reference form for threadkesimpulansaran	Eksekusi formulir referens
 execute ves reference form for holterref	Eksekusi formulir referensi VES
 explore cardio anak	eksplore cardio anak
 explore cardio dewasa	Eksplor cardio dewasa
+explore echocardiography	Eksplor echocardiography
 explore ekg	Eksplor EKG
 explore holter	Eksplor holter
 explore treadmill	Eksplor treadmill
@@ -531,6 +535,7 @@ group detail	Detil grup
 group edit	Edit grup
 hair reference detail for headface	Detil referensi rambut
 hair reference form for headface	Formulir referensi rambut
+hasil pencarian	Hasil pencarian
 headface_expression drop	Hapus ekspresi kepala dan muka
 headface_expression edit	Edit ekspresi kepala dan muka
 headface_expression form	Formulir ekspresi kepala dan muka
@@ -761,6 +766,7 @@ o	O
 others reference detail for punggung	Detil referensi lainnya
 others reference form for punggung	Formulir referensi lainnya
 page	halaman
+page message	Halaman pesan
 palpation reference detail for hearth	Detil referensi palpasi
 palpation reference form for hearth	Formulir referensi palpasi
 palpations reference detail for punggung	Detil referensi palpasi
@@ -850,7 +856,7 @@ redirect pengkajian	Pengalihan pengkajian
 redirect perawatan's patients to it's items	Pengalihan pasien perawatan ke bagian-bagian
 redirect to perawatans item	dialihkan ke bagian perawatan
 redirecting pengkajian menus	Pengalihan menu pengkajian
-reference information for all system	Informasi referensi untuk semua sistem 
+reference information for all system	Informasi referensi untuk semua sistem
 referensi	Referensi
 register patient into database	Registrasi pasien ke dalam database
 registrasi pendaftaran pasien rawat inap	Registrasi pendaftaran pasien rawat inap
@@ -969,13 +975,18 @@ search holter	Pencarian holter
 search holter's patients	Cari pasien holter
 search perawatan	Pencarian perawatan
 search perawatan's patients	Cari pasien perawatan
+search translations	Pencarian translasi
 search treadmill	Pencarian treadmill
 search treadmill's patients	Cari pasien treadmill
 search vascular	Pencarian vascular
 search vascular's patients	Cari pasien vascular
+search words	Cari kalimat
+searching certain words in system's dictionary	Pencarian kalimat tertentu dalam kamus sistem
 searching patient in database	Cari pasien dalam database
+searching words to traslate	Pencarian kalimat untuk diterjemahkan
 segala kegiatan dalam layanan rawat inap pasien	Segala kegiatan dalam layanan rawat inap pasien
 selamat datang di cardiac center	Selamat Datang di Cardiac Center
+show message page	Tampilkan halaman pesan
 silahkan login sebelum menggunakan aplikasi ini	Silahkan masuk sebelum menggunakan aplikasi ini
 skin reference detail for abdomen	Detil referensi kulit
 skin reference form for abdomen	Formulir referensi kulit
@@ -1001,6 +1012,7 @@ submitted search treadmill	Laksanakan pencarian treadmill
 submitted search treadmill's patients	Laksanakan pencarian pasien treadmill
 submitted search vascular	Laksanakan pencarian vascular
 submitted search vascular's patients	Laksanakan pencarian pasien vascular
+submitting search certain words in system's dictionary	Eksekusi pencarian kalimat tertentu dalam kamus sistem
 submitting update patient's info execution	Laksanakan eksekusi perubahan informasi pasien
 suku	Suku
 sulawesi barat	Sulawesi Barat
@@ -1040,9 +1052,11 @@ tingkat kesegaran jasmani	Tingkat kesegaran jasmani
 tipe tanda vital	Tipe tanda vital
 tp_lahir	Tempat Lahir
 translate	terjemahkan
-translate new	Terjemahkan yang baru
+translate certain words into choosed language	Terjemahkan kalimat tertentu ke dalam bahasa yang dipilih
+translate new	Terjemahan baru
 translate new words into default language	Terjemahkan kalimat yang baru ke dalam bahasa utama
 translate word into certain language	Terjemahkan kalimat ke dalam bahasa tertentu
+translate words	terjemahkan kalimat
 translations	Terjemahan
 treadmill	Treadmill
 treadmillmessage	Pesan treadmill
@@ -1063,6 +1077,7 @@ user's password	Sandi pengguna
 userid	ID Pengguna
 username	Nama pengguna
 usia	Usia
+vascular	Vascular
 vascular echo-doppler	Echo doppler
 vascularmessage	Pesan vascular
 ves	VES

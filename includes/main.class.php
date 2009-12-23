@@ -1204,6 +1204,63 @@ class mainModule
        return $result;
    }
 
+   function __get_translations_search($data){
+       $result = array();
+       $patient_fields = $this->__get_data_fields('translations', $this->sysquery);
+       if(strlen(trim($data)) < 2){
+           $sql = $this->sysquery->getSelect(
+               array('strkey'),
+               array('translations'),
+               array(
+                   array('&&', "strkey like '" . trim($data) . "%'")
+               )
+           );
+           $this->sysquery->connect();
+           $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+           $this->sysquery->close();
+           if($getit->_numOfRows > 0){
+               $dump = array();
+               for($i=0; $i<$getit->_numOfRows; $i++){
+                   $dump[] = $getit->fields['strkey'];
+                   $getit->MoveNext();
+               }
+               $result[trim($data)] = $dump;
+               unset($dump);
+           } unset($getit);
+       } else {
+           $dump = explode(' ', trim($data));
+           $getdump = array();
+           foreach($dump as $value){
+               $getdump[] = trim($value);
+           } unset($dump);
+           $dump = $this->__iterate($getdump);
+           unset($getdump);
+           foreach($dump as $key => $value){
+               $sql = $this->sysquery->getSelect(
+                   array(),
+                   array('isearch_translations'),
+                   array(
+                       array('&&', "phrase like '%" . $value . "%'")
+                   )
+               );
+               $this->sysquery->connect();
+               $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+               $this->sysquery->close();
+               if($getit->_numOfRows > 0){
+                   $getdump = array();
+                   for($i=0; $i<$getit->_numOfRows; $i++){
+                       $getdump[] = $getit->fields['strkey'];
+                       $getit->MoveNext();
+                   }
+                   $result[$value] = $getdump;
+                   unset($getdump);
+               }
+           } unset($dump);
+       }
+//       echo '<pre>'; print_r($result); echo '</pre>';
+       return $result;
+   }
+
    function __get_patients_search($data){
        $result = array();
        $patient_fields = $this->__get_data_fields('patients', $this->query);

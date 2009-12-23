@@ -109,7 +109,268 @@ class dictionaryModule extends mainModule
             'weight' => '0',
             'user_required' => 'admin'
         );
+        $items['dictionary_search'] = array(
+            'title' => __t('search translations'),
+            'description' => __t('searching certain words in system\'s dictionary'),
+            'path' => '/admin/dictionary/search',
+            'exec' => 'trsearch',
+            'weight' => '0',
+            'user_required' => 'admin'
+        );
+        $items['dictionary_searchsubmit'] = array(
+            'title' => __t('search translations'),
+            'description' => __t('submitting search certain words in system\'s dictionary'),
+            'path' => '/admin/dictionary/searchsubmit',
+            'exec' => 'trsearch_submit',
+            'weight' => '0',
+            'user_required' => 'admin'
+        );
+        $items['dictionary_trdetail'] = array(
+            'title' => __t('translate words'),
+            'description' => __t('translate certain words into choosed language'),
+            'path' => '/admin/dictionary/trdetail',
+            'exec' => 'trdetail_form',
+            'weight' => '0',
+            'user_required' => 'admin'
+        );
+        $items['dictionary_trdetailsubmit'] = array(
+            'title' => __t('translate words'),
+            'description' => __t('translate certain words into choosed language'),
+            'path' => '/admin/dictionary/trdetailsubmit',
+            'exec' => 'trdetail_form_submit',
+            'weight' => '0',
+            'user_required' => 'admin'
+        );
         return $items;
+    }
+
+    function trdetail_form_submit(){
+        $dump = $this->__write_form_cache();
+        foreach($dump as $key => $value){
+            if($key != 'submit' && $key != 'strkey' && $key != 'lang'){
+                if(trim($value) != ''){
+                    $thevalue[$key] = $value;
+                }
+            }
+        }
+        if(isset($thevalue)){
+            $sql = $this->sysquery->updateData(
+                    'translations',
+                    $thevalue,
+                    array(
+                        array('&&', "strkey=" . $dump['strkey'])
+                    )
+            );
+            $this->sysquery->connect();
+            $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
+            $this->__update_trisearch($thevalue);
+            unset($thevalue);
+        }
+        $this->__flush_caches();
+        redirect_to('/admin/dictionary/search/' . $dump['lang']);
+    }
+
+    function trdetail_form(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($dump[3])){
+            $lang = trim($dump[3]);
+            if(isset($dump[4])){
+                $strkey = urldecode(trim($dump[4]));
+            } else {
+                redirect_to('/admin/dictionary/search/' . $lang); exit();
+            }
+        } else {
+            redirect_to('/admin/dictionary'); exit();
+        } unset($dump);
+        if ($this->__check_caches() === TRUE){
+            $vcache = $this->__read_form_cache();
+        } else {
+            $sql = $this->sysquery->getSelect(
+                    array('strkey', $this->config->default_lang, $lang),
+                    array('translations'),
+                    array(
+                        array('&&', "strkey=" . $strkey)
+                    )
+            );
+            $this->sysquery->connect();
+            $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
+            if($getit->_numOfRows > 0){
+                foreach($getit->fields as $key => $value){
+                    $vcache[$key] = $value;
+                }
+            }
+        }
+        $themessage = '<font style="font-weight:bold">' . $strkey . '</font><br />' . "\n";
+        $themessage .= $vcache[$this->config->default_lang];
+        $form['translate'] = array(
+            '#type' => 'fieldset',
+            '#id' => 'translate',
+            '#title' => __t('translate'),
+            '#collapsible' => TRUE,
+            '#collapsed' => FALSE,
+            '#focused_item' => $lang,
+            '#weight' => 0,
+            '#action' => '/admin/dictionary/trdetailsubmit',
+            '#message' => $themessage,
+            '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
+        );
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search') . ' ' . __t('translations'),
+            'action' => '/admin/dictionary/search/' . $lang,
+            'position' => 'top',
+            'user_required' => 'admin'
+        );
+        $form['translate']['strkey'] = array(
+            '#type' => 'hidden',
+            '#value' => $vcache['strkey']
+        );
+        $form['translate']['lang'] = array(
+            '#type' => 'hidden',
+            '#value' => $lang
+        );
+        $form['translate'][$lang] = array(
+            '#type' => 'textarea',
+            '#title' => __t('translate'),
+            '#cols' => 40,
+            '#rows' => 3,
+            '#value' => $vcache[$lang]
+        );
+        $form['translate']['submit'] = array(
+            '#type' => 'submit',
+            '#title' => ' &nbsp;',
+            '#value' => __t('submit'),
+            '#extra' => 'class="button"'
+        );
+        return $form;
+    }
+
+    function trsearch_submit(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $lang = trim($dump[3]);
+        if(isset($_POST['data'])){
+            $str = $_POST['data'];
+            $dump = $this->__get_translations_search($str);
+        } else {
+            $str = '';
+            if(trim($dump[4]) != ''){
+                $str = trim($dump[4]);
+                $dump = $this->__get_translations_search($str);
+            } else {
+                $dump = array();
+            }
+        }
+        $result = array();
+        $result['type'] = 'notelist';
+        $result['title'] = __t('hasil pencarian') . ' ' . __t('in') . ' ' . __t($lang);
+        $result['description'] = __t('hasil pencarian') . ' <strong>"' . $str . '"</strong>';
+        unset($str);
+        if(count($dump) > 0){
+            foreach($dump as $key => $value){
+                foreach($value as $ky => $vl){
+                    $sql = $this->sysquery->getSelect(
+                        array(),
+                        array('translations'),
+                        array(
+                            array('&&', "strkey=" . $vl)
+                        )
+                    );
+                    $this->sysquery->connect();
+//                    $this->sysquery->conn->debug=true;
+                    $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+                    $this->sysquery->close();
+                    if($getit->_numOfRows > 0){
+                        if(!isset($cnt)){
+                            $cnt = 0;
+                            $result['data'] = array();
+                        }
+                        for($i=0; $i<$getit->_numOfRows; $i++){
+                            if(!isset($dumpid)){$dumpid = array();}
+                            if(!in_array($getit->fields['strkey'], $dumpid)){
+                                if(count($dumpid) > 0){
+                                    $cnt++;
+                                }
+                                $dumpid[] = $getit->fields['strkey'];
+                                $result['data'][$cnt]['links'] = '/admin/dictionary/trdetail/' . $lang . '/' . urlencode(eregi_replace('&', '-_dan_-', $getit->fields['strkey']));
+                                $result['data'][$cnt]['caption'] = $getit->fields['strkey'];
+                            }
+                            $sql = $this->sysquery->getSelect(
+                                array(),
+                                array('translations'),
+                                array(
+                                    array('&&', "strkey=" . $vl)
+                                )
+                            );
+                            $this->sysquery->connect();
+                            $getthis = $this->sysquery->conn->Execute($sql); unset($sql);
+                            $this->sysquery->close();
+                            if($getthis->_numOfRows > 0){
+                                foreach($getthis->fields as $yk => $lv){
+                                    if(eregi($key, $lv)){
+                                        $result['data'][$cnt]['string'][$yk] = eregi_replace($key, '<strong>' . $key . '</strong>', $lv);
+                                    }
+                                }
+//                                if(!isset($result['data'][$cnt]['string']['nama'])){
+//                                    $result['data'][$cnt]['string']['nama'] = $getthis->fields['strkey'];
+//                                }
+                            } unset($getthis);
+                            $getit->MoveNext();
+                        }
+                    } unset($getit);
+                }
+            }
+        } unset($dump);
+        return $result;
+    }
+
+    function trsearch(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($dump[3])){
+            $lang = trim($dump[3]);
+        }
+        $result = array();
+        $result['type'] = 'search';
+        $result['title'] = __t('search words') . ' ' . __t('in') . ' ' . __t($lang);
+        $result['description'] = __t('searching words to traslate');
+        $result['dataform']['character'] = array(
+            '#type' => 'character'
+        );
+        $i = 0;
+        foreach($this->config->abjad as $value){
+            $result['dataform']['character']['data'][$i]['show'] = $value;
+            $sql = $this->sysquery->getSelect(
+                array('strkey'),
+                array('translations'),
+                array(
+                    array('&&', "strkey like '" . strtolower($value) . "%'")
+                )
+            );
+            $this->sysquery->connect();
+//            $this->sysquery->conn->debug=true;
+            $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
+            $result['dataform']['character']['data'][$i]['links'] = $getit->_numOfRows > 0 ? '/admin/dictionary/search/' . $lang . '/' . $value : NULL;
+            unset($getit); $i++;
+        } unset($i);
+        $result['dataform']['form'] = array(
+            '#type' => 'form',
+            '#action' => '/admin/dictionary/search/' . $lang,
+            '#id' => 'translate_search',
+            '#title' => __t('search') . ' ' . __t('in') . ' ' . __t($lang),
+            'data' => array(
+                '#type' => 'text',
+                '#size' => 40
+            ),
+            'submit' => array(
+                '#type' => 'submit',
+                '#value' => __t('search')
+            )
+        );
+        if(isset($_POST['data']) || isset($dump[4])){
+            $result['result'] = $this->trsearch_submit();
+        } unset($dump);
+        return $result;
     }
 
     function clear_dump(){
@@ -147,6 +408,7 @@ class dictionaryModule extends mainModule
             $this->sysquery->connect();
             $this->sysquery->conn->Execute($sql); unset($sql);
             $this->sysquery->close();
+            $this->__update_trisearch($thevalue);
         }
         $this->__flush_caches();
         redirect_to('/admin/dictionary/newwords/' . $dump['page']);
@@ -343,10 +605,35 @@ class dictionaryModule extends mainModule
             $this->sysquery->connect();
             $this->sysquery->conn->Execute($sql); unset($sql);
             $this->sysquery->close();
+            $this->__update_trisearch($thevalue);
             unset($thevalue);
         }
         $this->__flush_caches();
         redirect_to('/admin/dictionary/detail/' . $dump['lang'] . '/' . $dump['page']);
+    }
+
+    function __update_trisearch($thevalue, $drop=NULL){
+        $sql = $this->sysquery->setDelete(
+            'isearch_translations',
+            array(
+                array('&&', "strkey=" . $thevalue['strkey'])
+            )
+        );
+        $this->sysquery->connect();
+        $this->sysquery->conn->Execute($sql); unset($sql);
+        $this->sysquery->close();
+        if(is_null($drop)){
+            $sql = $this->sysquery->saveData(
+                'isearch_translations',
+                array(
+                    'strkey' => $thevalue['strkey'],
+                    'phrase' => implode(' ', $thevalue)
+                )
+            );
+            $this->sysquery->connect();
+            $this->sysquery->conn->Execute($sql); unset($sql);
+            $this->sysquery->close();
+        }
     }
 
     function translate_form(){
@@ -476,6 +763,12 @@ class dictionaryModule extends mainModule
         $result['type'] = 'table';
         $result['title'] = __t('translations') . ' ' . __t('in') . ' ' . __t($lang);
         $result['description'] = __t('words that translated in') . ' ' . __t($lang);
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search') . ' ' . __t('translations'),
+            'action' => '/admin/dictionary/search/' . $lang,
+            'position' => 'top',
+            'user_required' => 'admin'
+        );
         $result['header'] = array(
             array(
                 'field' => 'strkey',
@@ -597,6 +890,7 @@ class dictionaryModule extends mainModule
             $this->sync_scheme('translations', $this->sysquery);
         }
         $this->sync_scheme('dumptr', $this->sysquery);
+        $this->sync_scheme('isearch_translations', $this->sysquery);
         $result = array();
         $result['type'] = 'table';
         $result['title'] = __t('daftar bahasa');
