@@ -1072,6 +1072,10 @@ function __create_items_of_form($data){
     return $result;
 }
 
-require_once THEMES_DIR . DS . $theme . DS . 'page.tpl';
+if(isset($content['output']['print'])){
+    require_once INCLUDES_DIR . DS . 'printed.inc';
+} else {
+    require_once THEMES_DIR . DS . $theme . DS . 'page.tpl';
+}
 
 //end of file;

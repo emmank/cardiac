@@ -1,4 +1,6 @@
 strkey	indonesia
+-- medical record --	-- Rekam Medik --
+-- perawatan --	-- perawatan --
 a	A
 ab	AB
 abdomen_auscultation	Auscultation
@@ -46,16 +48,22 @@ abdomen_skin drop	Drop
 abdomen_skin edit	Edit
 abdomen_skin form	Formulir
 add group	Grup
+add nutrient	Tambah nutrisi
+add reference	Tambah referensi
+add soreness	Tambah keluhan utama
 add user	Tambah pengguna
+admin	Admin
 administer	Pengaturan admin
 af	AF
 af reference detail for holterref	Detil referensi AF untuk holterref
 af reference form for holterref	Formulir referensi AF untuk holterref
 agama	Agama
+akses ke group	Akses ke grup
 alamat	Alamat
 alergi	Alergi
 all menu thats used by administrator to manage entire system configurations	Semua menu yang digunakan oleh administrator untuk mengatur konfigurasi sistem secara keseluruhan
 all menu thats used by user to manage their entry and self configurations	Semua menu yang digunakan pengguna untuk mengatur inputan mereka dan juga konfigurasinya sendiri
+antrian	Antrian
 antrian pasien	Antrian Pasien
 antrian pasien rawat inap	Antrian pasien rawat inap
 antrian pasien yang mendaftar pada hari ini	Antrian pasien yang mendaftar pada hari ini
@@ -94,6 +102,8 @@ bunyi_pernafasan reference detail for punggung	Detil referensi untuk punggung
 bunyi_pernafasan reference form for punggung	Formulir referensi untuk punggung
 bunyi_tambahan reference detail for punggung	Detil referensi bunyi tambahan untuk punggung
 bunyi_tambahan reference form for punggung	Formulir referensi bunyi tambahan
+by	oleh
+c	C
 cara_bayar	Cara Bayar
 cara_berkunjung	Cara Berkunjung
 cardio anak	cardio anak
@@ -102,6 +112,9 @@ cardio message	Pesan
 cari data pasien	Cari data pasien
 cari pasien	Cari pasien
 cari pasien rawat inap	Cari pasien rawat inap
+catatan_pemberian_cairan	Catatan pemberian cairan
+catatan_pemberian_obat	Catatan peberian obat
+catatan_perkembangan	Catatan perkembangan
 center reference detail for abdomen	Detil referensi center
 center reference form for abdomen	Formulir referensi center
 cerai	Cerai
@@ -113,16 +126,22 @@ clear dump	Bersihkan dump
 cornea	Kornea
 cornea reference detail for eye	Detil referensi kornea
 cornea reference form for eye	Formulir referensi kornea
+d	D
 daerah istimewa yogyakarta	Daerah Istimewa Yogyakarta
 daerah khusus ibukota jakarta	Daerah Khusus Ibukota Jakarta
 daftar alergi	Daftar Alergi
+daftar antrian pasien	Daftar antrian pasien
 daftar bagian	Daftar bagian
 daftar bahasa	Daftar bahasa
 daftar bahasa yang terdaftar dalam system ini	Daftar bahasa yang terdaftar dalam sistem ini
 daftar bahasa yang tersedia	Daftar bahasa yang tersedia
+daftar beberapa pasien	Daftar beberapa pasien
+daftar beberapa pasien terakhir yang telah diperiksa	Daftar beberapa pasien terakhir yang telah diperiksa
+daftar group	Daftar grup
 daftar pasien	Daftar pasien
 daftar pasien rawat inap	Daftar pasien rawat inap
 daftar pasien yang mendaftar hari ini	Daftar pasien yang mendaftar hari ini
+daftar pengguna	Daftar Pengguna
 daftar pengkajian	Daftar pengkajian
 daftar rencana perawatan	Daftar rencana perawatan
 daftar riwayat kesehatan	Daftar riwayat kesehatan
@@ -132,9 +151,11 @@ delete group	Hapus grup
 delete user	Hapus pengguna
 denyut_jantung reference detail for fekg	Detil referensi denyut jantung
 denyut_jantung reference form for fekg	Formulir referensi denyut jantung
+denyut_jantung_max	Denyut jantung maksimal
 depresi	Depresi
 depresi reference detail for ekgst	Detil referensi depresi
 depresi reference form for ekgst	Formulir referensi depresi
+desember	Desember
 detail bagian	Detil bagian
 detail cardio anak	Detil cardio anak
 detail cardio anak's patients	Detil pasien cardio anak
@@ -176,6 +197,7 @@ detil durasi	Detil durasi
 detil ekspresi	Detil ekspresi
 detil extermitas_inspections	Detil inspeksi extermitas
 detil gelombang p	Detil gelombang P
+detil group	Detil grup
 detil heartblock qrs complex	Detil heartblock QRS Complex
 detil hearth_auscultation_kind	Detil jenis auscultation
 detil hearth_auscultation_quality	Detil kualitas auscultation
@@ -193,6 +215,7 @@ detil irama dasar	Detil irama dasar
 detil keluhan	Detil keluhan
 detil klasifikasi fungsional	Detil klasifikasi fungsional
 detil konfigurasi	Detil konfigurasi
+detil pengguna	Detil pengguna
 detil perubahan gelombang r	Detil perubahan gelombang R
 detil protokol fase latihan	Detil protokol fase latihan
 detil punggung_bunyi_pernafasan	Detil bunyi pernafasan
@@ -202,6 +225,13 @@ detil punggung_others	Detil lainnya
 detil punggung_palpations	Detil palpasi
 detil q_interval fekg	Detil Q interval
 detil rambut	Detil rambut
+detil referensi expression	Detil referensi ekspresi
+detil referensi gizi	Detil referensi gizi
+detil referensi hair	Detil referensi rambut
+detil referensi inspections	Detil referensi inspeksi
+detil referensi irama nadi	Detil referensi irama nadi
+detil referensi kesadaran	Detil referensi kesadaran
+detil referensi tipe tanda vital	Detil referensi tipe tanda vital
 detil respon tekanan darah	Detil respon tekanan darah
 detil respon_jantung fase latihan	Detil respon jantung
 detil rlbs qrs complex	Detil ribs QRS colmpeks
@@ -210,10 +240,14 @@ detil tingkat kesegaran jasmani	Detil tingkat kesegaran jasmani
 detil tipe tanda vital	Detil tipe tanda vital
 detil ves	Detil VES
 dictionary	Kamus
+diet	Diet
 dihentikan	dihentikan
 dihentikan reference detail for faselatihan	Detil referensi dihentikan
 dihentikan reference form for faselatihan	Formulir referensi dihentikan
+dirujuk ke	Dirujuk ke
 dokter	Dokter
+dr yg kerjakan	dokter pemeriksa
+drop	Hapus
 dump table translations	Ambil data dari table translations
 dump translations	Ambil data translasi
 durasi	Durasi
@@ -226,6 +260,7 @@ echocardiography check form	Formulir pemeriksaan echocardiography
 echocardiography form	Formulir echocardiography
 echocardiography form submit	Formulir submit echocardiography
 echocardiography message	Pesan echocardiography
+edit	Edit
 editing  risk_factor reference form for present status	Formulir edit referensi faktor resiko
 editing af reference form for holterref	Formulir edit referensi AF
 editing auscultation reference form for abdomen	Formulir edit referensi auscultation
@@ -337,6 +372,7 @@ eksekusi perubahan informasi pengguna	Eksekusi perubahan informasi pengguna
 eksekusi perubahan sandi pengguna	Eksekusi perubahan sandi pengguna
 eksekusi registrasi pendaftaran pasien rawat inap	Eksekusi registrasi pendaftaran pasien rawat inap
 ekspresi	Ekspresi
+email	Email
 execute af reference form for holterref	Eksekusi formulir referensi AF
 execute auscultation reference form for abdomen	Eksekusi formulir referensi auscultation
 execute auscultation_kind reference form for hearth	Eksekusi formulir referensi auscultation
@@ -420,6 +456,7 @@ explore ekg	Eksplor EKG
 explore holter	Eksplor holter
 explore treadmill	Eksplor treadmill
 explore vascular	Eksplor vascular
+expression	Ekspresi
 expression reference detail for headface	Detil referensi ekspresi
 expression reference form for headface	Formulir referensi ekspresi
 extermitas_inspections	Inspeksi extermitas
@@ -533,6 +570,9 @@ gorontalo	Gorontalo
 group	Grup
 group detail	Detil grup
 group edit	Edit grup
+group yang terdaftar sebagai operator dan administrator system ini	Grup yang terdaftar sebagai operator dan administrator dalam sistem ini
+groups	Grup
+hair	Rambut
 hair reference detail for headface	Detil referensi rambut
 hair reference form for headface	Formulir referensi rambut
 hasil pencarian	Hasil pencarian
@@ -614,6 +654,8 @@ holterref_ves drop	Hapus VES
 holterref_ves edit	Edit VES
 holterref_ves form	Formulir VES
 id	ID
+identitas pasien	Identitas pasien
+illness_history	Riwayat penyakit
 illness_history drop	Hapus riwayat penyakit
 illness_history edit	Edit riwayat penyakit
 illness_history form	Formulir riwayat penyakit
@@ -623,8 +665,20 @@ in	dalam
 indikasi	Indikasi
 indonesia	Indonesia
 informasi detail pasien	Informasi detil pasien
+informasi detil group terdaftar yang terpilih	Informasi detil grup terdaftar yang dipilih
+informasi detil pengguna terdaftar yang terpilih	Informasi detil pengguna terdaftar yang dipilih
+informasi detil referensi expression yang terpilih	Informasi detil referensi ekspresi yang dipilih
+informasi detil referensi gizi yang terpilih	Informasi detil referensi gizi yang dipilih
+informasi detil referensi hair yang terpilih	Informasi detil referensi rambut yang dipilih
+informasi detil referensi inspections yang terpilih	Informasi detil referensi inspeksi yang dipilih
+informasi detil referensi irama nadi yang terpilih	Informasi detil referensi irama nadi yang dipilih
+informasi detil referensi kesadaran yang terpilih	Informasi detil referensi kesadaran yang dipilih
+informasi detil referensi tipe tanda vital yang terpilih	Informasi detil referensi tipe tanda vital yang dipilih
+input	Input
+inputtime	Waktu input
 inspection reference detail for hearth	Detil referensi inspeksi
 inspection reference form for hearth	Fromulir referensi inspeksi
+inspections	Inspeksi
 inspections reference detail for anusrectum	Detil referensi inspeksi
 inspections reference detail for extermitas	Detil referensi inspeksi
 inspections reference detail for eye	Detil referensi inspeksi
@@ -646,36 +700,134 @@ irama reference detail for fekg	Detil referensi irama
 irama reference form for fekg	Formulir referensi irama
 is amount	sebanyak
 islam	Islam
+jabatan	Jabatan
 jambi	Jambi
 jawa barat	Jawa Barat
 jawa tengah	Jawa tengah
 jawa timur	Jawa timur
 jumlah kata	Jumlah kata
+kabupaten asmat	Kabupaten Asmat
+kabupaten banggai	Kabupaten Banggai
+kabupaten banggai kepulauan	Kabupaten Banggai Kepulauan
 kabupaten bantaeng	Kabupaten Bantaeng
 kabupaten barru	Kabupaten Barru
+kabupaten biak numfor	Kabupaten Biak Numfor
+kabupaten boalemo	Kbupaten Boalemo
+kabupaten bolaang mongondow	Kabupaten Bolaang Mongondow
+kabupaten bolaang mongondow se	Kabupaten Bolaang Mongondow Selatan
+kabupaten bolaang mongondow ti	Kabupaten Bolaang Mongondow Timur
+kabupaten bolaang mongondow ut	Kabupaten Bolaang Mongondow Utara
+kabupaten bombana	Kabupaten Bombana
 kabupaten bone	Kabupaten Bone
+kabupaten bone bolango	Kabupaten Bone Bolango
+kabupaten boven digoel	Kabupaten Boven Digoel
 kabupaten bulukumba	Kabupaten Bulukumba
+kabupaten buol	Kabupaten Buol
+kabupaten buru	Kabupaten Buru
+kabupaten buru selatan	Kabupaten Buru Selatan
+kabupaten buton	Kabupaten Buton
+kabupaten buton utara	Kabupaten Buton Utara
+kabupaten deiyai	Kbupaten Deiyai
+kabupaten dogiyai	Kabupaten Dogiyai
+kabupaten donggala	Kabupaten Donggala
 kabupaten enrekang	Kabupaten Enrekang
+kabupaten fakfak	Kabupaten Fakfak
+kabupaten gorontalo	Kabupaten Gorontalo
+kabupaten gorontalo utara	Kabupaten Gorontalo Utara
 kabupaten gowa	Kabupaten Gowa
+kabupaten halmahera barat	Kabupaten Halmahera Barat
+kabupaten halmahera selatan	Kabupaten Halmahera Selatan
+kabupaten halmahera tengah	Kabupaten Halmahera Tengah
+kabupaten halmahera timur	Kabupaten Halmahera Timur
+kabupaten halmahera utara	Kabupaten Halmahera Utara
+kabupaten intan jaya	Kabupaten Intan Jaya
+kabupaten jayapura	Kabupaten Jayapura
+kabupaten jayawijaya	Kabupaten Jayawijaya
 kabupaten jeneponto	Kabupaten Jeneponto
+kabupaten kaimana	Kabupaten Kaimana
+kabupaten keerom	Kabupaten Keerom
+kabupaten kepulauan aru	Kabupaten Kepulauan Aru
+kabupaten kepulauan sangihe	Kabupaten Kepulauan Sangihe
 kabupaten kepulauan selayar	Kabupaten Kepulauan Selayar
+kabupaten kepulauan siau tagul	Kabupaten Kepulauan Siau Tagui
+kabupaten kepulauan sula	Kabupaten Kepulauan Sula
+kabupaten kepulauan talaud	Kabupaten Kepulauan Talaud
+kabupaten kepulauan yapen	Kabupaten Kepulauan Yapen
+kabupaten kolaka	Kabupaten Kolaka
+kabupaten kolaka utara	Kabupaten Kolaka Utara
+kabupaten konawe	Kabupaten Konawe
+kabupaten konawe selatan	Kabupaten Konwe Selatan
+kabupaten konawe utara	Kabupaten Konawe Utara
+kabupaten lanny jaya	Kabupaten Lanny Jaya
 kabupaten luwu	Kabupaten Luwu
 kabupaten luwu timur	Kabupaten Luwu Timur
 kabupaten luwu utara	Kabupaten Luwu Utara
+kabupaten majene	Kabupaten Majene
+kabupaten maluku barat daya	Kabupaten Maluku Barat Daya
+kabupaten maluku tengah	Kabupaten Maluku Tengah
+kabupaten maluku tenggara	Kabupaten Maluku Tenggara
+kabupaten maluku tenggara bara	Kabupaten Maluku Tenggara Barat
+kabupaten mamasa	Kabupaten Mamasa
+kabupaten mamberamo raya	Kabupaten Mamberamo Raya
+kabupaten mamberamo tengah	Kabupaten Mamberamo Tengah
+kabupaten mamuju	Kabupaten Mamuju
+kabupaten mamuju utara	Kabupaten Mamuju Utara
+kabupaten manokwari	Kabupaten Manokwari
+kabupaten mappi	Kabupaten Mappi
 kabupaten maros	Kabupaten Maros
+kabupaten maybrat	Kabupaten Maybrat
+kabupaten merauke	Kabupaten Merauke
+kabupaten mimika	Kabupaten Mimika
+kabupaten minahasa	Kabupaten Minahasa
+kabupaten minahasa selatan	Kabupaten Minahasa Selatan
+kabupaten minahasa tenggara	Kabupaten Minahasa Tenggara
+kabupaten minahasa utara	Kabupaten Minahasa Utara
+kabupaten morowali	Kabupaten Morowali
+kabupaten muna	Kabupaten Muna
+kabupaten nabire	Kabupaten Nabire
+kabupaten nduga	Kabupaten Nduga
 kabupaten pangkajene dan kepul	Kabupaten Pangkajene Kepulauan
+kabupaten paniai	Kabupaten Paniai
+kabupaten parigi moutong	Kabupaten Parigi Moutong
+kabupaten pegunungan bintang	Kabupaten Pegunungan Bintang
 kabupaten pinrang	Kabupaten Pinrang
+kabupaten pohuwato	Kabupaten Pohuwato
+kabupaten polewali mandar	Kabupaten Polewali Mandar
+kabupaten poso	Kabupaten Poso
+kabupaten pulau morotai	Kabupaten Pulau Morotai
+kabupaten puncak	Kabupaten Puncak
+kabupaten puncak jaya	Kabupaten Puncak Jaya
+kabupaten raja ampat	Kabupaten Raja Ampat
+kabupaten sarmi	Kabupaten Sarmi
+kabupaten seram bagian barat	Kabupaten Seram Bagian Barat
+kabupaten seram bagian timur	Kabupaten Seram Bagian Timur
 kabupaten sidenreng rappang	Kabupaten Sidenreng Rappang
+kabupaten sigi	Kabupaten Sigi
 kabupaten sinjai	Kabupaten Sinjai
 kabupaten soppeng	Kabupaten Soppeng
+kabupaten sorong	Kabupaten Sorong
+kabupaten sorong selatan	Kabupaten Sorong Selatan
+kabupaten supiori	Kabupaten Supiori
 kabupaten takalar	Kabupaten Takalar
+kabupaten tambrauw	Kabupaten Tambrauw
 kabupaten tana toraja	Kabupaten Tana Toraja
+kabupaten teluk bintuni	Kabupaten Teluk Bintuni
+kabupaten teluk wondama	Kabupaten Teluk Wondama
+kabupaten tojo una-una	Kabupaten Tojo Una-una
+kabupaten toli-toli	Kabupaten Toli-toli
+kabupaten tolikara	Kabupaten Toikara
 kabupaten toraja utara	Kabupaten Toraja Utara
 kabupaten wajo	Kabupaten Wajo
+kabupaten wakatobi	Kabupaten Wakatobi
+kabupaten waropen	Kabupaten Waropen
+kabupaten yahukimo	Kabupaten Yahukimo
+kabupaten yalimo	Kabupaten Yalimo
 kalimantan barat	Kalimantan Barat
 kalimantan selatan	Kalimantan Selatan
 kalimantan tengah	Kalimantan Tengah
 kalimantan timur	Kalimantan Timur
+kardio anak	Kardio anak
+kardio dewasa	Kardio dewasa
 kawin	Kawin
 kelamin	Kelamin
 kelopak mata	Kelopak mata
@@ -690,6 +842,7 @@ kesadaran reference detail for vitalsign	Detil referensi kesadaran
 kesadaran reference form for vitalsign	Formulir referensi kesadaran
 kesegaran reference detail for threadkesimpulansaran	Detil referensi kesegaran
 kesegaran reference form for threadkesimpulansaran	Formulir referensi kesegaran
+keterangan	Keterangan
 klasifikasi fungsional	Klasifikasi fungsional
 kode_pos	Kode Pos
 konfigurasi	Konfigurasi
@@ -703,12 +856,27 @@ konsul	Konsul
 kosongkan bila anda adalah pasien baru, kemudian klik submit	Kosongkan bila Anda adalah pasien baru, kemudian klik submit
 kosongkan jika tidak tahu	Kosongkan jika tidak tahu
 kota	Kota
+kota ambon	Kota Ambon
+kota bau-bau	Kota Bau-bau
+kota bitung	Kota Bitung
+kota gorontalo	Kota Gorontalo
+kota jayapura	Kota Jayapura
+kota kendari	Kota Kendari
+kota kotamobagu	Kota Kotamobagu
 kota makassar	Kota Makassar
+kota manado	Kota Manado
 kota palopo	Kota Palopo
+kota palu	Kota Palu
 kota parepare	Kota Parepare
+kota sorong	Kota Sorong
+kota ternate	Kota Ternate
+kota tidore kepulauan	Kota Tidore Kepulauan
+kota tomohon	Kota Tomohon
+kota tual	Kota Tual
 kristen katolik	Kristen Katolik
 kristen protestan	Kristen Protestan
 kunjungan pasien hari ini	Kunjungan pasien hari ini
+kunjungan_ke	Kunjungan ke
 lainnya	Lainnya
 laki-laki	Laki-laki
 lampung	Lampung
@@ -744,17 +912,22 @@ menu untuk menampilkan detail pengguna terdaftar yang terpilih	Menu untuk menamp
 nama	Nama
 nama_ayah	Nama Ayah
 nama_ibu	Nama Ibu
+nama_istri	Nama Istri
 nama_suami	Nama Suami
 name	Nama
 nanggroe aceh darussalam	Nanggroe Aceh Darussalam
+negara	Negara
 new words	Kalimat baru
 no	No.
 nomor	Nomor
 no_hp	No. HP
 no_identitas	No. Identitas
+no_ktp	No. KTP
+no_registrasi	No. register
 no_tlp	No. Telp.
 nusa tenggara barat	Nusa Tenggara Barat
 nusa tenggara timur	Nusa Tenggara Timur
+nutrient	Nutrisi
 nutrient detail	Detil nutrisi
 nutrient drop	Hapus Nutrisi
 nutrient edit	Edit nutrisi
@@ -783,16 +956,21 @@ patient update	Ubah pasien
 pekerjaan	Pekerjaan
 pekerjaan_ayah	Pekerjaan Ayah
 pekerjaan_ibu	Pekerjaan Ibu
+pekerjaan_istri	Pekerjaan Istri
 pekerjaan_suami	Pekerjaan Suami
+pemeriksaan	Pemeriksaan
 pencarian dengan huruf awalan	Pencarian dengan huruf awal
 pendaftaran pasien	Pendaftaran pasien
 pendidikan	Pendidikan
 pengguna	Pengguna
+pengguna yang terdaftar sebagai operator dan administrator system ini	Pengguna yang terdaftar sebagai operator dan administrator sistem ini
+pengirim	Pengirim
 pengkajian	Pengkajian
 penjalaran reference detail for hearth	Detil referensi penjalaran
 penjalaran reference form for hearth	Formulir referensi penjalaran
 perawatan	Perawatan
 perawatan message	Pesan perawatan
+perawatans report	Laporan perawatan
 percussion_bottom reference detail for hearth	Detil referensi perkusi bawah
 percussion_bottom reference form for hearth	Formulir referensi perkusi bawah
 percussion_left reference detail for hearth	Detil referensi perkusi kiri
@@ -811,11 +989,14 @@ perubahan sandi pengguna	Perubahan sandi pengguna
 perubahan_gelombang	Perubahan gelombang
 perubahan_gelombang reference detail for faselatihan	Detil referensi perubahan gelombang
 perubahan_gelombang reference form for faselatihan	Formulir referensi perubahan gelombang
+print	cetak
 propinsi	Propinsi
 protokol	Protokol
 protokol reference detail for faselatihan	Detil referensi protokol
 protokol reference form for faselatihan	Formulir referensi protokol
+pukul_masuk	Pukul masuk
 pulse rythm reference form for vitalsign	Formulir referensi ritme pulsa
+pulse_rythm	Ritme pulsa
 pulse_rythm reference detail for vitalsign	Detil referensi ritme pulsa
 pulse_rythm reference form for vitalsign	Formulir referensi ritme pulsa
 punggung_bunyi_pernafasan	Bunyi pernafasan
@@ -856,8 +1037,29 @@ redirect pengkajian	Pengalihan pengkajian
 redirect perawatan's patients to it's items	Pengalihan pasien perawatan ke bagian-bagian
 redirect to perawatans item	dialihkan ke bagian perawatan
 redirecting pengkajian menus	Pengalihan menu pengkajian
+reference	Referensi
 reference information for all system	Informasi referensi untuk semua sistem
 referensi	Referensi
+referensi ekspresi kepala dan muka	Referensi ekspresi kepala dan muka
+referensi faktor resiko	Referensi faktor resiko
+referensi gizi	Referensi gizi
+referensi inspeksi kepala dan muka	Referensi inspeksi kepala dan muka
+referensi irama nadi	Referensi irama nadi
+referensi isian faktor resiko pasien	Referensi isian faktor resiko pasien
+referensi isian gizi yang dipakai untuk menilai kadar suatu keadaan terkini pasien	Referensi isian gizi yang dipakai untuk menilai kadar suatu keadaan terkini pasien
+referensi isian irama nadi pasien	Referensi isian irama nadi pasien
+referensi isian keluhan yang dirasakan pasien	Referensi isian keluhan yang dirasakan pasien
+referensi isian kesadaran pasien	Referensi isian kesadaran pasien
+referensi isian riwayat penyakit pasien	Referensi isian riwayat penyakit
+referensi isian tipe tanda vital pasien	Referensi isian tipe tanda vital pasien
+referensi keluhan utama	Referensi keluhan utama
+referensi kesadaran	Referensi kesadaran
+referensi pilihan ekspresi kepala dan muka pasien	Referensi pilihan ekspresi kepala dan muka pasien
+referensi pilihan inspeksi kepala dan muka pasien	Referensi pilihan inspeksi kepala dan muka
+referensi rambut kepala dan muka	Referensi rambut kepala dan muka
+referensi riwayat penyakit	Refernsi riwayat penyakit
+referensi tipe tanda vital	Referensi tipe tanda vital
+register	Register
 register patient into database	Registrasi pasien ke dalam database
 registrasi pendaftaran pasien rawat inap	Registrasi pendaftaran pasien rawat inap
 registrasi perawatan	Registrasi perawatan
@@ -938,7 +1140,9 @@ remove tekanan_bola_mata reference form for eye	Formulir penghapusan referensi t
 remove type reference form for vitalsign	Formulir penghapusan referensi tipe
 remove ulib reference form for threadkesimpulansaran	Formulir penghapusan referensi ULJB
 remove ves reference form for holterref	Formulir penghapusan referensi VES
+rencana	Rencana
 rencana perawatan	Rencana perawatan
+report of perawatan handle	Laporan penanganan perawatan
 respon tekanan darah	Respon tekanan darah
 respon tekanan darah reference form for threadkesimpulansaran	Formulir referensi respon tekanan darah
 respon_jantung	respon jantung
@@ -948,6 +1152,7 @@ respon_jantung reference form for faselatihan	Formulir referensi respon jantung
 respon_jantung reference form for fekg	Formulir referensi respon jantung
 rewrite_registry	Tulis ulang registry
 riau	Riau
+risk_factor	Faktor Resiko
 risk_factor drop	Hapus faktor resiko
 risk_factor edit	Edit faktor resiko
 risk_factor form	Formulir faktor resiko
@@ -960,6 +1165,7 @@ rlbs reference detail for ekgqrs	Detil referensi iga
 rlbs reference detail for ekgst	Detil referensi iga
 rlbs reference form for ekgqrs	Formulir referensi iga
 rlbs reference form for ekgst	Formulir referensi iga
+ruang	Ruang
 sandi	Sandi
 sandi baru	Sandi baru
 sandi konfirmasi	Sandi konfirmasi
@@ -986,10 +1192,13 @@ searching patient in database	Cari pasien dalam database
 searching words to traslate	Pencarian kalimat untuk diterjemahkan
 segala kegiatan dalam layanan rawat inap pasien	Segala kegiatan dalam layanan rawat inap pasien
 selamat datang di cardiac center	Selamat Datang di Cardiac Center
+semua	Semua
+sesi	Sesi
 show message page	Tampilkan halaman pesan
 silahkan login sebelum menggunakan aplikasi ini	Silahkan masuk sebelum menggunakan aplikasi ini
 skin reference detail for abdomen	Detil referensi kulit
 skin reference form for abdomen	Formulir referensi kulit
+soreness	Keluhan
 soreness drop	Hapus nyeri
 soreness edit	Edit nyeri
 soreness form	Formulir nyeri
@@ -1026,6 +1235,9 @@ sumatera utara	Sumatera Utara
 svt	SVT
 svt reference detail for holterref	Detil referensi SVT
 svt reference form for holterref	Formulir referensi SVT
+tanggal	Tanggal
+tanggal masuk	Tanggal masuk
+target_denyut_jantung_max	Target denyut jantung maksimal
 tekanan bola mata	Tekanan bola mata
 tekanandarah reference detail for threadkesimpulansaran	Detil referensi tekanan darah
 tekanandarah reference form for threadkesimpulansaran	Formulir referensi tekanan darah
@@ -1046,7 +1258,10 @@ threadkesimpulansaran_tekanandarah form	Formulir tekanan darah
 threadkesimpulansaran_ulib drop	Hapus ULJB
 threadkesimpulansaran_ulib edit	Edit ULJB
 threadkesimpulansaran_ulib form	Formulir ULJB
+tidak ada pasien hari ini !	Tidak ada pasien hari ini !
 tidak kawin	Tidak Kawin
+timelog	Log waktu
+tindakan	Tindakan
 tinggi	Tinggi
 tingkat kesegaran jasmani	Tingkat kesegaran jasmani
 tipe tanda vital	Tipe tanda vital
@@ -1060,11 +1275,13 @@ translate words	terjemahkan kalimat
 translations	Terjemahan
 treadmill	Treadmill
 treadmillmessage	Pesan treadmill
+type	Tipe
 type reference detail for vitalsign	Detil referensi tipe
 type reference form for vitalsign	Formulir referensi tipe
 ulib	ULJB
 ulib reference detail for threadkesimpulansaran	Detil referensi ULJB
 ulib reference form for threadkesimpulansaran	Formulir referensi ULJB
+umur	Umur
 update	Ubah
 updating patient's info	Ubah informasi pasien
 user	Pengguna
@@ -1074,8 +1291,10 @@ user password	Sandi pengguna
 user setings	Pengaturan pengguna
 user settings	Pengaturan pengguna
 user's password	Sandi pengguna
+user-id	ID Pengguna
 userid	ID Pengguna
 username	Nama pengguna
+users	Pengguna
 usia	Usia
 vascular	Vascular
 vascular echo-doppler	Echo doppler
@@ -1083,6 +1302,7 @@ vascularmessage	Pesan vascular
 ves	VES
 ves reference detail for holterref	Detil referensi VES
 ves reference form for holterref	Formulir referensi VES
+view	tampilkan
 view login form to access authenticated menu	Tampilan formulir pintu masuk untuk mengakses menu yang diizinkan
 vitalsign_kesadaran drop	Hapus kesadaran
 vitalsign_kesadaran edit	Edit kesadaran
