@@ -497,20 +497,34 @@ class treadmillModule extends mainModule
                     );
                     if(count($query) > 0){
                         if($this->formhabit == 'readonly'){
-                            $form['treadmill']['#addmenu']['#addmenu0'] = array(
-                                'title' => __t('dirujuk ke'),
-                                'action' => '/user/patient/register_form_submit',
-                                'position' => 'top',
-                                'class' => 'button',
-                                'methode' => 'choose',
-                                'options' => $rujukanopts,
-                                'user_required' => 'treadmill',
-                                'filter' => 'bagian',
-                                'items' => array (
-                                    'id' => $vcache['patients'],
-                                    'strnum' => $query['strnum']
-                                )
-                            );
+                            if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
+                                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'Treadmill', $vcache['patients']);
+                                if(count($getvisit_info) > 0){
+                                    foreach($getvisit_info as $ky => $vl){
+                                        if(is_null($vl['doneby'])){
+                                            $forbidden = 0; break;
+                                        }
+                                    }
+                                }
+                                if(isset($forbidden)){
+                                    unset($forbidden);
+                                } else {
+                                    $form['treadmill']['#addmenu']['#addmenu0'] = array(
+                                        'title' => __t('dirujuk ke'),
+                                        'action' => '/user/patient/register_form_submit',
+                                        'position' => 'top',
+                                        'class' => 'button',
+                                        'methode' => 'choose',
+                                        'options' => $rujukanopts,
+                                        'user_required' => 'treadmill',
+                                        'filter' => 'bagian',
+                                        'items' => array (
+                                            'id' => $vcache['patients'],
+                                            'strnum' => $query['strnum']
+                                        )
+                                    );
+                                }
+                            }
                         } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
