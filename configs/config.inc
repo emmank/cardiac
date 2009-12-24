@@ -28,6 +28,8 @@ class config
     var $default_theme = 'default';
     var $default_lang = 'indonesia';
     var $default_module = array('user', 'auth', 'system', 'node', 'block');
+    var $user_organization = 'Rumah Sakit Wahidin Sudirohusodo';
+    var $organization_address = 'Jl. RS. Wahidin Sudirohusodo No. 21 Makassar';
     var $time;
     var $fcache;
     var $flog;
