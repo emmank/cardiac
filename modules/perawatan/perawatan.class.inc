@@ -121,7 +121,21 @@ class perawatanModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['perawatan_mainreport'] = array(
+            'title' => __t('perawatans report'),
+            'description' => __t("report of perawatan handle"),
+            'path' => '/care/perawatan/mainprint',
+            'exec' => 'report_execprint',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         return $items;
+    }
+
+    function report_execprint(){
+        $output['type'] = 'whatever';
+        $output['renderfile'] = MODULES_DIR . DS . 'perawatan' . DS . 'mainreport.render';
+        return $output;
     }
 
     function __redirect(){
@@ -512,6 +526,15 @@ class perawatanModule extends mainModule
                                 'items' => array (
                                     'pid' => $vcache['id']
                                 )
+                            );
+                            $form['perawatan']['#addmenu']['#printed'] = array(
+                                'title' => __t('print'),
+                                'action' => '/care/perawatan/mainprint',
+                                'position' => 'top',
+                                'class' => 'button',
+//                                'methode' => 'button',
+                                'user_required' => 'perawatan',
+                                'filter' => 'items'
                             );
                         } unset($rujukanopts);
                         foreach($query as $ky => $vl){

@@ -113,6 +113,8 @@ function exec_module_function($func){
 
                 if(preg_match('/form$/', $value)){
                     $output['form'][] = ${$get_module . '_exec'}->$value();
+                } elseif(preg_match('/execprint$/', $value)){
+                    $output['print'] = ${$get_module . '_exec'}->$value();
                 } else {
                     if($get_module == 'core'){
                         $output[] = $value();

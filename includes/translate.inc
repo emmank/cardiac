@@ -93,3 +93,29 @@ function __get_lang(){
     }
     return $result;
 }
+
+    function __update_trisearch($thevalue, $drop=NULL){
+        global $systemquery;
+        $sql = $systemquery->setDelete(
+            'isearch_translations',
+            array(
+                array('&&', "strkey=" . $thevalue['strkey'])
+            )
+        );
+        $systemquery->connect();
+        $systemquery->conn->Execute($sql); unset($sql);
+        $systemquery->close();
+        if(is_null($drop)){
+            $sql = $systemquery->saveData(
+                'isearch_translations',
+                array(
+                    'strkey' => $thevalue['strkey'],
+                    'phrase' => implode(' ', $thevalue)
+                )
+            );
+            $systemquery->connect();
+            $systemquery->conn->Execute($sql); unset($sql);
+            $systemquery->close();
+        }
+    }
+

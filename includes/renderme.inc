@@ -676,7 +676,7 @@ function __create_search($value){
 //    echo '<pre>'; print_r($value); echo '</pre>';
 //    $result .= "<br />Search\n <hr>";
     $result .= "<div id=search>";
-    $result .= "<font class=judul>" . ucwords(__t('search')) . "</font>";
+    $result .= "<font class=judul>" . ucwords($value['title']) . "</font>";
     if(is_array($value)){
         foreach($value as $yk => $lv){
 //    echo '<pre>'; print_r($value); echo '</pre>';
@@ -1072,6 +1072,10 @@ function __create_items_of_form($data){
     return $result;
 }
 
-require_once THEMES_DIR . DS . $theme . DS . 'page.tpl';
+if(isset($content['output']['print'])){
+    require_once INCLUDES_DIR . DS . 'printed.inc';
+} else {
+    require_once THEMES_DIR . DS . $theme . DS . 'page.tpl';
+}
 
 //end of file;
