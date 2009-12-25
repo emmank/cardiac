@@ -169,7 +169,29 @@ class cardioModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['cardio_formreport'] = array(
+            'title' => __t('cardio form report'),
+            'description' => __t("report of cardio form"),
+            'path' => '/user/cardio/report',
+            'exec' => 'report_execprint',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
         return $items;
+    }
+
+    function report_execprint(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($dump[3])){
+            $teens = 1;
+        }
+        $output['type'] = 'whatever';
+        $output['renderfile'] = MODULES_DIR . DS . 'cardio' . DS . 'form.report';
+        $vcache = $this->__get_cardio_data((int)$_POST['id']);
+        $this->formhabit = 'readonly';
+        $this->__write_custom_cache($vcache);
+        $output['data'] = $this->__get_form(isset($teens) ? $teens : NULL);
+        return $output;
     }
 
     function dewasa_search_submit(){
