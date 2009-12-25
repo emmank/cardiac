@@ -135,6 +135,10 @@ class perawatanModule extends mainModule
     function report_execprint(){
         $output['type'] = 'whatever';
         $output['renderfile'] = MODULES_DIR . DS . 'perawatan' . DS . 'mainreport.render';
+        $vcache = $this->__get_perawatan_data((int)$_POST['id']);
+        $this->formhabit = 'readonly';
+        $this->__write_custom_cache($vcache);
+        $output['data'] = $this->form();
         return $output;
     }
 
@@ -393,19 +397,21 @@ class perawatanModule extends mainModule
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
         } else {
-            $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-            if(count($dump) > 3){
-                if(preg_match('/^edit_/', $dump[3])){
-                    $perawatan_id = preg_replace('/^edit_/','',$dump[3]);
-                    $vcache = $this->__get_perawatan_data((int)$perawatan_id);
-                    $this->vardump = $vcache;
-                    unset($perawatan_id);
+//            if(!isset($vcache['id']) || trim($vcache['id']) == '' || !is_numeric($vcache['id'])){
+                $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+                if(count($dump) > 3){
+                    if(preg_match('/^edit_/', $dump[3])){
+                        $perawatan_id = preg_replace('/^edit_/','',$dump[3]);
+                        $vcache = $this->__get_perawatan_data((int)$perawatan_id);
+                        $this->vardump = $vcache;
+                        unset($perawatan_id);
+                    } else {
+                        $vcache['kunjungan'] = $dump[3]; unset($dump);
+                    }
                 } else {
-                    $vcache['kunjungan'] = $dump[3]; unset($dump);
-                }
-            } else {
-                redirect_to('/user/perawatan/today_patient_lists');
-            } unset($dump);
+                    redirect_to('/user/perawatan/today_patient_lists');
+                } unset($dump);
+//            }
         }
         $this->query->connect();
         $sql = $this->query->getSelect(
@@ -532,9 +538,11 @@ class perawatanModule extends mainModule
                                 'action' => '/care/perawatan/mainprint',
                                 'position' => 'top',
                                 'class' => 'button',
-//                                'methode' => 'button',
                                 'user_required' => 'perawatan',
-                                'filter' => 'items'
+                                'filter' => 'items',
+                                'items' => array (
+                                    'id' => $vcache['id']
+                                )
                             );
                         } unset($rujukanopts);
                         foreach($query as $ky => $vl){

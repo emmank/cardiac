@@ -1,8 +1,10 @@
 strkey	indonesia
+-- dirujuk ke --	-- dirujuk ke --
 -- medical record --	-- Rekam Medik --
 -- perawatan --	-- perawatan --
 a	A
 ab	AB
+abdomen	Abdomen
 abdomen_auscultation	Auscultation
 abdomen_auscultation drop	Drop auscultation
 abdomen_auscultation edit	Editauscultation
@@ -47,6 +49,7 @@ abdomen_skin	Kulit
 abdomen_skin drop	Drop
 abdomen_skin edit	Edit
 abdomen_skin form	Formulir
+add	tambah
 add group	Grup
 add nutrient	Tambah nutrisi
 add reference	Tambah referensi
@@ -58,6 +61,7 @@ af	AF
 af reference detail for holterref	Detil referensi AF untuk holterref
 af reference form for holterref	Formulir referensi AF untuk holterref
 agama	Agama
+agustus	Agustus
 akses ke group	Akses ke grup
 alamat	Alamat
 alergi	Alergi
@@ -67,6 +71,7 @@ antrian	Antrian
 antrian pasien	Antrian Pasien
 antrian pasien rawat inap	Antrian pasien rawat inap
 antrian pasien yang mendaftar pada hari ini	Antrian pasien yang mendaftar pada hari ini
+anus rectum	Anus rectum
 anusrectum_inspections	Inspeksi
 anusrectum_inspections drop	Drop
 anusrectum_inspections edit	Edit
@@ -75,13 +80,16 @@ anusrectum_rectal_touche	Rectal Touche
 anusrectum_rectal_touche drop	Drop
 anusrectum_rectal_touche edit	Edit
 anusrectum_rectal_touche form	Formulir
+april	April
 asuransi	Asuransi
+auscultation	Auscultation
 auscultation reference detail for abdomen	Detil referensi auscultation untuk abdomen
 auscultation reference form for abdomen	Formulir referensi auscultation untuk ebdomen
 auscultation_kind reference detail for hearth	Detil referensi jenis auscultation untuk jantung
 auscultation_kind reference form for hearth	Formulir referensi jenis auscultation untuk jantung
 auscultation_quality reference detail for hearth	Detil referensi kualitas untuk jantung
 auscultation_quality reference form for hearth	Formulir referensi untuk jantung
+auscultation_sound	Suara
 auscultation_sound reference detail for hearth	Detil referensi untuk jantung
 auscultation_sound reference form for hearth	Formulir referensi untuk jantung
 axis	Axis
@@ -95,11 +103,17 @@ bagian form submit	Formulir Submit
 bahasa	Bahasa
 bali	Bali
 banten	Banten
+batas_paru_belakang_kanan	Batas paru belakang kanan
+batas_paru_belakang_kiri	Batas paru belakang kiri
+batas_paru_hepar	Batas paru hepar
 bengkulu	Bengkulu
 berat	Berat
 budha	Budha
+bunyi_jantung	Bunyi jantung
+bunyi_pernafasan	Bunyi pernafasan
 bunyi_pernafasan reference detail for punggung	Detil referensi untuk punggung
 bunyi_pernafasan reference form for punggung	Formulir referensi untuk punggung
+bunyi_tambahan	Bunyi tambahan
 bunyi_tambahan reference detail for punggung	Detil referensi bunyi tambahan untuk punggung
 bunyi_tambahan reference form for punggung	Formulir referensi bunyi tambahan
 by	oleh
@@ -115,6 +129,8 @@ cari pasien rawat inap	Cari pasien rawat inap
 catatan_pemberian_cairan	Catatan pemberian cairan
 catatan_pemberian_obat	Catatan peberian obat
 catatan_perkembangan	Catatan perkembangan
+catched	Dirasakan
+center	pusat
 center reference detail for abdomen	Detil referensi center
 center reference form for abdomen	Formulir referensi center
 cerai	Cerai
@@ -152,6 +168,7 @@ delete user	Hapus pengguna
 denyut_jantung reference detail for fekg	Detil referensi denyut jantung
 denyut_jantung reference form for fekg	Formulir referensi denyut jantung
 denyut_jantung_max	Denyut jantung maksimal
+denyut_nadi	Denyut nadi
 depresi	Depresi
 depresi reference detail for ekgst	Detil referensi depresi
 depresi reference form for ekgst	Formulir referensi depresi
@@ -372,6 +389,7 @@ eksekusi perubahan informasi pengguna	Eksekusi perubahan informasi pengguna
 eksekusi perubahan sandi pengguna	Eksekusi perubahan sandi pengguna
 eksekusi registrasi pendaftaran pasien rawat inap	Eksekusi registrasi pendaftaran pasien rawat inap
 ekspresi	Ekspresi
+ekstermitas	Ekstermitas
 email	Email
 execute af reference form for holterref	Eksekusi formulir referensi AF
 execute auscultation reference form for abdomen	Eksekusi formulir referensi auscultation
@@ -497,6 +515,7 @@ faselatihan_protokol form	Formulir protokol
 faselatihan_respon_jantung drop	Hapus respon jantung
 faselatihan_respon_jantung edit	Edit respon jantung
 faselatihan_respon_jantung form	Formulir respon jantung
+februari	Februari
 fekg denyut jantung	Denyut jantung
 fekg gelombang p	Gelombang P
 fekg irama dasar	Irama dasar
@@ -545,11 +564,13 @@ formulir rencana pasien	Formulir rencana pasien
 formulir riwayatkesehatan pasien	Formulir riwayat kesehatan pasien
 formulir treadmill	Formulir treadmill
 formulir vascular	Formulir vascular
+fremitus_raba	Fremitus raba
 fungsional reference detail for threadkesimpulansaran	Detil referensi fungsional
 fungsional reference form for threadkesimpulansaran	Formulir referensi fungsional
 gelombang p reference detail for fekg	Detil referensi gelombang P
 gelombang p reference form for fekg	Formulir referensi gelombang P
 general information service for accessed by public	Layanan informasi umum untuk diakses publik
+gerakan_dinding_perut	Gerakan dinding perut
 gerakan_dinding_perut reference detail for abdomen	Detil referensi gerakan dinding perut
 gerakan_dinding_perut reference form for abdomen	Formulir referensi gerakan dinding perut
 get cardio message	Pesan cardio
@@ -572,6 +593,7 @@ group detail	Detil grup
 group edit	Edit grup
 group yang terdaftar sebagai operator dan administrator system ini	Grup yang terdaftar sebagai operator dan administrator dalam sistem ini
 groups	Grup
+gums	Gusi
 hair	Rambut
 hair reference detail for headface	Detil referensi rambut
 hair reference form for headface	Formulir referensi rambut
@@ -638,6 +660,7 @@ hearth_percussion_top edit	Edit perkusi atas
 hearth_percussion_top form	Formulir perkusi atas
 hepar reference detail for abdomen	Detil referensi hati
 hepar reference form for abdomen	Formulir referensi hati
+hidung	Hidung
 hindu	Hindu
 holter	Holter
 holter message	Pesan holter
@@ -654,13 +677,16 @@ holterref_ves drop	Hapus VES
 holterref_ves edit	Edit VES
 holterref_ves form	Formulir VES
 id	ID
+identitas	Identitas
 identitas pasien	Identitas pasien
+identitas patients	Identitas Pasien
 illness_history	Riwayat penyakit
 illness_history drop	Hapus riwayat penyakit
 illness_history edit	Edit riwayat penyakit
 illness_history form	Formulir riwayat penyakit
 illness_history reference detail for present status	Detil referensi riwayat penyakit
 illness_history reference form for present status	Formulir referensi riwayat penyakit
+ilness_history	Riwayat penyakit
 in	dalam
 indikasi	Indikasi
 indonesia	Indonesia
@@ -676,6 +702,7 @@ informasi detil referensi kesadaran yang terpilih	Informasi detil referensi kesa
 informasi detil referensi tipe tanda vital yang terpilih	Informasi detil referensi tipe tanda vital yang dipilih
 input	Input
 inputtime	Waktu input
+inspection	Inspeksi
 inspection reference detail for hearth	Detil referensi inspeksi
 inspection reference form for hearth	Fromulir referensi inspeksi
 inspections	Inspeksi
@@ -691,8 +718,11 @@ inspections reference form for headface	Formulir referensi inspeksi
 inspections reference form for punggung	Formulir referensi inspeksi
 inspeksi kepala & muka	Inspeksi kepala dan muka
 inspeksi mata	Inspeksi mata
+inspeksi_ginjal	Inspeksi ginjal
 inspeksi_ginjal reference detail for abdomen	Detil referensi inspeksi ginjal
 inspeksi_ginjal reference form for abdomen	Formulir referensi inspeksi ginjal
+inspeksi_kulit	Inspeksi kulit
+intencity	Intensitas
 intencity reference detail for hearth	Detil referensi intensitas
 intencity reference form for hearth	Formulir referensi intensitas
 irama nadi	Irama nadi
@@ -702,10 +732,14 @@ is amount	sebanyak
 islam	Islam
 jabatan	Jabatan
 jambi	Jambi
+jantung	Jantung
+januari	Januari
 jawa barat	Jawa Barat
 jawa tengah	Jawa tengah
 jawa timur	Jawa timur
+juli	Juli
 jumlah kata	Jumlah kata
+juni	Juni
 kabupaten asmat	Kabupaten Asmat
 kabupaten banggai	Kabupaten Banggai
 kabupaten banggai kepulauan	Kabupaten Banggai Kepulauan
@@ -831,10 +865,12 @@ kardio dewasa	Kardio dewasa
 kawin	Kawin
 kelamin	Kelamin
 kelopak mata	Kelopak mata
+kelopak_mata	Kelopak mata
 kelopak_mata reference detail for eye	Detil referensi kelopak mata
 kelopak_mata reference form for eye	Formulir referensi kelopak mata
 keluhan	Keluhan
 keluhan utama	Keluhan utama
+kepala dan muka	Kepala dan muka
 kepulauan bangka belitung	Kepulauan Bangka Belitung
 kepulauan riau	Kepulauan Riau
 kesadaran	Kesadaran
@@ -843,12 +879,14 @@ kesadaran reference form for vitalsign	Formulir referensi kesadaran
 kesegaran reference detail for threadkesimpulansaran	Detil referensi kesegaran
 kesegaran reference form for threadkesimpulansaran	Formulir referensi kesegaran
 keterangan	Keterangan
+kind	Jenis
 klasifikasi fungsional	Klasifikasi fungsional
 kode_pos	Kode Pos
 konfigurasi	Konfigurasi
 konfigurasi reference form for faselatihan	Formulir referensi konfigurasi
 konfig_rekaman reference detail for faselatihan	Detil referensi konfig rekaman
 konfig_rekaman reference form for faselatihan	Formulir referensi konfig rekaman
+konjuctifa	Konjunctifa
 konjunctifa	Konjunctifa
 konjunctifa reference detail for eye	Detil referensi konjunctifa
 konjunctifa reference form for eye	Formulir referensi konjunctifa
@@ -883,6 +921,8 @@ lampung	Lampung
 language detail	Detil bahasa
 language form	Formulir bahasa
 layanan	Layanan
+leher	Leher
+lips	Bibir
 list antrian cardio anak	Daftar antrian cardio anak
 list antrian cardio dewasa	Daftar antrian cardio dewasa
 list antrian treadmill	Daftar antrian treadmill
@@ -894,21 +934,27 @@ lists cardio dewasa	Daftar cardio dewasa
 lists cardio dewasa's patients	Daftar pasien cardio dewasa
 liver reference detail for abdomen	Detil referensi liver
 liver reference form for abdomen	Formulir referensi liver
+localization	Lokalisasi
 localization reference detail for hearth	Detil referensi lokalisasi
 localization reference form for hearth	Formulir referensi lokalisasi
 login	Masuk
 login_submit	Submit login
 logout	Keluar
 logout and redirected to home	Keluar dan diarahkan ke halaman utama
+main_soreness	Keluhan utama
 maluku	Maluku
 maluku utara	Maluku Utara
+maret	Maret
+mata	Mata
 medical record	Rekam medis
 medical records of patient	Rekam medis pasien
+mei	Mei
 mencari data pasien	Mencari data pasien
 menu untuk menampilkan daftar group yang terdaftar	Menu untuk menampilkan grup yang terdaftar
 menu untuk menampilkan daftar pengguna yang terdaftar	Menu untuk menampilkan pengguna yang terdaftar
 menu untuk menampilkan detail group terdaftar yang terpilih	Menu untuk menampilkan detil grup terdaftar yang terpilih
 menu untuk menampilkan detail pengguna terdaftar yang terpilih	Menu untuk menampilkan detil pengguna terdaftar yang terpilih
+mulut	Mulut
 nama	Nama
 nama_ayah	Nama Ayah
 nama_ibu	Nama Ibu
@@ -920,6 +966,7 @@ negara	Negara
 new words	Kalimat baru
 no	No.
 nomor	Nomor
+november	November
 no_hp	No. HP
 no_identitas	No. Identitas
 no_ktp	No. KTP
@@ -935,17 +982,38 @@ nutrient form	Formulir nutrisi
 nutrient reference detail for present status	Detil referensi nutrisi
 nutrient reference for present status	Referensi nutrisi
 nutrient reference form for present status	Formulir referensi nutrisi
+nyeri_tekan	Nyeri tekan
 o	O
+oktober	Oktober
+others	Lainnya
 others reference detail for punggung	Detil referensi lainnya
 others reference form for punggung	Formulir referensi lainnya
 page	halaman
 page message	Halaman pesan
+palpasi_ginjal	Palpasi ginjal
+palpasi_hepar	Palpasi hati
+palpasi_hepar_derajat_pembesaran	Derajat pembesaran
+palpasi_hepar_konsistensi	Konsistensi
+palpasi_hepar_nyeri_tekan	Nyeri tekan
+palpasi_hepar_permukaan	Permukaan
+palpasi_hepar_tepi	Tepi
+palpasi_liver	Palpasi liver
+palpasi_liver_derajat_pembesaran	Derajat pembesaran
+palpasi_liver_konsistensi	Konsistensi
+palpasi_liver_nyeri_tekan	Nyeri tekan
+palpasi_liver_permukaan	Permukaan
+palpasi_liver_tepi	Tepi
+palpation	Palpasi
 palpation reference detail for hearth	Detil referensi palpasi
 palpation reference form for hearth	Formulir referensi palpasi
+palpations	Palpasi
 palpations reference detail for punggung	Detil referensi palpasi
 palpations reference form for punggung	Formulir referensi palpasi
 papua	Papua
 papua barat	Papua Barat
+paru	Paru
+paru_kanan	Paru kanan
+paru_kiri	Paru kiri
 pasien berkunjung	Pasien berkunjung
 password	Sandi
 patient	Pasien
@@ -966,24 +1034,32 @@ pengguna	Pengguna
 pengguna yang terdaftar sebagai operator dan administrator system ini	Pengguna yang terdaftar sebagai operator dan administrator sistem ini
 pengirim	Pengirim
 pengkajian	Pengkajian
+penjalaran	Penjalaran
 penjalaran reference detail for hearth	Detil referensi penjalaran
 penjalaran reference form for hearth	Formulir referensi penjalaran
 perawatan	Perawatan
 perawatan message	Pesan perawatan
 perawatans report	Laporan perawatan
+percussion_bottom	Perkusi bawah
 percussion_bottom reference detail for hearth	Detil referensi perkusi bawah
 percussion_bottom reference form for hearth	Formulir referensi perkusi bawah
+percussion_left	Perkusi kiri
 percussion_left reference detail for hearth	Detil referensi perkusi kiri
 percussion_left reference form for hearth	Formulir referensi perkusi kiri
+percussion_right	Perkusi kanan
 percussion_right reference detail for hearth	Detil referensi perkusi kanan
 percussion_right reference form for hearth	Formulir referensi perkusi kanan
+percussion_top	Perkusi atas
 percussion_top reference detail for hearth	Detil referensi perkusi atas
 percussion_top reference form for hearth	Formulir referensi perkusi atas
 perempuan	Perempuan
+peristaltik_usus	Peristaltik usus
 peristaltik_usus reference detail for abdomen	Detil referensi peristaltik usus
 peristaltik_usus reference form for abdomen	Formulir referensi peristaltik usus
+perkusi	Perkusi
 perkusi reference detail for abdomen	Detil referensi perkusi
 perkusi reference form for abdomen	Formulir referensi perkusi
+pernafasan	Pernafasan
 perubahan informasi pengguna	Perubahan informasi pengguna
 perubahan sandi pengguna	Perubahan sandi pengguna
 perubahan_gelombang	Perubahan gelombang
@@ -999,6 +1075,7 @@ pulse rythm reference form for vitalsign	Formulir referensi ritme pulsa
 pulse_rythm	Ritme pulsa
 pulse_rythm reference detail for vitalsign	Detil referensi ritme pulsa
 pulse_rythm reference form for vitalsign	Formulir referensi ritme pulsa
+punggung	Punggung
 punggung_bunyi_pernafasan	Bunyi pernafasan
 punggung_bunyi_pernafasan drop	Hapus bunyi pernafasan
 punggung_bunyi_pernafasan edit	Edit bunyi pernafasan
@@ -1028,9 +1105,11 @@ qpatologi reference detail for ekgqrs	Detil referensi QPatologi
 qpatologi reference detail for ekgst	Detil referensi QPatologi
 qpatologi reference form for ekgqrs	Formulir referensi QPatologi
 qpatologi reference form for ekgst	Formulir referensi QPatologi
+quality	Kualitas
 q_interval reference detail for fekg	Detil referensi Q interval
 q_interval reference form for fekg	Formulir referensi Q interval
 rambut	Rambut
+rectal_touche	Rectal touche
 rectal_touche reference detail for anusrectum	Detil referensi rectal touche
 rectal_touche reference form for anusrectum	Formulir referensi rectal touche
 redirect pengkajian	Pengalihan pengkajian
@@ -1063,6 +1142,7 @@ register	Register
 register patient into database	Registrasi pasien ke dalam database
 registrasi pendaftaran pasien rawat inap	Registrasi pendaftaran pasien rawat inap
 registrasi perawatan	Registrasi perawatan
+relief	Relif
 relief reference detail for abdomen	Detil referensi relif
 relief reference form for abdomen	Formulir referensi relif
 reloading menus	Tampilkan ulang menu-menu
@@ -1193,6 +1273,7 @@ searching words to traslate	Pencarian kalimat untuk diterjemahkan
 segala kegiatan dalam layanan rawat inap pasien	Segala kegiatan dalam layanan rawat inap pasien
 selamat datang di cardiac center	Selamat Datang di Cardiac Center
 semua	Semua
+september	September
 sesi	Sesi
 show message page	Tampilkan halaman pesan
 silahkan login sebelum menggunakan aplikasi ini	Silahkan masuk sebelum menggunakan aplikasi ini
@@ -1205,6 +1286,7 @@ soreness form	Formulir nyeri
 soreness reference detail for present status	Detil referensi nyeri
 soreness reference form for present status	Formulir referensi nyeri
 status	Status
+status present	Status terkini
 strnum	Nomor registrasi
 submit	submit
 submitted search cardio anak	Laksanakan pencarian cardio anak
@@ -1223,6 +1305,9 @@ submitted search vascular	Laksanakan pencarian vascular
 submitted search vascular's patients	Laksanakan pencarian pasien vascular
 submitting search certain words in system's dictionary	Eksekusi pencarian kalimat tertentu dalam kamus sistem
 submitting update patient's info execution	Laksanakan eksekusi perubahan informasi pasien
+suhu_axilla	Suhu axilla
+suhu_oral	Suhu oral
+suhu_rectal	Suhu rectal
 suku	Suku
 sulawesi barat	Sulawesi Barat
 sulawesi selatan	Sulawesi Selatan
@@ -1235,17 +1320,26 @@ sumatera utara	Sumatera Utara
 svt	SVT
 svt reference detail for holterref	Detil referensi SVT
 svt reference form for holterref	Formulir referensi SVT
+tall	Tinggi
+tanda vital	Tanda vital
 tanggal	Tanggal
 tanggal masuk	Tanggal masuk
 target_denyut_jantung_max	Target denyut jantung maksimal
 tekanan bola mata	Tekanan bola mata
 tekanandarah reference detail for threadkesimpulansaran	Detil referensi tekanan darah
 tekanandarah reference form for threadkesimpulansaran	Formulir referensi tekanan darah
+tekanan_bola_mata	Tekanan bola mata
 tekanan_bola_mata reference detail for eye	Detil referensi tekanan bola mata
 tekanan_bola_mata reference form for eye	Formulir referensi tekanan bola mata
 tekanan_darah	Tekanan Darah
+tension	Tensi
+tensi_diastole	Tensi diastole
+tensi_systole	Tensi systole
+tgl	Tanggal
+tgl periksa	Tanggal periksa
 tgl_lahir	Tanggal Lahir
 theme	Tema
+thorax	Thorax
 threadkesimpulansaran_fungsional drop	Hapus fungsional
 threadkesimpulansaran_fungsional edit	Edit fungsional
 threadkesimpulansaran_fungsional form	Formulir fungsional
@@ -1265,6 +1359,7 @@ tindakan	Tindakan
 tinggi	Tinggi
 tingkat kesegaran jasmani	Tingkat kesegaran jasmani
 tipe tanda vital	Tipe tanda vital
+tongue	Lidah
 tp_lahir	Tempat Lahir
 translate	terjemahkan
 translate certain words into choosed language	Terjemahkan kalimat tertentu ke dalam bahasa yang dipilih
@@ -1313,5 +1408,6 @@ vitalsign_pulse_rythm form	Formulir ritme pulsa
 vitalsign_type drop	Hapus tipe
 vitalsign_type edit	Edit tipe
 vitalsign_type form	Formulir tipe
+weight	Berat
 words	Kalimat
 words that translated in	Kalimat yang diterjemahkan ke dalam
