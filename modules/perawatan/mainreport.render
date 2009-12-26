@@ -74,7 +74,7 @@ $pdf->AddPage();
 //$pdf->Cell(0, 12, 'Example 001 - €àèéìòù', 1, 1, 'C');
 $result = '';
 foreach ($data as $key => $value){
-    $result .= '<div>' . strtoupper (__t('Identitas Patients')) . '</div>';
+    $result .= '<div>' . ucwords (__t('Identitas Patients')) . '</div>';
     $gettbpos = array();
     foreach($value as $ky => $vl){
         if(!eregi('#', $ky)){
@@ -89,15 +89,16 @@ foreach ($data as $key => $value){
     ksort($gettbpos);
 //    echo '<pre>'; print_r($gettbpos); echo '</pre>';
     $result .= '<div><table align="center" width="100%" border="1"><tr><td>';
-    $result .= '<table align="center" width="98%" cellpadding="0" cellspacing="0"><tr>';
+    $result .= '<table align="center" width="98%" cellpadding="3" cellspacing="0"><tr>';
     foreach($gettbpos as $ky => $vl){
         if((int)$ky < 1 || (int)$ky % 8 == 0){
             $result .= '<td align="left" width="50%">';
-            $result .= '<table width="100%" cellpadding="3">';
+            $result .= '<table width="100%" cellpadding="0">';
             $setdiv = 1;
         }
         $result .= '<tr valign="top">';
-        $result .= '<td width="35%" align="right" style="font-weight:bold">' . ucwords (str_replace ("_"," ",$vl['#title'])) . '</td>';
+        $result .= '<td width="35%" align="right" style="font-weight:bold">' . ucwords (str_replace ("_"," ",$vl['#title'])) . ' </td>';
+        $result .= '<td width="5%" align="center">:</td>';
         $result .= '<td align="left">' . $vl['#value'] . '</td></tr>';
         if((int)$ky > 3 && ((int)$ky + 1) % 8 == 0){
             unset($setdiv);

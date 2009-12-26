@@ -122,6 +122,7 @@ cara_bayar	Cara Bayar
 cara_berkunjung	Cara Berkunjung
 cardio anak	cardio anak
 cardio dewasa	Cardio dewasa
+cardio form report	Report formulir cardio
 cardio message	Pesan
 cari data pasien	Cari data pasien
 cari pasien	Cari pasien
@@ -738,7 +739,7 @@ jawa barat	Jawa Barat
 jawa tengah	Jawa tengah
 jawa timur	Jawa timur
 juli	Juli
-jumlah kata	Jumlah kata
+jumlah kata	Jumlah kalimat
 juni	Juni
 kabupaten asmat	Kabupaten Asmat
 kabupaten banggai	Kabupaten Banggai
@@ -1222,6 +1223,7 @@ remove ulib reference form for threadkesimpulansaran	Formulir penghapusan refere
 remove ves reference form for holterref	Formulir penghapusan referensi VES
 rencana	Rencana
 rencana perawatan	Rencana perawatan
+report of cardio form	Laporan dari formulir cardio
 report of perawatan handle	Laporan penanganan perawatan
 respon tekanan darah	Respon tekanan darah
 respon tekanan darah reference form for threadkesimpulansaran	Formulir referensi respon tekanan darah
