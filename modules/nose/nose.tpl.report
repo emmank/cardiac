@@ -1,0 +1,78 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  presentStatus.php
+ *  
+ *  Created on Oct 28, 2009, 9:51:59 AM
+ */
+$result .= '<table width=100% class="table">' . "\n";
+$cnt = 0;
+// echo '<pre>'; print_r($vl['datafields']); echo '</pre>';
+foreach($vl['datafields'] as $yk => $lv){
+    if($lv['type'] != 'hidden'){
+        if($cnt < 1){
+            $result .= '<tr valign="top">' . "\n";
+            $trcr = 0;
+        }
+        $result .= '<td width="15%" align="left">' .ucwords (str_replace ("_"," ", $lv['title'])) . '</td>';
+        $result .= '<td width="5%">:</td>';
+        $result .= '<td width="30%" align="left">';
+        if($lv['type'] == 'select'){
+            $result .= $lv['theref'][$lv['value']] . "\n";
+        } elseif($lv['type'] == 'checkbox'){
+            $lv['value'] = explode(',', $lv['value']);
+            foreach($lv['value'] as $vv){
+                if(isset($koma)){$result .= ', ';}
+                $result .= $lv['theref'][$vv]; $koma = 1;
+            } unset($koma);
+        } elseif($lv['type'] == 'radio'){
+            $result .= $lv['theref'][$lv['value']];
+        } elseif($lv['type'] == 'datetime'){
+            if(isset($lv['value'])){
+                $datetime = $lv['value'];
+            } else {
+                $datetime = date('Y-m-d H:i:s', $lv['timenow']);
+            }
+            list($dumptgl, $dumptime) = explode(' ', $datetime);
+            unset($datetime);
+            $dumptgl = explode('-', $dumptgl);
+            $dumptime = explode(':', $dumptime);
+            $result .= $dumptgl[2] . "&nbsp;";
+            $result .= $lv['theref'][$dumptgl[1]] . "&nbsp;";
+            $result .= $dumptgl[0] . "&nbsp;";
+            $result .= $dumptime[0] . ":";
+            $result .= $dumptime[1] . ":";
+            $result .= $dumptime[2];
+        } else {
+            $result .= $lv['value'];
+        }
+        $result .= '</td>' . "\n";
+        $cnt++;
+        if($cnt > 1){
+            unset($trcr);
+            $cnt = 0;
+            $result .= '</tr>' . "\n";
+        }
+    }
+} unset($cnt);
+if(isset($trcr)){
+    unset($trcr);
+    $result .= '</tr>';
+}
+$result .= '</table>' . "\n";

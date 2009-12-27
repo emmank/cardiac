@@ -17,7 +17,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  mainreport.php
+ *  formreport.php
  *  
  *  Created on Dec 24, 2009, 6:18:44 AM
  */
@@ -49,7 +49,7 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 //set margins
-$pdf->SetMargins((PDF_MARGIN_LEFT + 15), PDF_MARGIN_TOP, (PDF_MARGIN_RIGHT - 5));
+$pdf->SetMargins((PDF_MARGIN_LEFT + 15), PDF_MARGIN_TOP - 4, (PDF_MARGIN_RIGHT - 5));
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -74,7 +74,7 @@ $pdf->AddPage();
 //$pdf->Cell(0, 12, 'Example 001 - €àèéìòù', 1, 1, 'C');
 $result = '';
 foreach ($data as $key => $value){
-    $result .= '<div>' . ucwords (__t('Identitas Patients')) . '</div>';
+    $result .= '<div>' . strtoupper (__t('Identitas Patients')) . '</div>';
     $gettbpos = array();
     foreach($value as $ky => $vl){
         if(!eregi('#', $ky)){
@@ -98,8 +98,8 @@ foreach ($data as $key => $value){
         }
         $result .= '<tr valign="top">';
         $result .= '<td width="35%" align="right" style="font-weight:bold">' . ucwords (str_replace ("_"," ",$vl['#title'])) . ' </td>';
-        $result .= '<td width="5%" align="center">:</td>';
-        $result .= '<td align="left">' . $vl['#value'] . '</td></tr>';
+        $result .= '<td width="3%" align="center">:</td>';
+        $result .= '<td align="left"> &nbsp;' . $vl['#value'] . '</td></tr>';
         if((int)$ky > 3 && ((int)$ky + 1) % 8 == 0){
             unset($setdiv);
             $result .= '</table>';
@@ -114,38 +114,26 @@ foreach ($data as $key => $value){
     $result .= '</tr></table>';
     $result .= '</td></tr></table><br /></div>';
 
-    $result .= '<div><table align="center" width="100%" border="1"><tr><td>';
-    $result .= '<table align="center" width="98%" cellpadding="3" cellspacing="2">';
-    foreach($value as $ky => $vl){
-        if(!eregi('#', $ky)){
-            if(!isset($vl['#tbpos']) && $vl['#type'] != 'hidden' && $ky != 'submit'){
-                $result .= '<tr><td align="left">';
-                $result .= '<div><font style="font-weight:bold">' . ucwords (str_replace ("_"," ",$vl['#title'])) . '</font>';
-                $result .= '&nbsp;';
-                if($vl['#type'] == 'datetime'){
-                    if(isset($vl['#value'])){
-                        $datetime = $vl['#value'];
-                    }
-                    list($dumptgl, $dumptime) = explode(' ', $datetime);
-                    unset($datetime);
-                    $dumptgl = explode('-', $dumptgl);
-                    $dumptime = explode(':', $dumptime);
-                    $result .= $dumptgl[2] . "&nbsp;";
-                    $result .= ucwords(__t($vl['#theref'][$dumptgl[1]])) . "&nbsp;";
-                    $result .= $dumptgl[0] . "&nbsp;";
-                    $result .= $dumptime[0] . ":";
-                    $result .= $dumptime[1] . ":";
-                    $result .= $dumptime[2];
-                } elseif($ky == 'ruang') {
-                    $result .= $vl['#value'];
-                }
-                $result .= '</div></td></tr>';
+    if(isset($value['tab_items']) && count($value['tab_items']) > 0){
+        $ke = 1;
+        foreach($value['tab_items'] as $ky => $vl){
+            if(isset($vl['#tpl'])  ){
+                $result .= '<div align="left">' . strtoupper($vl['#title']) . '</div>';
+                $result .= '<div><table align="center" width="100%" border="1"><tr><td>';
+                $result .= '<table align="center" width="98%" cellpadding="3" cellspacing="2">';
+                $result .= '<tr><td>';
+                require_once $vl['#tpl'] . '.report';
+                $ke++;
+                $result .= '</td></tr>';
+                $result .= '</table>';
+                $result .= '</td></tr></table>' . ($ky != 'extermitas' ? '<br />' : '') . '</div>';
+//            } else {
+//                $result .= str_repeat('<br />', 1);
             }
-        }
+        } unset($ke);
     }
-    $result .= '</table>';
-    $result .= '</td></tr></table></div>';
 }
+//echo $result;
 $pdf->writeHTML($result, true, 0, true, 0);
 unset($result);
 // ---------------------------------------------------------
