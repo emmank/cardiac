@@ -122,43 +122,50 @@ class superiorModule extends mainModule
     function vascular_submit(){
         $thefields = $this->__get_data_fields('superior', $this->query);
         foreach($this->config->free_val as $key => $value){
-             if(preg_match('/brachialis/', $key)){
-//                $key = trim(preg_replace('/^carotis_/', '', $key));
-//                if(in_array($key, $thefields)){
-//                    if($key == 'gelombang_t'){
-//                        if($value != 'Inverted'){
-//                            unset($value[1]);
-//                        }
+//            echo '<pre>';print_r($key); echo ' = ';print_r($value);echo '</pre>';
+            if (in_array($key,$thefields)) {
+                $thevalue[$key] = $value;
+            }
+        }
+//        foreach($this->config->free_val as $key => $value){
+//             if(preg_match('/brachialis/', $key)){
+////                $key = trim(preg_replace('/^carotis_/', '', $key));
+////                if(in_array($key, $thefields)){
+////                    if($key == 'gelombang_t'){
+////                        if($value != 'Inverted'){
+////                            unset($value[1]);
+////                        }
+////                    }
+//                    if(is_array($value) > 0){
+//                        $thevalue[$key] = implode('|', $value);
+//                    } else {
+//                        $thevalue[$key] = $value;
 //                    }
-                    if(is_array($value) > 0){
-                        $thevalue[$key] = implode('|', $value);
-                    } else {
-                        $thevalue[$key] = $value;
-                    }
-//                }
-            }
-            if(preg_match('/radialis/', $key)){
-                    if(is_array($value) > 0){
-                        $thevalue[$key] = implode('|', $value);
-                    } else {
-                        $thevalue[$key] = $value;
-                    }
-            }
-            if(preg_match('/ulmaris/', $key)){
-                    if(is_array($value) > 0){
-                        $thevalue[$key] = implode('|', $value);
-                    } else {
-                        $thevalue[$key] = $value;
-                    }
-            }
-            if(preg_match('/^vena$/', $key)){
-                    if(is_array($value) > 0){
-                        $thevalue[$key] = implode('|', $value);
-                    } else {
-                        $thevalue[$key] = $value;
-                    }
-            }
-       } unset($thefields);
+////                }
+//            }
+//            if(preg_match('/radialis/', $key)){
+//                    if(is_array($value) > 0){
+//                        $thevalue[$key] = implode('|', $value);
+//                    } else {
+//                        $thevalue[$key] = $value;
+//                    }
+//            }
+//            if(preg_match('/ulmaris/', $key)){
+//                    if(is_array($value) > 0){
+//                        $thevalue[$key] = implode('|', $value);
+//                    } else {
+//                        $thevalue[$key] = $value;
+//                    }
+//            }
+//            if(preg_match('/^vena$/', $key)){
+//                    if(is_array($value) > 0){
+//                        $thevalue[$key] = implode('|', $value);
+//                    } else {
+//                        $thevalue[$key] = $value;
+//                    }
+//            }
+//       }
+        unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $opr = 'update';
@@ -167,6 +174,9 @@ class superiorModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
+//        echo '<pre>'; print_r($opr); echo '</pre>';
+//        echo '<pre>'; print_r($strid); echo '</pre>';
+//        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->__exec_db_ops(
             $this->query,
             'superior',

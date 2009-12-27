@@ -71,11 +71,7 @@ foreach($data as $key => $value){
         unset($setdiv);
     }
     $result .= '</fieldset>' . "\n";
-
-//    $result .= '<a id="toggle-hidden-div" href="#toggle-hidden-div">Vascular Echo doppler </a><br />';
-//    $result .= '<a id="toggle-ahidden-div" href="#toggle-ahidden-div">Vascular Arteriography</a>';
-//    $result .= '<div id="hidden-div" style="display: none">';
-
+    
     if(isset($value['tab_items']) && count($value['tab_items']) > 0){
         $result .= '<ul id="fisistabs" class="shadetabs">' . "\n";
         $ke = 1;
@@ -104,61 +100,6 @@ foreach($data as $key => $value){
         $result .= '<input type="submit" value="' . $value['submit']['#value'] . '"' . (isset($value['submit']['#extra']) ? ' ' . $value['submit']['#extra'] : '') . '>';
         $result .= '</div>' . "\n";
     }
-//    $result .= __create_form_close();
-//    $result .= '<script type="text/javascript">' . "\n";
-//    $result .= 'var tabs=new ddtabcontent("fisistabs")' . "\n";
-//    $result .= 'tabs.setpersist(true)' . "\n";
-//    $result .= 'tabs.setselectedClassTarget("link") //"link" or "linkparent"' . "\n";
-//    $result .= 'tabs.init()' . "\n";
-//    $result .= '</script>' . "\n";
-//}
-
-//$result .= '</div>';
-
-//Vascular arteriography
-//$result .= '<div id="ahidden-div" style="display: none">';
-
-//    if(isset($value['tab_items']) && count($value['tab_items']) > 0){
-//        $result .= '<ul id="fisistabs" class="shadetabs">' . "\n";
-//        $ke = 1;
-////        echo "<pre>";print_r($value);echo "</pre";
-//        foreach($value['tab_items'] as $ky => $vl){
-//            if ($ky != "space") {
-//                $result .= '<li><a href="#" rel="fisis' . $ke . '">' . $vl['#title'] . '</a></li>' . "\n";
-//            } else {
-//                $result .= "<p></p>";
-//                $ke--;
-//            }
-//            $ke++;
-//        } unset($ke);
-//        $result .= '</ul>' . "\n";
-//        $result .= '<div style="border:1px solid gray; width:725px; margin-bottom: 1em; padding: 10px">' . "\n";
-//        $ke = 1;
-//        foreach($value['tab_items'] as $ky => $vl){
-//            if(isset($vl['#tpl'])  ){
-//                require_once $vl['#tpl'];
-//                $ke++;
-//            }
-//        } unset($ke);
-//        $result .= '</div>' . "\n";
-//    }
-//    if(isset($value['submit'])){
-//        $result .= '<div>' . "\n";
-//        $result .= '<input type="submit" value="' . $value['submit']['#value'] . '"' . (isset($value['submit']['#extra']) ? ' ' . $value['submit']['#extra'] : '') . '>';
-//        $result .= '</div>' . "\n";
-//    }
-//    $result .= __create_form_close();
-//    $result .= '<script type="text/javascript">' . "\n";
-//    $result .= 'var tabs=new ddtabcontent("fisistabs")' . "\n";
-//    $result .= 'tabs.setpersist(true)' . "\n";
-//    $result .= 'tabs.setselectedClassTarget("link") //"link" or "linkparent"' . "\n";
-//    $result .= 'tabs.init()' . "\n";
-//    $result .= '</script>' . "\n";
-//}
-
-
-//$result .= '</div>';
-
     $result .= __create_form_close();
     $result .= '<script type="text/javascript">' . "\n";
     $result .= 'var tabs=new ddtabcontent("fisistabs")' . "\n";
