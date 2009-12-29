@@ -94,7 +94,8 @@ foreach($data as $key => $value){
                 $result .= '<td align="left">';
                 if($lv['#type'] == 'select'){
                     if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
-                        $result .= $lv['#theref'][$lv['#value']];
+                        $result .= $lv['#value'][0] . ' ' . $lv['#value'][1] ;
+                        $result .= ' ' . $lv['#theref'][$lv['#value'][2]];
                     } else {
                         $result .= '<input type="radio" name="' . $yk . '[0]" value="Normal"> Normal <br />';// value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' checked="true"' : '') . '> ' . $vv;
                         $result .= '<input type="radio" name="' . $yk . '[0]" value="Steunosis"> Steunosis ';
@@ -130,7 +131,7 @@ foreach($data as $key => $value){
                     }
                 } else {
                     if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
-                        $result .= $lv['#value'];
+                        $result .= $lv['#theref'][$lv['#value']];
                     } else {
                         $result .= '<select name="' . $yk . '" size="1">';
                          $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
