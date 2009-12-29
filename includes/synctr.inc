@@ -4,6 +4,7 @@ strkey	indonesia
 -- medical record --	-- Rekam Medik --
 -- perawatan --	-- perawatan --
 a	A
+a.n.	a. n.
 ab	AB
 abdomen	Abdomen
 abdomen center	Abdomen Center
@@ -76,7 +77,9 @@ akses ke group	Akses ke grup
 alamat	Alamat
 alergi	Alergi
 all menu thats used by administrator to manage entire system configurations	Semua menu yang digunakan oleh administrator untuk mengatur konfigurasi sistem secara keseluruhan
+all menu thats used by user to manage their entry	Semua menu yang digunakan user untuk mengatur inputan dalam pekerjaannya
 all menu thats used by user to manage their entry and self configurations	Semua menu yang digunakan pengguna untuk mengatur inputan mereka dan juga konfigurasinya sendiri
+all report contects in this system	Semua kontek pelaporan dalam sistem ini
 antrian	Antrian
 antrian pasien	Antrian Pasien
 antrian pasien rawat inap	Antrian pasien rawat inap
@@ -178,12 +181,13 @@ daftar pasien yang mendaftar hari ini	Daftar pasien yang mendaftar hari ini
 daftar pengguna	Daftar Pengguna
 daftar pengkajian	Daftar pengkajian
 daftar rencana perawatan	Daftar rencana perawatan
+daftar rencana perawatan beberapa pasien terakhir	Daftar rencana perawatan beberapa pasien terakhir
+daftar rencana perawatan pasien	Daftar rencana perawatan pasien
 daftar riwayat kesehatan	Daftar riwayat kesehatan
 default	Default
 default-smarty	Default-smarty
 delete group	Hapus grup
 delete user	Hapus pengguna
-denyut jantung reference form for fekg	Formulir referensi denyut jantung untuk FEKG
 denyut_jantung	Denyut Jantung
 denyut_jantung reference detail for fekg	Detil referensi denyut jantung
 denyut_jantung reference form for fekg	Formulir referensi denyut jantung
@@ -711,6 +715,7 @@ illness_history form	Formulir riwayat penyakit
 illness_history reference detail for present status	Detil referensi riwayat penyakit
 illness_history reference form for present status	Formulir referensi riwayat penyakit
 ilness_history	Riwayat penyakit
+implementasi	Implementasi
 in	dalam
 indikasi	Indikasi
 indonesia	Indonesia
@@ -753,7 +758,12 @@ interval_pr	Interval PR
 irama nadi	Irama nadi
 irama reference detail for fekg	Detil referensi irama
 irama reference form for fekg	Formulir referensi irama
-irama_dasar	Irama dasar
+irama_dasar	Irama Dasar
+intervensi	Intervensi
+irama nadi	Irama nadi
+irama reference detail for fekg	Detil referensi irama
+irama reference form for fekg	Formulir referensi irama
+irama_dasar	Irama Dasar
 is amount	sebanyak
 islam	Islam
 jabatan	Jabatan
@@ -1014,6 +1024,7 @@ oktober	Oktober
 others	Lainnya
 others reference detail for punggung	Detil referensi lainnya
 others reference form for punggung	Formulir referensi lainnya
+pada sandapan	Pada Sandapan
 page	halaman
 page message	Halaman pesan
 palpasi_ginjal	Palpasi ginjal
@@ -1134,7 +1145,7 @@ qpatologi reference form for ekgqrs	Formulir referensi QPatologi
 qpatologi reference form for ekgst	Formulir referensi QPatologi
 qrs_axis	Axis
 qrs_durasi	Durasi
-qrs_konfigurasi_patologi	Q Patologi
+qrs_konfigurasi_patologi	Patologi
 qrs_konfigurasi_r_s	R > S
 quality	Kualitas
 q_interval	Q Interval
@@ -1254,6 +1265,8 @@ remove ulib reference form for threadkesimpulansaran	Formulir penghapusan refere
 remove ves reference form for holterref	Formulir penghapusan referensi VES
 rencana	Rencana
 rencana perawatan	Rencana perawatan
+rencana perawatan pasien	Rencana Perawatan Pasien
+report	Laporan
 report of cardio form	Laporan dari formulir cardio
 report of perawatan handle	Laporan penanganan perawatan
 respon tekanan darah	Respon tekanan darah
@@ -1306,12 +1319,14 @@ searching words to traslate	Pencarian kalimat untuk diterjemahkan
 segala kegiatan dalam layanan rawat inap pasien	Segala kegiatan dalam layanan rawat inap pasien
 segment_st_depresi	Depresi
 segment_st_elevasi	Elevasi
+segment_st	Segment ST
 segmen_st_depresi	Depresi
 segmen_st_elevasi	Elevasi
 selamat datang di cardiac center	Selamat Datang di Cardiac Center
 semua	Semua
 september	September
 sesi	Sesi
+setting	Pengaturan
 show message page	Tampilkan halaman pesan
 silahkan login sebelum menggunakan aplikasi ini	Silahkan masuk sebelum menggunakan aplikasi ini
 skin reference detail for abdomen	Detil referensi kulit
@@ -1424,6 +1439,7 @@ user password	Sandi pengguna
 user setings	Pengaturan pengguna
 user settings	Pengaturan pengguna
 user's password	Sandi pengguna
+user's profile and configurations settings	Pengaturan profil dan konfigurasi pengguna
 user-id	ID Pengguna
 userid	ID Pengguna
 username	Nama pengguna

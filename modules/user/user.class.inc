@@ -152,7 +152,7 @@ class userModule extends mainModule
         $items['user_settings'] = array(
             'title' => __t('user setings'),
             'description' => __t('perubahan informasi pengguna'),
-            'path' => '/user/edit',
+            'path' => '/setting/edit',
             'exec' => 'seting_form',
             'weight' => '0',
             'user_required' => 'users',
@@ -160,7 +160,7 @@ class userModule extends mainModule
         $items['user_setting_form_submit'] = array(
             'title' => __t('user setings'),
             'description' => __t('eksekusi perubahan informasi pengguna'),
-            'path' => '/user/edit_submit',
+            'path' => '/setting/edit_submit',
             'exec' => 'seting_form_submit',
             'weight' => '0',
             'user_required' => 'users',
@@ -168,7 +168,7 @@ class userModule extends mainModule
         $items['user_password'] = array(
             'title' => __t('user password'),
             'description' => __t('perubahan sandi pengguna'),
-            'path' => '/user/sandi',
+            'path' => '/setting/sandi',
             'exec' => 'password_form',
             'weight' => '0',
             'user_required' => 'users',
@@ -176,7 +176,7 @@ class userModule extends mainModule
         $items['user_password_submit'] = array(
             'title' => __t('user password'),
             'description' => __t('eksekusi perubahan sandi pengguna'),
-            'path' => '/user/sandisubmit',
+            'path' => '/setting/sandisubmit',
             'exec' => 'password_form_submit',
             'weight' => '0',
             'user_required' => 'users',
@@ -300,7 +300,7 @@ class userModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/edit_submit',
+            '#action' => '/setting/edit_submit',
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
         );
         foreach($this->users_fields as $value){
@@ -324,7 +324,7 @@ class userModule extends mainModule
                 $form['user'][$value] = array(
                     '#type' => 'info',
                     '#title' => __t($value),
-                    '#value' => '<a href="/user/sandi">' . __t('change password') . '</a>'
+                    '#value' => '<a href="/setting/sandi">' . __t('change password') . '</a>'
                 );
             }
         }
@@ -412,7 +412,7 @@ class userModule extends mainModule
                 $this->__write_custom_cache(
                     array('error' => __t('Data kurang lengkap di kolom <strong>"') . __t($key) . '"</strong>', 1)
                 );
-                redirect_to('/user/edit');
+                redirect_to('/setting/edit');
                 exit();
             }
             if($key != 'blank' && $key != 'submit'){
@@ -430,7 +430,7 @@ class userModule extends mainModule
         $this->sysquery->conn->Execute($sql); unset($sql);
         $this->sysquery->close();
         unset($thevalue);
-        redirect_to('/user');
+        redirect_to('/setting');
     }
 
     function form_submit(){

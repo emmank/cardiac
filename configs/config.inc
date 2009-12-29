@@ -96,8 +96,8 @@ class config
             'exec' => 'core_show_admin_menus'
         ),
         'user' => array(
-            'title' => 'pengguna',
-            'description' => 'All menu thats used by user to manage their entry and self configurations',
+            'title' => 'bagian',
+            'description' => 'All menu thats used by user to manage their entry',
             'user_required' => 'users',
             'path' => '/user',
             'exec' => 'core_show_user_menus'
@@ -122,6 +122,20 @@ class config
             'user_required' => 'users',
             'path' => '/care',
             'exec' => 'core_show_care_menus'
+        ),
+        'setting' => array(
+            'title' => 'setting',
+            'description' => 'user\'s profile and configurations settings',
+            'user_required' => 'users',
+            'path' => '/setting',
+            'exec' => 'core_show_setting_menus'
+        ),
+        'report' => array(
+            'title' => 'report',
+            'description' => 'All report contects in this system',
+            'user_required' => 'report',
+            'path' => '/report',
+            'exec' => 'core_show_report_menus'
         )
     );
 
