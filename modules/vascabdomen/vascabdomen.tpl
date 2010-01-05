@@ -27,7 +27,7 @@ $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 $result .= '<a id="toggle-arabdomenhidden-div" href="#toggle-arabdomenhidden-div">Artery </a><br />';
 $result .= '<a id="toggle-vabdomenhidden-div" href="#toggle-vabdomenhidden-div">Vena </a>';
 $result .= '<div id="arabdomenhidden-div" style="display: none">';
-$result .= '<table width=100% class="table" border="1">' . "\n";
+$result .= '<table width=100% class="table" border="0">' . "\n";
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['#type'] != 'hidden'){
         if(isset($lv['#customized'])){
@@ -36,11 +36,8 @@ foreach($vl['datafields'] as $yk => $lv){
         }
     }
 }
-//    $result .= '<a id="toggle-hidden-div" href="#toggle-hidden-div">Vascular Echo doppler </a><br />';
-//    $result .= '<a id="toggle-ahidden-div" href="#toggle-ahidden-div">Vascular Arteriography</a>';
-//    $result .= '<div id="hidden-div" style="display: none">';
-
-
+//Retrieve data from class
+//echo "<pre>";print_r($vl);echo "</pre>";
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['#type'] != 'hidden'){
         $result .= '<tr valign="top">' . "\n";
@@ -48,68 +45,37 @@ foreach($vl['datafields'] as $yk => $lv){
             if (preg_match('/vena/',$yk)){
 
             } else {
-                $result .= '<td align="right" width="15%" rowspan="6">' . ucwords($lv['#title']) . '</td>' . "\n";
-                $result .= '<td align="left" width="15%" rowspan="6">';
+                $result .= '<td align="right" width="25%" rowspan="6">' . ucwords($lv['#title']) . ': </td>' . "\n";
+                $result .= '<td align="left" width="10%" rowspan="6">';
             }
             if($lv['#type'] == 'select'){
                 if(isset($lv['#readonly']) && trim($lv['#readonly']) != '' && $lv['#readonly'] !== FALSE){
-                        $result .= $lv['#theref'][$lv['#value']];
+//                        $result .= $lv['#theref'][$lv['#value']];
+                   if (preg_match('/vena/',$yk)){
+                            //Something todo
+                        }
+                        else {
+                            $nilai = explode('|',$lv['#value']);
+//                            echo "<pre>";print_r($lv);echo "</pre>";
+    //                        echo "<pre>";print_r($nilai);echo "</pre>";
+                            $result .= $lv['#theref'][$nilai[0]];
+                            $result .= '</td><td width="10%" align="right">';
+                            $result .= 'Diameter : </td><td>' . $nilai[1] . '</td>';
+                            $result .= '<tr><td width="10%" align="right">';
+                            $result .= 'Flow : </td><td>' . $nilai[2] . '</td>';
+                            $result .= '<tr><td width="10%" align="right">';
+                            $result .= 'Steunosis : </td><td>' . $nilai[3] . '</td>';
+                            $result .= '<tr><td width="10%" align="right">';
+                            $result .= 'Thrambus : </td><td>' . $nilai[4] . '</td>';
+                            $result .= '<tr><td width="10%" align="right">';
+                            $result .= 'Kalsifkasi : </td><td>' . $nilai[5] . '</td>';
+                            $result .= '<tr><td width="10%" align="right">';
+                            $result .= 'Lain : </td><td>' . $nilai[6];
+                    }
                     } else {
 
                         if (preg_match('/vena/',$yk)){
-
-//                            $result .= '<select name="' . $yk . '[0]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-//                            foreach($lv['#theref'] as $kk => $vv){
-//                                $result .= '<option value="' . $kk . '"' . (isset($lv['#value']) && $lv['#value'] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>';
-//                            }
-//                            $result .= '</select></td><td width="10%" align="right">';
-//
-//                            $result .= 'Diameter </td><td>';
-//                            $result .= '<select name="' . $yk . '[1]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-//                                $result .= '<option value="Normal">Normal </option>';
-//                                $result .= '<option value="Kecil">Kecil </option>';
-//                                $result .= '<option value="Lebar">Lebar </option>';
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//
-//                            $result .= 'Flow </td><td>';
-//                            $result .= '<select name="' . $yk . '[2]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-//                                $result .= '<option value="Triphesic">Triphesic </option>';
-//                                $result .= '<option value="Biphesic">Biphesic </option>';
-//                                $result .= '<option value="Monophesic">Monophesic </option>';
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//
-//                            $result .= 'Compression ultrasonography </td><td>';
-//                            $result .= '<select name="' . $yk . '[3]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-//                                $result .= '<option value="Positif">Positif </option>';
-//                                $result .= '<option value="Negatif">Negatif </option>';
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//
-//                            $result .= 'Uji Squeezing </td><td>';
-//                            $result .= '<select name="' . $yk . '[4]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-//                                $result .= '<option value="Positif">Positif </option>';
-//                                $result .= '<option value="Negatif">Negatif </option>';
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//
-//                            $result .= 'Refluks </td><td>';
-//                            $result .= '<select name="' . $yk . '[5]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-//                                $result .= '<option value="Positif">Positif </option>';
-//                                $result .= '<option value="Negatif">Negatif </option>';
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//
-//                            $result .= 'Thrambus </td><td>';
-//                            $result .= '<select name="' . $yk . '[6]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-//                                $result .= '<option value="Kecil">Kecil </option>';
-//                                $result .= '<option value="Sedang">Sedang </option>';
-//                                $result .= '<option value="Besar">Besar </option>';
-//                            $result .= '</select>';
-
+                            //Something todo
                         }
                         else {
 
@@ -182,7 +148,7 @@ foreach($vl['datafields'] as $yk => $lv){
 
         } else {
             if(!is_array($lv['#value'])){
-                $lv['#value'] = explode('|', $lv['#value']);
+//                $lv['#value'] = explode('|', $lv['#value']);
             }
             if(!isset($dumpt)){$dumpt = array();}
             if(!in_array($lv['#customized']['title'], $dumpt)){
@@ -194,7 +160,7 @@ foreach($vl['datafields'] as $yk => $lv){
                 $result .= ucwords($lv['#title']);
             } else {
                 if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
-                    $result .= $lv['#value'][0];
+//                    $result .= $lv['#value'][0];
                 } else {
                     foreach($lv['#customized']['option'] as $kk => $vv){
                         if(isset($koma)){
@@ -216,10 +182,10 @@ foreach($vl['datafields'] as $yk => $lv){
 
 $result .= '</table>' . "\n";
 $result .= '</div>';
-
+unset($nilai);
 
 $result .= '<div id="vabdomenhidden-div" style="display: none">';
-$result .= '<table width=100% class="table" border="1">' . "\n";
+$result .= '<table width=100% class="table" border="0">' . "\n";
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['#type'] != 'hidden'){
         if(isset($lv['#customized'])){
@@ -228,24 +194,42 @@ foreach($vl['datafields'] as $yk => $lv){
         }
     }
 }
-//    $result .= '<a id="toggle-hidden-div" href="#toggle-hidden-div">Vascular Echo doppler </a><br />';
-//    $result .= '<a id="toggle-ahidden-div" href="#toggle-ahidden-div">Vascular Arteriography</a>';
-//    $result .= '<div id="hidden-div" style="display: none">';
-
 
 foreach($vl['datafields'] as $yk => $lv){
     if($lv['#type'] != 'hidden'){
         $result .= '<tr valign="top">' . "\n";
         if(!isset($lv['#customized'])){
             if (preg_match('/vena/',$yk)){
-                $result .= '<td align="right" width="15%" rowspan="6">' . ucwords($lv['#title']) . '</td>' . "\n";
-                $result .= '<td align="left" width="15%" rowspan="6">';
+                $result .= '<td align="right" width="25%" rowspan="6">' . ucwords($lv['#title']) . ': </td>' . "\n";
+                $result .= '<td align="left" width="10%" rowspan="6">';
             } else {
 
             }
             if($lv['#type'] == 'select'){
                 if(isset($lv['#readonly']) && trim($lv['#readonly']) != '' && $lv['#readonly'] !== FALSE){
-                        $result .= $lv['#theref'][$lv['#value']];
+//                        $result .= $lv['#theref'][$lv['#value']];
+                    if (preg_match('/vena/',$yk)){
+                        $nilai = explode('|',$lv['#value']);
+//                        echo "<pre>";print_r($lv['#theref']);echo "</pre>";
+//                        echo "<pre>2222";echo "</pre>";
+                        $result .= $lv['#theref'][$nilai[0]];
+                        $result .= '</td><td width="10%" align="right">';
+                        $result .= 'Diameter </td><td> : ' . $nilai[1] . '</td>';
+                        $result .= '<tr><td width="10%" align="right">';
+                        $result .= 'Flow </td><td> : ' . $nilai[2] . '</td>';
+                        $result .= '<tr><td width="10%" align="right">';
+                        $result .= 'Compression ultrasonography </td><td> : ' . $nilai[3] . '</td>';
+                        $result .= '<tr><td width="10%" align="right">';
+                        $result .= 'Uji Squeezing </td><td> : ' . $nilai[4] . '</td>';
+                        $result .= '<tr><td width="10%" align="right">';
+                        $result .= 'Refluks </td><td> : ' . $nilai[5] . '</td>';
+                        $result .= '<tr><td width="10%" align="right">';
+                        $result .= 'Thrambus </td><td> : ' . $nilai[6];
+                    }
+                    else {
+
+                    }
+
                     } else {
 
                         if (preg_match('/vena/',$yk)){
@@ -304,70 +288,7 @@ foreach($vl['datafields'] as $yk => $lv){
 
                         }
                         else {
-
-//                            $result .= '<select name="' . $yk . '[0]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-//                            foreach($lv['#theref'] as $kk => $vv){
-//                                $result .= '<option value="' . $kk . '"' . (isset($lv['#value']) && $lv['#value'] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>';
-//                            }
-//                            $result .= '</select></td><td width="10%" align="right">';
-//
-//                            $result .= 'Diameter </td><td>';
-//                            $result .= '<select name="' . $yk . '[1]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-////                            foreach($lv['#theref'] as $kk => $vv){
-//                                $result .= '<option value="Normal">Normal </option>';
-//                                $result .= '<option value="Kecil">Kecil </option>';
-//                                $result .= '<option value="Lebar">Lebar </option>';
-////                            }
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//                            $result .= 'Flow </td><td>';
-//                            $result .= '<select name="' . $yk . '[2]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-////                            foreach($lv['#theref'] as $kk => $vv){
-//                                $result .= '<option value="Triphesic">Triphesic </option>';
-//                                $result .= '<option value="Biphesic">Biphesic </option>';
-//                                $result .= '<option value="Monophesic">Monophesic </option>';
-////                            }
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//                            $result .= 'Steunosis </td><td>';
-//                            $result .= '<select name="' . $yk . '[3]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-////                            foreach($lv['#theref'] as $kk => $vv){
-//                                $result .= '<option value="Mild">Mild </option>';
-//                                $result .= '<option value="Moderate">Moderate </option>';
-//                                $result .= '<option value="Severe">Severe </option>';
-////                            }
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//                            $result .= 'Thrambus </td><td>';
-//                            $result .= '<select name="' . $yk . '[4]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-////                            foreach($lv['#theref'] as $kk => $vv){
-//                                $result .= '<option value="Kecil">Kecil </option>';
-//                                $result .= '<option value="Sedang">Sedang </option>';
-//                                $result .= '<option value="Besar">Besar </option>';
-//                                $result .= '<option value="Tidak ada">Tidak ada</option>';
-////                            }
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//                            $result .= 'Kalsifkasi </td><td>';
-//                            $result .= '<select name="' . $yk . '[5]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-////                            foreach($lv['#theref'] as $kk => $vv){
-//                                $result .= '<option value="Mild">Mild </option>';
-//                                $result .= '<option value="Moderate">Moderate </option>';
-//                                $result .= '<option value="Severe">Severe </option>';
-//                                $result .= '<option value="Tidak">Tidak </option>';
-////                            }
-//                            $result .= '</select><tr><td width="10%" align="right">';
-//                            $result .= 'Lain </td><td>';
-//                            $result .= '<select name="' . $yk . '[6]" size="1">';
-//                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-////                            foreach($lv['#theref'] as $kk => $vv){
-//                                $result .= '<option value="Tourtous">Tourtous </option>';
-//                                $result .= '<option value="Ancurysma">Ancurysma </option>';
-////                            }
-//                            $result .= '</select>';
-
+                            //something todo
 
                         }
                     }
@@ -400,7 +321,6 @@ foreach($vl['datafields'] as $yk => $lv){
             $result .= '</td>' . "\n";
         }
         $result .= '</tr>' . "\n";
-
     }
     }
 
@@ -408,8 +328,5 @@ foreach($vl['datafields'] as $yk => $lv){
 
 $result .= '</table>' . "\n";
 $result .= '</div>';
-
-
-
-
+unset($nilai);
 $result .= '</div>' . "\n";

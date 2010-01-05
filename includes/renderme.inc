@@ -359,7 +359,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     foreach($data as $key => $value){
         $result .= '<div id=block>' . "\n";
         if(isset($value['#title']) && $value['#title'] != 'hidden' && $value['#type'] != 'hidden' && trim($value['#title']) != '' && !is_null($value['#title']) && $value['#type'] != 'submit'){
-            $result .= '<label for="'. $key .'"' . (isset($value['#id_label']) ? ' id="' . $value['#id_label'] . '"' : '') . '>' . ucwords($value['#title']) . '</label>' . "\n";
+            $result .= '<font size="3"><label for="'. $key .'"' . (isset($value['#id_label']) ? ' id="' . $value['#id_label'] . '"' : '') . '>' . ucwords($value['#title']) . '</label></font>' . "\n";
         }
         if(in_array($value['#type'], $forminput)){
             if($value['#type'] == 'checkbox' || $value['#type'] == 'radio'){

@@ -556,6 +556,13 @@ class patientConfig extends config
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
+            ),
+            'no_asuransi' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
             )
         ),
         'kunjungan' => array(
@@ -637,6 +644,13 @@ class patientConfig extends config
                 'extra' => ''
             ),
             'pilihan_cara_bayar' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'no_asuransi' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',

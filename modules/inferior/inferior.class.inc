@@ -61,7 +61,7 @@ class inferiorModule extends mainModule
                 array(
                     array('&&', "id=" . $vcache['id'])
                 )
-            ); unset($vcache);
+            ); //unset($vcache);
             $this->query->connect();
             $getit = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
@@ -78,6 +78,7 @@ class inferiorModule extends mainModule
                     $vcache['catched'] = date('Y-m-d H:i:s', $this->config->time);
                 }
             }
+//            echo '<pre>'; print_r($vcache[$value]); echo '</pre>';
             $result['datafields'][$value] = array(
                 '#title' => __t($value),
                 '#type' => $this->config->fields_form_type[$value],
@@ -90,81 +91,75 @@ class inferiorModule extends mainModule
             } elseif($this->config->typeoffields[$value] == 'datetime'){
                 $result['datafields'][$value]['#theref'] = $this->nama_bulan;
                 $result['datafields'][$value]['#timenow'] = $this->config->time;
-//            } else {
-//                $result['datafields'][$value]['#size'] = 6;
             }
             if(in_array($value, $this->config->qrs_complex) || in_array($value, $this->config->segment_st) || $value == 'gelombang_t'){
                 $result['datafields'][$value]['#customized']['title'] = in_array($value, $this->config->qrs_complex) ? __t('qrs_complex') : ($value == 'gelombang_t' ? __t('gelombang_t') : __t('segment_st'));
                 $result['datafields'][$value]['#customized']['id'] = in_array($value, $this->config->qrs_complex) ? 'qrs_complex' : ($value == 'gelombang_t' ? 'gelombang_t' : 'segment_st');
-                if($this->config->fields_form_type[$value] == 'select2'){
-                    $result['datafields'][$value]['#customized']['option'] =  array(
-                        '1mm - 2mm' => '1mm - 2mm',
-                        '> 2mm - 3mm' => '> 2mm - 3mm',
-                        '> 3mm' => '> 3mm'
-                    );
-                } elseif ($this->config->fields_form_type[$value] == 'select3') {
-                    $result['datafields'][$value]['#customized']['option'] =  array(
-                        'Q Patologi +' => 'Q Patologi +',
-                        'Q Patologi -' => 'Q Patologi -'
-                    );
-                } elseif ($value == 'gelombang_t') {
-                    $result['datafields'][$value]['#customized']['option'] =  array(
-                        'Normal' => 'Normal',
-                        'Inverted' => 'Inverted'
-                    );
-                }
+
             }
+            $result['datafields'][$value]['#readonly'] = isset($this->config->free_val['readonly']) ? TRUE : FALSE;
+
         }
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
     function vascular_submit(){
         $thefields = $this->__get_data_fields('inferior', $this->query);
         foreach($this->config->free_val as $key => $value){
-             if(preg_match('/fermoralis/', $key)){
-//                $key = trim(preg_replace('/^carotis_/', '', $key));
-//                if(in_array($key, $thefields)){
-//                    if($key == 'gelombang_t'){
-//                        if($value != 'Inverted'){
-//                            unset($value[1]);
-//                        }
+//            echo '<pre>';print_r($key); echo ' = ';print_r($value);echo '</pre>';
+            if (in_array($key,$thefields)) {
+//                echo '<pre>';print_r($key); echo ' = ';print_r($value);echo '</pre>';
+                $thevalue[$key] = $value;
+            }
+//            $thevalue[$key] =
+        }
+//        foreach($this->config->free_val as $key => $value){
+//             if(preg_match('/fermoralis/', $key)){
+////                $key = trim(preg_replace('/^carotis_/', '', $key));
+////                if(in_array($key, $thefields)){
+////                    if($key == 'gelombang_t'){
+////                        if($value != 'Inverted'){
+////                            unset($value[1]);
+////                        }
+////                    }
+//                    if(is_array($value) > 0){
+//                        $thevalue[$key] = implode('|', $value);
+//                    } else {
+//                        $thevalue[$key] = $value;
 //                    }
-                    if(is_array($value) > 0){
-                        $thevalue[$key] = implode('|', $value);
-                    } else {
-                        $thevalue[$key] = $value;
-                    }
-//                }
-            }
-            if(preg_match('/paplitca/', $key)){
-                    if(is_array($value) > 0){
-                        $thevalue[$key] = implode('|', $value);
-                    } else {
-                        $thevalue[$key] = $value;
-                    }
-            }
-            if(preg_match('/tibalin/', $key)){
-                    if(is_array($value) > 0){
-                        $thevalue[$key] = implode('|', $value);
-                    } else {
-                        $thevalue[$key] = $value;
-                    }
-            }
-            if(preg_match('/aorsalin/', $key)){
-                    if(is_array($value) > 0){
-                        $thevalue[$key] = implode('|', $value);
-                    } else {
-                        $thevalue[$key] = $value;
-                    }
-            }
-            if(preg_match('/^vena$/', $key)){
-                    if(is_array($value) > 0){
-                        $thevalue[$key] = implode('|', $value);
-                    } else {
-                        $thevalue[$key] = $value;
-                    }
-            }
-       } unset($thefields);
+////                }
+//            }
+//            if(preg_match('/paplitca/', $key)){
+//                    if(is_array($value) > 0){
+//                        $thevalue[$key] = implode('|', $value);
+//                    } else {
+//                        $thevalue[$key] = $value;
+//                    }
+//            }
+//            if(preg_match('/tibalin/', $key)){
+//                    if(is_array($value) > 0){
+//                        $thevalue[$key] = implode('|', $value);
+//                    } else {
+//                        $thevalue[$key] = $value;
+//                    }
+//            }
+//            if(preg_match('/aorsalin/', $key)){
+//                    if(is_array($value) > 0){
+//                        $thevalue[$key] = implode('|', $value);
+//                    } else {
+//                        $thevalue[$key] = $value;
+//                    }
+//            }
+//            if(preg_match('/^vena$/', $key)){
+//                    if(is_array($value) > 0){
+//                        $thevalue[$key] = implode('|', $value);
+//                    } else {
+//                        $thevalue[$key] = $value;
+//                    }
+//            }
+//       }
+        unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $opr = 'update';

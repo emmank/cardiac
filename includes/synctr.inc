@@ -1,11 +1,21 @@
 strkey	indonesia
 -- dirujuk ke --	-- dirujuk ke --
+-- empty --	--Data Kosong--
 -- medical record --	-- Rekam Medik --
 -- perawatan --	-- perawatan --
 a	A
 a.n.	a. n.
 ab	AB
 abdomen	Abdomen
+abdomen center	Abdomen Center
+abdomen gerakan dinding perut	Gerakan Dinding Perut
+abdomen ginjal	Ginjal
+abdomen hepar	Hepar
+abdomen inspeksi ginjal	Inspeksi Ginjal
+abdomen liver	Liver
+abdomen perkusi	Perkusi
+abdomen relief	Relief
+abdomen skin	Kulit
 abdomen_auscultation	Auscultation
 abdomen_auscultation drop	Drop auscultation
 abdomen_auscultation edit	Editauscultation
@@ -75,6 +85,8 @@ antrian pasien	Antrian Pasien
 antrian pasien rawat inap	Antrian pasien rawat inap
 antrian pasien yang mendaftar pada hari ini	Antrian pasien yang mendaftar pada hari ini
 anus rectum	Anus rectum
+anusrectum inspections	Inspeksi
+anusrectum rectal touche	Rectal Touche
 anusrectum_inspections	Inspeksi
 anusrectum_inspections drop	Drop
 anusrectum_inspections edit	Edit
@@ -86,8 +98,11 @@ anusrectum_rectal_touche form	Formulir
 april	April
 asuransi	Asuransi
 auscultation	Auscultation
+auscultation kind reference form for hearth	Formulir referensi jenis untuk jantung
+auscultation quality reference form for hearth	Formulir referensi kualitas untuk jantung
 auscultation reference detail for abdomen	Detil referensi auscultation untuk abdomen
 auscultation reference form for abdomen	Formulir referensi auscultation untuk ebdomen
+auscultation sound reference form for hearth	Formulir referensi suara untuk jantung
 auscultation_kind reference detail for hearth	Detil referensi jenis auscultation untuk jantung
 auscultation_kind reference form for hearth	Formulir referensi jenis auscultation untuk jantung
 auscultation_quality reference detail for hearth	Detil referensi kualitas untuk jantung
@@ -112,6 +127,8 @@ batas_paru_hepar	Batas paru hepar
 bengkulu	Bengkulu
 berat	Berat
 budha	Budha
+bunyi pernafasan reference form for punggung	Formulir referensi bunyi pernafasan untuk punggung
+bunyi tambahan reference form for punggung	Formulir referensi bunyi tambahan untuk punggung
 bunyi_jantung	Bunyi jantung
 bunyi_pernafasan	Bunyi pernafasan
 bunyi_pernafasan reference detail for punggung	Detil referensi untuk punggung
@@ -171,7 +188,7 @@ default	Default
 default-smarty	Default-smarty
 delete group	Hapus grup
 delete user	Hapus pengguna
-denyut_jantung	Denyut jantung
+denyut_jantung	Denyut Jantung
 denyut_jantung reference detail for fekg	Detil referensi denyut jantung
 denyut_jantung reference form for fekg	Formulir referensi denyut jantung
 denyut_jantung_max	Denyut jantung maksimal
@@ -214,6 +231,7 @@ detil abdomen_skin	Detil abdomen kulit
 detil anusrectum_inspections	Detil inspeksi anusrectum
 detil anusrectum_rectal_touche	Detil rectal touche
 detil axis fase latihan	Detil fase latihan axis
+detil bahasa	Detil Bahasa
 detil denyut_jantung	Detil denyut jantung
 detil depresi fase latihan	Detil depresi fase latihan
 detil dihentikan fase latihan	Detil dihentikan
@@ -484,6 +502,7 @@ explore vascular	Eksplor vascular
 expression	Ekspresi
 expression reference detail for headface	Detil referensi ekspresi
 expression reference form for headface	Formulir referensi ekspresi
+extermitas inspections	Inspeksi Extermitas
 extermitas_inspections	Inspeksi extermitas
 extermitas_inspections drop	Hapus inspeksi
 extermitas_inspections edit	Edit inspeksi
@@ -736,6 +755,10 @@ intencity	Intensitas
 intencity reference detail for hearth	Detil referensi intensitas
 intencity reference form for hearth	Formulir referensi intensitas
 interval_pr	Interval PR
+irama nadi	Irama nadi
+irama reference detail for fekg	Detil referensi irama
+irama reference form for fekg	Formulir referensi irama
+irama_dasar	Irama Dasar
 intervensi	Intervensi
 irama nadi	Irama nadi
 irama reference detail for fekg	Detil referensi irama
@@ -1035,6 +1058,7 @@ patient detail	Detil pasien
 patient get strnum info	Informasi nomor registrasi pasien
 patient register	Registrasi pasien
 patient update	Ubah pasien
+pause	Pause
 pekerjaan	Pekerjaan
 pekerjaan_ayah	Pekerjaan Ayah
 pekerjaan_ibu	Pekerjaan Ibu
@@ -1119,11 +1143,10 @@ qpatologi reference detail for ekgqrs	Detil referensi QPatologi
 qpatologi reference detail for ekgst	Detil referensi QPatologi
 qpatologi reference form for ekgqrs	Formulir referensi QPatologi
 qpatologi reference form for ekgst	Formulir referensi QPatologi
-qrs_axis	QRS Axis
-qrs_complex	QRS Complex
+qrs_axis	Axis
 qrs_durasi	Durasi
 qrs_konfigurasi_patologi	Patologi
-qrs_konfigurasi_r_s	R S
+qrs_konfigurasi_r_s	R > S
 quality	Kualitas
 q_interval	Q Interval
 q_interval reference detail for fekg	Detil referensi Q interval
@@ -1294,6 +1317,8 @@ searching certain words in system's dictionary	Pencarian kalimat tertentu dalam 
 searching patient in database	Cari pasien dalam database
 searching words to traslate	Pencarian kalimat untuk diterjemahkan
 segala kegiatan dalam layanan rawat inap pasien	Segala kegiatan dalam layanan rawat inap pasien
+segment_st_depresi	Depresi
+segment_st_elevasi	Elevasi
 segment_st	Segment ST
 segmen_st_depresi	Depresi
 segmen_st_elevasi	Elevasi
@@ -1362,6 +1387,7 @@ tekanan_darah	Tekanan Darah
 tension	Tensi
 tensi_diastole	Tensi diastole
 tensi_systole	Tensi systole
+terjemahkan	terjemahkan
 tgl	Tanggal
 tgl periksa	Tanggal periksa
 tgl_lahir	Tanggal Lahir
@@ -1420,7 +1446,7 @@ username	Nama pengguna
 users	Pengguna
 usia	Usia
 vascular	Vascular
-vascular echo-doppler	Echo doppler
+vascular echo-doppler	Vascular
 vascularmessage	Pesan vascular
 ves	VES
 ves reference detail for holterref	Detil referensi VES

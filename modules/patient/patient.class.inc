@@ -725,6 +725,7 @@ class patientModule extends mainModule
     }
 
     function register_form(){
+//        echo '<pre>'; print_r($vcache); echo '</pre>';
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
         } else {
@@ -976,6 +977,12 @@ class patientModule extends mainModule
                     '#id' => 'tchooseb',
                     '#option_blank' => 1
                 ); unset($options);
+                $form['patient']['no_asuransi'] = array(
+                    '#type' => 'text',
+                    '#value' => isset($vcache['no_asuransi']) ? $vcache['no_asuransi'] : '',
+                    '#title' => __t('no. asuransi'),
+                    '#error' => isset($vcache['blank']) && in_array('no_asuransi', $vcache['blank']) ? 1 : 0
+                ); unset($options);
                 if($vcache['cara_bayar'] != 'asuransi'){
                     $form['patient']['pilihan_cara_bayar']['#extra'] = ' DISABLED="TRUE"';
                 }
@@ -989,6 +996,7 @@ class patientModule extends mainModule
                     '#extra' => ' class="button"'
                );
             }
+//            echo '<pre>'; print_r($vcache); echo '</pre>';
             return $form;
     }
     
@@ -1666,6 +1674,12 @@ class patientModule extends mainModule
                     '#id' => 'tchooseb',
                     '#extra' => ' disabled="true"',
                     '#option_blank' => 1
+                ); unset($options);
+                $form['patient']['no_asuransi'] = array(
+                    '#type' => 'text',
+                    '#value' => isset($vcache['no_asuransi']) ? $vcache['no_asuransi'] : '',
+                    '#title' => __t('no. asuransi'),
+                    '#error' => isset($vcache['blank']) && in_array('no_asuransi', $vcache['blank']) ? 1 : 0,
                 ); unset($options);
                 $form['patient']['submit'] = array(
                     '#type' => 'submit',
