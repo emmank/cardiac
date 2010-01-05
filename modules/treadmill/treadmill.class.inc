@@ -105,6 +105,22 @@ class treadmillModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['treadmill_prescription'] = array(
+            'title' => __t('treadmill form') . ' ' . __t('prescription'),
+            'description' => __t("form of treadmill") . ' ' . __t('prescription'),
+            'path' => '/user/treadmill/prescription',
+            'exec' => 'prescription_form',
+            'weight' => '0',
+            'user_required' => 'treadmill'
+        );
+        $items['treadmill_prescription_submit'] = array(
+            'title' => __t('treadmill form') . ' ' . __t('prescription'),
+            'description' => __t("form of treadmill") . ' ' . __t('prescription'),
+            'path' => '/user/treadmill/prescription_submit',
+            'exec' => 'prescription_submit',
+            'weight' => '0',
+            'user_required' => 'treadmill'
+        );
         return $items;
     }
 
@@ -523,8 +539,30 @@ class treadmillModule extends mainModule
                                             'strnum' => $query['strnum']
                                         )
                                     );
+                                    $form['treadmill']['#addmenu']['#prescription'] = array(
+                                        'title' => __t('prescription'),
+                                        'action' => '/user/treadmill/prescription/' . $vcache['id'],
+                                        'position' => 'top',
+                                        'class' => 'button',
+                                        'user_required' => 'treadmill',
+                                        'filter' => 'items',
+                                        'items' => array (
+                                            'id' => $vcache['id']
+                                        )
+                                    );
                                 }
                             }
+                            $form['treadmill']['#addmenu']['#printed'] = array(
+                                'title' => __t('print'),
+                                'action' => '/user/treadmill/report',
+                                'position' => 'top',
+                                'class' => 'button',
+                                'user_required' => 'treadmill',
+                                'filter' => 'items',
+                                'items' => array (
+                                    'id' => $vcache['id']
+                                )
+                            );
                         } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
@@ -716,6 +754,22 @@ class treadmillModule extends mainModule
             '#type' => 'submit',
             '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
+        if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
+            $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'Treadmill', $vcache['patients']);
+            if(count($getvisit_info) > 0){
+                foreach($getvisit_info as $ky => $vl){
+                    if(is_null($vl['doneby'])){
+                        $forbidden = 0; break;
+                    }
+                }
+            }
+        } else {
+            $forbidden = 0;
+        }
+        if(isset($forbidden)){
+            $form['treadmill']['submit']['#extra'] = ' disabled="true"';
+            unset($forbidden);
+        }
         return $form;
     }
 

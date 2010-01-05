@@ -1358,4 +1358,157 @@ class mainModule
        return $result;
    }
 
+   function prescription_form(){
+        $vcache = array();
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($dump[1]) && isset($dump[3])){
+            $vcache['idperiksa'] = trim($dump[3]);
+            $bagian = eregi('cardio', $dump[1]) ? 'cardio' : trim($dump[1]);
+            $sql = $this->query->getSelect(
+                    array('inputtime'),
+                    array($bagian),
+                    array(
+                        array('&&', "id=" . trim($dump[3]))
+                    )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if(date('Y-n-j', strtotime($getit->fields['inputtime']) != date('Y-n-j', $this->config->time))){
+                $readonly = 0;
+            } unset($getit);
+            $sql = $this->query->getSelect(
+                    array('id'),
+                    array('bagian'),
+                    array(
+                        array('&&', "tableuse=" . $bagian)
+                    )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $vcache['bagian'] = $getit->fields['id'];
+                $sql = $this->query->getSelect(
+                        array('id'),
+                        array('prescription'),
+                        array(
+                            array('&&', "bagian=" . $getit->fields['id']),
+                            array('&&', "idperiksa=" . trim($dump[3]))
+                        )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                if($getthis->_numOfRows > 0){
+                    $id = $getthis->fields['id'];
+                } unset($getthis);
+            } unset($getit);
+        }
+        if(isset($id) && trim($id) != ''){
+            $sql = $this->query->getSelect(
+                    array(),
+                    array('prescription'),
+                    array(
+                        array('&&', "id=" . $id)
+                    )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                foreach($getit->fields as $key => $value){
+                    $vcache[$key] = $value;
+                }
+                if(date('Y-n-j', strtotime($getit->fields['inputtime'])) != date('Y-n-j', $this->config->time)){
+                    $readonly = 0;
+                }
+            } unset($getit);
+        }
+        $form['prescription'] = array(
+            '#type' => 'fieldset',
+            '#id' => 'prescription',
+            '#title' => __t('prescription'),
+            '#collapsible' => TRUE,
+            '#collapsed' => FALSE,
+            '#weight' => -3,
+            '#action' => '/user/' . trim($dump[1]) . '/' . (isset($readonly) ? 'detail_form/' . trim($dump[3]) : 'prescription_submit'),
+            '#focused_item' => 'prescription',
+            'id' => array(
+                '#type' => 'hidden',
+                '#title' => __t('id'),
+                '#value' => isset($vcache['id']) ? $vcache['id'] : '',
+                '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
+            ),
+            'bagian' => array(
+                '#type' => 'hidden',
+                '#title' => __t('bagian'),
+                '#value' => isset($vcache['bagian']) ? $vcache['bagian'] : '',
+                '#error' => isset($vcache['blank']) && in_array('bagian', $vcache['blank']) ? 1 : 0
+            ),
+            'idperiksa' => array(
+                '#type' => 'hidden',
+                '#title' => __t('idperiksa'),
+                '#value' => isset($vcache['idperiksa']) ? $vcache['idperiksa'] : '',
+                '#error' => isset($vcache['blank']) && in_array('idperiksa', $vcache['blank']) ? 1 : 0
+            ),
+            'prescription' => array(
+                '#type' => 'textarea',
+                '#rows' => '10',
+                '#cols' => '75',
+                '#title' => __t('prescription'),
+                '#value' => isset($vcache['prescription']) ? $vcache['prescription'] : '',
+                '#error' => isset($vcache['blank']) && in_array('prescription', $vcache['blank']) ? 1 : 0,
+                '#readonly' => isset($readonly) ? TRUE : FALSE
+            ),
+            'submit' => array(
+                '#type' => 'submit',
+                '#value' => isset($readonly) ? __t('back') : __t('send'),
+                '#extra' => ' class="button"'
+            )
+        );
+        return $form;
+   }
+
+   function prescription_submit(){
+       $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+       if(trim($_POST['prescription']) != ''){
+           $thevalue = array();
+           foreach($_POST as $key => $value){
+               if($key != 'id' && $key != 'submit'){
+                   $thevalue[$key] = $this->__reduce_newline($value);
+               }
+           }
+       }
+       if(isset($thevalue)){
+           if(trim($_POST['id']) != ''){
+               $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
+               $sql = $this->query->updateData(
+                       'prescription',
+                       $thevalue,
+                       array(
+                           array('&&', "id=" . $_POST['id'])
+                       )
+               );
+           } else {
+               $thevalue['id'] = $this->__get_id_insert_value('prescription', 'id', $this->query);
+               $thevalue['inputer'] = $_COOKIE[$this->config->cookieid];
+               $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
+               $sql = $this->query->saveData(
+                       'prescription',
+                       $thevalue,
+                       array(
+                           array('&&', "id=" . $_POST['id'])
+                       )
+               );
+           } unset($thevalue);
+           if(isset($sql)){
+               $this->query->connect();
+               $this->query->conn->Execute($sql); unset($sql);
+               $this->query->close();
+           }
+       }
+       redirect_to(DS . 'user' . DS . trim($dump[1]) . DS . 'detail_form' . DS . $_POST['idperiksa']);
+   }
+
 }

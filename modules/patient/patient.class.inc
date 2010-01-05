@@ -1236,6 +1236,7 @@ class patientModule extends mainModule
         $this->sync_scheme('kunjungan', $this->query);
         $this->sync_scheme('asuransi', $this->query);
         $this->sync_scheme('konsul', $this->query);
+        $this->sync_scheme('prescription', $this->query);
         $this->__clean_queue();
         $result = array();
         $result['type'] = 'table';

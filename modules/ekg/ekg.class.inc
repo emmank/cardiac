@@ -105,6 +105,22 @@ class ekgModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['ekg_prescription'] = array(
+            'title' => __t('ekg form') . ' ' . __t('prescription'),
+            'description' => __t("form of ekg") . ' ' . __t('prescription'),
+            'path' => '/user/ekg/prescription',
+            'exec' => 'prescription_form',
+            'weight' => '0',
+            'user_required' => 'ekg'
+        );
+        $items['ekg_prescription_submit'] = array(
+            'title' => __t('ekg form') . ' ' . __t('prescription'),
+            'description' => __t("form of ekg") . ' ' . __t('prescription'),
+            'path' => '/user/ekg/prescription_submit',
+            'exec' => 'prescription_submit',
+            'weight' => '0',
+            'user_required' => 'ekg'
+        );
         return $items;
     }
 
@@ -400,9 +416,7 @@ class ekgModule extends mainModule
                                         }
                                     }
                                 }
-                                if(isset($forbidden)){
-                                    unset($forbidden);
-                                } else {
+                                if(!isset($forbidden)){
                                     $form['ekg']['#addmenu']['#addmenu0'] = array(
                                         'title' => __t('dirujuk ke'),
                                         'action' => '/user/patient/register_form_submit',
@@ -417,8 +431,32 @@ class ekgModule extends mainModule
                                             'strnum' => $query['strnum']
                                         )
                                     );
+                                    $form['ekg']['#addmenu']['#prescription'] = array(
+                                        'title' => __t('prescription'),
+                                        'action' => '/user/ekg/prescription/' . $vcache['id'],
+                                        'position' => 'top',
+                                        'class' => 'button',
+                                        'user_required' => 'ekg',
+                                        'filter' => 'items',
+                                        'items' => array (
+                                            'id' => $vcache['id']
+                                        )
+                                    );
+                                } else {
+                                    unset($forbidden);
                                 }
                             }
+                            $form['ekg']['#addmenu']['#printed'] = array(
+                                'title' => __t('print'),
+                                'action' => '/user/ekg/report',
+                                'position' => 'top',
+                                'class' => 'button',
+                                'user_required' => 'ekg',
+                                'filter' => 'items',
+                                'items' => array (
+                                    'id' => $vcache['id']
+                                )
+                            );
                         } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
@@ -551,6 +589,22 @@ class ekgModule extends mainModule
             '#type' => 'submit',
             '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
+        if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
+            $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'EKG', $vcache['patients']);
+            if(count($getvisit_info) > 0){
+                foreach($getvisit_info as $ky => $vl){
+                    if(is_null($vl['doneby'])){
+                        $forbidden = 0; break;
+                    }
+                }
+            }
+        } else {
+            $forbidden = 0;
+        }
+        if(isset($forbidden)){
+            $form['ekg']['submit']['#extra'] = ' disabled="true"';
+            unset($forbidden);
+        }
         return $form;
     }
 
