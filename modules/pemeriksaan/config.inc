@@ -92,7 +92,21 @@ class pemeriksaanConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'N_P_S' => array(
+            'nadi' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'pernapasan' => array(
+                'type' => 'varchar(100)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'suhu' => array(
                 'type' => 'varchar(100)',
                 'null' => 1,
                 'key' => '',

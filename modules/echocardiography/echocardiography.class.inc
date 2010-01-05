@@ -175,6 +175,14 @@ class echocardiographyModule extends mainModule
             'weight' => 5,
             'user_required' => 'echocardiography'
         );
+        $items['ekg_detail'] = array(
+            'title' => __t('detail ekg'),
+            'description' => __t("detail ekg's patients"),
+            'path' => '/user/ekg/detail_form',
+            'exec' => 'detail_form',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
       return $items;
     }
 
@@ -257,7 +265,36 @@ class echocardiographyModule extends mainModule
         }
         return $result;
     }
-    
+
+    function __get_ekg_data($id){
+        $result = array();
+        $sql = $this->query->getSelect(
+            array(),
+            array('ekg'),
+            array(
+                array('&&', "id=" . $id)
+            )
+        );
+        $this->query->connect();
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows > 0){
+            foreach($query->fields as $key => $value){
+                $result[$key] = $value;
+            }
+        } unset($query);
+        return $result;
+    }
+
+    function detail_form(){
+        $this->formhabit = 'readonly';
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $vcache = $this->__get_ekg_data((int)$dump[3]);
+        $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
+        $result = $this->form();
+        return $result;
+    }
 
     function form(){
         if ($this->__check_caches() === TRUE){
@@ -414,7 +451,7 @@ class echocardiographyModule extends mainModule
 
     function form_submit(){
         $ignoredfields = array(
-            'alamat', 'submit', 'blank', 'id', 'idkunjungan'
+            'alamat', 'submit', 'blank', 'id', 'idkunjungan','nama','umur','no_registrasi'
         );
         $dump = $this->__write_form_cache();
         foreach($dump as $key => $value){
@@ -443,7 +480,7 @@ class echocardiographyModule extends mainModule
         } else {
             $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
         }
-        echo "<pre>";print_r($thevalue);echo "</pre>";
+//        echo "<pre>";print_r($thevalue);echo "</pre>";
         $this->query->connect();
         $sql = $this->query->saveData(
             'echocardiography', $thevalue
