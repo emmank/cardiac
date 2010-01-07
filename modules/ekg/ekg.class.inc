@@ -121,6 +121,14 @@ class ekgModule extends mainModule
             'weight' => '0',
             'user_required' => 'ekg'
         );
+        $items['ekg_storejpgdata'] = array(
+            'title' => __t('ekg store'),
+            'description' => __t("file of ekg"),
+            'path' => '/user/ekg/storethis',
+            'exec' => 'store_jpgdata',
+            'weight' => '0',
+            'user_required' => 'ekg'
+        );
         return $items;
     }
 
@@ -457,6 +465,18 @@ class ekgModule extends mainModule
                                     'id' => $vcache['id']
                                 )
                             );
+                            $checkmyfile = $this->__check_myfile($vcache['id']);
+                            $form['ekg']['#addmenu']['#file'] = array(
+                                'title' => ($checkmyfile !== FALSE ? __t('show') : __t('get')) . ' ' . __t('file'),
+                                'action' => $checkmyfile !== FALSE ? $vcache['file'] : '/user/ekg/storethis',
+                                'position' => 'top',
+                                'class' => 'button',
+                                'user_required' => 'ekg',
+                                'filter' => 'items',
+                                'items' => array (
+                                    'id' => $vcache['id']
+                                )
+                            );
                         } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
@@ -773,6 +793,95 @@ class ekgModule extends mainModule
             }
         }
         return $result;
+    }
+
+    function __check_ekgdir(){
+        $ekgdir = __get_file_lists($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir);
+        if(!in_array(date('Ymd', $this->config->time), $ekgdir)){
+            mkdir($this->config->ekgdata_dir . DS . date('Ymd', $this->config->time), 0700);
+        } unset($ekgdir);
+    }
+
+    function __sync_ekg_data(){
+        //updating data
+        $this->__check_ekgdir();
+        shell_exec('rsync --progress --stats -axvl root@' . $this->config->source_server . ':/' . $this->config->source_path . '/ ' . $this->config->ekgdata_dir . '/' . date('Ymd', $this->config->time) . '/');
+    }
+
+    function __get_datadigital($id){
+        $this->__sync_ekg_data();
+        $getdataarray = __get_file_lists($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir . '/' . date('Ymd', $this->config->time));
+        $arraydata = array();
+        foreach($getdataarray as $key => $value){
+            if(preg_match("/^$id/", $value)){
+                $dump = explode('.', $value);
+                $arraydata[] = $dump[0];
+                unset($dump);
+            }
+        }
+        if(count($arraydata) > 0){
+            rsort($arraydata);
+            $filetarget = $arraydata[0];
+            unset($arraydata);
+            return $filetarget . '.' . $this->config->filedata_extension;
+        } else {
+            return FALSE;
+        }
+    }
+
+    function __check_myfile($id){
+        $sql = $this->query->getSelect(
+                array('file'),
+                array('ekg'),
+                array(
+                    array('&&', "id=" . $id)
+                )
+        );
+        $this->query->connect();
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows < 1){
+            return FALSE;
+        } elseif(is_null($getit->fields['file'])){
+            return FALSE;
+        } elseif(trim($getit->fields['file']) == ''){
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+
+    function store_jpgdata(){
+        $id = $_POST['id'];
+        $sql = $this->query->getSelect(
+                array('patients|strnum as patients'),
+                array('ekg', 'patients'),
+                array(
+                    array('&&', "ekg|id=" . $id),
+                    array('&&', "ekg|patients=patients|id")
+                )
+        );
+        $this->query->connect();
+        $getthis = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getthis->_numOfRows > 0){
+            $filetarget = $this->__get_datadigital($getthis->fields['patients']);
+            if($this->__check_myfile($id) === FALSE && $filetarget !== FALSE){
+                $sql = $this->query->updateData(
+                        'ekg',
+                        array(
+                            'file' => $this->config->ekgdata_dir . DS . date('Ymd', $this->config->time) . DS . $filetarget
+                        ),
+                        array(
+                            array('&&', "id=" . $id)
+                        )
+                );
+                $this->query->connect();
+                $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+            } unset($filetarget);
+        } unset($getthis);
+        redirect_to(DS . 'user' . DS . 'ekg' . DS . 'detail_form' . DS . $id);
     }
 
 }
