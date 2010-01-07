@@ -73,6 +73,7 @@ foreach($data as $key => $value){
             if(!eregi('#', $ke) && $ke != 'data'){
                 if(isset($val['#tbpos']) && $val['#tbpos'] == $i){
 //                    __create_form_items($val);
+
                     if(isset($val['#title']) && $val['#title'] != 'hidden' && $val['#type'] != 'hidden'){
                         $result .= '<label>' . ucwords($val['#title']) . ' :</label>';
                     }
@@ -173,7 +174,7 @@ foreach($data as $key => $value){
                         if(isset($val['#link'])){
                             $result .= '</a>' . "\n";
                         }
-                    }
+                    } 
                     break;
                 }
             }
@@ -195,11 +196,13 @@ foreach($data as $key => $value){
     $result .= '<div id="treadmill1" class="tabcontent">' . "\n";
 //    echo '<pre>'; print_r($value); echo '</pre>';
         foreach($value as $ke => $val){
+//            echo '<pre>'; print_r($val['#type']); echo '</pre>';
             if(!eregi('#', $ke) && $ke != 'data'){
                 if(!isset($val['#tbpos']) && !isset($val['#normal_value']) && $ke != 'submit'){
                     if($ke == 'interpretasi'){
                         $result .= '<br />';
                     }
+                    
                     if(isset($val['#title']) && $val['#title'] != 'hidden' && $val['#type'] != 'hidden'){
                         $result .= '<label for="'. $ke .'" style="width:100px">' . ucwords($val['#title']) . ' :</label>';
                     }
@@ -224,6 +227,7 @@ foreach($data as $key => $value){
                             $result .= '<div>'. ucwords($val['#message']) .'</div>' . "\n";
                         }
                     }
+                    
                     if(in_array($val['#type'], $forminput)){
                         $result .= '<input type="' . $val['#type'] . '" name="' . $ke . '"';
                         if(isset($val['#size'])){
@@ -321,10 +325,51 @@ foreach($data as $key => $value){
                         if(isset($val['#link'])){
                             $result .= '</a>' . "\n";
                         }
+                    } elseif($val['#type'] == 'text'){
+                        
+                        $result .= '<input type="text" name="' . $ke . '[' . $kk . ']" maxlength="' . ($kk > 0 ? 2 : 4) . '"';
+                                if(isset($val['#size'])){
+                                    $result .= ' size="' . ($kk > 0 ? 2 : 4) . '"';
+                                }
+                                if(isset($val['#value'])){
+                                    $result .= ' value="' . $vv . '"';
+                                }
+                                if(isset($val['#style'])){
+                                    $result .= ' style="' . $val['#style'] . '"';
+                                }
+                                if(isset($val['#extra'])){
+                                    $result .= ' ' . $val['#extra'];
+                                }
+                                if($value['#id'] == 'login' && $val['#type'] == 'submit'){
+                                    $result .= ' class="button"';
+                                }
+                                $result .= '>' . "\n";
                     }
+//                    echo '<pre>'; print_r($val); echo '</pre>';
+
 //                break;
                 }
             }
+            if ($val['#type'] == 'text'){
+//                         echo '<pre>'; print_r($val); echo '</pre>';
+                        $result .= '<input type="text" name="' . $ke . '[' . $kk . ']" maxlength="' . ($kk > 0 ? 2 : 4) . '"';
+                                if(isset($val['#size'])){
+                                    $result .= ' size="' . ($kk > 0 ? 2 : 4) . '"';
+                                }
+                                if(isset($val['#value'])){
+                                    $result .= ' value="' . $vv . '"';
+                                }
+                                if(isset($val['#style'])){
+                                    $result .= ' style="' . $val['#style'] . '"';
+                                }
+                                if(isset($val['#extra'])){
+                                    $result .= ' ' . $val['#extra'];
+                                }
+                                if($value['#id'] == 'login' && $val['#type'] == 'submit'){
+                                    $result .= ' class="button"';
+                                }
+                                $result .= '>' . "\n";
+                    }
         }
     $result .= '</div>' . "\n";
     $result .= '<div id="treadmill2" class="tabcontent">' . "\n";

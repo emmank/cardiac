@@ -175,13 +175,13 @@ class echocardiographyModule extends mainModule
             'weight' => 5,
             'user_required' => 'echocardiography'
         );
-        $items['ekg_detail'] = array(
-            'title' => __t('detail ekg'),
-            'description' => __t("detail ekg's patients"),
-            'path' => '/user/ekg/detail_form',
+        $items['echocardiography_detail'] = array(
+            'title' => __t('detail echocardiography'),
+            'description' => __t("detail echocardiography's patients"),
+            'path' => '/user/echocardiography/detail_form',
             'exec' => 'detail_form',
             'weight' => '0',
-            'user_required' => 'users'
+            'user_required' => 'echocardiography'
         );
       return $items;
     }
@@ -266,11 +266,11 @@ class echocardiographyModule extends mainModule
         return $result;
     }
 
-    function __get_ekg_data($id){
+    function __get_echo_data($id){
         $result = array();
         $sql = $this->query->getSelect(
             array(),
-            array('ekg'),
+            array('echocardiography'),
             array(
                 array('&&', "id=" . $id)
             )
@@ -289,7 +289,7 @@ class echocardiographyModule extends mainModule
     function detail_form(){
         $this->formhabit = 'readonly';
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        $vcache = $this->__get_ekg_data((int)$dump[3]);
+        $vcache = $this->__get_echo_data((int)$dump[3]);
         $this->vardump = $this->__write_custom_cache($vcache);
         $this->vardump['readonly'] = $this->formhabit;
         $result = $this->form();
@@ -299,8 +299,8 @@ class echocardiographyModule extends mainModule
     function form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-        } elseif(isset($vascular_id) && !is_null($vascular_id)){
-            $vcache = $this->__get_vascular_data($vascular_id);
+        } elseif(isset($echo_id) && !is_null($echo_id)){
+            $vcache = $this->__get_echo_data($echo_id);
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
 //            echo '<pre>'; print_r($dump); echo '</pre>'; exit();
@@ -427,6 +427,7 @@ class echocardiographyModule extends mainModule
                     $form['echocardiography'][$value]['#cols'] = 95;
                     $form['echocardiography'][$value]['#rows'] = 8;
                     $form['echocardiography'][$value]['#message'] = __t($title);
+                    $form['echocardiography'][$value]['#extra'] = 'readonly="true"';
                 } unset($title);
             } else {
                 foreach($this->fields_alias as $key => $val){
@@ -435,9 +436,11 @@ class echocardiographyModule extends mainModule
                         '#value' => isset($vcache[$key]) ? $vcache[$key] : '',
                         '#title' => $val['alias'] . (isset($val['short']) && $val['short'] != '' ? ' (' . $val['short'] . ')' : ''),
                         '#error' => isset($vcache['blank']) && in_array($key, $vcache['blank']) ? 1 : 0,
-                        '#normal_value' => $val['normal_value']
+                        '#normal_value' => $val['normal_value'],
+                        '#extra' => 'readonly="true"'
                     );
                 }
+//                echo '<pre>'; print_r($form); echo '</pre>';
             }
         }
         $form['echocardiography']['submit'] = array(
