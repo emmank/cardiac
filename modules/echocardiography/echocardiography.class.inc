@@ -149,7 +149,7 @@ class echocardiographyModule extends mainModule
             'path' => '/user/echocardiography/today_patient_lists',
             'exec' => 'today_patient_lists',
             'weight' => 5,
-            'user_required' => 'echocardiography'
+            'user_required' => 'users'
         );
         $items['echocardiography_lists'] = array(
             'title' => __t('echocardiography'),

@@ -55,7 +55,7 @@ class ekgModule extends mainModule
             'path' => '/user/ekg/today_ekg_lists',
             'exec' => '__get_today_lists',
             'weight' => '0',
-            'user_required' => 'ekg'
+            'user_required' => 'users'
         );
         $items['ekg_message'] = array(
             'title' => __t('ekg message'),
