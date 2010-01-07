@@ -78,16 +78,16 @@ class patientModule extends mainModule
 
     function menu(){
         $items['patient_lists'] = array(
-            'title' => __t('Pendaftaran pasien'),
-            'description' => __t('Daftar pasien'),
+            'title' => __t('Pendaftaran Pasien Lama') ,
+            'description' => __t('Daftar pasien lama'),
             'path' => '/node/patient',
             'exec' => 'view',
             'weight' => 5,
             'user_required' => FALSE
         );
         $items['patient_form'] = array(
-            'title' => __t('Formulir Pendaftaran Pasien'),
-            'description' => __t(''),
+            'title' => __t('Pendaftaran pasien baru'),
+            'description' => __t('Daftar Pasien Baru'),
             'path' => '/node/patient/form',
             'exec' => 'form',
             'weight' => 5,
@@ -155,7 +155,7 @@ class patientModule extends mainModule
             'path' => '/user/patient/search',
             'exec' => 'search',
             'weight' => 5,
-            'user_required' => 'users'
+            'user_required' => FALSE
         );
         $items['patient_detail'] = array(
             'title' => __t('Detail Pasien'),
@@ -1399,18 +1399,20 @@ class patientModule extends mainModule
             '#collapsed' => FALSE,
             '#weight' => -3,
             '#action' => '/node/patient/setstrnum',
+            //'#message' => '<br> <font size="3">' . __t('kosongkan bila Anda adalah pasien baru, kemudian klik submit').'</font><br><p>',
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
 //            '#focused_item' => 'strnum'
         );
         $form['patient']['strnum'] = array(
+            
             '#type' => 'text',
             '#title' => __t('strnum'),
             '#size' => 15,
-            '#message' => '&laquo; ' . __t('kosongkan bila Anda adalah pasien baru, kemudian klik submit')
+            
         );
         $form['patient']['submit'] = array(
             '#type' => 'submit',
-            '#value' => __t('submit'),
+            '#value' => __t('Daftar'),
             '#extra' => ' class="button"'
         );
 //        echo '<pre>'; print_r($form); echo '</pre>';
@@ -1447,12 +1449,12 @@ class patientModule extends mainModule
         if($this->__check_caches() === true){
             $vcache = $this->__read_form_cache();
         }
-        if(!isset($vcache['strnum'])){
-            redirect_to('/node/patient/strnumform'); exit;
+//        if(!isset($vcache['strnum'])){
+//            redirect_to('/node/patient/strnumform'); exit;
 //        } else {
 //            if(!isset($vcache['nama'])){$vcache['strnum'] = '';}
 //            elseif(trim($vcache['nama']) == ''){$vcache['strnum'] = '';}
-        }
+//        }
             $form['patient'] = array(
                 '#type' => 'fieldset',
                 '#id' => 'patient',
@@ -1691,6 +1693,7 @@ class patientModule extends mainModule
 //            echo '<pre>'; print_r($form); echo '</pre>';//===add by emmank
             return $form;
     }
+    
 
     function form_submit(){
         $dump = $this->__write_form_cache();
