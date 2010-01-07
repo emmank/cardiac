@@ -35,6 +35,10 @@ class ekgConfig extends config
         'user' => 'root',
         'passwd' => 'emmank'
     );
+    var $ekgdata_dir = '/file/ekgdata';
+    var $source_server = '102.13.31.3';
+    var $source_path = 'home/herman/www/ekg_data/CPT_DATA';
+    var $filedata_extension = 'jpg';
     var $hiddenfields = array(
         'id', 'id_pasien'
     );
@@ -203,6 +207,13 @@ class ekgConfig extends config
             ),
             'q_interval' => array(
                 'type' => 'int(11)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'file' => array(
+                'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
