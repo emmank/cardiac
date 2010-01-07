@@ -177,6 +177,38 @@ class cardioModule extends mainModule
             'weight' => '0',
             'user_required' => 'users'
         );
+        $items['cardio_anak_prescription'] = array(
+            'title' => __t('cardio anak form') . ' ' . __t('prescription'),
+            'description' => __t("form of cardio") . ' ' . __t('prescription'),
+            'path' => '/user/cardio_anak/prescription',
+            'exec' => 'prescription_form',
+            'weight' => '0',
+            'user_required' => 'cardio_anak'
+        );
+        $items['cardio_dewasa_prescription'] = array(
+            'title' => __t('cardio dewasa form') . ' ' . __t('prescription'),
+            'description' => __t("form of cardio") . ' ' . __t('prescription'),
+            'path' => '/user/cardio_dewasa/prescription',
+            'exec' => 'prescription_form',
+            'weight' => '0',
+            'user_required' => 'cardio_dewasa'
+        );
+        $items['cardio_anak_prescription_submit'] = array(
+            'title' => __t('cardio anak form') . ' ' . __t('prescription'),
+            'description' => __t("form of cardio") . ' ' . __t('prescription'),
+            'path' => '/user/cardio_anak/prescription_submit',
+            'exec' => 'prescription_submit',
+            'weight' => '0',
+            'user_required' => 'cardio_anak'
+        );
+        $items['cardio_dewasa_prescription_submit'] = array(
+            'title' => __t('cardio dewasa form') . ' ' . __t('prescription'),
+            'description' => __t("form of cardio") . ' ' . __t('prescription'),
+            'path' => '/user/cardio_dewasa/prescription_submit',
+            'exec' => 'prescription_submit',
+            'weight' => '0',
+            'user_required' => 'cardio_dewasa'
+        );
         return $items;
     }
 
@@ -621,20 +653,45 @@ class cardioModule extends mainModule
                     );
                     if(count($query) > 0){
                         if($this->formhabit == 'readonly'){
-                            $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['#addmenu']['#addmenu0'] = array(
-                                'title' => __t('dirujuk ke'),
-                                'action' => '/user/patient/register_form_submit',
-                                'position' => 'top',
-                                'class' => 'button',
-                                'methode' => 'choose',
-                                'options' => $rujukanopts,
-                                'user_required' => 'cardio_' . ($teens == 0 ? 'dewasa' : 'anak'),
-                                'filter' => 'bagian',
-                                'items' => array (
-                                    'id' => $vcache['patients'],
-                                    'strnum' => $query['strnum']
-                                )
-                            );
+                            if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
+                                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'cardio_' . ($teens == 0 ? 'dewasa' : 'anak'), $vcache['patients']);
+                                if(count($getvisit_info) > 0){
+                                    foreach($getvisit_info as $ky => $vl){
+                                        if(is_null($vl['doneby'])){
+                                            $forbidden = 0; break;
+                                        }
+                                    }
+                                }
+                                if(!isset($forbidden)){
+                                    $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['#addmenu']['#addmenu0'] = array(
+                                        'title' => __t('dirujuk ke'),
+                                        'action' => '/user/patient/register_form_submit',
+                                        'position' => 'top',
+                                        'class' => 'button',
+                                        'methode' => 'choose',
+                                        'options' => $rujukanopts,
+                                        'user_required' => 'cardio_' . ($teens == 0 ? 'dewasa' : 'anak'),
+                                        'filter' => 'bagian',
+                                        'items' => array (
+                                            'id' => $vcache['patients'],
+                                            'strnum' => $query['strnum']
+                                        )
+                                    );
+                                    $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['#addmenu']['#prescription'] = array(
+                                        'title' => __t('prescription'),
+                                        'action' => '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/prescription/' . $vcache['id'],
+                                        'position' => 'top',
+                                        'class' => 'button',
+                                        'user_required' => 'cardio_' . ($teens == 0 ? 'dewasa' : 'anak'),
+                                        'filter' => 'items',
+                                        'items' => array (
+                                            'id' => $vcache['id']
+                                        )
+                                    );
+                                } else {
+                                    unset($forbidden);
+                                }
+                            }
                             $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['#addmenu']['#printed'] = array(
                                 'title' => __t('print'),
                                 'action' => '/user/cardio/report' . ($teens != 0 ? '/1' : ''),
@@ -770,6 +827,24 @@ class cardioModule extends mainModule
             '#type' => 'submit',
             '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
+        if($this->formhabit == 'readonly'){
+            if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
+                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'cardio_' . ($teens == 0 ? 'dewasa' : 'anak'), $vcache['patients']);
+                if(count($getvisit_info) > 0){
+                    foreach($getvisit_info as $ky => $vl){
+                        if(is_null($vl['doneby'])){
+                            $forbidden = 0; break;
+                        }
+                    }
+                }
+            } else {
+                $forbidden = 0;
+            }
+            if(isset($forbidden)){
+                $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['submit']['#extra'] = ' disabled="true"';
+                unset($forbidden);
+            }
+        }
         return $form;
     }
 
