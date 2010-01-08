@@ -56,7 +56,7 @@ $main_module = new mainModule();
 //echo '<pre>'; print_r($_COOKIE[$configs->cookiesession]); echo '</pre>';
 
 $user = array();
-$forminput = array('text', 'hidden', 'submit', 'radio', 'checkbox', 'password');
+$forminput = array('text', 'hidden', 'submit', 'radio', 'checkbox', 'password', 'file');
 $formtextarea = array('textarea');
 $formselect = array('select');
 

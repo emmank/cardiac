@@ -477,6 +477,25 @@ class ekgModule extends mainModule
                                     'id' => $vcache['id']
                                 )
                             );
+                            if($checkmyfile === FALSE){
+                                $form['ekg']['#addmenu']['#uploadfile'] = array(
+                                    'title' => __t('upload'),
+                                    'action' => '/user/ekg/storethis',
+                                    'extraform' => 'enctype="multipart/form-data"',
+                                    'position' => 'top',
+                                    'class' => 'button',
+                                    'user_required' => 'ekg',
+                                    'filter' => 'items',
+                                    'items' => array (
+                                        'id' => $vcache['id'],
+                                        'MAX_FILE_SIZE' => 80000,
+                                        'filedigital' => array(
+                                            'type' => 'file',
+                                            'value' => ''
+                                        )
+                                    )
+                                );
+                            } unset($checkmyfile);
                         } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
@@ -798,7 +817,7 @@ class ekgModule extends mainModule
     function __check_ekgdir(){
         $ekgdir = __get_file_lists($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir);
         if(!in_array(date('Ymd', $this->config->time), $ekgdir)){
-            mkdir($this->config->ekgdata_dir . DS . date('Ymd', $this->config->time), 0700);
+            mkdir($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir . DS . date('Ymd', $this->config->time), 0700);
         } unset($ekgdir);
     }
 
@@ -851,6 +870,15 @@ class ekgModule extends mainModule
         }
     }
 
+    function __store_uploadedfile(){
+        $this->__check_ekgdir();
+        if (move_uploaded_file($_FILES['filedigital']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir . DS . date('Ymd', $this->config->time) . DS . basename($_FILES['filedigital']['name']))) {
+            return basename($_FILES['filedigital']['name']);
+        } else {
+            return FALSE;
+        }
+    }
+
     function store_jpgdata(){
         $id = $_POST['id'];
         $sql = $this->query->getSelect(
@@ -865,7 +893,11 @@ class ekgModule extends mainModule
         $getthis = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($getthis->_numOfRows > 0){
-            $filetarget = $this->__get_datadigital($getthis->fields['patients']);
+            if(!isset($_FILES)){
+                $filetarget = $this->__get_datadigital($getthis->fields['patients']);
+            } else {
+                $filetarget = $this->__store_uploadedfile();
+            }
             if($this->__check_myfile($id) === FALSE && $filetarget !== FALSE){
                 $sql = $this->query->updateData(
                         'ekg',
