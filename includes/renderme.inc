@@ -103,13 +103,18 @@ function __create_add_menu($data){
                     '#title' => 'hidden',
                     '#action' => $data[$ky]['action']
                 );
+                if(isset($data[$ky]['extraform'])){
+                    $valadd['add']['#extraform'] = $data[$ky]['extraform'];
+                }
                 if(isset($data[$ky]['items'])){
                     if(is_array($data[$ky]['items'])){
                         foreach($data[$ky]['items'] as $kk => $vv){
-                            $valadd['add'][$kk] = array(
-                                '#type' => 'hidden',
-                                '#value' => $vv
-                            );
+                            if($kk != 'extraform') {
+                                $valadd['add'][$kk] = array(
+                                    '#type' => is_array($vv) ? $vv['type'] : 'hidden',
+                                    '#value' => is_array($vv) ? $vv['value'] : $vv
+                                );
+                            }
                         }
                     }
                 }
@@ -128,6 +133,7 @@ function __create_add_menu($data){
                     );
                 }
                 $result .= '<td align="' . ($i < 1 ? 'left' : 'right') . '">';
+//                echo '<pre>'; print_r($valadd); echo '</pre>'; //exit();
                 $result .= __create_form($valadd);
                 $result .= '</td>';
                 $i++; unset($valadd);
@@ -142,10 +148,12 @@ function __create_add_menu($data){
             if(isset($data['items'])){
                 if(is_array($data['items'])){
                     foreach($data['items'] as $kk => $vv){
-                        $valadd['add'][$kk] = array(
-                            '#type' => 'hidden',
-                            '#value' => $vv
-                        );
+                        if($kk != 'extraform') {
+                            $valadd['add'][$kk] = array(
+                                '#type' => is_array($vv) ? $vv['type'] : 'hidden',
+                                '#value' => is_array($vv) ? $vv['value'] : $vv
+                            );
+                        }
                     }
                 }
             }
@@ -580,7 +588,7 @@ function __create_form_items($data, $iditem=NULL, $classitem=NULL){
     return $result;
 }
 
-function __create_form_open($data, $name, $idform=NULL, $classform=NULL){
+function __create_form_open($data, $name, $idform=NULL, $classform=NULL, $extra=NULL){
 //    echo "Id form :" . $data['#id'];
     $result = '';
     if(isset($data['#focused_item'])){
@@ -589,7 +597,7 @@ function __create_form_open($data, $name, $idform=NULL, $classform=NULL){
     if(isset($data['#error']) && $data['#error'] !== FALSE){
         $result .= '<div class="error">' . $data['#error'] . '</div><br /><br />' . "\n";
     }
-    $result .= '<form action="' . $data['#action'] . '" method="POST" name="' . $name . '"';
+    $result .= '<form action="' . $data['#action'] . '"' . (isset($data['#extraform']) ? ' ' . $data['#extraform'] : '') . ' method="POST" name="' . $name . '"';
 
     if(isset($idform) && !is_null($idform)){
         $result .= ' id="' . $idform . '"';
@@ -641,7 +649,7 @@ function __create_form_close(){
     return $result;
 }
 
-function __create_form($dataform, $idform=NULL, $classform=NULL, $iditem=NULL, $classitem=NULL){
+function __create_form($dataform, $idform=NULL, $classform=NULL, $iditem=NULL, $classitem=NULL, $extra=NULL){
     global $forminput, $formtextarea, $formselect;
 //    echo '<pre>'; print_r($dataform); echo '</pre>';
     $result = '';
@@ -657,7 +665,7 @@ function __create_form($dataform, $idform=NULL, $classform=NULL, $iditem=NULL, $
         if(isset($value['#addmenu'])){
             $result .= __create_add_menu($value['#addmenu']);
         }
-        $result .= __create_form_open($formhead, $key, $idform, $classform); unset($formhead);
+        $result .= __create_form_open($formhead, $key, $idform, $classform, $extra); unset($formhead);
         $result .= __create_form_items($created, $iditem, $classitem); unset($created);
         $result .= __create_form_close();
     } unset($created);
