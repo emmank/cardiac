@@ -58,7 +58,7 @@ foreach($data as $key => $value){
         }
     }
     ksort($gettbpos);
-    //echo '<pre>'; print_r($gettbpos); echo '</pre>';
+//    echo '<pre>'; print_r($value); echo '</pre>';
     foreach($gettbpos as $ky => $vl){
         if((int)$ky < 1 || (int)$ky % 5 == 0){
             $result .= '<div id="kolom">' . "\n";

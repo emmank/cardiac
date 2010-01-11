@@ -45,6 +45,7 @@ function __t($string){
         )
     );
     $systemquery->connect();
+//    $systemquery->conn->debug=true;
     $result = $systemquery->conn->Execute($sql); unset($sql);
     $systemquery->close();
     if($result->_numOfRows > 0 && trim($result->fields[$lang]) != ''){

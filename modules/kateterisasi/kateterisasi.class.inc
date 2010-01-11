@@ -377,7 +377,7 @@ class kateterisasiModule extends mainModule
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
-                    $query = $this->__get_patient_data($vcache['patients'], array('nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah'));
+                    $query = $this->__get_patient_data($vcache['patients'], array('nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah','strnum'));
                     if(count($query) > 0){
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
@@ -390,7 +390,7 @@ class kateterisasiModule extends mainModule
 //                                    '#tbpos' => 3
 //                                );
                             } else {
-                                if($ky != 'kota' && $ky != 'propinsi'){
+                                if($ky != 'kota' && $ky != 'propinsi' && $ky != 'strnum'){
                                     if($ky == 'alamat'){
                                         $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
                                         $tbpos = 4;
@@ -417,6 +417,7 @@ class kateterisasiModule extends mainModule
                                         $form['kateterisasi'][$ky]['#rows'] = '3';
                                     } elseif($ky == 'no_registrasi'){
                                         $form['kateterisasi'][$ky]['#link'] = '/user/kateterisasi/today_patient_lists';
+                                        $form['kateterisasi'][$ky]['#value'] = $query['strnum'];
                                     }
                                     unset($tbpos);
                                 }

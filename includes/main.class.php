@@ -1018,7 +1018,7 @@ class mainModule
                 $gpatient = $this->__get_patient_data($query->fields['patients']);
                 if(count($gpatient) > 0){
                     $result['data'][$i] = $query->fields;
-                    $result['data'][$i]['nomor'] = ucwords($gpatient['nomor']);
+                    $result['data'][$i]['nomor'] = ucwords($gpatient['strnum']);
                     $result['data'][$i]['patients'] = ucwords($gpatient['nama']);
                     $age = $this->agecount_in_month(strtotime($gpatient['tgl_lahir']));
                     $result['data'][$i]['age'] = floor($age / 12); unset($age);

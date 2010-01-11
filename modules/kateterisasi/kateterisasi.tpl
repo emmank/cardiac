@@ -133,8 +133,9 @@ foreach($data as $key => $value){
                     if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
                         $result .= $lv['#theref'][$lv['#value']];
                     } else {
+//                        echo "<pre>";print_r($lv);echo "</pre>";
                         $result .= '<select name="' . $yk . '" size="1">';
-                         $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
+                        $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
                         foreach($lv['#theref'] as $kk => $vv){
                             $result .= '<option value="' . $kk . '"' . (isset($lv['#value']) && $lv['#value'] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>';
                         }

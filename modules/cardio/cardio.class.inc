@@ -411,6 +411,12 @@ class cardioModule extends mainModule
                 'align' => 'right'
             ),
             array(
+                'field' => 'strnum',
+                'caption' => __t('No. RM'),
+                'width' => '10%',
+                'align' => 'left'
+            ),
+            array(
                 'field' => 'nama',
                 'caption' => __t('nama'),
                 'align' => 'left'
@@ -445,7 +451,7 @@ class cardioModule extends mainModule
         if($getit->_numOfRows > 0){
             for($i=0; $i<$getit->_numOfRows; $i++){
                 $sql = $this->query->getSelect(
-                    array('id', 'nama', 'tgl_lahir', 'inputtime'),
+                    array('id', 'nama', 'tgl_lahir', 'inputtime','strnum'),
                     array('patients'),
                     array(
                         array('&&', "id=" . $getit->fields['patients'])
@@ -454,6 +460,7 @@ class cardioModule extends mainModule
                 $this->query->connect();
                 $getthis = $this->query->conn->Execute($sql); unset($sql);
                 $this->query->close();
+                $result['data'][$i]['strnum'] = $getthis->fields['strnum'];
                 $result['data'][$i]['nama'] = $getthis->fields['nama'];
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
                 $result['data'][$i]['goto'] = '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/detail_form/' . $getit->fields['id'];
@@ -552,6 +559,8 @@ class cardioModule extends mainModule
                 redirect_to('/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/today_cardio_lists');
             } unset($dump);
         }
+//        echo '<pre>'; print_r($vcache); echo '</pre>';
+        
         $this->query->connect();
         $sql = $this->query->getSelect(
             array('patients', 'inputer'),
@@ -566,6 +575,18 @@ class cardioModule extends mainModule
         if(!isset($vcache['patients'])){
             $vcache['patients'] = $query->fields['patients']; unset($query);
         }
+//        $sql = $this->query->getSelect(
+//                array('strnum'),
+//                array('patients'),
+//                array(
+//                    array('&&', "id=" . $vcache['patients']),
+//                )
+//            );
+//        $this->query->connect();
+//        $getstrnum = $this->query->conn->Execute($sql); unset($sql);
+//        $this->query->close();
+//        $norm = $getstrnum->fields['strnum'];
+//        echo '<pre>'; print_r($norm); echo '</pre>';
         $addmenuopts = array(
             '' => __t('-- medical record --'),
             'all' => __t('semua')
@@ -574,6 +595,7 @@ class cardioModule extends mainModule
             '' => __t('-- dirujuk ke --')
         );
         $dump_addmenus = $this->__get_bagian_lists();
+//        echo '<pre>'; print_r($vcache); echo '</pre>';
         foreach($dump_addmenus as $key => $value){
             $rujukanopts[$key] = $value;
             $sql = $this->query->getSelect(
@@ -588,6 +610,7 @@ class cardioModule extends mainModule
             $this->query->connect();
             $getit = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
+            
             if($getit->_numOfRows > 0){
                 $addmenuopts[$key] = $value;
             } unset($getit);
@@ -651,6 +674,7 @@ class cardioModule extends mainModule
                             'strnum'
                         )
                     );
+//                    echo '<pre>'; print_r($query); echo '</pre>';
                     if(count($query) > 0){
                         if($this->formhabit == 'readonly'){
                             if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
@@ -729,12 +753,21 @@ class cardioModule extends mainModule
                                     } elseif($ky == 'gol_darah'){
                                         $tbpos = 5;
                                     }
+//                                    echo '<pre>'; print_r($query); echo '</pre>';
                                     $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')][$ky] = array(
                                         '#type' => $ky == 'alamat' ? 'textarea' : 'info',
                                         '#value' => $vl,
                                         '#title' => __t($ky),
                                         '#tbpos' => $tbpos
                                     );
+                                    if ($ky=='no_registrasi'){
+                                        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')][$ky] = array(
+                                            '#type' => $ky == 'alamat' ? 'textarea' : 'info',
+                                            '#value' => $query['strnum'],
+                                            '#title' => __t($ky),
+                                            '#tbpos' => $tbpos
+                                        );
+                                    }
                                     if($ky == 'alamat'){
                                         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')][$ky]['#extra'] = 'readonly="true"';
                                         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')][$ky]['#cols'] = '55';
@@ -746,6 +779,7 @@ class cardioModule extends mainModule
                                 }
                             }
                         }
+//                        echo '<pre>'; print_r($form); echo '</pre>';
                         $sql = $this->query->getSelect(
                             array('pukul'),
                             array('kunjungan'),
@@ -845,6 +879,7 @@ class cardioModule extends mainModule
                 unset($forbidden);
             }
         }
+        
         return $form;
     }
 

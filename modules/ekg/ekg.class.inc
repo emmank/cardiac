@@ -646,6 +646,7 @@ class ekgModule extends mainModule
             unset($forbidden);
         }
         }
+//        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
     }
 

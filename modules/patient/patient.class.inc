@@ -306,6 +306,12 @@ class patientModule extends mainModule
                 'align' => 'right'
             ),
             array(
+                'field' => 'norm',
+                'caption' => __t('No. RM'),
+                'width' => '10%',
+                'align' => 'left'
+            ),
+            array(
                 'field' => 'nama',
                 'caption' => __t('nama'),
                 'width' => '25%',
@@ -326,7 +332,7 @@ class patientModule extends mainModule
 
        
         $sql = $this->query->getSelect(
-            array('id', 'nama', 'tgl_lahir', 'alamat', 'nourut', 'kota'),
+            array('id', 'nama', 'tgl_lahir', 'alamat', 'nourut', 'kota','strnum'),
             array('antrian'),
             array(
                 array('&&', "year(pukul)=" . date('Y', $this->config->time)),
@@ -345,6 +351,7 @@ class patientModule extends mainModule
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getit->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
                 $result['data'][$i]['goto'] = '/user/patient/register_form/' . $getit->fields['id'];
                 $result['data'][$i]['nourut'] = $getit->fields['nourut'];
+                $result['data'][$i]['norm'] = $getit->fields['strnum'];
                 $sql = $this->query->getSelect(
                     array('kabupaten'),
                     array('kabupaten'),
@@ -1275,6 +1282,12 @@ class patientModule extends mainModule
                 'align' => 'right'
             ),
             array(
+                'field' => 'norm',
+                'caption' => __t('No. RM'),
+                'width' => '10%',
+                'align' => 'left'
+            ),
+            array(
                 'field' => 'nama',
                 'caption' => __t('nama'),
                 'width' => '25%',
@@ -1294,7 +1307,7 @@ class patientModule extends mainModule
         );
 
         $sql = $this->query->getSelect(
-            array('id', 'nama', 'tgl_lahir', 'alamat', 'kota', 'nourut'),
+            array('id', 'nama', 'tgl_lahir', 'alamat', 'kota', 'nourut','strnum'),
             array('antrian'),
             array(
                 array('&&', "year(pukul)=" . date('Y', $this->config->time)),
@@ -1313,6 +1326,7 @@ class patientModule extends mainModule
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getit->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
                 $result['data'][$i]['goto'] = '/node/patient/showme/' . $getit->fields['id'];
                 $result['data'][$i]['nourut'] = $getit->fields['nourut'];
+                $result['data'][$i]['norm'] = $getit->fields['strnum'];
                 $sql = $this->query->getSelect(
                     array('kabupaten'),
                     array('kabupaten'),

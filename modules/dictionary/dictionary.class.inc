@@ -343,7 +343,7 @@ class dictionaryModule extends mainModule
                 array('strkey'),
                 array('translations'),
                 array(
-                    array('&&', "strkey like '" . strtolower($value) . "%'")
+                    array('&&', "strkey like '%" . strtolower($value) . "%'")
                 )
             );
             $this->sysquery->connect();

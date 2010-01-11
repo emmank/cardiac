@@ -247,7 +247,7 @@ class echocardiographyModule extends mainModule
         if($getit->_numOfRows > 0){
             for($i=0; $i<$getit->_numOfRows; $i++){
                 $sql = $this->query->getSelect(
-                    array('id', 'nama', 'tgl_lahir', 'inputtime'),
+                    array('id', 'nama', 'tgl_lahir', 'inputtime','strnum'),
                     array('patients'),
                     array(
                         array('&&', "id=" . $getit->fields['patients'])

@@ -58,6 +58,7 @@ class ekgConfig extends config
         'segmen_st_elevasi' => 'select2',
         'gelombang_t' => 'radio',
         'q_interval' => 'select',
+        'kesan' => 'textarea',
         'inputer' => 'hidden',
         'inputtime' => 'hedden',
         'updated' => 'hedden'
@@ -213,6 +214,13 @@ class ekgConfig extends config
                 'extra' => ''
             ),
             'file' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'kesan' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',

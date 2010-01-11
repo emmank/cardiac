@@ -201,6 +201,18 @@ foreach($data as $key => $value){
                         $result .= '</select>' . "\n";
                         $result .= '</td>';
                     }
+//                    echo '<pre>'; print_r($value['kesan']); echo '</pre>';
+                    if($lv['#type'] == 'textarea' && (!isset($lv['#readonly']) || $lv['#readonly'] !== TRUE)){
+                        $result .= '<td align="left">' . "\n";
+                        $result .= __t('pada sandapan') . "\n";
+                        $result .= '<select name="' . $yk . '[1]" size="1">';
+                        $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
+                        foreach($lv['#theref'] as $kk => $vv){
+                            $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][1]) && $lv['#value'][1] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
+                        }
+                        $result .= '</select>' . "\n";
+                        $result .= '</td>';
+                    }
                 }
                 $result .= '</tr>' . "\n";
                 $cnt++;

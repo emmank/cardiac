@@ -86,13 +86,6 @@ class presentStatusConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'tension' => array(
-                'type' => 'varchar(100)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
             'catched' => array(
                 'type' => 'datetime',
                 'null' => 1,
