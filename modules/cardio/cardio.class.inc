@@ -845,6 +845,7 @@ class cardioModule extends mainModule
 //        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['anusrectum'] = $this->__loadAnusrectum();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['punggung'] = $this->__loadPunggung();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['extermitas'] = $this->__loadExtermitas();
+        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['diagnosa'] = $this->__loadDiagnosa();
 
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['submit'] = array(
             '#type' => 'submit',
@@ -883,6 +884,19 @@ class cardioModule extends mainModule
             }
         } else {
             return $this->hearth_exec->cardio_menu();
+        }
+    }
+    function __loadDiagnosa($exec=NULL){
+        $this->__include_module('diagnosa');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->diagnosa_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->diagnosa_exec->cardio_submit();
+            }
+        } else {
+            return $this->diagnosa_exec->cardio_menu();
         }
     }
 
@@ -1137,6 +1151,7 @@ class cardioModule extends mainModule
 //        $this->__loadAnusrectum('submit');
         $this->__loadPunggung('submit');
         $this->__loadExtermitas('submit');
+        $this->__loadDiagnosa('submit');
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',

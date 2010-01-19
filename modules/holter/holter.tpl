@@ -109,13 +109,14 @@ foreach($data as $key => $value){
                         }
                     } else {
                         if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
-                            $result .= $lv['#value'][0] . ' ' . __t('per menit') . ' ' . str_repeat('&nbsp;', 15) . __t('waktu') . ' ' . $lv['#value'][1][0] . ':' . $lv['#value'][1][1] . "\n";
+//                            echo "<pre>Value : ";print_r($lv['#value']);echo "</pre>";
+                            $result .= $lv['#value'][0] . ' ' . __t('per menit') . ' ' . str_repeat('&nbsp;', 15) . __t('waktu') . ' ' . $lv['#value'][1][0] . ':' . $lv['#value'][2] . "\n";
                         } else {
                             $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '[0]" size="' . (isset($lv['#size']) ? $lv['#size']: '5') . '"' . (is_array($lv['#value']) && isset($lv['#value'][0]) ? ' value="' . $lv['#value'][0] . '"' : '') . '>' . "\n";
                             $result .= ' ' . __t('per menit') . ' ' . str_repeat('&nbsp;', 15) . __t('waktu') . ' ' . "\n";
-                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '[1][0]" size="2"' . (is_array($lv['#value']) && isset($lv['#value'][1][0]) ? ' value="' . $lv['#value'][1][0] . '"' : '') . '>' . "\n";
+                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '[1]" size="2"' . (is_array($lv['#value']) && isset($lv['#value'][1][0]) ? ' value="' . $lv['#value'][1][0] . '"' : '') . '>' . "\n";
                             $result .= ':' . "\n";
-                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '[1][1]" size="2"' . (is_array($lv['#value']) && isset($lv['#value'][1][1]) ? ' value="' . $lv['#value'][1][1] . '"' : '') . '>' . "\n";
+                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '[2]" size="2"' . (is_array($lv['#value']) && isset($lv['#value'][1][1]) ? ' value="' . $lv['#value'][1][1] . '"' : '') . '>' . "\n";
                         }
                     }
                     $result .= '</td>' . "\n";

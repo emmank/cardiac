@@ -1024,14 +1024,14 @@ others reference form for punggung	Formulir referensi lainnya
 pada sandapan	Pada Sandapan
 page	halaman
 page message	Halaman pesan
-palpasi_ginjal	Palpasi ginjal
-palpasi_hepar	Palpasi hati
+palpasi_ginjal	Ginjal
+palpasi_hepar	hati
 palpasi_hepar_derajat_pembesaran	Derajat pembesaran
 palpasi_hepar_konsistensi	Konsistensi
 palpasi_hepar_nyeri_tekan	Nyeri tekan
 palpasi_hepar_permukaan	Permukaan
 palpasi_hepar_tepi	Tepi
-palpasi_liver	Palpasi liver
+palpasi_liver	Limpa
 palpasi_liver_derajat_pembesaran	Derajat pembesaran
 palpasi_liver_konsistensi	Konsistensi
 palpasi_liver_nyeri_tekan	Nyeri tekan
@@ -1091,7 +1091,7 @@ perempuan	Perempuan
 peristaltik_usus	Peristaltik usus
 peristaltik_usus reference detail for abdomen	Detil referensi peristaltik usus
 peristaltik_usus reference form for abdomen	Formulir referensi peristaltik usus
-perkusi	Perkusi
+perkusi	Perkusi abdomen
 perkusi reference detail for abdomen	Detil referensi perkusi
 perkusi reference form for abdomen	Formulir referensi perkusi
 pernafasan	Pernafasan

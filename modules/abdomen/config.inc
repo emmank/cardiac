@@ -103,7 +103,7 @@ class abdomenConfig extends config
         'inspeksi_ginjal' => array('ref_abdomen_inspeksi_ginjal', 'inspeksi_ginjal'),
         'perkusi' => array('ref_abdomen_perkusi', 'perkusi'),
         'auscultation' => array('ref_abdomen_auscultation', 'auscultation'),
-        'peristaltik_usus' => array('ref_abdomen_peistaltik_usus', 'peristaltik_usus')
+        'peristaltik_usus' => array('ref_abdomen_peristaltik_usus', 'peristaltik_usus')
     );
     var $table_scheme = array(
         'abdomen' => array(
@@ -233,21 +233,7 @@ class abdomenConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inspeksi_ginjal' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
             'perkusi' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'auscultation' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',

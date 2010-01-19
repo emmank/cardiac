@@ -117,7 +117,7 @@ foreach($vl['datafields'] as $yk => $lv){
             }
         }
         $result .= '</td>' . "\n";
-        $cnt++;
+//        $cnt++;
         if($cnt > 1){
             $cnt = 0;
             $result .= '</tr>' . "\n";
