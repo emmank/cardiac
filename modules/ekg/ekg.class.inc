@@ -66,7 +66,7 @@ class ekgModule extends mainModule
             'user_required' => 'ekg'
         );
         $items['ekg_lists'] = array(
-            'title' => __t('ekg lists'),
+            'title' => __t('Formulir EKG'),
             'description' => __t('get ekg lists'),
             'path' => '/user/ekg/lists',
             'exec' => 'lists',
@@ -306,7 +306,7 @@ class ekgModule extends mainModule
                     $ekg_id = preg_replace('/^edit_/','',$dump[3]);
                     $vcache = $this->__get_ekg_data((int)$ekg_id);
                     $this->vardump = $vcache;
-                    unset($cardio_id);
+                    unset($ekg_id);
 //                    redirect_to('/user/ekg/view');
                 } else {
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
@@ -362,6 +362,7 @@ class ekgModule extends mainModule
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
+            '#extraform' => 'enctype="multipart/form-data"',
             '#action' => '/user/ekg/' . ($this->formhabit == 'readonly' ? 'form/edit_' . $vcache['id'] : 'form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'ekg' . DS . 'ekg.tpl',
@@ -466,6 +467,7 @@ class ekgModule extends mainModule
                                 )
                             );
                             $checkmyfile = $this->__check_myfile($vcache['id']);
+//                            echo "<pre>vcache File : ";print_r($vcache['file']);echo "</pre>";
                             $form['ekg']['#addmenu']['#file'] = array(
                                 'title' => ($checkmyfile !== FALSE ? __t('show') : __t('get')) . ' ' . __t('file'),
                                 'action' => $checkmyfile !== FALSE ? $vcache['file'] : '/user/ekg/storethis',
@@ -477,7 +479,11 @@ class ekgModule extends mainModule
                                     'id' => $vcache['id']
                                 )
                             );
-                            if($checkmyfile === FALSE){
+
+//                            echo "<pre>Show File : ";print_r($form['ekg']['#addmenu']['#file']);echo "</pre>";
+                            if($checkmyfile !== FALSE){
+                                $form['ekg']['#addmenu']['#file']['extraform']='target="_blank"';
+                            } else {
                                 $form['ekg']['#addmenu']['#uploadfile'] = array(
                                     'title' => __t('upload'),
                                     'action' => '/user/ekg/storethis',
@@ -585,7 +591,7 @@ class ekgModule extends mainModule
                         unset($getsender);
                     }
                 }
-                if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
+                if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients' && $value != 'file'){
                     $form['ekg'][$value] = array(
                         '#type' => $this->config->fields_form_type[$value],
                         '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
@@ -624,29 +630,38 @@ class ekgModule extends mainModule
             }
         }
 
+        if($this->formhabit != 'readonly'){
+            $form['ekg']['MAX_FILE_SIZE'] = array(
+                '#type' => 'hidden',
+                '#value' => '80000'
+            );
+            $form['ekg']['filedigital'] = array(
+                '#title' => __t('upload file'),
+                '#type' => 'file'
+            );
+        }
         $form['ekg']['submit'] = array(
             '#type' => 'submit',
             '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
         if ($this->formhabit == 'readonly'){
-        if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
-            $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'EKG', $vcache['patients']);
-            if(count($getvisit_info) > 0){
-                foreach($getvisit_info as $ky => $vl){
-                    if(is_null($vl['doneby'])){
-                        $forbidden = 0; break;
+            if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
+                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'EKG', $vcache['patients']);
+                if(count($getvisit_info) > 0){
+                    foreach($getvisit_info as $ky => $vl){
+                        if(is_null($vl['doneby'])){
+                            $forbidden = 0; break;
+                        }
                     }
                 }
+            } else {
+                $forbidden = 0;
             }
-        } else {
-            $forbidden = 0;
+            if(isset($forbidden)){
+                $form['ekg']['submit']['#extra'] = ' disabled="true"';
+                unset($forbidden);
+            }
         }
-        if(isset($forbidden)){
-            $form['ekg']['submit']['#extra'] = ' disabled="true"';
-            unset($forbidden);
-        }
-        }
-//        echo '<pre>'; print_r($form); echo '</pre>';
         return $form;
     }
 
@@ -710,6 +725,7 @@ class ekgModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
+//        echo "<pre>";print_r($thevalue);echo "</pre>";
         $this->__exec_db_ops(
             $this->query,
             'ekg',
@@ -730,10 +746,11 @@ class ekgModule extends mainModule
                 )
             );
             $this->query->connect();
-            $this->query->conn->Execute($sql); unset($sql);
+//            $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
         $this->__flush_caches();
+        $this->store_jpgdata($iddata, 1);
         redirect_to('/user/ekg/detail_form/' . $iddata);
     }
 
@@ -824,11 +841,11 @@ class ekgModule extends mainModule
         } unset($ekgdir);
     }
 
-    function __sync_ekg_data(){
-        //updating data
-        $this->__check_ekgdir();
-        shell_exec('rsync --progress --stats -axvl root@' . $this->config->source_server . ':/' . $this->config->source_path . '/ ' . $this->config->ekgdata_dir . '/' . date('Ymd', $this->config->time) . '/');
-    }
+//    function __sync_ekg_data(){
+//        //updating data
+//        $this->__check_ekgdir();
+//        shell_exec('rsync --progress --stats -axvl root@' . $this->config->source_server . ':/' . $this->config->source_path . '/ ' . $this->config->ekgdata_dir . '/' . date('Ymd', $this->config->time) . '/');
+//    }
 
     function __get_datadigital($id){
         $this->__sync_ekg_data();
@@ -875,15 +892,23 @@ class ekgModule extends mainModule
 
     function __store_uploadedfile(){
         $this->__check_ekgdir();
+//        $_FILES['filedigital']['tmp_name'];
         if (move_uploaded_file($_FILES['filedigital']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir . DS . date('Ymd', $this->config->time) . DS . basename($_FILES['filedigital']['name']))) {
             return basename($_FILES['filedigital']['name']);
         } else {
             return FALSE;
         }
+        
     }
 
-    function store_jpgdata(){
-        $id = $_POST['id'];
+    function store_jpgdata($storeid = NULL, $free = NULL){
+        if(is_null($storeid)){
+            if(isset($_POST['id'])){
+                $id = $_POST['id'];
+            }
+        } else {
+            $id = $storeid;
+        }
         $sql = $this->query->getSelect(
                 array('patients|strnum as patients'),
                 array('ekg', 'patients'),
@@ -893,6 +918,7 @@ class ekgModule extends mainModule
                 )
         );
         $this->query->connect();
+        $this->query->conn->debug=true;
         $getthis = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($getthis->_numOfRows > 0){
@@ -901,6 +927,15 @@ class ekgModule extends mainModule
             } else {
                 $filetarget = $this->__store_uploadedfile();
             }
+//            echo "<pre>file target : ";print_r($_FILES);echo "</pre>";
+//            if ($_FILES["file"]["error"] > 0){
+//                  echo "Error: " . $_FILES["filedigital"]["error"] . "<br />";
+//            } else {
+//                  echo "Upload: " . $_FILES["filedigital"]["name"] . "<br />";
+//                  echo "Type: " . $_FILES["filedigital"]["type"] . "<br />";
+//                  echo "Size: " . ($_FILES["filedigital"]["size"] / 1024) . " Kb<br />";
+//                  echo "Stored in: " . $_FILES["filedigital"]["tmp_name"];
+//            }
             if($this->__check_myfile($id) === FALSE && $filetarget !== FALSE){
                 $sql = $this->query->updateData(
                         'ekg',
@@ -916,7 +951,9 @@ class ekgModule extends mainModule
                 $this->query->close();
             } unset($filetarget);
         } unset($getthis);
-        redirect_to(DS . 'user' . DS . 'ekg' . DS . 'detail_form' . DS . $id);
+        if(is_null($free)){
+            redirect_to(DS . 'user' . DS . 'ekg' . DS . 'detail_form' . DS . $id);
+        }
     }
 
 }

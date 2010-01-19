@@ -42,14 +42,14 @@ class headfaceConfig extends config
         'id' => 'hidden',
         'expression' => 'select',
         'hair' => 'select',
-        'inspections' => 'checkbox'
+        'hair_inspections' => 'checkbox'
     );
     
     var $fieldsisarray = array(
-        'inspections','hair','expression'
+        'hair_inspections','hair','expression'
     );
     var $reftable = array(
-        'inspections' => array('ref_headface_inspections','inspections'),
+        'hair_inspections' => array('ref_headface_inspections','inspections'),
         'hair' => array('ref_headface_hair', 'hair'),
         'expression' => array('ref_headface_expression', 'expression')
     );
@@ -76,7 +76,7 @@ class headfaceConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inspections' => array(
+            'hair_inspections' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',

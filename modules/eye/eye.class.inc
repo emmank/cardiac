@@ -1687,6 +1687,8 @@ class eyeModule extends mainModule
             }
             $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
+//        echo '<pre>menu'; print_r($result); echo '</pre>';
+        unset($vcache);
         return $result;
     }
 
@@ -1694,13 +1696,9 @@ class eyeModule extends mainModule
         $thefields = $this->__get_data_fields('eye', $this->query);
         foreach($this->config->free_val as $key => $value){
             if(in_array($key, $thefields)){
-                if($key == 'inspections'){
-                    if(count($value) > 0){
-                        $value = implode(',', $value);
-                    }
-                }
                 $thevalue[$key] = $value;
             }
+            
         } unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
@@ -1710,6 +1708,7 @@ class eyeModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
+//        echo '<pre>eye: '; print_r($thevalue); echo '</pre>';
         $this->__exec_db_ops(
             $this->query,
             'eye',

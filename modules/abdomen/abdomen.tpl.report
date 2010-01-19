@@ -36,7 +36,7 @@ foreach($vl['datafields'] as $yk => $lv){
             $result .= $lv['theref'][$lv['value']] . "\n";
         } elseif($lv['type'] == 'checkbox'){
             if (count($lv['theref'])>0) {
-                $lv['value'] = explode(',', $lv['value']);
+                $lv['value'] = explode('|', $lv['value']);
                 foreach($lv['value'] as $vv){
                     if(isset($koma)){$result .= ', ';}
                     $result .= $lv['theref'][$vv]; $koma = 1;

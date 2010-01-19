@@ -73,6 +73,13 @@ class latihanConfig extends config
         'puncak_denyut_jantung' => array('ref_ekg_denyut_jantung', 'denyut_jantung'),
         'tekanan_darah' => array('ref_threadKesimpulanSaran_tekananDarah', 'tekananDarah'),
     );
+    var $qrs_complex = array(
+        'qrs_axis', 'qrs_durasi', 'qrs_konfigurasi_patologi', 'qrs_konfigurasi_r_s'
+    );
+    var $segment_st = array(
+        'segmen_st_depresi', 'segmen_st_elevasi','segmen_st_konfigurasi'
+    );
+
     var $urutanform = array(
         'A' => array(
             'protokol' => 'protokol'

@@ -136,22 +136,26 @@ class latihanModule extends mainModule
              if(preg_match('/^latihan_/', $key) || $key == 'id'){
                 $key = trim(preg_replace('/^latihan_/', '', $key));
                 if(in_array($key, $thefields)){
-                    if($key == 'tekanan_darah'){
-                        if($value[0] != '2' && $value[0] != '3'){
-                            unset($value[1], $value[2], $value[3], $value[4]);
-                        } elseif($value[0] == '2'){
-                            unset($value[3], $value[4]);
-                        } else {
-                            unset($value[1], $value[2]);
-                        }
-                    }
-                    if(is_array($value)){
-                        $value = implode('|', $value);
-                    }
+    //                    if($key == 'tekanan_darah'){
+    //                        if($value[0] != '2' && $value[0] != '3'){
+    //                            unset($value[1], $value[2], $value[3], $value[4]);
+    //                        } elseif($value[0] == '2'){
+    //                            unset($value[3], $value[4]);
+    //                        } else {
+    //                            unset($value[1], $value[2]);
+    //                        }
+    //                    }
+    //                    if(is_array($value)){
+    //                        $value = implode('|', $value);
+    //                    }
                     $thevalue[$key] = $value;
                 }
             }
-       } unset($thefields);
+        }
+//        echo '<pre>key latihan : '; print_r($key); echo '</pre>';
+//        echo '<pre>the fields latihan : '; print_r($thefields); echo '</pre>';
+//        echo '<pre>Thevalue latihan : '; print_r($thevalue); echo '</pre>';
+        unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $opr = 'update';

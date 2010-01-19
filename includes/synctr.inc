@@ -188,6 +188,7 @@ default	Default
 default-smarty	Default-smarty
 delete group	Hapus grup
 delete user	Hapus pengguna
+denyut jantung reference form for fekg	Formulir referensi denyut jantung untuk FEKG
 denyut_jantung	Denyut Jantung
 denyut_jantung reference detail for fekg	Detil referensi denyut jantung
 denyut_jantung reference form for fekg	Formulir referensi denyut jantung
@@ -755,10 +756,6 @@ intencity	Intensitas
 intencity reference detail for hearth	Detil referensi intensitas
 intencity reference form for hearth	Formulir referensi intensitas
 interval_pr	Interval PR
-irama nadi	Irama nadi
-irama reference detail for fekg	Detil referensi irama
-irama reference form for fekg	Formulir referensi irama
-irama_dasar	Irama Dasar
 intervensi	Intervensi
 irama nadi	Irama nadi
 irama reference detail for fekg	Detil referensi irama
@@ -1010,7 +1007,7 @@ no_registrasi	No. register
 no_tlp	No. Telp.
 nusa tenggara barat	Nusa Tenggara Barat
 nusa tenggara timur	Nusa Tenggara Timur
-nutrient	Nutrisi
+nutrient	Gizi
 nutrient detail	Detil nutrisi
 nutrient drop	Hapus Nutrisi
 nutrient edit	Edit nutrisi
@@ -1317,9 +1314,9 @@ searching certain words in system's dictionary	Pencarian kalimat tertentu dalam 
 searching patient in database	Cari pasien dalam database
 searching words to traslate	Pencarian kalimat untuk diterjemahkan
 segala kegiatan dalam layanan rawat inap pasien	Segala kegiatan dalam layanan rawat inap pasien
+segment_st	Segment ST
 segment_st_depresi	Depresi
 segment_st_elevasi	Elevasi
-segment_st	Segment ST
 segmen_st_depresi	Depresi
 segmen_st_elevasi	Elevasi
 selamat datang di cardiac center	Selamat Datang di Cardiac Center

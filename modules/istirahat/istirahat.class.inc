@@ -123,20 +123,30 @@ class istirahatModule extends mainModule
         $thefields = $this->__get_data_fields('istirahat', $this->query);
         foreach($this->config->free_val as $key => $value){
             if(preg_match('/^istirahat_/', $key) || $key == 'id'){
+//                echo '<pre>Key before : '; print_r($key); echo '</pre>';
+
                 $key = trim(preg_replace('/^istirahat_/', '', $key));
+//                echo '<pre>Key after :'; print_r($key); echo '</pre>';
+//                echo '<pre>the fields :'; print_r($thefields); echo '</pre>';
+
                 if(in_array($key, $thefields)){
-                    if($key == 'gelombang_t'){
-                        if($value[0] != 'Inverted'){
-                            unset($value[1]);
-                        }
-                    }
-                    if(is_array($value)){
-                        $value = implode('|', $value);
-                    }
+//                    if($key == 'gelombang_t'){
+//                        if($value[0] != 'Inverted'){
+//                            unset($value[1]);
+//                        }
+//                    }
+//                    if(is_array($value)){
+//                        $value = implode('|', $value);
+//                    }
                     $thevalue[$key] = $value;
                 }
+//                echo '<pre>the value : '; print_r($thevalue); echo '</pre>';
             }
-        } unset($thefields);
+        } 
+//        echo '<pre>Key after :'; print_r($key); echo '</pre>';
+//        echo '<pre>the fields :'; print_r($thefields); echo '</pre>';
+//        echo '<pre>the value : '; print_r($thevalue); echo '</pre>';
+        unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $opr = 'update';

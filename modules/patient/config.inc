@@ -37,7 +37,14 @@ class patientConfig extends config
     );
     var $digit_of_number = 5;
     var $cara_berkunjung_opts = array(
-        'sendiri', 'konsul', 'pilih dokter', 'kasus polisi'
+        'sendiri',
+        'konsul',
+        'pilih dokter',
+        'dokter praktek',
+        'Puskesmas',
+        'RS. Swasta',
+        'RS. Umum Daerah',
+        'kasus polisi',
     );
     var $cara_bayar_opts = array(
         'tunai', 'asuransi'

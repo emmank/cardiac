@@ -41,15 +41,15 @@ class extermitasConfig extends config
 
     var $typeoffields = array(
         'id' => 'hidden',
-        'inspections' => 'checkbox'
+        'extermitas_inspections' => 'checkbox'
 
     );
 
     var $fieldsisarray = array(
-        'inspections'
+        'extermitas_inspections'
     );
     var $reftable = array(
-        'inspections' => array('ref_extermitas_inspections','inspections')
+        'extermitas_inspections' => array('ref_extermitas_inspections','inspections')
     );
     var $table_scheme = array(
         'extermitas' => array(
@@ -60,7 +60,7 @@ class extermitasConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inspections' => array(
+            'extermitas_inspections' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',

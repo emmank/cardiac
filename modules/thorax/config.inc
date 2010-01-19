@@ -41,16 +41,16 @@ class thoraxConfig extends config
 
     var $typeoffields = array(
         'id' => 'hidden',
-        'inspections' => 'checkbox',
+        'thorax_inspections' => 'checkbox',
         'relief' => 'select'
 
     );
 
     var $fieldsisarray = array(
-        'inspections','relief'
+        'thorax_inspections','relief'
     );
     var $reftable = array(
-        'inspections' => array('ref_thorax_inspections','inspections'),
+        'thorax_inspections' => array('ref_thorax_inspections','inspections'),
         'relief' => array('ref_thorax_relief','relief')
     );
     var $table_scheme = array(
@@ -62,7 +62,7 @@ class thoraxConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inspections' => array(
+            'thorax_inspections' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',

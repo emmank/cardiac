@@ -106,7 +106,11 @@ class kesimpulanModule extends mainModule
                     $thevalue[$key] = $value;
                 }
             }
-        } unset($thefields);
+        }
+//        echo '<pre>key recovery :'; print_r($key); echo '</pre>';
+//        echo '<pre>the fields recovery :'; print_r($thefields); echo '</pre>';
+//        echo '<pre>Thevalue recovery :'; print_r($thevalue); echo '</pre>';
+        unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $opr = 'update';

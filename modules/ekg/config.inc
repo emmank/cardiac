@@ -36,8 +36,8 @@ class ekgConfig extends config
         'passwd' => 'emmank'
     );
     var $ekgdata_dir = '/file/ekgdata';
-    var $source_server = '102.13.31.3';
-    var $source_path = 'home/herman/www/ekg_data/CPT_DATA';
+    var $source_server = '192.168.1.46';
+    var $source_path = 'home/herman/www/ekg_data';
     var $filedata_extension = 'jpg';
     var $hiddenfields = array(
         'id', 'id_pasien'
@@ -59,6 +59,7 @@ class ekgConfig extends config
         'gelombang_t' => 'radio',
         'q_interval' => 'select',
         'kesan' => 'textarea',
+        'uploader' => 'hidden',
         'inputer' => 'hidden',
         'inputtime' => 'hedden',
         'updated' => 'hedden'
@@ -235,6 +236,13 @@ class ekgConfig extends config
                 'extra' => ''
             ),
             'inputer' => array(
+                'type' => 'int(11)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'uploader' => array(
                 'type' => 'int(11)',
                 'null' => 0,
                 'key' => '',

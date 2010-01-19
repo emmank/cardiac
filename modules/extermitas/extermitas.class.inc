@@ -364,11 +364,6 @@ class extermitasModule extends mainModule
         $thefields = $this->__get_data_fields('extermitas', $this->query);
         foreach($this->config->free_val as $key => $value){
             if(in_array($key, $thefields)){
-                if($key == 'inspections'){
-                    if(count($value) > 0){
-                        $value = implode(',', $value);
-                    }
-                }
                 $thevalue[$key] = $value;
             }
         } unset($thefields);
@@ -380,6 +375,7 @@ class extermitasModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
+//        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->__exec_db_ops(
             $this->query,
             'extermitas',

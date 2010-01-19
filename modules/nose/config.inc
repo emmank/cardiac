@@ -41,13 +41,13 @@ class noseConfig extends config
 
     var $typeoffields = array(
         'id' => 'hidden',
-        'inspections' => 'checkbox'
+        'nose_inspections' => 'checkbox'
     );
     var $fieldsisarray = array(
-        'inspections'
+        'nose_inspections'
     );
     var $reftable = array(
-        'inspections' => array('ref_nose_inspections', 'inspections')
+        'nose_inspections' => array('ref_nose_inspections', 'inspections')
 
         //'ilness_history' => array('ref_present_illness_history', 'illness_history')
     );
@@ -61,7 +61,7 @@ class noseConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inspections' => array(
+            'nose_inspections' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',

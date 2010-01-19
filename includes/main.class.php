@@ -651,13 +651,16 @@ class mainModule
             )
         );
         $this->sysquery->connect();
+        
         $getit = $this->sysquery->conn->Execute($sql); unset($sql);
+//        $this->sysquery->conn->debug=true;
         $this->sysquery->close();
         if($getit->_numOfRows > 0){
             return TRUE;
         } else {
             return FALSE;
         }
+//        echo "<pre>check_cache ";print_r($result);echo "</pre>";
     }
 
     function __read_form_cache(){
@@ -689,8 +692,10 @@ class mainModule
                 }
             }
         } unset($handle);
+//        echo "<pre>read_from_cache ";print_r($result);echo "</pre>";
         $this->__flush_caches();
         return $result;
+//        echo "<pre>read_from_cache after flush ";print_r($result);echo "</pre>";
     }
 
     function __flush_caches($all = NULL){
@@ -703,6 +708,7 @@ class mainModule
             $this->sysquery->close();
         } else {
             $this->__delete_cache($_COOKIE[$this->config->cookiesession]);
+//            echo "<pre>flush cache ";print_r($all);echo "</pre>";
         }
     }
 
@@ -733,6 +739,7 @@ class mainModule
                 $getit->MoveNext();
             }
         }
+//        echo "<pre>get_cache_list ";print_r($result);echo "</pre>";
         return $result;
     }
 
@@ -762,6 +769,7 @@ class mainModule
         } else {
             $this->__flush_caches(1);
         }
+        unset ($getit);
     }
 
     function agecount_in_month($birthdate){
@@ -959,7 +967,7 @@ class mainModule
                 array('&&', "doneby is null")
             ),
             'pukul'
-        ); unset($idbagian);
+        ); //unset($idbagian);
         $query = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
         if($query->_numOfRows < 1){
@@ -978,7 +986,7 @@ class mainModule
             $getit = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
             if($getit->_numOfRows > 0){
-                $pesan = __t('habis mi pasien kodong... !');
+                $pesan = __t('Tidak ada lagi pasien yang mengantri..');
             } else {
                 $pesan = __t('tidak ada pasien hari ini !');
             }
@@ -1026,9 +1034,112 @@ class mainModule
                     $result['data'][$i]['goto'] = '/user/' . $bagian . '/form/' . $query->fields['id'];
                 } unset($gpatient);
                 $query->MoveNext();
+            } unset($query,$bagian);
+        } //unset($query);
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+    function today_patient_lists_ekg(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $bagian = trim($dump[1]);
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('antrian');
+        $result['description'] = __t('Daftar Antrian Pasien');
+//        $result['addmenu']['#add'] = array(
+//            'title' => __t('view'),
+//            'action' => '/user/' . $bagian . '/lists',
+//            'position' => 'top',
+//            'user_required' => 'users'
+//        );
+//        $result['addmenu']['#search'] = array(
+//            'title' => __t('search'),
+//            'action' => '/user/' . $bagian . '/search',
+//            'position' => 'top',
+//            'user_required' => 'users'
+//        );
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('kunjungan'),
+            array(
+                array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                array('&&', "day(pukul)=" . date('j', $this->config->time)),
+                array('&&', "bagian=" . $bagian),
+                array('&&', "doneby is null")
+            ),
+            'pukul'
+        ); //unset($idbagian);
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows < 1){
+            $sql = $this->query->getSelect(
+                    array('id'),
+                    array('kunjungan'),
+                    array(
+                        array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                        array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                        array('&&', "day(pukul)=" . date('j', $this->config->time)),
+                        array('&&', "bagian=" . $bagian),
+                        array('&&', "doneby is not null")
+                    )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $pesan = __t('Tidak ada lagi pasien yang mengantri..');
+            } else {
+                $pesan = __t('tidak ada pasien hari ini !');
             }
-        } unset($query);
-//        echo '<pre>'; print_r($result); echo '</pre>'; exit();
+            $result['addmessage'] = array(
+                array(
+                    'position' => 'bottom',
+                    'message' => $pesan
+                )
+            ); unset($pesan);
+        } else {
+                $result['header'] = array(
+                    array(
+                        'field' => 'none',
+                        'caption' => __t('no'),
+                        'width' => '5%',
+                        'align' => 'right'
+                    ),
+                    array(
+                        'field' => 'nomor',
+                        'caption' => __t('Nomor Register'),
+                        'width' => '15%',
+                        'align' => 'center'
+                    ),
+                    array(
+                        'field' => 'patients',
+                        'caption' => __t('Nama'),
+                        'align' => 'left'
+                    ),
+                    array(
+                        'field' =>'nourut',
+                        'caption' => __t('No Urut'),
+                        'width' => '15%',
+                        'align' => 'center'
+                    )
+                );
+            for($i=0; $i<$query->_numOfRows; $i++){
+                $gpatient = $this->__get_patient_data($query->fields['patients']);
+                if(count($gpatient) > 0){
+                    $result['data'][$i] = $query->fields;
+                    $result['data'][$i]['nomor'] = ucwords($gpatient['strnum']);
+                    $result['data'][$i]['patients'] = ucwords($gpatient['nama']);
+                    $age = $this->agecount_in_month(strtotime($gpatient['tgl_lahir']));
+                    $result['data'][$i]['age'] = floor($age / 12); unset($age);
+                    $result['data'][$i]['nourut'] = ucwords($query->fields['nourut']);
+                    $result['data'][$i]['goto'] = '/user/ekgupload/form/' . $query->fields['id'];
+                } unset($gpatient);
+                $query->MoveNext();
+            } unset($query,$bagian);
+        } //unset($query);
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 

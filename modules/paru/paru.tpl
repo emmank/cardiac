@@ -38,9 +38,9 @@ foreach($vl['datafields'] as $yk => $lv){
                 $result .= $lv['theref'][$lv['value']] . "\n";
             } else {
                 $result .= '<select name="' . $yk . '" size="' . $lv['size']. '">' . "\n";
-                if(isset($lv['blankopt'])){
-                    $result .= '<option value=""></option>';
-                }
+//                if(isset($lv['blankopt'])){
+                    $result .= '<option value="-">-</option>';
+//                }
                 foreach($lv['theref'] as $kc => $isi){
                     $result .= '<option value="' . $kc . '"' . (isset($lv['value']) && $lv['value'] == $kc ? ' selected=selected' : '') . '>' . $isi . '</option>' . "\n";
                 }
@@ -48,7 +48,7 @@ foreach($vl['datafields'] as $yk => $lv){
             }
         } elseif($lv['type'] == 'checkbox'){
             if (count($lv['theref'])>0) {
-                $lv['value'] = explode(',', $lv['value']);
+                $lv['value'] = explode('|', $lv['value']);
                 if($lv['readonly'] === true){
                     foreach($lv['value'] as $vv){
                         if(isset($koma)){$result .= ', ';}

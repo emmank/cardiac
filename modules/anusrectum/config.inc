@@ -41,14 +41,14 @@ class anusrectumConfig extends config
 
     var $typeoffields = array(
         'id' => 'hidden',
-        'inspections' => 'checkbox',
+        'anus_inspections' => 'checkbox',
         'rectal_touche' => 'checkbox'
     );
     var $fieldsisarray = array(
-        'inspections','rectal_touche'
+        'anus_inspections','rectal_touche'
     );
     var $reftable = array(
-        'inspections' => array('ref_anusrectum_inspections', 'inspections'),
+        'anus_inspections' => array('ref_anusrectum_inspections', 'inspections'),
         'rectal_touche' => array('ref_anusrectum_rectal_touche', 'rectal_touche')
 
         //'ilness_history' => array('ref_present_illness_history', 'illness_history')
@@ -62,7 +62,7 @@ class anusrectumConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inspections' => array(
+            'anus_inspections' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',

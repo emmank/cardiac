@@ -149,13 +149,21 @@ class echocardiographyModule extends mainModule
             'path' => '/user/echocardiography/today_patient_lists',
             'exec' => 'today_patient_lists',
             'weight' => 5,
-            'user_required' => 'users'
+            'user_required' => 'echocardiography'
         );
         $items['echocardiography_lists'] = array(
             'title' => __t('echocardiography'),
             'description' => __t('explore echocardiography'),
             'path' => '/user/echocardiography/lists',
             'exec' => 'lists',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['echocardiography_detail'] = array(
+            'title' => __t('detail echocardiography'),
+            'description' => __t("detail echo cardiography patients"),
+            'path' => '/user/echocardiography/detail_form',
+            'exec' => 'detail_form',
             'weight' => '0',
             'user_required' => 'users'
         );
@@ -173,14 +181,6 @@ class echocardiographyModule extends mainModule
             'path' => '/user/echocardiography/form_submit',
             'exec' => 'form_submit',
             'weight' => 5,
-            'user_required' => 'echocardiography'
-        );
-        $items['echocardiography_detail'] = array(
-            'title' => __t('detail echocardiography'),
-            'description' => __t("detail echocardiography's patients"),
-            'path' => '/user/echocardiography/detail_form',
-            'exec' => 'detail_form',
-            'weight' => '0',
             'user_required' => 'echocardiography'
         );
       return $items;
@@ -247,7 +247,7 @@ class echocardiographyModule extends mainModule
         if($getit->_numOfRows > 0){
             for($i=0; $i<$getit->_numOfRows; $i++){
                 $sql = $this->query->getSelect(
-                    array('id', 'nama', 'tgl_lahir', 'inputtime','strnum'),
+                    array('id', 'nama', 'tgl_lahir', 'inputtime'),
                     array('patients'),
                     array(
                         array('&&', "id=" . $getit->fields['patients'])
@@ -292,15 +292,17 @@ class echocardiographyModule extends mainModule
         $vcache = $this->__get_echo_data((int)$dump[3]);
         $this->vardump = $this->__write_custom_cache($vcache);
         $this->vardump['readonly'] = $this->formhabit;
+//        echo '<pre>'; print_r($this->vardump); echo '</pre>';
         $result = $this->form();
         return $result;
     }
+    
 
     function form(){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
-        } elseif(isset($echo_id) && !is_null($echo_id)){
-            $vcache = $this->__get_echo_data($echo_id);
+        } elseif(isset($vascular_id) && !is_null($vascular_id)){
+            $vcache = $this->__get_vascular_data($vascular_id);
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
 //            echo '<pre>'; print_r($dump); echo '</pre>'; exit();
@@ -427,7 +429,6 @@ class echocardiographyModule extends mainModule
                     $form['echocardiography'][$value]['#cols'] = 95;
                     $form['echocardiography'][$value]['#rows'] = 8;
                     $form['echocardiography'][$value]['#message'] = __t($title);
-                    $form['echocardiography'][$value]['#extra'] = 'readonly="true"';
                 } unset($title);
             } else {
                 foreach($this->fields_alias as $key => $val){
@@ -436,11 +437,9 @@ class echocardiographyModule extends mainModule
                         '#value' => isset($vcache[$key]) ? $vcache[$key] : '',
                         '#title' => $val['alias'] . (isset($val['short']) && $val['short'] != '' ? ' (' . $val['short'] . ')' : ''),
                         '#error' => isset($vcache['blank']) && in_array($key, $vcache['blank']) ? 1 : 0,
-                        '#normal_value' => $val['normal_value'],
-                        '#extra' => 'readonly="true"'
+                        '#normal_value' => $val['normal_value']
                     );
                 }
-//                echo '<pre>'; print_r($form); echo '</pre>';
             }
         }
         $form['echocardiography']['submit'] = array(
@@ -454,7 +453,7 @@ class echocardiographyModule extends mainModule
 
     function form_submit(){
         $ignoredfields = array(
-            'alamat', 'submit', 'blank', 'id', 'idkunjungan','nama','umur','no_registrasi'
+            'alamat', 'submit', 'blank', 'id', 'idkunjungan', 'no_registrasi','nama','umur',
         );
         $dump = $this->__write_form_cache();
         foreach($dump as $key => $value){
@@ -488,6 +487,7 @@ class echocardiographyModule extends mainModule
         $sql = $this->query->saveData(
             'echocardiography', $thevalue
         );
+//        $this->query->conn->debug=true;
         $this->query->conn->Execute($sql); unset($sql);
         $sql = $this->query->getSelect(
             array('nama'),

@@ -41,7 +41,7 @@ class mouthConfig extends config
 
     var $typeoffields = array(
         'id' => 'hidden',
-        'inspections' => 'checkbox',
+        'mouth_inspections' => 'checkbox',
         'lips' => 'select',
         'gums' => 'select',
         'tongue' => 'select'
@@ -49,10 +49,10 @@ class mouthConfig extends config
     );
 
     var $fieldsisarray = array(
-        'inspections','lips','gums','tongue'
+        'mouth_inspections','lips','gums','tongue'
     );
     var $reftable = array(
-        'inspections' => array('ref_mouth_inspections','inspections'),
+        'mouth_inspections' => array('ref_mouth_inspections','inspections'),
         'lips' => array('ref_mouth_lips', 'lips'),
         'gums' => array('ref_mouth_gums', 'gums'),
         'tongue' => array('ref_mouth_tongue', 'tongue')
@@ -66,7 +66,7 @@ class mouthConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inspections' => array(
+            'mouth_inspections' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',

@@ -898,6 +898,7 @@ class vitalSignModule extends mainModule
             if(in_array($key, $thefields)){
                 $thevalue[$key] = $value;
             }
+            
         } unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
@@ -907,6 +908,7 @@ class vitalSignModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
+//        echo '<pre>'; print_r($thevalue); echo '</pre>';
         $this->__exec_db_ops(
             $this->query,
             'vital_sign',

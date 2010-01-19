@@ -1169,11 +1169,13 @@ class presentStatusModule extends mainModule
         $patientsdata = array();
         foreach($this->config->free_val as $key => $value){
             if(in_array($key, $thefields)){
+//                echo '<pre>'; print_r($value); echo '</pre>';
                 if($key == 'catched'){
+                    $value = explode('|',$value);
                     $value = $value[0] . '-' . $value[1] . '-' . $value[2] . ' ' . $value[3] . ':' . $value[4] . ':' . $value[5];
                 } elseif($key == 'risk_factor' || $key == 'ilness_history'){
                     if(count($value) > 0){
-                        $value = implode(',', $value);
+//                        $value = implode(',', $value);
                     }
                 }
                 $thevalue[$key] = $value;
@@ -1184,6 +1186,7 @@ class presentStatusModule extends mainModule
                         }
                     }
                 }
+//                echo '<pre>'; print_r($thevalue); echo '</pre>';
             }
         } unset($thefields, $patient_fields);
         if($_POST['id'] != ''){
@@ -1202,6 +1205,7 @@ class presentStatusModule extends mainModule
             $thevalue
         );
         unset($opr, $strid, $thevalue);
+//        echo '<pre>'; print_r($patientdata); echo '</pre>';
         $this->__exec_db_ops(
             $this->query,
             'patients',

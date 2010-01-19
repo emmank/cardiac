@@ -41,15 +41,20 @@ class neckConfig extends config
 
     var $typeoffields = array(
         'id' => 'hidden',
-        'inspections' => 'checkbox'
+        'kelenjar_gondok' => 'select',
+        'kelenjar_getah_bening' => 'select',
+        'tumor' => 'select',
+        'trakea' => 'select2',
+        'DVS' => 'text',
+        'kaku_kuduk' => 'select2',
 
     );
 
     var $fieldsisarray = array(
-        'inspections'
+//        'inspections'
     );
     var $reftable = array(
-        'inspections' => array('ref_neck_inspections','inspections')
+//        'inspections' => array('ref_neck_inspections','inspections')
     );
     var $table_scheme = array(
         'neck' => array(
@@ -60,13 +65,48 @@ class neckConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
-            'inspections' => array(
+            'kelenjar_gondok' => array(
                 'type' => 'varchar(255)',
                 'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''
-            )
+            ),
+            'kelenjar_getah_bening' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'tumor' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'trakea' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'DVS' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'kaku_kuduk' => array(
+                'type' => 'varchar(255)',
+                'null' => 1,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
         )
     );
 }

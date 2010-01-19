@@ -47,7 +47,7 @@ foreach($vl['datafields'] as $yk => $lv){
                 $result .= '</select>' . "\n";
             }
         } elseif($lv['type'] == 'checkbox'){
-            $lv['value'] = explode(',', $lv['value']);
+            $lv['value'] = explode('|', $lv['value']);
             if($lv['readonly'] === true){
                 foreach($lv['value'] as $vv){
                     if(isset($koma)){$result .= ', ';}

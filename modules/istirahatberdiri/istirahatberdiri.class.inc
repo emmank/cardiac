@@ -124,19 +124,25 @@ class istirahatberdiriModule extends mainModule
         foreach($this->config->free_val as $key => $value){
              if(preg_match('/^istirahatberdiri_/', $key) || $key == 'id'){
                 $key = trim(preg_replace('/^istirahatberdiri_/', '', $key));
+                
                 if(in_array($key, $thefields)){
-                    if($key == 'gelombang_t'){
-                        if($value[0] != 'Inverted'){
-                            unset($value[1]);
-                        }
-                    }
-                    if(is_array($value)){
-                        $value = implode('|', $value);
-                    }
+//                    if($key == 'gelombang_t'){
+//                        if($value[0] != 'Inverted'){
+//                            unset($value[1]);
+//                        }
+//                    }
+//                    if(is_array($value)){
+//                        $value = implode('|', $value);
+//                    }
                     $thevalue[$key] = $value;
                 }
+                ;
             }
-       } unset($thefields);
+        }
+//        echo '<pre>key berdiri :'; print_r($key); echo '</pre>';
+//        echo '<pre>the fields berdiri :'; print_r($thefields); echo '</pre>';
+//        echo '<pre>Thevalue berdiri'; print_r($thevalue); echo '</pre>';
+        unset($thefields);
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $opr = 'update';

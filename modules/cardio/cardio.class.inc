@@ -510,6 +510,7 @@ class cardioModule extends mainModule
                 }
             }
         }
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -575,18 +576,6 @@ class cardioModule extends mainModule
         if(!isset($vcache['patients'])){
             $vcache['patients'] = $query->fields['patients']; unset($query);
         }
-//        $sql = $this->query->getSelect(
-//                array('strnum'),
-//                array('patients'),
-//                array(
-//                    array('&&', "id=" . $vcache['patients']),
-//                )
-//            );
-//        $this->query->connect();
-//        $getstrnum = $this->query->conn->Execute($sql); unset($sql);
-//        $this->query->close();
-//        $norm = $getstrnum->fields['strnum'];
-//        echo '<pre>'; print_r($norm); echo '</pre>';
         $addmenuopts = array(
             '' => __t('-- medical record --'),
             'all' => __t('semua')
@@ -694,7 +683,7 @@ class cardioModule extends mainModule
                                         'class' => 'button',
                                         'methode' => 'choose',
                                         'options' => $rujukanopts,
-                                        'user_required' => 'cardio_' . ($teens == 0 ? 'dewasa' : 'anak'),
+                                        'user_required' => 'kardio ' . ($teens == 0 ? 'dewasa' : 'anak'),
                                         'filter' => 'bagian',
                                         'items' => array (
                                             'id' => $vcache['patients'],
@@ -706,7 +695,7 @@ class cardioModule extends mainModule
                                         'action' => '/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/prescription/' . $vcache['id'],
                                         'position' => 'top',
                                         'class' => 'button',
-                                        'user_required' => 'cardio_' . ($teens == 0 ? 'dewasa' : 'anak'),
+                                        'user_required' => 'kardio ' . ($teens == 0 ? 'dewasa' : 'anak'),
                                         'filter' => 'items',
                                         'items' => array (
                                             'id' => $vcache['id']
@@ -721,7 +710,7 @@ class cardioModule extends mainModule
                                 'action' => '/user/cardio/report' . ($teens != 0 ? '/1' : ''),
                                 'position' => 'top',
                                 'class' => 'button',
-                                'user_required' => 'cardio_' . ($teens == 0 ? 'dewasa' : 'anak'),
+                                'user_required' => 'kardio ' . ($teens == 0 ? 'dewasa' : 'anak'),
                                 'filter' => 'items',
                                 'items' => array (
                                     'id' => $vcache['id']
@@ -853,7 +842,7 @@ class cardioModule extends mainModule
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['paru'] = $this->__loadParu();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['hearth'] = $this->__loadHearth();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['abdomen'] = $this->__loadAbdomen();
-        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['anusrectum'] = $this->__loadAnusrectum();
+//        $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['anusrectum'] = $this->__loadAnusrectum();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['punggung'] = $this->__loadPunggung();
         $form['cardio_' . ($teens == 0 ? 'dewasa' : 'anak')]['tab_items']['extermitas'] = $this->__loadExtermitas();
 
@@ -1145,7 +1134,7 @@ class cardioModule extends mainModule
         $this->__loadParu('submit');
         $this->__loadHearth('submit');
         $this->__loadAbdomen('submit');
-        $this->__loadAnusrectum('submit');
+//        $this->__loadAnusrectum('submit');
         $this->__loadPunggung('submit');
         $this->__loadExtermitas('submit');
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
@@ -1162,6 +1151,7 @@ class cardioModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
+        $this->__flush_caches();
         redirect_to('/user/cardio_' . ($teens == 0 ? 'dewasa' : 'anak') . '/view');
     }
 

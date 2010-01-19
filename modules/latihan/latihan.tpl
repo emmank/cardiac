@@ -23,6 +23,7 @@
  */
 $result .= '<div id="fisis' . $ke . '" class="tabcontent">' . "\n";
 //$result .= $vl['datafields']['Fase Latihan']['title'];
+//echo '<pre>'; print_r($vl); echo '</pre>';
 $result .= '<table width=100% class="table" border="0">' . "\n";
 foreach($vl['datafields'] as $yk => $lv){
     $result .= '<tr valign="top">' . "\n";
@@ -52,7 +53,9 @@ foreach($vl['datafields'] as $yk => $lv){
                             if(isset($uu['readonly']) && $uu['readonly'] !== FALSE){
                                 $result .= $uu['theref'][$uu['value'][0]] . "\n";
                             } else {
+//                                echo '<pre>'; print_r($ee); echo '</pre>';
                                 $result .= '<select name="' . $ky . '_' . $ee . '[0]" size="1">' . "\n";
+                                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
                                 foreach($uu['theref'] as $ey => $al){
                                     $result .= '<option name="' . $ey . '"' . (isset($uu['value'][0]) && $uu['value'][0] == $ey ? ' selected' : '') . '>' . __t($al) . '</option>' . "\n";
                                 }
@@ -113,7 +116,9 @@ foreach($vl['datafields'] as $yk => $lv){
                         $result .= "\n";
                     } else {
                         if($ll['type'] == 'select'){
+//                            echo '<pre>'; print_r($yy); echo '</pre>';
                             $result .= '<select name="' . $ky . '_' . $yy . '[0]" size="1">' . "\n";
+                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
                             foreach($ll['theref'] as $ee => $uu){
                                 $result .= '<option value="' . $ee . '"' . (isset($ll['value'][0]) && $ll['value'][0] == $ee ? ' selected' : '') . '>' . __t($uu) . '</option>' . "\n";
                             }
@@ -157,12 +162,15 @@ foreach($vl['datafields'] as $yk => $lv){
             } else {
                 $result .= '<div>' . "\n";
                 if($vv['type'] == 'text'){
-                    $result .= '<input type="text" name="' .   $ky . '_' . $kk . ($kk == 'protokol' ? '[0]' : '') . '" size="' . (isset($vv['size']) ? $vv['size'] : 20) . '">';
+                    $result .= '<input type="text" name="' .   $ky . '_' . $kk . ($kk == 'protokol' ? '[0]' : '') . '" size="' . (isset($vv['size']) ? $vv['size'] : 20) . '" value="Bruce">';
                     if($kk == 'protokol'){
                         $result .= ' ' . __t('Stage') . ' ' . __t('lamanya') . ' : <input type="text" name="' . $ky . '_' . $kk . '[1]" size="' . (isset($vv['size']) ? $vv['size'] : 20) . '"' . (isset($vv['value'][1]) ? ' value="' . $vv['value'][1] . '"' : '') . '> ' . __t('menit') . "\n";
+//                        $result .= ' ' . __t('Stage') . ' ' . __t('lamanya') . ' : <input type="text" name="' . $ky . '_' . $kk . '[1]" size="' . (isset($vv['size']) ? $vv['size'] : 20) . '"' . (isset($vv['value'][1]) ? ' value="' . $vv['value'][1] . '"' : '') . '> Bruce' . __t('menit') . "\n";
                     }
                 } elseif($vv['type'] == 'select'){
+//                    echo '<pre>'; print_r($kk); echo '</pre>';
                     $result .= '<select name="' . $ky . '_' . $kk . '[0]" size="1">' . "\n";
+                    $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
                     foreach($vv['theref'] as $yy => $ll){
                         $result .= '<option value="' . $yy . '"' . (isset($vv['value'][0]) && $vv['value'][0] == $yy ? ' selected' : '') . '>' . __t($ll) . '</option>' . "\n";
                     }

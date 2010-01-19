@@ -133,6 +133,14 @@ class patientModule extends mainModule
             'weight' => 5,
             'user_required' => 'patient'
         );
+        $items['patient_register_today'] = array(
+            'title' => __t('Daftar Pasien'),
+            'description' => __t('Daftar Pasien yang telah Mendaftar'),
+            'path' => '/user/patient/register_today',
+            'exec' => 'register_today',
+            'weight' => 5,
+            'user_required' => 'patient'
+        );
         $items['register_form'] = array(
             'title' => __t('Patient Register'),
             'description' => __t('execute registering patient into database'),
@@ -366,6 +374,144 @@ class patientModule extends mainModule
                 $getit->MoveNext(); unset($getthis);
             }
         }
+        return $result;
+    }
+
+    function register_today(){
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('daftar pasien yang telah mendaftar hari ini ');
+        $result['description'] = __t('antrian pasien yang telah mendaftar pada hari ini');
+        /* tambahan item search */
+        $result['search'] = $this->search();
+
+        $result['header'] = array(
+            array(
+                'field' => 'nourut',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'norm',
+                'caption' => __t('No. RM'),
+                'width' => '10%',
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'nama',
+                'caption' => __t('nama'),
+                'width' => '25%',
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'bagian',
+                'caption' => __t('bagian'),
+                'width' => '10%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'carabayar',
+                'caption' => __t('cara bayar'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'doneby',
+                'caption' => __t('diperiksa oleh'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'kirim',
+                'caption' => __t('dikirim oleh'),
+                'align' => 'left'
+            ),
+        );
+
+
+        $sql = $this->query->getSelect(
+            array('id','pukul','patients','bagian','doneby','inputer','pilihan_cara_bayar'),
+            array('kunjungan'),
+            array(
+                array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                array('&&', "day(pukul)=" . date('j', $this->config->time)),
+//                array('&&', "id=" . date('j', $this->config->time))
+            ),
+            'pukul'
+        );
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $result['data'][$i]['bagian'] = $getit->fields['bagian'];
+                if (isset($getit->fields['pilihan_cara_bayar'])){
+                    $result['data'][$i]['carabayar'] = $getit->fields['pilihan_cara_bayar'];
+                } else {
+                    $result['data'][$i]['carabayar'] = 'tunai';
+                }
+//                $result['data'][$i]['goto'] = '/user/patient/register_form/' . $getit->fields['id'];
+                $result['data'][$i]['nourut'] = $i+1;
+//                $result['data'][$i]['doneby'] = $getit->fields['doneby'];
+//                $result['data'][$i]['kirim'] = $getit->fields['inputer'];
+                $sql = $this->query->getSelect(
+                    array('strnum','nama'),
+                    array('patients'),
+                    array(
+                        array('&&', "id=" . $getit->fields['patients'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['norm'] = $getthis->fields['strnum'];
+                $result['data'][$i]['nama'] = $getthis->fields['nama'];
+                unset($getthis);
+                $sql = $this->query->getSelect(
+                    array('nama'),
+                    array('stafs'),
+                    array(
+                        array('&&', "id=" . $getit->fields['doneby'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['doneby'] = $getthis->fields['nama'];
+                unset($getthis);
+                $sql = $this->query->getSelect(
+                    array('nama'),
+                    array('stafs'),
+                    array(
+                        array('&&', "id=" . $getit->fields['inputer'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['kirim'] = $getthis->fields['nama'];
+                $getit->MoveNext(); unset($getthis);
+            }
+        } unset($getit);
+        $sql = $this->query->getSelect(
+            array('count(id) as jumlah'),
+            array('kunjungan'),
+            array(
+                array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                array('&&', "day(pukul)=" . date('j', $this->config->time)),
+//                array('&&', "id=" . date('j', $this->config->time))
+            ),
+            'pukul'
+        );
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        $result['title'] .= ' ' . $getit->fields['jumlah'] . ' Orang';
+//        echo "<pre>";print_r($getit);echo "</pre";
+        unset ($getit);
         return $result;
     }
 
@@ -701,17 +847,6 @@ class patientModule extends mainModule
 //                    } elseif($value == 'strnum'){
 //                        $form['patient'][$value]['#extra'] = 'readonly="true"';
                     }
-                    // ------ Add by emmank -------
-//                    if($this->formtype_fields[$value] == 'select'){
-//                        if($value == 'gol_darah') {
-//                            $options = $this->__get_goldarah_options();
-//                        } elseif($this->formtype_fields[$value] == 'date'){
-//                            $options = $this->nama_bulan;
-//                        }
-//                        $form['patient'][$value]['#option'] = $options;
-  //                  } elseif($value == 'strnum'){
-  //                      $form['patient'][$value]['#extra'] = 'readonly="true"';
-//                    }
                     if(!is_null($readonly)){
                         $form['patient'][$value]['#readonly'] = true;
                 }

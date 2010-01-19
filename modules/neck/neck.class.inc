@@ -353,10 +353,11 @@ class neckModule extends mainModule
                 $result['datafields'][$value]['theref'] = $this->nama_bulan;
                 $result['datafields'][$value]['timenow'] = $this->config->time;
             } else {
-                $result['datafields'][$value]['size'] = 6;
+                $result['datafields'][$value]['size'] = 1;
             }
             $result['datafields'][$value]['readonly'] = isset($this->config->free_val['readonly']) ? true : false;
         }
+//        echo "<pre>";print_r($result);echo "</pre>";
         return $result;
     }
 
@@ -364,14 +365,17 @@ class neckModule extends mainModule
         $thefields = $this->__get_data_fields('neck', $this->query);
         foreach($this->config->free_val as $key => $value){
             if(in_array($key, $thefields)){
-                if($key == 'inspections'){
-                    if(count($value) > 0){
-                        $value = implode(',', $value);
-                    }
-                }
+//                if($key == 'inspections'){
+//                    if(count($value) > 0){
+//                        $value = implode(',', $value);
+//                    }
+//                }
+//                echo '<pre>'; print_r($value); echo '</pre>';
                 $thevalue[$key] = $value;
             }
+//            echo '<pre>'; print_r($thefields); echo '</pre>';
         } unset($thefields);
+//        echo '<pre>'; print_r($thevalue); echo '</pre>';
         if($_POST['id'] != ''){
             unset($thevalue['id']);
             $opr = 'update';
