@@ -1144,6 +1144,7 @@ class patientModule extends mainModule
     
     function register_submit(){
         $dump = $this->__write_form_cache();
+//        echo "<pre>";print_r($dump);echo "</pre>";
         $patientfields = $this->__get_data_fields('patients', $this->query);
         $thevalue = array();
         foreach($dump as $key => $value){
@@ -1238,6 +1239,7 @@ class patientModule extends mainModule
         if($query->_numOfRows > 0){
             $no += $query->fields['no'];
         } unset($query);
+//        echo "<pre>";print_r($dump);echo "</pre>";
         $thevalue = array(
             'pukul' => date('Y-m-d H:i:s', $this->config->time),
             'patients' => $dump['id'],

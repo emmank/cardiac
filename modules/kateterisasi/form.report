@@ -1,0 +1,148 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  formreport.php
+ *  
+ *  Created on Dec 24, 2009, 6:18:44 AM
+ */
+
+//echo '<pre>'; print_r($data); echo '</pre>'; exit();
+
+$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+// set document information
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor('Denic');
+$pdf->SetTitle('Main Report Perawatan');
+$pdf->SetSubject('PDF Prototipe');
+$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+// set default header data
+$pdf->SetHeaderData(
+        '..' . DS . '..' . DS . '..' . DS . THEMES_DIR . DS . $theme . DS . 'images' . DS . 'main_image.gif',
+        PDF_HEADER_LOGO_WIDTH,
+        $configs->user_organization,
+        $configs->organization_address . "\n" . ' '
+);
+
+//echo '<pre>'; print_r(PDF_HEADER_STRING); echo '</pre>'; exit();
+// set header and footer fonts
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+//set margins
+$pdf->SetMargins((PDF_MARGIN_LEFT + 15), PDF_MARGIN_TOP - 4, (PDF_MARGIN_RIGHT - 5));
+$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+//set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+//set image scale factor
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+//set some language-dependent strings
+$pdf->setLanguageArray($l);
+
+// ---------------------------------------------------------
+
+// set font
+$pdf->SetFont('times', '', 10);
+
+// add a page
+$pdf->AddPage();
+
+// print a line using Cell()
+//$pdf->Cell(0, 12, 'Example 001 - €àèéìòù', 1, 1, 'C');
+$result = '';
+foreach ($data as $key => $value){
+    $result .= '<div>' . strtoupper (__t('Identitas Patients')) . '</div>';
+    $gettbpos = array();
+    foreach($value as $ky => $vl){
+        if(!eregi('#', $ky)){
+            if($ky != 'tab_items'){
+                if(isset($vl['#tbpos'])){
+                    $gettbpos[$vl['#tbpos']] = $vl;
+                    $gettbpos[$vl['#tbpos']]['#key'] = $ky;
+                }
+            }
+        }
+    }
+    ksort($gettbpos);
+//    echo '<pre>'; print_r($gettbpos); echo '</pre>';
+    $result .= '<div><table align="center" width="100%" border="1"><tr><td>';
+    $result .= '<table align="center" width="98%" cellpadding="3" cellspacing="0"><tr>';
+    foreach($gettbpos as $ky => $vl){
+        if((int)$ky < 1 || (int)$ky % 8 == 0){
+            $result .= '<td align="left" width="50%">';
+            $result .= '<table width="100%" cellpadding="0">';
+            $setdiv = 1;
+        }
+        $result .= '<tr valign="top">';
+        $result .= '<td width="35%" align="right" style="font-weight:bold">' . ucwords (str_replace ("_"," ",$vl['#title'])) . ' </td>';
+        $result .= '<td width="3%" align="center">:</td>';
+        $result .= '<td align="left"> &nbsp;' . $vl['#value'] . '</td></tr>';
+        if((int)$ky > 3 && ((int)$ky + 1) % 8 == 0){
+            unset($setdiv);
+            $result .= '</table>';
+            $result .= '</td>';
+        }
+    } unset($gettbpos);
+    if(isset($setdiv)){
+        $result .= '</table>';
+        $result .= '</td>';
+        unset($setdiv);
+    }
+    $result .= '</tr></table>';
+    $result .= '</td></tr></table><br /></div>';
+
+    if(isset($value['tab_items']) && count($value['tab_items']) > 0){
+        $ke = 1;
+        foreach($value['tab_items'] as $ky => $vl){
+            if(isset($vl['#tpl'])  ){
+                $result .= '<div align="left">' . strtoupper($vl['#title']) . '</div>';
+                $result .= '<div><table align="center" width="100%" border="1"><tr><td>';
+                $result .= '<table align="center" width="98%" cellpadding="3" cellspacing="2">';
+                $result .= '<tr><td>';
+                require_once $vl['#tpl'] . '.report';
+                $ke++;
+                $result .= '</td></tr>';
+                $result .= '</table>';
+                $result .= '</td></tr></table>' . ($ky != 'extermitas' ? '<br />' : '') . '</div>';
+//            } else {
+//                $result .= str_repeat('<br />', 1);
+            }
+        } unset($ke);
+    }
+}
+//echo $result;
+$pdf->writeHTML($result, true, 0, true, 0);
+unset($result);
+// ---------------------------------------------------------
+
+//Close and output PDF document
+//$pdf->Output('perawatan.pdf', 'I');
+//$pdf->Output('perawatan.pdf', 'S');
+$pdf->Output();
+
+//============================================================+
+// END OF FILE
+//============================================================+

@@ -17,28 +17,28 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  kateterisasi.php
+ *  cardio.php
  *  
  *  Created on Oct 1, 2009, 1:11:20 PM
  */
 
-require_once MODULES_DIR . DS . 'kateterisasi' . DS . 'kateterisasi.class.inc';
+require_once MODULES_DIR . DS . 'ekgupload' . DS . 'ekgupload.class.inc';
 
-if(!isset($kateterisasi_config)){
-    $kateterisasi_config = new kateterisasiConfig();
-} elseif(!$kateterisasi_config instanceof kateterisasiConfig) {
-    $kateterisasi_config = new kateterisasiConfig();
+if(!isset($ekgupload_config)){
+    $ekgupload_config = new ekguploadConfig();
+} elseif(!$ekgupload_config instanceof ekguploadConfig) {
+    $ekgupload_config = new ekguploadConfig();
 }
 
-require_once DBSTRINGS_DIR . DS . $kateterisasi_config->rdbms . DS . 'dbquery.php';
-if(!isset($kateterisasi_query)){
-    $kateterisasi_query = new dbset();
-} elseif(!$kateterisasi_query instanceof dbset) {
-    $kateterisasi_query = new dbset();
+require_once DBSTRINGS_DIR . DS . $ekgupload_config->rdbms . DS . 'dbquery.php';
+if(!isset($ekgupload_query)){
+    $ekgupload_query = new dbset();
+} elseif(!$ekgupload_query instanceof dbset) {
+    $ekgupload_query = new dbset();
 }
 
-if(!isset($kateterisasi_exec)){
-    $kateterisasi_exec = new kateterisasiModule();
-} elseif(!$kateterisasi_exec instanceof kateterisasiModule) {
-    $kateterisasi_exec = new kateterisasiModule();
+if(!isset($ekgupload_exec)){
+    $ekgupload_exec = new ekguploadModule();
+} elseif(!$ekgupload_exec instanceof ekguploadModule) {
+    $ekgupload_exec = new ekguploadModule();
 }

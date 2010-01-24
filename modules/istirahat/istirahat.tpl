@@ -44,7 +44,7 @@ foreach($vl['datafields'] as $yk => $lv){
                     $result .= $lv['#theref'][$lv['#value']];
                 } else {
                     $result .= '<select name="' . $ky . '_' . $yk . '" size="1">' . "\n";
-                    $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
+                    $result .= '<option value="-"> - </option>' . "\n";
                     foreach($lv['#theref'] as $kk => $vv){
                         $result .= '<option value="' . $kk . '"' . (isset($lv['#value']) && $lv['#value'] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
                     }

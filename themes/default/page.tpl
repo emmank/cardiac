@@ -30,7 +30,7 @@
     <!--link rel="stylesheet" type="text/css" href="/themes/<?php echo $theme;?>/css/default.css"-->
     <link rel="stylesheet" type="text/css" href="/themes/<?php echo $theme;?>/css/<?php if(isset($body_login)){echo 'login';} else {echo 'style';}?>.css">
     <link rel="stylesheet" type="text/css" href="/themes/<?php echo $theme;?>/css/tabcontent.css">
-    <link href="/themes/<?php echo $theme;?>/css/column4.css" media="all" rel="stylesheet" type="text/css">
+    <!-- link href="/themes/<?php echo $theme;?>/css/column4.css" media="all" rel="stylesheet" type="text/css" -->
 
 <script type="text/javascript" src="/themes/<?php echo $theme;?>/js/tabcontent.js">
 

@@ -431,8 +431,15 @@ class treadmillModule extends mainModule
             '' => __t('-- dirujuk ke --')
         );
         $dump_addmenus = $this->__get_bagian_lists();
+//        echo '<pre>rujukan :'; print_r($dump_addmenus); echo '</pre>';
         foreach($dump_addmenus as $key => $value){
-            $rujukanopts[$key] = $value;
+//            echo '<pre>'; print_r($value); echo '</pre>';
+            if ($value=='Treadmill'){
+
+            } else {
+                $rujukanopts[$key] = $value;
+            }
+//            $rujukanopts[$key] = $value;
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),

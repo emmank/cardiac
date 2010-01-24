@@ -55,7 +55,6 @@ class hearthConfig extends config
         'penjalaran' => 'select',
         'kind' => 'select',
         'quality' => 'select'
-
     );
 
     var $fieldsisarray = array(

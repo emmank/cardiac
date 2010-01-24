@@ -17,28 +17,28 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  kateterisasi.php
+ *  lvGrafi.php
  *  
- *  Created on Oct 1, 2009, 1:11:20 PM
+ *  Created on Oct 3, 2009, 4:34:16 PM
  */
 
-require_once MODULES_DIR . DS . 'kateterisasi' . DS . 'kateterisasi.class.inc';
+require_once MODULES_DIR . DS . 'lvGrafi' . DS . 'lvGrafi.class.inc';
 
-if(!isset($kateterisasi_config)){
-    $kateterisasi_config = new kateterisasiConfig();
-} elseif(!$kateterisasi_config instanceof kateterisasiConfig) {
-    $kateterisasi_config = new kateterisasiConfig();
+if(!isset($lvGrafi_config)){
+    $lvGrafi_config = new lvGrafiConfig();
+} elseif(!$lvGrafi_config instanceof lvGrafiConfig) {
+    $lvGrafi_config = new lvGrafiConfig();
 }
 
-require_once DBSTRINGS_DIR . DS . $kateterisasi_config->rdbms . DS . 'dbquery.php';
-if(!isset($kateterisasi_query)){
-    $kateterisasi_query = new dbset();
-} elseif(!$kateterisasi_query instanceof dbset) {
-    $kateterisasi_query = new dbset();
+require_once DBSTRINGS_DIR . DS . $lvGrafi_config->rdbms . DS . 'dbquery.php';
+if(!isset($lvGrafi_query)){
+    $lvGrafi_query = new dbset();
+} elseif(!$lvGrafi_query instanceof dbset) {
+    $lvGrafi_query = new dbset();
 }
 
-if(!isset($kateterisasi_exec)){
-    $kateterisasi_exec = new kateterisasiModule();
-} elseif(!$kateterisasi_exec instanceof kateterisasiModule) {
-    $kateterisasi_exec = new kateterisasiModule();
+if(!isset($lvGrafi_exec)){
+    $lvGrafi_exec = new lvGrafiModule();
+} elseif(!$lvGrafi_exec instanceof lvGrafiModule) {
+    $lvGrafi_exec = new lvGrafiModule();
 }

@@ -1064,7 +1064,7 @@ class hearthModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => 'batas_atas',
+                'field' => 'percussion_top',
                 'caption' => __t('keterangan'),
                 'align' => 'left'
             )
@@ -1080,7 +1080,7 @@ class hearthModule extends mainModule
         if($query->_numOfRows > 0){
             for($i=0; $i<$query->_numOfRows; $i++){
                 $result['data'][$i] = $query->fields;
-                $result['data'][$i]['batas_atas'] = ucwords($query->fields['batas_atas']);
+                $result['data'][$i]['percussion_top'] = ucwords($query->fields['percussion_top']);
                 $result['data'][$i]['goto'] = '/reference/hearth_percussion_top/detail/' . $query->fields['id'];
                 $query->MoveNext();
             }
@@ -1164,7 +1164,7 @@ class hearthModule extends mainModule
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'batas_atas', 'hearth', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'percussion_top', 'hearth', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
         $result['title'] = __t('detil referensi percussion_top');
@@ -1175,7 +1175,7 @@ class hearthModule extends mainModule
         unset($dropable);
         $this->query->connect();
         $sql = $this->query->getSelect(
-            array('id', 'batas_atas'),
+            array('id', 'percussion_top'),
             array('ref_hearth_percussion_top'),
             array(
                 array('&&', "id=" . $keyid)
@@ -1281,7 +1281,7 @@ class hearthModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => 'batas_bawah',
+                'field' => 'percussion_bottom',
                 'caption' => __t('keterangan'),
                 'align' => 'left'
             )
@@ -1297,7 +1297,7 @@ class hearthModule extends mainModule
         if($query->_numOfRows > 0){
             for($i=0; $i<$query->_numOfRows; $i++){
                 $result['data'][$i] = $query->fields;
-                $result['data'][$i]['batas_bawah'] = ucwords($query->fields['batas_bawah']);
+                $result['data'][$i]['percussion_bottom'] = ucwords($query->fields['percussion_bottom']);
                 $result['data'][$i]['goto'] = '/reference/hearth_percussion_bottom/detail/' . $query->fields['id'];
                 $query->MoveNext();
             }
@@ -1316,7 +1316,7 @@ class hearthModule extends mainModule
             '#title' => __t('add hearth_percussion_bottom'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
-            '#focused_item' => 'batas_bawah',
+            '#focused_item' => 'percussion_bottom',
             '#weight' => -3,
             '#action' => '/reference/hearth_percussion_bottom/form_submit',
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
@@ -1381,7 +1381,7 @@ class hearthModule extends mainModule
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'batas_bawah', 'hearth', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'percussion_bottom', 'hearth', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
         $result['title'] = __t('detil referensi percussion_bottom');
@@ -1392,7 +1392,7 @@ class hearthModule extends mainModule
         unset($dropable);
         $this->query->connect();
         $sql = $this->query->getSelect(
-            array('id', 'batas_bawah'),
+            array('id', 'percussion_bottom'),
             array('ref_hearth_percussion_bottom'),
             array(
                 array('&&', "id=" . $keyid)
@@ -1465,7 +1465,7 @@ class hearthModule extends mainModule
     }
 
     function ref_percussion_bottom_drop(){
-        if($this->__is_dropable($_POST['id'], 'batas_bawah', 'hearth', $this->query) !== FALSE){
+        if($this->__is_dropable($_POST['id'], 'percussion_bottom', 'hearth', $this->query) !== FALSE){
             $this->query->connect();
             $sql = $this->query->setDelete(
                 'ref_hearth_percussion_bottom',
@@ -1498,7 +1498,7 @@ class hearthModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => 'batas_kanan',
+                'field' => 'percussion_right',
                 'caption' => __t('keterangan'),
                 'align' => 'left'
             )
@@ -1514,7 +1514,7 @@ class hearthModule extends mainModule
         if($query->_numOfRows > 0){
             for($i=0; $i<$query->_numOfRows; $i++){
                 $result['data'][$i] = $query->fields;
-                $result['data'][$i]['batas_kanan'] = ucwords($query->fields['batas_kanan']);
+                $result['data'][$i]['percussion_right'] = ucwords($query->fields['percussion_right']);
                 $result['data'][$i]['goto'] = '/reference/hearth_percussion_right/detail/' . $query->fields['id'];
                 $query->MoveNext();
             }
@@ -1533,7 +1533,7 @@ class hearthModule extends mainModule
             '#title' => __t('add hearth_percussion_right'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
-            '#focused_item' => 'batas_kanan',
+            '#focused_item' => 'percussion_right',
             '#weight' => -3,
             '#action' => '/reference/hearth_percussion_right/form_submit',
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
@@ -1598,7 +1598,7 @@ class hearthModule extends mainModule
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'batas_kanan', 'hearth', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'percussion_right', 'hearth', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
         $result['title'] = __t('detil referensi percussion_right');
@@ -1609,7 +1609,7 @@ class hearthModule extends mainModule
         unset($dropable);
         $this->query->connect();
         $sql = $this->query->getSelect(
-            array('id', 'batas_kanan'),
+            array('id', 'percussion_right'),
             array('ref_hearth_percussion_right'),
             array(
                 array('&&', "id=" . $keyid)
@@ -1682,7 +1682,7 @@ class hearthModule extends mainModule
     }
 
     function ref_percussion_right_drop(){
-        if($this->__is_dropable($_POST['id'], 'batas_kanan', 'hearth', $this->query) !== FALSE){
+        if($this->__is_dropable($_POST['id'], 'percussion_right', 'hearth', $this->query) !== FALSE){
             $this->query->connect();
             $sql = $this->query->setDelete(
                 'ref_hearth_percussion_right',
@@ -1715,7 +1715,7 @@ class hearthModule extends mainModule
                 'align' => 'right'
             ),
             array(
-                'field' => 'batas_kiri',
+                'field' => 'percussion_left',
                 'caption' => __t('keterangan'),
                 'align' => 'left'
             )
@@ -1731,7 +1731,7 @@ class hearthModule extends mainModule
         if($query->_numOfRows > 0){
             for($i=0; $i<$query->_numOfRows; $i++){
                 $result['data'][$i] = $query->fields;
-                $result['data'][$i]['batas_kiri'] = ucwords($query->fields['batas_kiri']);
+                $result['data'][$i]['percussion_left'] = ucwords($query->fields['percussion_left']);
                 $result['data'][$i]['goto'] = '/reference/hearth_percussion_left/detail/' . $query->fields['id'];
                 $query->MoveNext();
             }
@@ -1750,7 +1750,7 @@ class hearthModule extends mainModule
             '#title' => __t('add hearth_percussion_left'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
-            '#focused_item' => 'batas_kiri',
+            '#focused_item' => 'percussion_left',
             '#weight' => -3,
             '#action' => '/reference/hearth_percussion_left/form_submit',
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE
@@ -1815,7 +1815,7 @@ class hearthModule extends mainModule
             $update = $dump[4];
         }
         $keyid = $dump[3]; unset($dump);
-        $dropable = $this->__is_dropable($keyid, 'batas_kiri', 'hearth', $this->query);
+        $dropable = $this->__is_dropable($keyid, 'percussion_left', 'hearth', $this->query);
         $result = array();
         $result['type'] = 'items_detail';
         $result['title'] = __t('detil referensi percussion_left');
@@ -1826,7 +1826,7 @@ class hearthModule extends mainModule
         unset($dropable);
         $this->query->connect();
         $sql = $this->query->getSelect(
-            array('id', 'batas_kiri'),
+            array('id', 'percussion_left'),
             array('ref_hearth_percussion_left'),
             array(
                 array('&&', "id=" . $keyid)
@@ -1899,7 +1899,7 @@ class hearthModule extends mainModule
     }
 
     function ref_percussion_left_drop(){
-        if($this->__is_dropable($_POST['id'], 'batas_kiri', 'hearth', $this->query) !== FALSE){
+        if($this->__is_dropable($_POST['id'], 'percussion_left', 'hearth', $this->query) !== FALSE){
             $this->query->connect();
             $sql = $this->query->setDelete(
                 'ref_hearth_percussion_left',

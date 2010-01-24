@@ -17,28 +17,28 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  kateterisasi.php
+ *  diagnosa.php
  *  
- *  Created on Oct 1, 2009, 1:11:20 PM
+ *  Created on Oct 4, 2009, 7:11:16 AM
  */
 
-require_once MODULES_DIR . DS . 'kateterisasi' . DS . 'kateterisasi.class.inc';
+require_once MODULES_DIR . DS . 'diagnosa' . DS . 'diagnosa.class.inc';
 
-if(!isset($kateterisasi_config)){
-    $kateterisasi_config = new kateterisasiConfig();
-} elseif(!$kateterisasi_config instanceof kateterisasiConfig) {
-    $kateterisasi_config = new kateterisasiConfig();
+if(!isset($diagnosa_config)){
+    $diagnosa_config = new diagnosaConfig();
+} elseif(!$diagnosa_config instanceof diagnosaConfig) {
+    $diagnosa_config = new diagnosaConfig();
 }
 
-require_once DBSTRINGS_DIR . DS . $kateterisasi_config->rdbms . DS . 'dbquery.php';
-if(!isset($kateterisasi_query)){
-    $kateterisasi_query = new dbset();
-} elseif(!$kateterisasi_query instanceof dbset) {
-    $kateterisasi_query = new dbset();
+require_once DBSTRINGS_DIR . DS . $diagnosa_config->rdbms . DS . 'dbquery.php';
+if(!isset($diagnosa_query)){
+    $diagnosa_query = new dbset();
+} elseif(!$diagnosa_query instanceof dbset) {
+    $diagnosa_query = new dbset();
 }
 
-if(!isset($kateterisasi_exec)){
-    $kateterisasi_exec = new kateterisasiModule();
-} elseif(!$kateterisasi_exec instanceof kateterisasiModule) {
-    $kateterisasi_exec = new kateterisasiModule();
+if(!isset($diagnosa_exec)){
+    $diagnosa_exec = new diagnosaModule();
+} elseif(!$diagnosa_exec instanceof diagnosaModule) {
+    $diagnosa_exec = new diagnosaModule();
 }

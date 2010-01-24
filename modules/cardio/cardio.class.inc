@@ -584,9 +584,14 @@ class cardioModule extends mainModule
             '' => __t('-- dirujuk ke --')
         );
         $dump_addmenus = $this->__get_bagian_lists();
-//        echo '<pre>'; print_r($vcache); echo '</pre>';
+//        echo '<pre>'; print_r($dump_addmenus); echo '</pre>';
         foreach($dump_addmenus as $key => $value){
-            $rujukanopts[$key] = $value;
+            if ($value=='cardio_dewasa'){
+                
+            } else {
+                $rujukanopts[$key] = $value;
+            }
+//            echo '<pre>'; print_r($value); echo '</pre>';
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),

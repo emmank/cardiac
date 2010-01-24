@@ -26,51 +26,35 @@ require_once MODULES_DIR . DS . 'kateterisasi' . DS . 'config.inc';
 
 class kateterisasiModule extends mainModule
 {
-    var $title = 'kateterisasi module';
-    var $description = '';
+    var $title = 'kateterisasi';
+    var $description = 'Manajemen data digital pasien kateterisasilogi';
     var $hidden_fields = array(
-        'id', 'id_pasien', 'inputer','updated', 'inputtime','tgl'
+        'id', 'teens', 'inputer','updated', 'inputtime'
     );
 
     function menu(){
         $items['kateterisasi_form'] = array(
-            'title' => __t('form kateterisasi'),
-            'description' => __t('formulir kateterisasi'),
+            'title' => __t('form kateterisasi dewasa'),
+            'description' => __t('formulir kateterisasi dewasa'),
             'path' => '/user/kateterisasi/form',
-            'exec' => 'form',
+            'exec' => 'dewasa_form',
             'weight' => '0',
             'user_required' => 'kateterisasi'
         );
         $items['kateterisasi_form_submit'] = array(
-            'title' => __t('form kateterisasi'),
-            'description' => __t('formulir kateterisasi'),
+            'title' => __t('form kateterisasi dewasa'),
+            'description' => __t('formulir kateterisasi dewasa'),
             'path' => '/user/kateterisasi/form_submit',
-            'exec' => 'form_submit',
+            'exec' => 'dewasa_form_submit',
             'weight' => '0',
             'user_required' => 'kateterisasi'
         );
         $items['kateterisasi_get_lists'] = array(
-            'title' => __t('form kateterisasi'),
-            'description' => __t('formulir kateterisasi'),
+            'title' => __t('list antrian kateterisasi dewasa'),
+            'description' => __t('formulir kateterisasi dewasa'),
             'path' => '/user/kateterisasi/today_kateterisasi_lists',
             'exec' => '__get_today_lists',
             'weight' => '0',
-            'user_required' => 'kateterisasi'
-        );
-        $items['kateterisasi_lists'] = array(
-            'title' => __t('Kateterisasi'),
-            'description' => __t('explore kateterisasi'),
-            'path' => '/user/kateterisasi/lists',
-            'exec' => 'lists',
-            'weight' => '0',
-            'user_required' => 'users'
-        );
-        $items['kateterisasi_message'] = array(
-            'title' => __t('kateterisasi message'),
-            'description' => __t('get kateterisasi message'),
-            'path' => '/user/kateterisasi/message',
-            'exec' => 'message',
-            'weight' => 5,
             'user_required' => 'kateterisasi'
         );
         $items['kateterisasi_message'] = array(
@@ -83,40 +67,111 @@ class kateterisasiModule extends mainModule
         );
         $items['kateterisasi_view'] = array(
             'title' => __t('kateterisasi'),
-            'description' => __t('explore kateterisasi'),
+            'description' => __t('explore kateterisasi dewasa'),
             'path' => '/user/kateterisasi/view',
-            'exec' => 'view',
+            'exec' => 'dewasa_view',
             'weight' => '0',
             'user_required' => 'users'
         );
         $items['kateterisasi_detail'] = array(
-            'title' => __t('detail kateterisasi'),
-            'description' => __t("detail kateterisasi's patients"),
+            'title' => __t('detail kateterisasi dewasa'),
+            'description' => __t("detail kateterisasi dewasa's patients"),
             'path' => '/user/kateterisasi/detail_form',
-            'exec' => 'detail_form',
+            'exec' => 'dewasa_detail_form',
             'weight' => '0',
             'user_required' => 'users'
         );
         $items['kateterisasi_search'] = array(
-            'title' => __t('search kateterisasi'),
-            'description' => __t("search kateterisasi's patients"),
+            'title' => __t('search kateterisasi dewasa'),
+            'description' => __t("search kateterisasi dewasa's patients"),
             'path' => '/user/kateterisasi/search',
-            'exec' => 'search',
+            'exec' => 'dewasa_search',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['kateterisasi_lists'] = array(
+            'title' => __t('lists kateterisasi dewasa'),
+            'description' => __t("lists kateterisasi dewasa's patients"),
+            'path' => '/user/kateterisasi/lists',
+            'exec' => 'dewasa_lists',
             'weight' => '0',
             'user_required' => 'users'
         );
         $items['kateterisasi_search_submit'] = array(
-            'title' => __t('submitted search kateterisasi'),
-            'description' => __t("submitted search kateterisasi's patients"),
+            'title' => __t('submitted search kateterisasi dewasa'),
+            'description' => __t("submitted search kateterisasi dewasa's patients"),
             'path' => '/user/kateterisasi/search_submit',
-            'exec' => 'search_submit',
+            'exec' => 'dewasa_search_submit',
             'weight' => '0',
             'user_required' => 'users'
+        );
+        $items['kateterisasi_formreport'] = array(
+            'title' => __t('kateterisasi form report'),
+            'description' => __t("report of kateterisasi form"),
+            'path' => '/user/kateterisasi/report',
+            'exec' => 'report_execprint',
+            'weight' => '0',
+            'user_required' => 'users'
+        );
+        $items['kateterisasi_prescription'] = array(
+            'title' => __t('kateterisasi anak form') . ' ' . __t('prescription'),
+            'description' => __t("form of kateterisasi") . ' ' . __t('prescription'),
+            'path' => '/user/kateterisasi/prescription',
+            'exec' => 'prescription_form',
+            'weight' => '0',
+            'user_required' => 'kateterisasi'
+        );
+        $items['kateterisasi_prescription'] = array(
+            'title' => __t('kateterisasi dewasa form') . ' ' . __t('prescription'),
+            'description' => __t("form of kateterisasi") . ' ' . __t('prescription'),
+            'path' => '/user/kateterisasi/prescription',
+            'exec' => 'prescription_form',
+            'weight' => '0',
+            'user_required' => 'kateterisasi'
+        );
+        $items['kateterisasi_prescription_submit'] = array(
+            'title' => __t('kateterisasi anak form') . ' ' . __t('prescription'),
+            'description' => __t("form of kateterisasi") . ' ' . __t('prescription'),
+            'path' => '/user/kateterisasi/prescription_submit',
+            'exec' => 'prescription_submit',
+            'weight' => '0',
+            'user_required' => 'kateterisasi'
+        );
+        $items['kateterisasi_prescription_submit'] = array(
+            'title' => __t('kateterisasi dewasa form') . ' ' . __t('prescription'),
+            'description' => __t("form of kateterisasi") . ' ' . __t('prescription'),
+            'path' => '/user/kateterisasi/prescription_submit',
+            'exec' => 'prescription_submit',
+            'weight' => '0',
+            'user_required' => 'kateterisasi'
         );
         return $items;
     }
 
-    function search_submit(){
+    function report_execprint(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        if(isset($dump[3])){
+            $teens = 1;
+        }
+        $output['type'] = 'whatever';
+        $output['renderfile'] = MODULES_DIR . DS . 'kateterisasi' . DS . 'form.report';
+        $vcache = $this->__get_kateterisasi_data((int)$_POST['id']);
+        $this->formhabit = 'readonly';
+        $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
+        $output['data'] = $this->__get_form(isset($teens) ? $teens : 0);
+        return $output;
+    }
+
+    function dewasa_search_submit(){
+        return $this->__get_search_submit();
+    }
+
+    function anak_search_submit(){
+        return $this->__get_search_submit(1);
+    }
+
+    function __get_search_submit($teens=0){
         if(isset($_POST['data'])){
             $str = $_POST['data'];
             $dump = $this->__get_patients_search($str);
@@ -142,7 +197,8 @@ class kateterisasiModule extends mainModule
                         array('id', 'inputtime'),
                         array('kateterisasi'),
                         array(
-                            array('&&', "patients=" . $vl)
+                            array('&&', "patients=" . $vl),
+                            array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
                         )
                     );
                     $this->query->connect();
@@ -160,7 +216,7 @@ class kateterisasiModule extends mainModule
                                     $cnt++;
                                 }
                                 $dumpid[] = $getit->fields['id'];
-                                $result['data'][$cnt]['links'] = '/user/kateterisasi/detail_form/' . $getit->fields['id'];
+                                $result['data'][$cnt]['links'] = '/user/kateterisasi_' . ($teens != 0 ? 'anak' : 'dewasa') . '/detail_form/' . $getit->fields['id'];
                                 $result['data'][$cnt]['caption'] = 'Data Tanggal ' . date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
                             }
                             $sql = $this->query->getSelect(
@@ -189,10 +245,19 @@ class kateterisasiModule extends mainModule
                 }
             }
         } unset($dump);
+//        echo '<pre>'; print_r($result); echo '</pre>'; exit();
         return $result;
     }
 
-    function search(){
+    function dewasa_search(){
+        return $this->__get_search();
+    }
+
+    function anak_search(){
+        return $this->__get_search(1);
+    }
+
+    function __get_search($teens=0){
         $result = array();
         $result['type'] = 'search';
         $result['title'] = __t('Cari data pasien kateterisasi');
@@ -208,7 +273,8 @@ class kateterisasiModule extends mainModule
                 array('kateterisasi', 'patients'),
                 array(
                     array('&&', "kateterisasi|patients=patients|id"),
-                    array('&&', "patients|nama like '" . strtolower($value) . "%'")
+                    array('&&', "patients|nama like '" . strtolower($value) . "%'"),
+                    array('&&', "teens=" . ($teens == 0 ? 0 : $teens))
                 )
             );
             $this->query->connect();
@@ -233,19 +299,154 @@ class kateterisasiModule extends mainModule
         );
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         if(isset($_POST['data']) || isset($dump[3])){
-            $result['result'] = $this->search_submit();
+            $result['result'] = $this->__get_search_submit($teens);
         } unset($dump);
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
-    function __get_today_lists(){
+    function dewasa_view(){
+        return $this->__get_today_lists();
+    }
+
+    function anak_view(){
+        return $this->__get_today_lists(1);
+    }
+
+    function dewasa_lists(){
+        return $this->__get_lists();
+    }
+
+    function anak_lists(){
+        return $this->__get_lists(1);
+    }
+
+    function __get_lists($teens=0){
+        $this->sync_scheme('kateterisasi', $this->query);
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('daftar beberapa pasien');
+        $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
+        $result['addmenu']['#add'] = array(
+            'title' => __t('add'),
+            'action' => '/user/kateterisasi/form',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['addmenu']['#search'] = array(
+            'title' => __t('search'),
+            'action' => '/user/kateterisasi/search',
+            'position' => 'top',
+            'user_required' => 'users'
+        );
+        $result['header'] = array(
+            array(
+                'field' => 'none',
+                'caption' => __t('no'),
+                'width' => '5%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'strnum',
+                'caption' => __t('No. RM'),
+                'width' => '10%',
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'nama',
+                'caption' => __t('nama'),
+                'align' => 'left'
+            ),
+            array(
+                'field' => 'tgl_lahir',
+                'caption' => __t('usia'),
+                'width' => '10%',
+                'align' => 'right'
+            ),
+            array(
+                'field' => 'inputtime',
+                'caption' => __t('tgl periksa'),
+                'width' => '25%',
+                'align' => 'right'
+            )
+        );
+
+        $sql = $this->query->getSelect(
+            array(),
+            array('kateterisasi'),
+            array(),
+//                array('&&', "teens=" . ($teens != 0 ? $teens : 0))
+//            ),
+            'inputtime desc',
+            '0,10'
+        ); unset($where);
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $getit = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($getit->_numOfRows > 0){
+            for($i=0; $i<$getit->_numOfRows; $i++){
+                $sql = $this->query->getSelect(
+                    array('id', 'nama', 'tgl_lahir', 'inputtime','strnum'),
+                    array('patients'),
+                    array(
+                        array('&&', "id=" . $getit->fields['patients'])
+                    )
+                );
+                $this->query->connect();
+                $getthis = $this->query->conn->Execute($sql); unset($sql);
+                $this->query->close();
+                $result['data'][$i]['strnum'] = $getthis->fields['strnum'];
+                $result['data'][$i]['nama'] = $getthis->fields['nama'];
+                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
+                $result['data'][$i]['goto'] = '/user/kateterisasi/detail_form/' . $getit->fields['id'];
+                $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
+                $getit->MoveNext();
+            }
+        }
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+
+    function dewasa_detail_form(){
+        return $this->__detail_form();
+    }
+
+    function anak_detail_form(){
+        return $this->__detail_form(1);
+    }
+
+    function __detail_form($teens=0){
+        $this->formhabit = 'readonly';
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $vcache = $this->__get_kateterisasi_data((int)$dump[3]);
+        $this->vardump = $this->__write_custom_cache($vcache);
+        $this->vardump['readonly'] = $this->formhabit;
+        if($teens == 0){
+            $result = $this->dewasa_form();
+        } else {
+            $result = $this->anak_form();
+        }
+        return $result;
+    }
+
+    function __get_today_lists($teens=NULL){
         $result = array();
         $result = $this->today_patient_lists();
         if(count($result['data'])>0){
             foreach($result['data'] as $key => $value){
-                $result['data'][$key] = $value;
+//                if(!is_null($teens)){
+//                    if($value['age'] <= $this->config->teenlimit){
+                        $result['data'][$key] = $value;
+//                    }
+//                } else {
+//                    if($value['age'] > $this->config->teenlimit){
+//                        $result['data'][$key] = $value;
+//                    }
+//                }
             }
         }
+//        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
 
@@ -269,28 +470,25 @@ class kateterisasiModule extends mainModule
         return $result;
     }
 
-    function detail_form(){
-        $this->formhabit = 'readonly';
-        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        $vcache = $this->__get_kateterisasi_data((int)$dump[3]);
-        $this->vardump = $this->__write_custom_cache($vcache);
-        $this->vardump['readonly'] = $this->formhabit;
-        $result = $this->form();
-        return $result;
+    function dewasa_form(){
+        return $this->__get_form();
     }
 
-    function form(){
+    function anak_form(){
+        return $this->__get_form(1);
+    }
+
+    function __get_form($teens=0){
         if ($this->__check_caches() === TRUE){
             $vcache = $this->__read_form_cache();
         } else {
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
-                if(preg_match('/^back_/', $dump[3])){
-//                    $kateterisasi_id = preg_replace('/^edit_/','',$dump[3]);
-//                    $vcache = $this->__get_kateterisasi_data((int)$kateterisasi_id);
-//                    $this->vardump = $vcache;
-//                    unset($cardio_id);
-                    redirect_to('/user/kateterisasi/view');
+                if(preg_match('/^edit_/', $dump[3])){
+                    $kateterisasi_id = preg_replace('/^edit_/','',$dump[3]);
+                    $vcache = $this->__get_kateterisasi_data((int)$kateterisasi_id);
+                    $this->vardump = $vcache;
+                    unset($kateterisasi_id);
                 } else {
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
                 }
@@ -298,9 +496,11 @@ class kateterisasiModule extends mainModule
                 redirect_to('/user/kateterisasi/today_kateterisasi_lists');
             } unset($dump);
         }
+//        echo '<pre>'; print_r($vcache); echo '</pre>';
+        
         $this->query->connect();
         $sql = $this->query->getSelect(
-            array('patients', 'inputer'),
+            array('patients', 'inputer','pilihan_cara_bayar'),
             array('kunjungan'),
             array(
                 array('&&', "id=" . $vcache['kunjungan'])
@@ -310,16 +510,27 @@ class kateterisasiModule extends mainModule
         $this->query->close();
         $pengirim = $query->fields['inputer'];
         if(!isset($vcache['patients'])){
-            $vcache['patients'] = $query->fields['patients']; unset($query);
+            $vcache['patients'] = $query->fields['patients']; 
+            $vcache['pilihan_cara_bayar'] = $query->fields['pilihan_cara_bayar']; unset($query);
         }
         $addmenuopts = array(
             '' => __t('-- medical record --'),
             'all' => __t('semua')
         );
+        $rujukanopts = array(
+            '' => __t('-- dirujuk ke --')
+        );
         $dump_addmenus = $this->__get_bagian_lists();
+//        echo '<pre>'; print_r($dump_addmenus); echo '</pre>';
         foreach($dump_addmenus as $key => $value){
+            if ($value=='kateterisasi'){
+                
+            } else {
+                $rujukanopts[$key] = $value;
+            }
+//            echo '<pre>'; print_r($value); echo '</pre>';
             $sql = $this->query->getSelect(
-                array('id'),
+                array('id','pilihan_cara_bayar'),
                 array('kunjungan'),
                 array(
                     array('&&', "patients=" . $vcache['patients']),
@@ -330,6 +541,7 @@ class kateterisasiModule extends mainModule
             $this->query->connect();
             $getit = $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
+            
             if($getit->_numOfRows > 0){
                 $addmenuopts[$key] = $value;
             } unset($getit);
@@ -337,21 +549,23 @@ class kateterisasiModule extends mainModule
         $form['kateterisasi'] = array(
             '#type' => 'special',
             '#id' => 'kateterisasi',
-            '#title' => __t('kateterisasi'),
+            '#title' => __t('Kateterisasi'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
-            '#action' => '/user/kateterisasi/' . ($this->formhabit == 'readonly' ? 'form/edit_' . $vcache['id'] : 'form_submit'),
+            '#action' => '/user/kateterisasi/form' . ($this->formhabit == 'readonly' ? '/edit_' . $vcache['id'] : '_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
             '#formtpl' => MODULES_DIR . DS . 'kateterisasi' . DS . 'kateterisasi.tpl',
             '#addmenu' => array(
-                'title' => __t('medical record'),
-                'action' => '/user/patient/medical_record/' . $vcache['patients'],
-                'position' => 'top',
-                'class' => 'button',
-                'methode' => 'choose',
-                'options' => $addmenuopts,
-                'filter' => 'bagian'
+                '#addmenu' => array(
+                    'title' => __t('medical record'),
+                    'action' => '/user/patient/medical_record/' . $vcache['patients'],
+                    'position' => 'top',
+                    'class' => 'button',
+                    'methode' => 'choose',
+                    'options' => $addmenuopts,
+                    'filter' => 'bagian'
+                )
             )
         ); unset($addmenuopts);
         $form['kateterisasi']['kunjungan'] = array(
@@ -377,20 +591,86 @@ class kateterisasiModule extends mainModule
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
-                    $query = $this->__get_patient_data($vcache['patients'], array('nama', 'tgl_lahir', 'alamat', 'kota', 'propinsi', 'nomor', 'kelamin', 'gol_darah','strnum'));
+                    $query = $this->__get_patient_data(
+                        $vcache['patients'],
+                        array(
+                            'nama',
+                            'tgl_lahir',
+                            'alamat',
+                            'kota',
+                            'propinsi',
+                            'nomor',
+                            'kelamin',
+                            'gol_darah',
+                            'strnum'
+                        )
+                    );
+//                    echo '<pre>'; print_r($query); echo '</pre>';
                     if(count($query) > 0){
+                        if($this->formhabit == 'readonly'){
+                            if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
+                                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'kateterisasi', $vcache['patients']);
+                                if(count($getvisit_info) > 0){
+                                    foreach($getvisit_info as $ky => $vl){
+                                        if(is_null($vl['doneby'])){
+                                            $forbidden = 0; break;
+                                        }
+                                    }
+                                }
+                                if(!isset($forbidden)){
+                                    $form['kateterisasi']['#addmenu']['#addmenu0'] = array(
+                                        'title' => __t('dirujuk ke'),
+                                        'action' => '/user/patient/register_form_submit',
+                                        'position' => 'top',
+                                        'class' => 'button',
+                                        'methode' => 'choose',
+                                        'options' => $rujukanopts,
+                                        'user_required' => 'kateterisasi',
+                                        'filter' => 'bagian',
+                                        'items' => array (
+                                            'id' => $vcache['patients'],
+                                            'strnum' => $query['strnum'],
+                                            'pilihan_cara_bayar' => $vcache['pilihan_cara_bayar'],
+                                        )
+                                    );
+                                    $form['kateterisasi']['#addmenu']['#prescription'] = array(
+                                        'title' => __t('prescription'),
+                                        'action' => '/user/kateterisasi/prescription/' . $vcache['id'],
+                                        'position' => 'top',
+                                        'class' => 'button',
+                                        'user_required' => 'kateterisasi',
+                                        'filter' => 'items',
+                                        'items' => array (
+                                            'id' => $vcache['id']
+                                        )
+                                    );
+                                } else {
+                                    unset($forbidden);
+                                }
+                            }
+                            $form['kateterisasi']['#addmenu']['#printed'] = array(
+                                'title' => __t('print'),
+                                'action' => '/user/kateterisasi/report' . ($teens != 0 ? '/1' : ''),
+                                'position' => 'top',
+                                'class' => 'button',
+                                'user_required' => 'kateterisasi',
+                                'filter' => 'items',
+                                'items' => array (
+                                    'id' => $vcache['id']
+                                )
+                            );
+                        } unset($rujukanopts);
                         foreach($query as $ky => $vl){
                             if($ky == 'tgl_lahir'){
-//                                $vl = $this->agecount_in_month(strtotime($vl));
-//                                $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
-//                                $form['kateterisasi']['umur'] = array(
-//                                    '#type' => 'info',
-//                                    '#value' => $vl . ' tahun',
-//                                    '#title' => __t('umur'),
-//                                    '#tbpos' => 3
-//                                );
-                            } else {
-                                if($ky != 'kota' && $ky != 'propinsi' && $ky != 'strnum'){
+                                $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
+                                $form['kateterisasi']['umur'] = array(
+                                    '#type' => 'info',
+                                    '#value' => $vl . ' tahun',
+                                    '#title' => __t('umur'),
+                                    '#tbpos' => 3
+                                );
+                            } elseif($ky != 'strnum') {
+                                if($ky != 'kota' && $ky != 'propinsi'){
                                     if($ky == 'alamat'){
                                         $vl = $vl . ' ' . $query['kota'] . ' ' . $query['propinsi'];
                                         $tbpos = 4;
@@ -405,24 +685,33 @@ class kateterisasiModule extends mainModule
                                     } elseif($ky == 'gol_darah'){
                                         $tbpos = 5;
                                     }
+//                                    echo '<pre>'; print_r($query); echo '</pre>';
                                     $form['kateterisasi'][$ky] = array(
                                         '#type' => $ky == 'alamat' ? 'textarea' : 'info',
                                         '#value' => $vl,
                                         '#title' => __t($ky),
                                         '#tbpos' => $tbpos
                                     );
+                                    if ($ky=='no_registrasi'){
+                                        $form['kateterisasi'][$ky] = array(
+                                            '#type' => $ky == 'alamat' ? 'textarea' : 'info',
+                                            '#value' => $query['strnum'],
+                                            '#title' => __t($ky),
+                                            '#tbpos' => $tbpos
+                                        );
+                                    }
                                     if($ky == 'alamat'){
                                         $form['kateterisasi'][$ky]['#extra'] = 'readonly="true"';
                                         $form['kateterisasi'][$ky]['#cols'] = '55';
                                         $form['kateterisasi'][$ky]['#rows'] = '3';
                                     } elseif($ky == 'no_registrasi'){
                                         $form['kateterisasi'][$ky]['#link'] = '/user/kateterisasi/today_patient_lists';
-                                        $form['kateterisasi'][$ky]['#value'] = $query['strnum'];
                                     }
                                     unset($tbpos);
                                 }
                             }
                         }
+//                        echo '<pre>'; print_r($form); echo '</pre>';
                         $sql = $this->query->getSelect(
                             array('pukul'),
                             array('kunjungan'),
@@ -467,74 +756,89 @@ class kateterisasiModule extends mainModule
                         );
                         unset($getsender);
                     }
+//                    $this->query->close();
                 }
                 if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients'){
                     $form['kateterisasi'][$value] = array(
                         '#type' => $this->config->fields_form_type[$value],
                         '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
-                        '#size' => $this->config->fields_form_type[$value] != 'select' && $this->config->fields_form_type[$value] != 'date' ? 20 : 1,
+                        '#size' => $this->config->fields_form_type[$value] != 'select' && $this->formtype_fields[$value] != 'date' ? 20 : 1,
                         '#title' => __t($value),
                         '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
                     );
-                    if(in_array($value, $this->config->fieldsisarray)){
-                        $form['kateterisasi'][$value]['#theref'] = $this->__get_refs($value);
-                    }
-                    if(in_array($value, $this->config->qrs_complex) || in_array($value, $this->config->segment_st) || $value == 'gelombang_t'){
-                        $form['kateterisasi'][$value]['#customized']['title'] = in_array($value, $this->config->qrs_complex) ? __t('qrs_complex') : ($value == 'gelombang_t' ? __t('gelombang_t') : __t('segment_st'));
-                        $form['kateterisasi'][$value]['#customized']['id'] = in_array($value, $this->config->qrs_complex) ? 'qrs_complex' : ($value == 'gelombang_t' ? 'gelombang_t' : 'segment_st');
-                        if($this->config->fields_form_type[$value] == 'select2'){
-                            $form['kateterisasi'][$value]['#customized']['option'] =  array(
-                                '1mm - 2mm' => '1mm - 2mm',
-                                '> 2mm - 3mm' => '> 2mm - 3mm',
-                                '> 3mm' => '> 3mm'
-                            );
-                        } elseif ($this->config->fields_form_type[$value] == 'select3') {
-                            $form['kateterisasi'][$value]['#customized']['option'] =  array(
-                                'Q Patologi +' => 'Q Patologi +',
-                                'Q Patologi -' => 'Q Patologi -'
-                            );
-                        } elseif ($value == 'gelombang_t') {
-                            $form['kateterisasi'][$value]['#customized']['option'] =  array(
-                                'Normal' => 'Normal',
-                                'Inverted' => 'Inverted'
-                            );
-                        }
-                    }
                 }
                 if($this->formhabit == 'readonly'){
-                    $form['kateterisasi'][$value]['#readonly'] = TRUE;
+                    $form['kateterisasi'][$value]['#extra'] = 'readonly="true"';
                 }
             }
         }
 
+        $form['kateterisasi']['tab_items']['lvGrafi'] = $this->__loadLvGrafi();
+        $form['kateterisasi']['tab_items']['keterangan'] = $this->__loadKeterangan();
+
         $form['kateterisasi']['submit'] = array(
             '#type' => 'submit',
-            '#value' => ($this->formhabit == 'readonly' ? __t('back') : __t('submit'))
+            '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
-//        echo "<pre>";print_r($form);echo "</pre>";
+        if($this->formhabit == 'readonly'){
+            if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
+                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'kateterisasi', $vcache['patients']);
+                if(count($getvisit_info) > 0){
+                    foreach($getvisit_info as $ky => $vl){
+                        if(is_null($vl['doneby'])){
+                            $forbidden = 0; break;
+                        }
+                    }
+                }
+            } else {
+                $forbidden = 0;
+            }
+            if(isset($forbidden)){
+                $form['kateterisasi']['submit']['#extra'] = ' disabled="true"';
+                unset($forbidden);
+            }
+        }
+        
         return $form;
     }
 
-    function __get_refs($fields, $sort=NULL){
-        $result = array();
-        $sql = $this->query->getSelect(
-            array(),
-            array($this->config->reftable[$fields][0]),
-            NULL,
-            (!is_null($sort) ? $sort . ' asc' : 'id asc')
-        );
-        $this->query->connect();
-        $query = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        for($i=0; $i<$query->_numOfRows; $i++){
-            $result[$query->fields['id']] = $query->fields[$this->config->reftable[$fields][1]];
-            $query->MoveNext();
+    function __loadLvGrafi($exec=NULL){
+        $this->__include_module('lvGrafi');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->lvGrafi_config->free_val = $this->vardump;
         }
-        return $result;
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->lvGrafi_exec->kateterisasi_submit();
+            }
+        } else {
+            return $this->lvGrafi_exec->kateterisasi_menu();
+        }
     }
 
-    
-    function form_submit(){
+    function __loadKeterangan($exec=NULL){
+        $this->__include_module('keterangan');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->keterangan_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->keterangan_exec->kateterisasi_submit();
+            }
+        } else {
+            return $this->keterangan_exec->kateterisasi_menu();
+        }
+    }
+
+    function dewasa_form_submit(){
+        return $this->__get_form_submit();
+    }
+
+    function anak_form_submit(){
+        return $this->__get_form_submit(1);
+    }
+
+    function __get_form_submit($teens=0){
         $this->vardump = $this->__write_form_cache();
         $sql = $this->query->getSelect(
             array(),
@@ -554,30 +858,25 @@ class kateterisasiModule extends mainModule
         $thefields = $this->__get_data_fields('kateterisasi', $this->query);
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
-                if (is_array($value)){
-                    ksort($value);
-                    $thevalue[$key] = implode('|', $value);
-                } else {
-                    $thevalue[$key] = $value;
-                }
+                $thevalue[$key] = $value;
             }
         } unset($thefields);
-//        echo "<pre>";print_r($thevalue);echo "</pre>";
+        if($teens != 0 && $teens != '0'){
+            $thevalue['teens'] = 1;
+        }
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
-            $thevalue['updated'] = $user['userid'] . '|' . date('Y-m-d H:i:s', $this->config->time);
+            $thevalue['updated'] = $_COOKIE[$this->config->cookieid] . '|' . date('Y-m-d H:i:s', $this->config->time);
             $opr = 'update';
             $strid = array('id', $_POST['id']);
         } else {
             $thevalue['id'] = $this->__get_id_insert_value('kateterisasi', 'id', $this->query);
-            $thevalue['inputer'] = $user['id'];
+            $thevalue['inputer'] = $user['userid'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
             $this->vardump['id'] = $thevalue['id'];
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
-//        echo $opr;
-//        echo "<pre>";print_r($strid);echo "</pre>";
         $this->__exec_db_ops(
             $this->query,
             'kateterisasi',
@@ -586,6 +885,9 @@ class kateterisasiModule extends mainModule
             $thevalue
         );
         unset($thevalue, $opr, $strid);
+        $this->__loadLvGrafi('submit');
+        $this->__loadKeterangan('submit');
+        
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
                 'kunjungan',
@@ -600,88 +902,8 @@ class kateterisasiModule extends mainModule
             $this->query->conn->Execute($sql); unset($sql);
             $this->query->close();
         }
-        
         $this->__flush_caches();
         redirect_to('/user/kateterisasi/view');
     }
 
-    function view(){
-        return $this->__get_today_lists();
-    }
-
-    function lists(){
-//        $this->sync_scheme('kateterisasi', $this->query);
-        $result = array();
-        $result['type'] = 'table';
-        $result['title'] = __t('daftar beberapa pasien');
-        $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
-        $result['addmenu']['#add'] = array(
-            'title' => __t('add'),
-            'action' => '/user/kateterisasi/form',
-            'position' => 'top',
-            'user_required' => 'users'
-        );
-        $result['addmenu']['#search'] = array(
-            'title' => __t('search'),
-            'action' => '/user/kateterisasi/search',
-            'position' => 'top',
-            'user_required' => 'users'
-        );
-        $result['header'] = array(
-            array(
-                'field' => 'none',
-                'caption' => __t('no'),
-                'width' => '5%',
-                'align' => 'right'
-            ),
-            array(
-                'field' => 'nama',
-                'caption' => __t('nama'),
-                'align' => 'left'
-            ),
-            array(
-                'field' => 'tgl_lahir',
-                'caption' => __t('usia'),
-                'width' => '10%',
-                'align' => 'right'
-            ),
-            array(
-                'field' => 'inputtime',
-                'caption' => __t('tgl periksa'),
-                'width' => '25%',
-                'align' => 'right'
-            )
-        );
-
-        $sql = $this->query->getSelect(
-            array(),
-            array('kateterisasi'),
-            NULL,
-            'inputtime desc',
-            '0,10'
-        ); unset($where);
-        $this->query->connect();
-        $getit = $this->query->conn->Execute($sql); unset($sql);
-        $this->query->close();
-        if($getit->_numOfRows > 0){
-            for($i=0; $i<$getit->_numOfRows; $i++){
-                $sql = $this->query->getSelect(
-                    array('id', 'nama', 'tgl_lahir', 'inputtime'),
-                    array('patients'),
-                    array(
-                        array('&&', "id=" . $getit->fields['patients'])
-                    )
-                );
-                $this->query->connect();
-                $getthis = $this->query->conn->Execute($sql); unset($sql);
-                $this->query->close();
-                $result['data'][$i]['nama'] = $getthis->fields['nama'];
-                $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
-                $result['data'][$i]['goto'] = '/user/kateterisasi/detail_form/' . $getit->fields['id'];
-                $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
-                $getit->MoveNext();
-            }
-        }
-        return $result;
-    }
 }
