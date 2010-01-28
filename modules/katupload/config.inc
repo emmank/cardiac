@@ -22,10 +22,10 @@
  *  Created on Oct 1, 2009, 1:10:09 PM
  */
 
-class ekguploadConfig extends config
+class katuploadConfig extends config
 {
     var $rdbms = 'mysql';
-    var $dbekgupload = array(
+    var $dbkatupload = array(
         'name' => 'layanan_kesehatan',
         'prefix' => '',
         'suffix' => '',
@@ -35,7 +35,7 @@ class ekguploadConfig extends config
         'user' => 'root',
         'passwd' => 'emmank'
     );
-    var $ekgdata_dir = 'file/katdata';
+    var $katdata_dir = 'file/katdata';
 //    var $source_server = 'www.cardiac.com';
 //    var $source_path = 'home/herman/www/ekg_data';
 //    var $source_jpg = 'home/herman/www/ekg_data/CPT_DATA/';
@@ -88,50 +88,50 @@ class ekguploadConfig extends config
 //    var $segment_st = array(
 //        'segmen_st_depresi', 'segmen_st_elevasi'
 //    );
-    var $table_scheme = array(
-        'ekg' => array(
-            'id' => array(
-                'type' => 'int(11)',
-                'null' => 0,
-                'key' => 'pri',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'file_dicom_cvp' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'file_dicom_cvq' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'file_dicom_cvr' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'file_dicom_cvs' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-            'file_dicom_cvt' => array(
-                'type' => 'varchar(255)',
-                'null' => 1,
-                'key' => '',
-                'default' => NULL,
-                'extra' => ''
-            ),
-        )
-    );
+//    var $table_scheme = array(
+//        'ekg' => array(
+//            'id' => array(
+//                'type' => 'int(11)',
+//                'null' => 0,
+//                'key' => 'pri',
+//                'default' => NULL,
+//                'extra' => ''
+//            ),
+//            'file_dicom_cvp' => array(
+//                'type' => 'varchar(255)',
+//                'null' => 1,
+//                'key' => '',
+//                'default' => NULL,
+//                'extra' => ''
+//            ),
+//            'file_dicom_cvq' => array(
+//                'type' => 'varchar(255)',
+//                'null' => 1,
+//                'key' => '',
+//                'default' => NULL,
+//                'extra' => ''
+//            ),
+//            'file_dicom_cvr' => array(
+//                'type' => 'varchar(255)',
+//                'null' => 1,
+//                'key' => '',
+//                'default' => NULL,
+//                'extra' => ''
+//            ),
+//            'file_dicom_cvs' => array(
+//                'type' => 'varchar(255)',
+//                'null' => 1,
+//                'key' => '',
+//                'default' => NULL,
+//                'extra' => ''
+//            ),
+//            'file_dicom_cvt' => array(
+//                'type' => 'varchar(255)',
+//                'null' => 1,
+//                'key' => '',
+//                'default' => NULL,
+//                'extra' => ''
+//            ),
+//        )
+//    );
 }

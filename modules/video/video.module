@@ -17,28 +17,28 @@
  *  with this program; if not, write to the Free Software Foundation, Inc., 
  *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *  
- *  cardio.php
+ *  video.php
  *  
- *  Created on Oct 1, 2009, 1:11:20 PM
+ *  Created on Oct 3, 2009, 8:38:26 PM
  */
 
-require_once MODULES_DIR . DS . 'katupload' . DS . 'katupload.class.inc';
+require_once MODULES_DIR . DS . 'video' . DS . 'video.class.inc';
 
-if(!isset($katupload_config)){
-    $katupload_config = new katuploadConfig();
-} elseif(!$katupload_config instanceof katuploadConfig) {
-    $katupload_config = new katuploadConfig();
+if(!isset($video_config)){
+    $video_config = new videoConfig();
+} elseif(!$video_config instanceof videoConfig) {
+    $video_config = new videoConfig();
 }
 
-require_once DBSTRINGS_DIR . DS . $katupload_config->rdbms . DS . 'dbquery.php';
-if(!isset($katupload_query)){
-    $katupload_query = new dbset();
-} elseif(!$katupload_query instanceof dbset) {
-    $katupload_query = new dbset();
+require_once DBSTRINGS_DIR . DS . $video_config->rdbms . DS . 'dbquery.php';
+if(!isset($video_query)){
+    $video_query = new dbset();
+} elseif(!$video_query instanceof dbset) {
+    $video_query = new dbset();
 }
 
-if(!isset($katupload_exec)){
-    $katupload_exec = new katuploadModule();
-} elseif(!$katupload_exec instanceof katuploadModule) {
-    $katupload_exec = new katuploadModule();
+if(!isset($video_exec)){
+    $video_exec = new videoModule();
+} elseif(!$video_exec instanceof videoModule) {
+    $video_exec = new videoModule();
 }

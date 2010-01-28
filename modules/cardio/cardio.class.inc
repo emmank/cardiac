@@ -442,7 +442,7 @@ class cardioModule extends mainModule
                 array('&&', "teens=" . ($teens != 0 ? $teens : 0))
             ),
             'inputtime desc',
-            '0,10'
+            '0,20'
         ); unset($where);
         $this->query->connect();
 //        $this->query->conn->debug=true;

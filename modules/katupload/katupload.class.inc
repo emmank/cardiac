@@ -22,71 +22,71 @@
  *  Created on Oct 1, 2009, 1:12:45 PM
  */
 
-require_once MODULES_DIR . DS . 'ekgupload' . DS . 'config.inc';
+require_once MODULES_DIR . DS . 'katupload' . DS . 'config.inc';
 
-class ekguploadModule extends mainModule
+class katuploadModule extends mainModule
 {
-    var $title = 'ekgupload module';
+    var $title = 'katupload module';
     var $description = '';
     var $hidden_fields = array(
         'id', 'id_pasien', 'inputer','updated', 'inputtime','tgl'
     );
 
     function menu(){
-        $items['ekgupload_form'] = array(
-            'title' => __t('form upload ekg'),
-            'description' => __t('formulir upload ekg'),
-            'path' => '/user/ekgupload/form',
+        $items['katupload_form'] = array(
+            'title' => __t('form upload Kateterisasi'),
+            'description' => __t('formulir upload Kateterisasi'),
+            'path' => '/user/katupload/form',
             'exec' => 'form',
             'weight' => '0',
-            'user_required' => 'ekg'
+            'user_required' => 'kateterisasi'
         );
-        $items['ekgupload_form_submit'] = array(
-            'title' => __t('form upload ekg'),
-            'description' => __t('formulir upload ekg'),
-            'path' => '/user/ekgupload/form_submit',
+        $items['katupload_form_submit'] = array(
+            'title' => __t('form upload kateterisasi'),
+            'description' => __t('formulir upload kateterisasi'),
+            'path' => '/user/katupload/form_submit',
             'exec' => 'form_submit',
             'weight' => '0',
-            'user_required' => 'ekg'
+            'user_required' => 'kateterisasi'
         );
-        $items['ekgupload_get_lists'] = array(
-            'title' => __t('uploader ekg'),
-            'description' => __t('upload ekg'),
-            'path' => '/user/ekg/today_ekg_list',
-            'exec' => '__get_today_list',
+        $items['katupload_get_lists'] = array(
+            'title' => __t('uploader kateterisasi'),
+            'description' => __t('upload kateterisasi'),
+            'path' => '/user/kateterisasi/today_kat_lists',
+            'exec' => '__get_today_lists',
             'weight' => '0',
             'user_required' => 'users'
         );
-        $items['ekgupload_message'] = array(
-            'title' => __t('ekg message'),
-            'description' => __t('get ekg message'),
-            'path' => '/user/ekgupload/message',
+        $items['katupload_message'] = array(
+            'title' => __t('kateterisasi message'),
+            'description' => __t('get kateterisasi message'),
+            'path' => '/user/katupload/message',
             'exec' => 'message',
             'weight' => 5,
-            'user_required' => 'ekg'
+            'user_required' => 'kateterisasi'
         );
-        $items['ekgupload_lists'] = array(
-            'title' => __t('ekg lists'),
-            'description' => __t('get ekg lists'),
-            'path' => '/user/ekgupload/lists',
+        $items['katupload_lists'] = array(
+            'title' => __t('kateterisasi lists'),
+            'description' => __t('get kateterisasi lists'),
+            'path' => '/user/katupload/lists',
             'exec' => 'lists',
             'weight' => 5,
-            'user_required' => 'ekg'
+            'user_required' => 'kateterisasi'
         );
-        $items['ekg_storejpgdata'] = array(
-            'title' => __t('ekg store'),
-            'description' => __t("file of ekg"),
-            'path' => '/user/ekgupload/storethis',
+        $items['kateterisasi_storejpgdata'] = array(
+            'title' => __t('kateterisasi store'),
+            'description' => __t("file of kateterisasi"),
+            'path' => '/user/katupload/storethis',
             'exec' => 'store_jpgdata',
             'weight' => '0',
-            'user_required' => 'ekg'
+            'user_required' => 'kateterisasi'
         );
         return $items;
     }
 
-    function __get_today_list(){
+    function __get_today_lists(){
         $result = array();
-        $result = $this->today_patient_lists_ekg();
+        $result = $this->today_patient_lists_kat();
         if(count($result['data'])>0){
             foreach($result['data'] as $key => $value){
                 $result['data'][$key] = $value;
@@ -96,11 +96,11 @@ class ekguploadModule extends mainModule
         return $result;
     }
 
-    function __get_ekg_data($id){
+    function __get_kat_data($id){
         $result = array();
         $sql = $this->query->getSelect(
             array(),
-            array('ekg'),
+            array('kateterisasi'),
             array(
                 array('&&', "id=" . $id)
             )
@@ -119,7 +119,7 @@ class ekguploadModule extends mainModule
     function detail_form(){
         $this->formhabit = 'readonly';
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
-        $vcache = $this->__get_ekg_data((int)$dump[3]);
+        $vcache = $this->__get_kat_data((int)$dump[3]);
         $this->vardump = $this->__write_custom_cache($vcache);
         $this->vardump['readonly'] = $this->formhabit;
         $result = $this->form();
@@ -133,16 +133,16 @@ class ekguploadModule extends mainModule
             $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
             if(count($dump) > 3){
                 if(preg_match('/^edit_/', $dump[3])){
-                    $ekg_id = preg_replace('/^edit_/','',$dump[3]);
-                    $vcache = $this->__get_ekg_data((int)$ekg_id);
+                    $kat_id = preg_replace('/^edit_/','',$dump[3]);
+                    $vcache = $this->__get_kat_data((int)$kat_id);
                     $this->vardump = $vcache;
-                    unset($ekg_id);
-//                    redirect_to('/user/ekgupload/view');
+                    unset($kat_id);
+//                    redirect_to('/user/katupload/view');
                 } else {
                     $vcache['kunjungan'] = $dump[3]; unset($dump);
                 }
             } else {
-                redirect_to('/user/ekgupload/today_ekg_lists');
+                redirect_to('/user/kateterisasi/today_kat_lists');
             } unset($dump);
         }
         $this->query->connect();
@@ -185,17 +185,17 @@ class ekguploadModule extends mainModule
                 $addmenuopts[$key] = $value;
             } unset($getit);
         } unset($dump_addmenus);
-        $form['ekgupload'] = array(
+        $form['katupload'] = array(
             '#type' => 'special',
-            '#id' => 'ekgupload',
-            '#title' => __t('Upload EKG'),
+            '#id' => 'katupload',
+            '#title' => __t('Upload Kateterisasi'),
             '#collapsible' => TRUE,
             '#collapsed' => FALSE,
             '#weight' => -3,
             '#extraform' => 'enctype="multipart/form-data"',
-            '#action' => '/user/ekgupload/' . ($this->formhabit == 'readonly' ? 'form/edit_' . $vcache['id'] : 'form_submit'),
+            '#action' => '/user/katupload/' . ($this->formhabit == 'readonly' ? 'form/edit_' . $vcache['id'] : 'form_submit'),
             '#error' => isset($vcache['error']) ? $vcache['error'] : FALSE,
-            '#formtpl' => MODULES_DIR . DS . 'ekgupload' . DS . 'ekgupload.tpl',
+            '#formtpl' => MODULES_DIR . DS . 'katupload' . DS . 'katupload.tpl',
             '#addmenu' => array(
                 '#addmenu' => array(
                     'title' => __t('medical record'),
@@ -208,15 +208,15 @@ class ekguploadModule extends mainModule
                 )
             )
         ); unset($addmenuopts);
-        $form['ekgupload']['kunjungan'] = array(
+        $form['katupload']['kunjungan'] = array(
             '#type' => 'hidden',
             '#value' => isset($vcache['kunjungan']) ? $vcache['kunjungan'] : ''
         );
-        $thefields = $this->__get_data_fields('ekg', $this->query);
+        $thefields = $this->__get_data_fields('kateterisasi', $this->query);
         foreach($thefields as $value){
             if(in_array($value, $this->hidden_fields)){
                 if($value == 'id'){
-                    $form['ekgupload'][$value] = array(
+                    $form['katupload'][$value] = array(
                         '#type' => 'hidden',
                         '#value' => isset($vcache['id']) ? $vcache['id'] : ''
                     );
@@ -227,7 +227,7 @@ class ekguploadModule extends mainModule
                         $vcache['tgl'] = date('Y-m-d', $this->config->time);
                     }
                 } elseif($value == 'patients'){
-                    $form['ekgupload'][$value] = array(
+                    $form['katupload'][$value] = array(
                         '#type' => 'hidden',
                         '#value' => $vcache['patients']
                     );
@@ -247,7 +247,7 @@ class ekguploadModule extends mainModule
                     if(count($query) > 0){
                         if($this->formhabit == 'readonly'){
                             if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
-                                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'EKG', $vcache['patients']);
+                                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'kateterisasi', $vcache['patients']);
                                 if(count($getvisit_info) > 0){
                                     foreach($getvisit_info as $ky => $vl){
                                         if(is_null($vl['doneby'])){
@@ -256,7 +256,7 @@ class ekguploadModule extends mainModule
                                     }
                                 }
                                 if(!isset($forbidden)){
-//                                    $form['ekgupload']['#addmenu']['#addmenu0'] = array(
+//                                    $form['katupload']['#addmenu']['#addmenu0'] = array(
 //                                        'title' => __t('dirujuk ke'),
 //                                        'action' => '/user/patient/register_form_submit',
 //                                        'position' => 'top',
@@ -270,9 +270,9 @@ class ekguploadModule extends mainModule
 //                                            'strnum' => $query['strnum']
 //                                        )
 //                                    );
-//                                    $form['ekgupload']['#addmenu']['#prescription'] = array(
+//                                    $form['katupload']['#addmenu']['#prescription'] = array(
 //                                        'title' => __t('prescription'),
-//                                        'action' => '/user/ekgupload/prescription/' . $vcache['id'],
+//                                        'action' => '/user/katupload/prescription/' . $vcache['id'],
 //                                        'position' => 'top',
 //                                        'class' => 'button',
 //                                        'user_required' => 'ekg',
@@ -285,9 +285,9 @@ class ekguploadModule extends mainModule
                                     unset($forbidden);
                                 }
                             }
-//                            $form['ekgupload']['#addmenu']['#printed'] = array(
+//                            $form['katupload']['#addmenu']['#printed'] = array(
 //                                'title' => __t('print'),
-//                                'action' => '/user/ekgupload/report',
+//                                'action' => '/user/katupload/report',
 //                                'position' => 'top',
 //                                'class' => 'button',
 //                                'user_required' => 'ekg',
@@ -297,9 +297,9 @@ class ekguploadModule extends mainModule
 //                                )
 //                            );
                             $checkmyfile = $this->__check_myfile($vcache['id']);
-//                            $form['ekgupload']['#addmenu']['#file'] = array(
+//                            $form['katupload']['#addmenu']['#file'] = array(
 //                                'title' => ($checkmyfile !== FALSE ? __t('show') : __t('get')) . ' ' . __t('file'),
-//                                'action' => $checkmyfile !== FALSE ? $vcache['file'] : '/user/ekgupload/storethis',
+//                                'action' => $checkmyfile !== FALSE ? $vcache['file'] : '/user/katupload/storethis',
 //                                'position' => 'top',
 //                                'class' => 'button',
 //                                'user_required' => 'ekg',
@@ -309,9 +309,9 @@ class ekguploadModule extends mainModule
 //                                )
 //                            );
                             if($checkmyfile === FALSE){
-//                                $form['ekgupload']['#addmenu']['#uploadfile'] = array(
+//                                $form['katupload']['#addmenu']['#uploadfile'] = array(
 //                                    'title' => __t('upload'),
-//                                    'action' => '/user/ekgupload/storethis',
+//                                    'action' => '/user/katupload/storethis',
 //                                    'extraform' => 'enctype="multipart/form-data"',
 //                                    'position' => 'top',
 //                                    'class' => 'button',
@@ -320,7 +320,7 @@ class ekguploadModule extends mainModule
 //                                    'items' => array (
 //                                        'id' => $vcache['id'],
 //                                        'MAX_FILE_SIZE' => 80000,
-//                                        'filedigital' => array(
+//                                        'dicom_cvp' => array(
 //                                            'type' => 'file',
 //                                            'value' => ''
 //                                        )
@@ -332,7 +332,7 @@ class ekguploadModule extends mainModule
                             if($ky == 'tgl_lahir'){
 //                                $vl = $this->agecount_in_month(strtotime($vl));
 //                                $vl = round(($this->agecount_in_month(strtotime($vl))/12),0);
-//                                $form['ekgupload']['umur'] = array(
+//                                $form['katupload']['umur'] = array(
 //                                    '#type' => 'info',
 //                                    '#value' => $vl . ' tahun',
 //                                    '#title' => __t('umur'),
@@ -354,18 +354,18 @@ class ekguploadModule extends mainModule
                                     } elseif($ky == 'gol_darah'){
                                         $tbpos = 5;
                                     }
-                                    $form['ekgupload'][$ky] = array(
+                                    $form['katupload'][$ky] = array(
                                         '#type' => $ky == 'alamat' ? 'textarea' : 'info',
                                         '#value' => $vl,
                                         '#title' => __t($ky),
                                         '#tbpos' => $tbpos
                                     );
                                     if($ky == 'alamat'){
-                                        $form['ekgupload'][$ky]['#extra'] = 'readonly="true"';
-                                        $form['ekgupload'][$ky]['#cols'] = '55';
-                                        $form['ekgupload'][$ky]['#rows'] = '3';
+                                        $form['katupload'][$ky]['#extra'] = 'readonly="true"';
+                                        $form['katupload'][$ky]['#cols'] = '55';
+                                        $form['katupload'][$ky]['#rows'] = '3';
                                     } elseif($ky == 'no_registrasi'){
-                                        $form['ekgupload'][$ky]['#link'] = '/user/ekgupload/today_patient_lists';
+                                        $form['katupload'][$ky]['#link'] = '/user/katupload/today_patient_lists';
                                     }
                                     unset($tbpos);
                                 }
@@ -390,7 +390,7 @@ class ekguploadModule extends mainModule
                             unset($buffer);
                             $getfrek->MoveNext();
                         }
-                        $form['ekgupload']['kunjungan_ke'] = array(
+                        $form['katupload']['kunjungan_ke'] = array(
                             '#type' => 'info',
                             '#value' => count($dumpfrek),
                             '#title' => __t('kunjungan_ke'),
@@ -407,7 +407,7 @@ class ekguploadModule extends mainModule
                         $this->query->connect();
                         $getsender = $this->query->conn->Execute($sql); unset($sql);
                         $this->query->close();
-                        $form['ekgupload']['pengirim'] = array(
+                        $form['katupload']['pengirim'] = array(
                             '#type' => 'info',
                             '#value' => $getsender->fields['nama'],
                             '#title' => __t('pengirim'),
@@ -417,7 +417,7 @@ class ekguploadModule extends mainModule
                     }
                 }
 //                if($value != 'no_registrasi' && $value != 'kunjungan' && $value != 'patients' && $value != 'file'){
-//                    $form['ekgupload'][$value] = array(
+//                    $form['katupload'][$value] = array(
 //                        '#type' => $this->config->fields_form_type[$value],
 //                        '#value' => isset($vcache[$value]) ? $vcache[$value] : '',
 //                        '#size' => $this->config->fields_form_type[$value] != 'select' && $this->config->fields_form_type[$value] != 'date' ? 20 : 1,
@@ -425,24 +425,24 @@ class ekguploadModule extends mainModule
 //                        '#error' => isset($vcache['blank']) && in_array($value, $vcache['blank']) ? 1 : 0
 //                    );
 //                    if(in_array($value, $this->config->fieldsisarray)){
-//                        $form['ekgupload'][$value]['#theref'] = $this->__get_refs($value);
+//                        $form['katupload'][$value]['#theref'] = $this->__get_refs($value);
 //                    }
 ////                    if(in_array($value, $this->config->qrs_complex) || in_array($value, $this->config->segment_st) || $value == 'gelombang_t'){
-////                        $form['ekgupload'][$value]['#customized']['title'] = in_array($value, $this->config->qrs_complex) ? __t('qrs_complex') : ($value == 'gelombang_t' ? __t('gelombang_t') : __t('segment_st'));
-////                        $form['ekgupload'][$value]['#customized']['id'] = in_array($value, $this->config->qrs_complex) ? 'qrs_complex' : ($value == 'gelombang_t' ? 'gelombang_t' : 'segment_st');
+////                        $form['katupload'][$value]['#customized']['title'] = in_array($value, $this->config->qrs_complex) ? __t('qrs_complex') : ($value == 'gelombang_t' ? __t('gelombang_t') : __t('segment_st'));
+////                        $form['katupload'][$value]['#customized']['id'] = in_array($value, $this->config->qrs_complex) ? 'qrs_complex' : ($value == 'gelombang_t' ? 'gelombang_t' : 'segment_st');
 ////                        if($this->config->fields_form_type[$value] == 'select2'){
-////                            $form['ekgupload'][$value]['#customized']['option'] =  array(
+////                            $form['katupload'][$value]['#customized']['option'] =  array(
 ////                                '1mm - 2mm' => '1mm - 2mm',
 ////                                '> 2mm - 3mm' => '> 2mm - 3mm',
 ////                                '> 3mm' => '> 3mm'
 ////                            );
 ////                        } elseif ($this->config->fields_form_type[$value] == 'select3') {
-////                            $form['ekgupload'][$value]['#customized']['option'] =  array(
+////                            $form['katupload'][$value]['#customized']['option'] =  array(
 ////                                'Q Patologi +' => 'Q Patologi +',
 ////                                'Q Patologi -' => 'Q Patologi -'
 ////                            );
 ////                        } elseif ($value == 'gelombang_t') {
-////                            $form['ekgupload'][$value]['#customized']['option'] =  array(
+////                            $form['katupload'][$value]['#customized']['option'] =  array(
 ////                                'Normal' => 'Normal',
 ////                                'Inverted' => 'Inverted'
 ////                            );
@@ -450,28 +450,148 @@ class ekguploadModule extends mainModule
 ////                    }
 //                }
                 if($this->formhabit == 'readonly'){
-                    $form['ekgupload'][$value]['#readonly'] = TRUE;
+                    $form['katupload'][$value]['#readonly'] = TRUE;
                 }
             }
         }
 
         if($this->formhabit != 'readonly'){
-//            $form['ekgupload']['MAX_FILE_SIZE'] = array(
+//            $form['katupload']['MAX_FILE_SIZE'] = array(
 //                '#type' => 'hidden',
 //                '#value' => '80000'
 //            );
-            $form['ekgupload']['filedigital'] = array(
-                '#title' => __t('upload file'),
+            $form['katupload']['dicom_cvp'] = array(
+                '#title' => __t('dicom cvp'),
                 '#type' => 'file'
             );
+            $form['katupload']['dicom_cvq'] = array(
+                '#title' => __t('dicom cvq'),
+                '#type' => 'file'
+            );
+            $form['katupload']['dicom_cvr'] = array(
+                '#title' => __t('dicom cvr'),
+                '#type' => 'file'
+            );
+            $form['katupload']['dicom_cvs'] = array(
+                '#title' => __t('dicom cvs'),
+                '#type' => 'file'
+            );
+            $form['katupload']['dicom_cvt'] = array(
+                '#title' => __t('dicom cvt'),
+                '#type' => 'file'
+            );
+//            // --------------CVQ-------------------
+//            $form['katupload']['dicom_cvq'] = array(
+//                '#mark' => 'cvq',
+//                '#title' => __t('dicom cvq'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gif_cvq'] = array(
+//                '#mark' => 'cvq',
+//                '#title' => __t('gif'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar1_cvq'] = array(
+//                '#mark' => 'cvq',
+//                '#title' => __t('gambar 1'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar2_cvq'] = array(
+//                '#mark' => 'cvq',
+//                '#title' => __t('gambar 2'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar3_cvq'] = array(
+//                '#mark' => 'cvq',
+//                '#title' => __t('gambar 3'),
+//                '#type' => 'file'
+//            );
+//            // --------------CVR-------------------
+//            $form['katupload']['dicom_cvr'] = array(
+//                '#mark' => 'cvr',
+//                '#title' => __t('dicom cvr'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gif_cvr'] = array(
+//                '#mark' => 'cvr',
+//                '#title' => __t('gif'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar1_cvr'] = array(
+//                '#mark' => 'cvr',
+//                '#title' => __t('gambar 1'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar2_cvr'] = array(
+//                '#mark' => 'cvr',
+//                '#title' => __t('gambar 2'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar3_cvr'] = array(
+//                '#mark' => 'cvr',
+//                '#title' => __t('gambar 3'),
+//                '#type' => 'file'
+//            );
+//            // --------------CVS-------------------
+//            $form['katupload']['dicom_cvs'] = array(
+//                '#mark' => 'cvs',
+//                '#title' => __t('dicom cvs'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gif_cvs'] = array(
+//                '#mark' => 'cvs',
+//                '#title' => __t('gif'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar1_cvs'] = array(
+//                '#mark' => 'cvs',
+//                '#title' => __t('gambar 1'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar2_cvs'] = array(
+//                '#mark' => 'cvs',
+//                '#title' => __t('gambar 2'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar3_cvs'] = array(
+//                '#mark' => 'cvs',
+//                '#title' => __t('gambar 3'),
+//                '#type' => 'file'
+//            );
+//            // --------------CVT-------------------
+//            $form['katupload']['dicom_cvt'] = array(
+//                '#mark' => 'cvt',
+//                '#title' => __t('dicom cvt'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gif_cvt'] = array(
+//                '#mark' => 'cvt',
+//                '#title' => __t('gif'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar1_cvt'] = array(
+//                '#mark' => 'cvt',
+//                '#title' => __t('gambar 1'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar2_cvt'] = array(
+//                '#mark' => 'cvt',
+//                '#title' => __t('gambar 2'),
+//                '#type' => 'file'
+//            );
+//            $form['katupload']['gambar3_cvt'] = array(
+//                '#mark' => 'cvt',
+//                '#title' => __t('gambar 3'),
+//                '#type' => 'file'
+//            );
         }
-        $form['ekgupload']['submit'] = array(
+        $form['katupload']['submit'] = array(
             '#type' => 'submit',
             '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
         if ($this->formhabit == 'readonly'){
             if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
-                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'EKG', $vcache['patients']);
+                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'kateterisasi', $vcache['patients']);
                 if(count($getvisit_info) > 0){
                     foreach($getvisit_info as $ky => $vl){
                         if(is_null($vl['doneby'])){
@@ -483,7 +603,7 @@ class ekguploadModule extends mainModule
                 $forbidden = 0;
             }
             if(isset($forbidden)){
-                $form['ekgupload']['submit']['#extra'] = ' disabled="true"';
+                $form['katupload']['submit']['#extra'] = ' disabled="true"';
                 unset($forbidden);
             }
         }
@@ -527,7 +647,7 @@ class ekguploadModule extends mainModule
             'tgl' => date('Y-m-d', strtotime($query->fields['pukul']))
         );
         unset($query);
-        $thefields = $this->__get_data_fields('ekg', $this->query);
+        $thefields = $this->__get_data_fields('kateterisasi', $this->query);
 //        echo "<pre>";print_r($thefields);echo "</pre>";
         foreach($this->vardump as $key => $value){
             if(in_array($key, $thefields)){
@@ -540,28 +660,50 @@ class ekguploadModule extends mainModule
             }
             
         } unset($thefields);
+//        echo "<pre>";print_r($thevalue);echo "</pre>";//exit;
         $user = $this->__get_user_info();
         if($_POST['id'] != ''){
             $thevalue['updated'] = $user['userid'] . '|' . date('Y-m-d H:i:s', $this->config->time);
             $opr = 'update';
             $strid = array('id', $_POST['id']);
         } else {
-            $thevalue['id'] = $this->__get_id_insert_value('ekg', 'id', $this->query);
+            $thevalue['id'] = $this->__get_id_insert_value('kateterisasi', 'id', $this->query);
             $thevalue['uploader'] = $user['id'];
             $thevalue['inputtime'] = date('Y-m-d H:i:s', $this->config->time);
             $this->vardump['id'] = $thevalue['id'];
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
-//        echo "<pre>";print_r($thevalue);echo "</pre>";
+//        echo "<pre>";print_r($thevalue);echo "</pre>";//exit;
+//        echo "<pre>";print_r($strid);echo "</pre>";//exit;
+//        echo "<pre>";print_r($opr);echo "</pre>";//exit;
         $this->__exec_db_ops(
             $this->query,
-            'ekg',
+            'kateterisasi',
             $opr,
             $strid,
             $thevalue
         );
         $iddata = $thevalue['id'];
+//        $thevalue['id']=$id;
+//        echo str_repeat('=', 56) . '<br />';
+        $sql = $this->query->saveData(
+            'lv_grafi',
+            array('id' => $thevalue['id'])
+        );
+        $this->query->connect();
+//        $this->query->conn->debug=true;
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+//                unset($thevalue);
+        $sql = $this->query->saveData(
+            'keterangan',
+            array('id' => $thevalue['id'])
+        );
+        $this->query->connect();
+        $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        unset($thevalue);
         unset($thevalue, $opr, $strid);
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(
@@ -579,11 +721,11 @@ class ekguploadModule extends mainModule
         }
         $this->__flush_caches();
         $this->store_jpgdata($iddata, 1);
-        redirect_to('/user/ekgupload/detail_form/' . $iddata);
+        redirect_to('/user/katupload/detail_form/' . $iddata);
     }
 
     function view(){
-        return $this->__get_today_lists();
+        return $this->__get_today_lists_kat();
     }
 
     function lists(){
@@ -594,13 +736,13 @@ class ekguploadModule extends mainModule
         $result['description'] = __t('daftar beberapa pasien terakhir yang telah diperiksa');
 //        $result['addmenu']['#add'] = array(
 //            'title' => __t('add'),
-//            'action' => '/user/ekgupload/form',
+//            'action' => '/user/katupload/form',
 //            'position' => 'top',
 //            'user_required' => 'users'
 //        );
 //        $result['addmenu']['#search'] = array(
 //            'title' => __t('search'),
-//            'action' => '/user/ekgupload/search',
+//            'action' => '/user/katupload/search',
 //            'position' => 'top',
 //            'user_required' => 'users'
 //        );
@@ -632,7 +774,7 @@ class ekguploadModule extends mainModule
 
         $sql = $this->query->getSelect(
             array(),
-            array('ekg'),
+            array('kateterisasi'),
             NULL,
             'inputtime desc',
             '0,10'
@@ -654,7 +796,7 @@ class ekguploadModule extends mainModule
                 $this->query->close();
                 $result['data'][$i]['nama'] = $getthis->fields['nama'];
                 $result['data'][$i]['tgl_lahir'] = number_format(round($this->agecount_in_month(strtotime($getthis->fields['tgl_lahir']))/12, 1), 1, ',','.') . ' th';
-                $result['data'][$i]['goto'] = '/user/ekgupload/detail_form/' . $getit->fields['id'];
+                $result['data'][$i]['goto'] = '/user/katupload/detail_form/' . $getit->fields['id'];
                 $result['data'][$i]['inputtime'] = date('j-n-Y H:i:s', strtotime($getit->fields['inputtime']));
                 $getit->MoveNext();
             }
@@ -662,11 +804,11 @@ class ekguploadModule extends mainModule
         return $result;
     }
 
-    function __check_ekgdir(){
-        $ekgdir = __get_file_lists($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir);
-        if(!in_array(date('Ymd', $this->config->time), $ekgdir)){
-            mkdir($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir . DS . date('Ymd', $this->config->time), 0700);
-        } unset($ekgdir);
+    function __check_katdir(){
+        $katdir = __get_file_lists($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->katdata_dir);
+        if(!in_array(date('Ymd', $this->config->time), $katdir)){
+            mkdir($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->katdata_dir . DS . date('Ymd', $this->config->time), 0700);
+        } unset($katdir);
     }
 
 //    function __sync_ekg_data(){
@@ -675,31 +817,31 @@ class ekguploadModule extends mainModule
 //        shell_exec('rsync --progress --stats -axvl root@' . $this->config->source_server . ':/' . $this->config->source_path . '/ ' . $this->config->ekgdata_dir . '/' . date('Ymd', $this->config->time) . '/');
 //    }
 
-    function __get_datadigital($id){
-        $this->__sync_ekg_data();
-        $getdataarray = __get_file_lists($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir . '/' . date('Ymd', $this->config->time));
-        $arraydata = array();
-        foreach($getdataarray as $key => $value){
-            if(preg_match("/^$id/", $value)){
-                $dump = explode('.', $value);
-                $arraydata[] = $dump[0];
-                unset($dump);
-            }
-        }
-        if(count($arraydata) > 0){
-            rsort($arraydata);
-            $filetarget = $arraydata[0];
-            unset($arraydata);
-            return $filetarget . '.' . $this->config->filedata_extension;
-        } else {
-            return FALSE;
-        }
-    }
+//    function __get_datadigital($id){
+//        $this->__sync_ekg_data();
+//        $getdataarray = __get_file_lists($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir . '/' . date('Ymd', $this->config->time));
+//        $arraydata = array();
+//        foreach($getdataarray as $key => $value){
+//            if(preg_match("/^$id/", $value)){
+//                $dump = explode('.', $value);
+//                $arraydata[] = $dump[0];
+//                unset($dump);
+//            }
+//        }
+//        if(count($arraydata) > 0){
+//            rsort($arraydata);
+//            $filetarget = $arraydata[0];
+//            unset($arraydata);
+//            return $filetarget . '.' . $this->config->filedata_extension;
+//        } else {
+//            return FALSE;
+//        }
+//    }
 
     function __check_myfile($id){
         $sql = $this->query->getSelect(
                 array('file'),
-                array('ekg'),
+                array('kateterisasi'),
                 array(
                     array('&&', "id=" . $id)
                 )
@@ -719,17 +861,24 @@ class ekguploadModule extends mainModule
     }
 
     function __store_uploadedfile(){
-        $this->__check_ekgdir();
-//        echo "<pre>tmp name : ";print_r($_FILES['filedigital']['tmp_name']);echo "</pre>";
-//        echo "<pre>name : ";print_r($_FILES['filedigital']['name']);echo "</pre>";
+        $this->__check_katdir();
+//        echo "<pre>tmp name : ";print_r($_FILES['dicom_cvp']['tmp_name']);echo "</pre>";
+//        echo "<pre>name : ";print_r($_FILES['dicom_cvp']['name']);echo "</pre>";
 //        echo "<pre>moveupload : ";print_r($_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir . DS . date('Ymd', $this->config->time) . DS . basename($_FILES['file']['name']));echo "</pre>";
-
-        if (move_uploaded_file($_FILES['filedigital']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . DS . $this->config->ekgdata_dir . DS . date('Ymd', $this->config->time) . DS . basename($_FILES['filedigital']['name']))) {
-            return basename($_FILES['filedigital']['name']);
+        for ($i=0;$i<=4; $i++){
+//            echo "<pre>tmp name : ";print_r($_FILES['dicom']['tmp_name'][$i]);echo "</pre>";
+            if (move_uploaded_file($_FILES['dicom']['tmp_name'][$i], $_SERVER['DOCUMENT_ROOT'] . DS . $this->config->katdata_dir . DS . date('Ymd', $this->config->time) . DS . basename($_FILES['dicom']['name'][$i]))) {
+                $target[] = basename($_FILES['dicom']['name'][$i]);
+            } //else {
+//                return FALSE;
+//            }
+        }
+        if (isset($_FILES)){
+            return $target;
         } else {
             return FALSE;
         }
-        
+
     }
 
     function store_jpgdata($storeid = NULL, $free = NULL){
@@ -742,37 +891,34 @@ class ekguploadModule extends mainModule
         }
         $sql = $this->query->getSelect(
                 array('patients|strnum as patients'),
-                array('ekg', 'patients'),
+                array('kateterisasi', 'patients'),
                 array(
-                    array('&&', "ekg|id=" . $id),
-                    array('&&', "ekg|patients=patients|id")
+                    array('&&', "kateterisasi|id=" . $id),
+                    array('&&', "kateterisasi|patients=patients|id")
                 )
         );
         $this->query->connect();
 //        $this->query->conn->debug=true;
         $getthis = $this->query->conn->Execute($sql); unset($sql);
         $this->query->close();
-//        echo "<pre>debug _FILES QQ : ";print_r($_FILES);echo "</pre>";
+//        echo "<pre>debug _FILES : ";print_r($_FILES);echo "</pre>";
         if($getthis->_numOfRows > 0){
             if(!isset($_FILES)){
                 $filetarget = $this->__get_datadigital($getthis->fields['patients']);
             } else {
                 $filetarget = $this->__store_uploadedfile();
             }
+//            echo "<pre>debug filetarger : ";print_r($filetarget);echo "</pre>";
 //            echo "<pre>debug _FILES : ";print_r($_FILES);echo "</pre>";
-//            if ($_FILES["filedigital"]["error"] > 0){
-//                  echo "Error: " . $_FILES["filedigital"]["error"] . "<br />";
-//            } else {
-//                  echo "Upload: " . $_FILES["filedigital"]["name"] . "<br />";
-//                  echo "Type: " . $_FILES["filedigital"]["type"] . "<br />";
-//                  echo "Size: " . ($_FILES["filedigital"]["size"] / 1024) . " Kb<br />";
-//                  echo "Stored in: " . $_FILES["filedigital"]["tmp_name"];
-//            }
             if($this->__check_myfile($id) === FALSE && $filetarget !== FALSE){
                 $sql = $this->query->updateData(
-                        'ekg',
+                        'kateterisasi',
                         array(
-                            'file' => DS . $this->config->ekgdata_dir . DS . date('Ymd', $this->config->time) . DS . $filetarget
+                            'filecvp' => DS . $this->config->katdata_dir . DS . date('Ymd', $this->config->time) . DS . $filetarget[0],
+                            'filecvq' => DS . $this->config->katdata_dir . DS . date('Ymd', $this->config->time) . DS . $filetarget[1],
+                            'filecvr' => DS . $this->config->katdata_dir . DS . date('Ymd', $this->config->time) . DS . $filetarget[2],
+                            'filecvs' => DS . $this->config->katdata_dir . DS . date('Ymd', $this->config->time) . DS . $filetarget[3],
+                            'filecvt' => DS . $this->config->katdata_dir . DS . date('Ymd', $this->config->time) . DS . $filetarget[4]
                         ),
                         array(
                             array('&&', "id=" . $id)
@@ -784,7 +930,7 @@ class ekguploadModule extends mainModule
             } unset($filetarget);
         } unset($getthis);
         if(is_null($free)){
-            redirect_to(DS . 'user' . DS . 'ekgupload' . DS . 'detail_form' . DS . $id);
+            redirect_to(DS . 'user' . DS . 'katupload' . DS . 'detail_form' . DS . $id);
         }
     }
 

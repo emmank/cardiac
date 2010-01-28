@@ -72,17 +72,15 @@ foreach($data as $key => $value){
     $result .= '</fieldset>' . "\n";
     
     $result .= '<div>' . "\n";
+    //-----------------------------------------------------------------
+
+//    $result .= '<a id="toggle-katcvphidden-div" href="#toggle-katcvphidden-div">C V P</a><br />';
+//    $result .= '<a id="toggle-katcvqhidden-div" href="#toggle-katcvqhidden-div">C V Q</a><br />';
+//    $result .= '<a id="toggle-katcvrhidden-div" href="#toggle-katcvrhidden-div">C V R</a><br />';
+//    $result .= '<a id="toggle-katcvshidden-div" href="#toggle-katcvshidden-div">C V S</a><br />';
+//    $result .= '<a id="toggle-katcvthidden-div" href="#toggle-katcvthidden-div">C V T</a><br />';
+//    $result .= '<div id="katcvphidden-div" style="display: none">';
     $result .= '<table width=100% class="table" border="0">' . "\n";
-    foreach($value as $yk => $lv){
-        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
-            if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
-                if(isset($lv['#customized'])){
-                    if(!isset($rowspan[$lv['#customized']['id']])){$rowspan[$lv['#customized']['id']] = array();}
-                    $rowspan[$lv['#customized']['id']][] = $yk;
-                }
-            }
-        }
-    }
     $cnt = 0;
     foreach($value as $yk => $lv){
         if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
@@ -90,138 +88,149 @@ foreach($data as $key => $value){
             if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
                 $result .= '<tr valign="top">' . "\n";
                 if(!isset($lv['#customized'])){
-                    $result .= '<td align="right" width="15%">' . ucwords($lv['#title']) . '</td>' . "\n";
-                    $result .= '<td align="left" colspan="4">';
-                    if($lv['#type'] == 'select'){
-                        if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
-                            $result .= $lv['#theref'][$lv['#value']];
-                        } else {
-                            $result .= '<select name="' . $yk . '" size="1">';
-                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>';
-                            foreach($lv['#theref'] as $kk => $vv){
-                                $result .= '<option value="' . $kk . '"' . (isset($lv['#value']) && $lv['#value'] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>';
-                            }
-                            $result .= '</select>';
-                        }
-                    } else {
+//                    $result .= '<td align="right" width="15%">' . ucwords($lv['#title']) . '</td>' . "\n";
+//                    $result .= '<td align="left" colspan="4">';
+                        $result .= '<td align="left" width="15%">' . ucwords($lv['#title']) . '</td>' . "\n";
+                        $result .= '<td align="left" colspan="4">';
                         if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
                             $result .= $lv['#value'];
                         } else {
-                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '"' . (isset($lv['#size']) ? ' size="' . $lv['#size'] . '"' : '') . '>';
+                            $result .= '<input type="' . $lv['#type'] . '" name="dicom[]"' . (isset($lv['#size']) ? ' size="' . $lv['#size'] . '"' : '') . '>';
                         }
-                    }
-                    $result .= '</td>' . "\n";
-                } else {
-                    if(!is_array($lv['#value'])){
-                        $lv['#value'] = explode('|', $lv['#value']);
-                    }
-//                    echo "<pre>";print_r($lv);echo "</pre>";
-                    if(!isset($dumpt)){$dumpt = array();}
-                    if(!in_array($lv['#customized']['title'], $dumpt)){
-                        $dumpt[] = $lv['#customized']['title'];
-                        $result .= '<td align="right" rowspan="' . count($rowspan[$lv['#customized']['id']]) . '">' . ucwords($lv['#customized']['title']) . '</td>' . "\n";
-                    }
-                    $result .= '<td width="15%" align="' . ($yk != 'gelombang_t' ? 'right' : 'left') . '">';
-                    if($yk != 'gelombang_t'){
-                        $result .= ucwords($lv['#title']);
-                    } else {
-                        if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
-                            $result .= $lv['#value'][0];
-                        } else {
-                            
-                            foreach($lv['#customized']['option'] as $kk => $vv){
-                                
-                                if(isset($koma)){
-                                    $result .= '<br /> ';
-                                }
-                                $result .= '<input type="radio" name="' . $yk . '[0]" value="'.$kk.'"> '. $kk ;//<input type="radio" name="' . $yk . '[0]" value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' checked="true"' : '') . '> ' . $vv;
-                                $koma = 0;
-                            } unset($koma);
-                        }
-                    }
-                    $result .= '</td>' . "\n";
-                    $result .= '<td align="left"' . ($lv['#type'] != 'select2' ? ' colspan="2"' : '') . '>';
-                    if($yk != 'gelombang_t'){
-                        if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
-                            $result .= ($lv['#type'] == 'select' ? $lv['#theref'][$lv['#value'][0]] : $lv['#value'][0]) . ($lv['#type'] == 'select' ? '' : ' ' . __t('pada sandapan') . ' ' . $lv['#theref'][$lv['#value'][1]]);
-                        } else {
-                            if($lv['#type'] == 'select2'){
-//                                echo '<pre>'; print_r($lv['#value']); echo '</pre>';
-                                $result .= '<select name="' . $yk . '[0]" size="1">';
-                                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
-                                foreach($lv['#customized']['option'] as $kk => $vv){
-                                    $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
-                                }
-                                $result .= '</select>' . "\n";
-                            } elseif($lv['#type'] == 'select3') {
-                                $result .= '<select name="' . $yk . '[0]" size="1">';
-                                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
-                                foreach($lv['#customized']['option'] as $kk => $vv){
-                                    $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
-                                }
-                                $result .= '</select>' . "\n";
-                                $result .= __t('pada sandapan') . "\n";
-                                $result .= '<select name="' . $yk . '[1]" size="1">';
-                                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
-                                foreach($lv['#theref'] as $kk => $vv){
-                                    $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][1]) && $lv['#value'][1] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
-                                }
-                                $result .= '</select>' . "\n";
-                            } else {
-                                $result .= '<select name="' . $yk . '[0]" size="1">';
-                                $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
-                                foreach($lv['#theref'] as $kk => $vv){
-                                    $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][0]) && $lv['#value'][0] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
-                                }
-                                $result .= '</select>' . "\n";
-                            }
-                        }
-                    } else {
-                        $result .= '<br />' . __t('pada sandapan') . "\n";
-                        if(isset($lv['#readonly']) && $lv['#readonly'] !== FALSE){
-                            $result .= $lv['#theref'][$lv['#value'][1]];
-                        } else {
-                            $result .= '<select name="' . $yk . '[1]" size="1">' . "\n";
-                            $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
-                            foreach($lv['#theref'] as $kk => $vv){
-                                $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][1]) && $lv['#value'][1] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
-                            }
-                            $result .= '</select>' . "\n";
-                        }
-                    }
-                    $result .= '</td>' . "\n";
-                    if($lv['#type'] == 'select2' && (!isset($lv['#readonly']) || $lv['#readonly'] !== TRUE)){
-                        $result .= '<td align="left">' . "\n";
-                        $result .= __t('pada sandapan') . "\n";
-                        $result .= '<select name="' . $yk . '[1]" size="1">';
-                        $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
-                        foreach($lv['#theref'] as $kk => $vv){
-                            $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][1]) && $lv['#value'][1] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
-                        }
-                        $result .= '</select>' . "\n";
-                        $result .= '</td>';
-                    }
-//                    echo '<pre>'; print_r($value['kesan']); echo '</pre>';
-                    if($lv['#type'] == 'textarea' && (!isset($lv['#readonly']) || $lv['#readonly'] !== TRUE)){
-                        $result .= '<td align="left">' . "\n";
-                        $result .= __t('pada sandapan') . "\n";
-                        $result .= '<select name="' . $yk . '[1]" size="1">';
-                        $result .= '<option value=""> --- ' . __t('Silahkan pilih') . ' --- </option>' . "\n";
-                        foreach($lv['#theref'] as $kk => $vv){
-                            $result .= '<option value="' . $kk . '"' . (isset($lv['#value'][1]) && $lv['#value'][1] == $kk ? ' selected="selected"' : '') . '>' . $vv . '</option>' . "\n";
-                        }
-                        $result .= '</select>' . "\n";
-                        $result .= '</td>';
-                    }
+                        $result .= '</td>' . "\n";
                 }
+                    
+//                }
                 $result .= '</tr>' . "\n";
                 $cnt++;
             }
         }
     } unset($dumpt, $cnt, $rowspan);
     $result .= '</table>' . "\n";
-    $result .= '</div>' . "\n";
+//    $result .= '</div>';
+//    //----------------------------------------------------------------------------------------
+//    $result .= '<div id="katcvqhidden-div" style="display: none">';
+//    $result .= '<table width=100% class="table" border="0">' . "\n";
+//    $cnt = 0;
+//    foreach($value as $yk => $lv){
+//        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
+//            if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
+//                $result .= '<tr valign="top">' . "\n";
+////                if(!isset($lv['#customized'])){
+//
+//                    if($lv['#mark'] == 'cvq'){
+//                        $result .= '<td align="right" width="15%">' . ucwords($lv['#title']) . '</td>' . "\n";
+//                        $result .= '<td align="left" colspan="4">';
+//                        if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
+//                            $result .= $lv['#value'];
+//                        } else {
+//                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '"' . (isset($lv['#size']) ? ' size="' . $lv['#size'] . '"' : '') . '>';
+//                        }
+//                        $result .= '</td>' . "\n";
+//                    }
+//
+////                }
+//                $result .= '</tr>' . "\n";
+//                $cnt++;
+//            }
+//        }
+//    } unset($dumpt, $cnt, $rowspan);
+//    $result .= '</table>' . "\n";
+//    $result .= '</div>';
+//    //--------------------------------------------------------------
+//    $result .= '<div id="katcvrhidden-div" style="display: none">';
+//    $result .= '<table width=100% class="table" border="0">' . "\n";
+//    $cnt = 0;
+//    foreach($value as $yk => $lv){
+//        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
+//            if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
+//                $result .= '<tr valign="top">' . "\n";
+////                if(!isset($lv['#customized'])){
+//
+//                    if($lv['#mark'] == 'cvr'){
+//                        $result .= '<td align="right" width="15%">' . ucwords($lv['#title']) . '</td>' . "\n";
+//                        $result .= '<td align="left" colspan="4">';
+//                        if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
+//                            $result .= $lv['#value'];
+//                        } else {
+//                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '"' . (isset($lv['#size']) ? ' size="' . $lv['#size'] . '"' : '') . '>';
+//                        }
+//                        $result .= '</td>' . "\n";
+//                    }
+//
+////                }
+//                $result .= '</tr>' . "\n";
+//                $cnt++;
+//            }
+//        }
+//    } unset($dumpt, $cnt, $rowspan);
+//    $result .= '</table>' . "\n";
+//    $result .= '</div>';
+//    //--------------------------------------------------------------
+//    $result .= '<div id="katcvshidden-div" style="display: none">';
+//    $result .= '<table width=100% class="table" border="0">' . "\n";
+//    $cnt = 0;
+//    foreach($value as $yk => $lv){
+//        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
+//            if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
+//                $result .= '<tr valign="top">' . "\n";
+////                if(!isset($lv['#customized'])){
+//
+//                    if($lv['#mark'] == 'cvs'){
+//                        $result .= '<td align="right" width="15%">' . ucwords($lv['#title']) . '</td>' . "\n";
+//                        $result .= '<td align="left" colspan="4">';
+//                        if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
+//                            $result .= $lv['#value'];
+//                        } else {
+//                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '"' . (isset($lv['#size']) ? ' size="' . $lv['#size'] . '"' : '') . '>';
+//                        }
+//                        $result .= '</td>' . "\n";
+//                    }
+//
+////                }
+//                $result .= '</tr>' . "\n";
+//                $cnt++;
+//            }
+//        }
+//    } unset($dumpt, $cnt, $rowspan);
+//    $result .= '</table>' . "\n";
+//    $result .= '</div>';
+//    //--------------------------------------------------------------
+//    $result .= '<div id="katcvthidden-div" style="display: none">';
+//    $result .= '<table width=100% class="table" border="0">' . "\n";
+//    $cnt = 0;
+//    foreach($value as $yk => $lv){
+//        if(!eregi('#', $yk) && is_array($lv) && $yk != 'submit'){
+//            if($lv['#type'] != 'hidden' && !isset($lv['#tbpos'])){
+//                $result .= '<tr valign="top">' . "\n";
+////                if(!isset($lv['#customized'])){
+//
+//                    if($lv['#mark'] == 'cvt'){
+//                        $result .= '<td align="right" width="15%">' . ucwords($lv['#title']) . '</td>' . "\n";
+//                        $result .= '<td align="left" colspan="4">';
+//                        if(isset($lv['#readonly']) && trim($lv['#readonly']) !== FALSE){
+//                            $result .= $lv['#value'];
+//                        } else {
+//                            $result .= '<input type="' . $lv['#type'] . '" name="' . $yk . '"' . (isset($lv['#size']) ? ' size="' . $lv['#size'] . '"' : '') . '>';
+//                        }
+//                        $result .= '</td>' . "\n";
+//                    }
+//
+////                }
+//                $result .= '</tr>' . "\n";
+//                $cnt++;
+//            }
+//        }
+//    } unset($dumpt, $cnt, $rowspan);
+//    $result .= '</table>' . "\n";
+//    $result .= '</div>';
 
+
+
+
+    //--------------------------------------------------
+    $result .= '</div>' . "\n";
+    
     if(isset($value['submit'])){
         $result .= '<div>' . "\n";
         $result .= '<input type="submit" value="' . $value['submit']['#value'] . '"' . (isset($value['submit']['#extra']) ? ' ' . $value['submit']['#extra'] : '') . '>';

@@ -72,9 +72,51 @@ class kateterisasiConfig extends config
                 'default' => NULL,
                 'extra' => ''
             ),
+            'filecvp' => array(
+                'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'filecvq' => array(
+                'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'filecvr' => array(
+                'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'filecvs' => array(
+                'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'filecvt' => array(
+                'type' => 'varchar(255)',
+                'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
             'inputtime' => array(
                 'type' => 'datetime',
                 'null' => 0,
+                'key' => '',
+                'default' => NULL,
+                'extra' => ''
+            ),
+            'uploader' => array(
+                'type' => 'int(11)',
+                'null' => 1,
                 'key' => '',
                 'default' => NULL,
                 'extra' => ''

@@ -42,7 +42,7 @@
 
 </script>
 
-<?php if($path['menu'] == 'vascular'){ ?>
+<?php if($path['menu'] == 'vascular' || $path['menu'] == 'katupload'){ ?>
 <script src="/themes/default/js/jquery-1.3.2.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(document).ready( function() {
@@ -74,6 +74,27 @@ $(document).ready( function() {
     });
     $("#toggle-vabdomenhidden-div").click( function() {
         $("#vabdomenhidden-div").slideToggle('slow');
+    });
+    //--------------------------------------------------
+    //kateterisasi cvp
+    $("#toggle-katcvphidden-div").click( function() {
+        $("#katcvphidden-div").slideToggle('slow');
+    });
+    //kateterisasi cvq
+    $("#toggle-katcvqhidden-div").click( function() {
+        $("#katcvqhidden-div").slideToggle('slow');
+    });
+    //kateterisasi cvr
+    $("#toggle-katcvrhidden-div").click( function() {
+        $("#katcvrhidden-div").slideToggle('slow');
+    });
+    //kateterisasi cvs
+    $("#toggle-katcvshidden-div").click( function() {
+        $("#katcvshidden-div").slideToggle('slow');
+    });
+    //kateterisasi cvt
+    $("#toggle-katcvthidden-div").click( function() {
+        $("#katcvthidden-div").slideToggle('slow');
     });
 });
 </script>

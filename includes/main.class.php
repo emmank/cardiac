@@ -250,6 +250,7 @@ class mainModule
 //                    $interpreter->conn->debug=true;
                     $interpreter->conn->Execute($sql); unset($sql);
                     $interpreter->close();
+                    $tid = $arrayval[$id[0]];
                 } else {
                     $sql = $interpreter->updateData(
                         $tbname,
@@ -261,6 +262,24 @@ class mainModule
                     $interpreter->connect();
                     $interpreter->conn->Execute($sql); unset($sql);
                     $interpreter->close();
+                    $tid = $id[1];
+                }
+                $sql = $interpreter->getSelect(
+                        array(),
+                        array('jobtrack'),
+                        array(
+                            array('&&', "tableuse=" . $tbname),
+                            array('&&', "id=" . $tid),
+                            array('&&', "uid=" . $_COOKIE[$this->config->cookieid])
+                        )
+                );
+                $interpreter->connect();
+                $rslt = $interpreter->conn->Execute($sql); unset($sql);
+                $interpreter->close();
+                if($rslt->_numOfRows < 1){
+                    $valjob = array(
+                        $tbname, $tid, $_COOKIE[$this->config->cookieid], $opr
+                    );
                 }
                 foreach($arrayval as $key => $value){
                     if(isset($koma)){
@@ -282,6 +301,16 @@ class mainModule
             $this->sysquery->conn->Execute($sql); unset($sql);
             $this->sysquery->close();
             unset($thevalue);
+            if(isset($valjob)){
+                $sql = $interpreter->saveData(
+                        'jobtrack',
+                        $valjob
+                );
+                $interpreter->connect();
+                $interpreter->conn->Execute($sql); unset($sql);
+                $interpreter->close();
+                unset($valjob);
+            }
         }
     }
     
@@ -1039,6 +1068,7 @@ class mainModule
 //        echo '<pre>'; print_r($result); echo '</pre>';
         return $result;
     }
+    
     function today_patient_lists_ekg(){
         $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
         $bagian = trim($dump[1]);
@@ -1135,6 +1165,109 @@ class mainModule
                     $result['data'][$i]['age'] = floor($age / 12); unset($age);
                     $result['data'][$i]['nourut'] = ucwords($query->fields['nourut']);
                     $result['data'][$i]['goto'] = '/user/ekgupload/form/' . $query->fields['id'];
+                } unset($gpatient);
+                $query->MoveNext();
+            } unset($query,$bagian);
+        } //unset($query);
+//        echo '<pre>'; print_r($result); echo '</pre>';
+        return $result;
+    }
+    function today_patient_lists_kat(){
+        $dump = explode('/', trim(preg_replace('/^\//','',$_GET['q'])));
+        $bagian = trim($dump[1]);
+        $result = array();
+        $result['type'] = 'table';
+        $result['title'] = __t('antrian');
+        $result['description'] = __t('Daftar Antrian Pasien');
+//        $result['addmenu']['#add'] = array(
+//            'title' => __t('view'),
+//            'action' => '/user/' . $bagian . '/lists',
+//            'position' => 'top',
+//            'user_required' => 'users'
+//        );
+//        $result['addmenu']['#search'] = array(
+//            'title' => __t('search'),
+//            'action' => '/user/' . $bagian . '/search',
+//            'position' => 'top',
+//            'user_required' => 'users'
+//        );
+        $this->query->connect();
+        $sql = $this->query->getSelect(
+            array(),
+            array('kunjungan'),
+            array(
+                array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                array('&&', "day(pukul)=" . date('j', $this->config->time)),
+                array('&&', "bagian=" . $bagian),
+                array('&&', "doneby is null")
+            ),
+            'pukul'
+        ); //unset($idbagian);
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows < 1){
+            $sql = $this->query->getSelect(
+                    array('id'),
+                    array('kunjungan'),
+                    array(
+                        array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                        array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                        array('&&', "day(pukul)=" . date('j', $this->config->time)),
+                        array('&&', "bagian=" . $bagian),
+                        array('&&', "doneby is not null")
+                    )
+            );
+            $this->query->connect();
+            $getit = $this->query->conn->Execute($sql); unset($sql);
+            $this->query->close();
+            if($getit->_numOfRows > 0){
+                $pesan = __t('Tidak ada lagi pasien yang mengantri..');
+            } else {
+                $pesan = __t('tidak ada pasien hari ini !');
+            }
+            $result['addmessage'] = array(
+                array(
+                    'position' => 'bottom',
+                    'message' => $pesan
+                )
+            ); unset($pesan);
+        } else {
+                $result['header'] = array(
+                    array(
+                        'field' => 'none',
+                        'caption' => __t('no'),
+                        'width' => '5%',
+                        'align' => 'right'
+                    ),
+                    array(
+                        'field' => 'nomor',
+                        'caption' => __t('Nomor Register'),
+                        'width' => '15%',
+                        'align' => 'center'
+                    ),
+                    array(
+                        'field' => 'patients',
+                        'caption' => __t('Nama'),
+                        'align' => 'left'
+                    ),
+                    array(
+                        'field' =>'nourut',
+                        'caption' => __t('No Urut'),
+                        'width' => '15%',
+                        'align' => 'center'
+                    )
+                );
+            for($i=0; $i<$query->_numOfRows; $i++){
+                $gpatient = $this->__get_patient_data($query->fields['patients']);
+                if(count($gpatient) > 0){
+                    $result['data'][$i] = $query->fields;
+                    $result['data'][$i]['nomor'] = ucwords($gpatient['strnum']);
+                    $result['data'][$i]['patients'] = ucwords($gpatient['nama']);
+                    $age = $this->agecount_in_month(strtotime($gpatient['tgl_lahir']));
+                    $result['data'][$i]['age'] = floor($age / 12); unset($age);
+                    $result['data'][$i]['nourut'] = ucwords($query->fields['nourut']);
+                    $result['data'][$i]['goto'] = '/user/katupload/form/' . $query->fields['id'];
                 } unset($gpatient);
                 $query->MoveNext();
             } unset($query,$bagian);

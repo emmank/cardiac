@@ -754,17 +754,19 @@ class perawatanModule extends mainModule
             '#type' => 'submit',
             '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
-        if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
-            $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'perawatan', $vcache['patients']);
-            if(count($getvisit_info) > 0){
-                foreach($getvisit_info as $ky => $vl){
-                    if(is_null($vl['doneby'])){
-                        $forbidden = 0; break;
+        if($this->formhabit == 'readonly'){
+            if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
+                $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'perawatan', $vcache['patients']);
+                if(count($getvisit_info) > 0){
+                    foreach($getvisit_info as $ky => $vl){
+                        if(is_null($vl['doneby'])){
+                            $forbidden = 0; break;
+                        }
                     }
                 }
+            } else {
+                $forbidden = 0;
             }
-        } else {
-            $forbidden = 0;
         }
         if(isset($forbidden)){
             $form['perawatan']['submit']['#extra'] = ' disabled="true"';

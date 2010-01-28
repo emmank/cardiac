@@ -1144,7 +1144,7 @@ class patientModule extends mainModule
     
     function register_submit(){
         $dump = $this->__write_form_cache();
-//        echo "<pre>";print_r($dump);echo "</pre>";
+//        echo "<pre>Dump : ";print_r($dump);echo "</pre>";
         $patientfields = $this->__get_data_fields('patients', $this->query);
         $thevalue = array();
         foreach($dump as $key => $value){
@@ -1224,6 +1224,23 @@ class patientModule extends mainModule
         $bagian = $query->fields['bagian']; unset($query);
         $no = 1;
         $sql = $this->query->getSelect(
+            array('patients'),
+            array('kunjungan'),
+            array(
+                array('&&', "bagian=" . $bagian),
+                array('&&', "year(pukul)=" . date('Y', $this->config->time)),
+                array('&&', "month(pukul)=" . date('n', $this->config->time)),
+                array('&&', "day(pukul)=" . date('j', $this->config->time))
+            )
+        );
+        $this->query->connect();
+        $query = $this->query->conn->Execute($sql); unset($sql);
+        $this->query->close();
+        if($query->_numOfRows > 0){
+            $pesan = __t('patient tidak bisa dirujuk !');
+            redirect_to('/node/message'); exit();
+        } unset($query);
+        $sql = $this->query->getSelect(
             array('max(nourut) as no'),
             array('kunjungan'),
             array(
@@ -1239,7 +1256,7 @@ class patientModule extends mainModule
         if($query->_numOfRows > 0){
             $no += $query->fields['no'];
         } unset($query);
-//        echo "<pre>";print_r($dump);echo "</pre>";
+//        echo "<pre>Dump insert into thevalue: ";print_r($dump);echo "</pre>";
         $thevalue = array(
             'pukul' => date('Y-m-d H:i:s', $this->config->time),
             'patients' => $dump['id'],
@@ -1274,7 +1291,9 @@ class patientModule extends mainModule
         }
         if(isset($gogogo)){
             unset($gogogo);
+            //--bagian ini akan dikerjakan pada proses merujuk pasien------
             $thevalue['id'] = $this->__get_id_insert_value('kunjungan', 'id', $this->query);
+//            echo "<pre>";print_r($thevalue);echo "</pre>";
             $sql = $this->query->saveData(
                 'kunjungan',
                 $thevalue

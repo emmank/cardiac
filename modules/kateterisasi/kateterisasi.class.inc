@@ -775,11 +775,13 @@ class kateterisasiModule extends mainModule
 
         $form['kateterisasi']['tab_items']['lvGrafi'] = $this->__loadLvGrafi();
         $form['kateterisasi']['tab_items']['keterangan'] = $this->__loadKeterangan();
+        $form['kateterisasi']['tab_items']['video'] = $this->__loadVideo();
 
         $form['kateterisasi']['submit'] = array(
             '#type' => 'submit',
             '#value' => ($this->formhabit == 'readonly' ? __t('edit') : __t('submit'))
         );
+
         if($this->formhabit == 'readonly'){
             if(isset($vcache['inputtime']) && date('Y-n-j', strtotime($vcache['inputtime'])) == date('Y-n-j', $this->config->time)){
                 $getvisit_info = $this->patient_visit_lists(date('Y-m-d', $this->config->time), 'kateterisasi', $vcache['patients']);
@@ -827,6 +829,20 @@ class kateterisasiModule extends mainModule
             }
         } else {
             return $this->keterangan_exec->kateterisasi_menu();
+        }
+    }
+
+    function __loadvideo($exec=NULL){
+        $this->__include_module('video');
+        if(isset($this->vardump) && count($this->vardump) > 0){
+            $this->video_config->free_val = $this->vardump;
+        }
+        if(!is_null($exec)){
+            if($exec == 'submit'){
+                return $this->video_exec->kateterisasi_submit();
+            }
+        } else {
+            return $this->video_exec->kateterisasi_menu();
         }
     }
 
@@ -887,6 +903,7 @@ class kateterisasiModule extends mainModule
         unset($thevalue, $opr, $strid);
         $this->__loadLvGrafi('submit');
         $this->__loadKeterangan('submit');
+        $this->__loadVideo('submit');
         
         if(!isset($_POST['id']) || is_null($_POST['id']) || $_POST['id'] == ''){
             $sql = $this->query->updateData(

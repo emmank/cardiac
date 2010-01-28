@@ -553,7 +553,7 @@ class ekguploadModule extends mainModule
             $opr = 'insert';
             $strid = array('id', $thevalue['id']);
         }
-//        echo "<pre>";print_r($thevalue);echo "</pre>";
+//        echo "<pre>";print_r($thevalue);echo "</pre>";exit;
         $this->__exec_db_ops(
             $this->query,
             'ekg',

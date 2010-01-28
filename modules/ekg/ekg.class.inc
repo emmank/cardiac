@@ -338,7 +338,12 @@ class ekgModule extends mainModule
         );
         $dump_addmenus = $this->__get_bagian_lists();
         foreach($dump_addmenus as $key => $value){
-            $rujukanopts[$key] = $value;
+//            $rujukanopts[$key] = $value;
+            if ($value=='EKG'){
+
+            } else {
+                $rujukanopts[$key] = $value;
+            }
             $sql = $this->query->getSelect(
                 array('id'),
                 array('kunjungan'),
