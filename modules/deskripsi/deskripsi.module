@@ -1,0 +1,44 @@
+<?php
+/* 
+ *  Copyright (c) 2009 Denic Wibowo<denicwibowo@gmail.com>.
+ *  All rights reserved.
+ *  
+ *  This program is free software; you can redistribute it and/or modify it 
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation; either version 2 of the License, or 
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful, but 
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of 
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
+ *  Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along 
+ *  with this program; if not, write to the Free Software Foundation, Inc., 
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
+ *  deskripsi.php
+ *  
+ *  Created on Oct 3, 2009, 4:34:16 PM
+ */
+
+require_once MODULES_DIR . DS . 'deskripsi' . DS . 'deskripsi.class.inc';
+
+if(!isset($deskripsi_config)){
+    $deskripsi_config = new deskripsiConfig();
+} elseif(!$deskripsi_config instanceof deskripsiConfig) {
+    $deskripsi_config = new deskripsiConfig();
+}
+
+require_once DBSTRINGS_DIR . DS . $deskripsi_config->rdbms . DS . 'dbquery.php';
+if(!isset($deskripsi_query)){
+    $deskripsi_query = new dbset();
+} elseif(!$deskripsi_query instanceof dbset) {
+    $deskripsi_query = new dbset();
+}
+
+if(!isset($deskripsi_exec)){
+    $deskripsi_exec = new deskripsiModule();
+} elseif(!$deskripsi_exec instanceof deskripsiModule) {
+    $deskripsi_exec = new deskripsiModule();
+}
